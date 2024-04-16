@@ -8,8 +8,6 @@
             <div class="type">
                 <div class="normal">
 
-
-
                     <div class="register_text">
                         <div class="user_text">
                             <p>개인 구매회원(외국인포함)</p>
@@ -23,8 +21,8 @@
 
 
                     <div class="register_container">
-                        <a class="user_register">일반 회원가입</a>
-                        <a class="seller_register">판매회원 가입/전환</a>
+                        <a th:href="@{/member/signup(user_role='user')}" class="user_register">일반 회원가입</a>
+                        <a th:href="@{/member/signup(user_role='seller')}" class="seller_register">판매회원 가입/전환</a>
                     </div>
 
                 </div>
