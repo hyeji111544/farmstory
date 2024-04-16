@@ -24,8 +24,8 @@ spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Abcd1234!
-        url: jdbc:mysql://127.0.0.1/farmstory
-        username: farmUser
+        url: jdbc:mysql://127.0.0.1/lotteon
+        username: team1
 
     devtools:
         livereload:

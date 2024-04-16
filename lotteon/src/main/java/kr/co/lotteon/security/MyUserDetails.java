@@ -39,19 +39,19 @@ public class MyUserDetails implements UserDetails, OAuth2User {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 계정이 갖는 권한 목록
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+        authorities.add(new SimpleGrantedAuthority(user.getUser_role()));
         log.info("authorities : " + authorities.toString());
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return user.getPass();
+        return user.getUser_pw();
     }
 
     @Override
     public String getUsername() {
-        return user.getUid();
+        return user.getUser_id();
     }
 
     @Override
