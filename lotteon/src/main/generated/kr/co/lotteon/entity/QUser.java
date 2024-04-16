@@ -19,45 +19,43 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
-    public final StringPath user_addr1 = createString("user_addr1");
+    public final StringPath userAddr1 = createString("userAddr1");
 
-    public final StringPath user_addr2 = createString("user_addr2");
+    public final StringPath userAddr2 = createString("userAddr2");
 
-    public final DateTimePath<java.time.LocalDateTime> user_birth = createDateTime("user_birth", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> userBirth = createDateTime("userBirth", java.time.LocalDateTime.class);
 
-    public final StringPath user_email = createString("user_email");
+    public final StringPath userEmail = createString("userEmail");
 
-    public final StringPath user_grade = createString("user_grade");
+    public final StringPath userGrade = createString("userGrade");
 
-    public final StringPath user_hp = createString("user_hp");
+    public final StringPath userHp = createString("userHp");
 
-    public final StringPath user_id = createString("user_id");
+    public final StringPath userId = createString("userId");
 
-    public final StringPath user_name = createString("user_name");
+    public final StringPath userName = createString("userName");
 
-    public final NumberPath<Integer> user_point = createNumber("user_point", Integer.class);
+    public final NumberPath<Integer> userPoint = createNumber("userPoint", Integer.class);
 
-    public final StringPath user_profile = createString("user_profile");
+    public final StringPath userProfile = createString("userProfile");
 
-    public final StringPath user_promo = createString("user_promo");
+    public final StringPath userPromo = createString("userPromo");
 
-    public final StringPath user_provider = createString("user_provider");
+    public final StringPath userProvider = createString("userProvider");
 
-    public final StringPath user_pw = createString("user_pw");
+    public final StringPath userPw = createString("userPw");
 
-    public final DateTimePath<java.time.LocalDateTime> user_regDate = createDateTime("user_regDate", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> userRegDate = createDateTime("userRegDate", java.time.LocalDateTime.class);
 
-    public final StringPath user_role = createString("user_role");
+    public final StringPath userRole = createString("userRole");
 
-    public final StringPath user_status = createString("user_status");
+    public final StringPath userStatus = createString("userStatus");
 
-    public final DateTimePath<java.time.LocalDateTime> user_update = createDateTime("user_update", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> userUpdate = createDateTime("userUpdate", java.time.LocalDateTime.class);
 
-    public final DateTimePath<java.time.LocalDateTime> user_visit_Date = createDateTime("user_visit_Date", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> userVisit_Date = createDateTime("userVisit_Date", java.time.LocalDateTime.class);
 
-    public final StringPath user_zip = createString("user_zip");
-
-    public final NumberPath<Integer> userpoint_point_no = createNumber("userpoint_point_no", Integer.class);
+    public final StringPath userZip = createString("userZip");
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

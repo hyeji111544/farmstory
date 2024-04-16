@@ -4093,3 +4093,315 @@ Caused by: org.springframework.data.mapping.PropertyReferenceException: No prope
 	at org.springframework.data.jpa.repository.query.PartTreeJpaQuery.<init>(PartTreeJpaQuery.java:100) ~[spring-data-jpa-3.2.4.jar:3.2.4]
 	... 51 common frames omitted
 
+2024-04-16T11:30:53.901+09:00  INFO 14156 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : Starting LotteonApplication using Java 17.0.9 with PID 14156 (C:\Users\java\Desktop\workspace\lotteon-team1\lotteon\build\classes\java\main started by java in C:\Users\java\Desktop\workspace\lotteon-team1\lotteon)
+2024-04-16T11:30:53.902+09:00  INFO 14156 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : No active profile set, falling back to 1 default profile: "default"
+2024-04-16T11:30:54.042+09:00  INFO 14156 --- [lotteon] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-04-16T11:30:54.042+09:00  INFO 14156 --- [lotteon] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-04-16T11:30:54.416+09:00  INFO 14156 --- [lotteon] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-16T11:30:54.441+09:00  INFO 14156 --- [lotteon] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 1 JPA repository interface.
+2024-04-16T11:30:54.518+09:00  WARN 14156 --- [lotteon] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[kr.co.lotteon]' package. Please check your configuration.
+2024-04-16T11:30:54.756+09:00  INFO 14156 --- [lotteon] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-04-16T11:30:54.763+09:00  INFO 14156 --- [lotteon] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-04-16T11:30:54.763+09:00  INFO 14156 --- [lotteon] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-04-16T11:30:54.789+09:00  INFO 14156 --- [lotteon] [restartedMain] o.a.c.c.C.[.[localhost].[/lotteon]       : Initializing Spring embedded WebApplicationContext
+2024-04-16T11:30:54.789+09:00  INFO 14156 --- [lotteon] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 747 ms
+2024-04-16T11:30:54.871+09:00  INFO 14156 --- [lotteon] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-16T11:30:54.898+09:00  INFO 14156 --- [lotteon] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-16T11:30:54.917+09:00  INFO 14156 --- [lotteon] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-04-16T11:30:55.036+09:00  INFO 14156 --- [lotteon] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-16T11:30:55.050+09:00  INFO 14156 --- [lotteon] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-04-16T11:30:55.175+09:00  INFO 14156 --- [lotteon] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@24bc6df0
+2024-04-16T11:30:55.177+09:00  INFO 14156 --- [lotteon] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-04-16T11:30:55.205+09:00  WARN 14156 --- [lotteon] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-04-16T11:30:55.646+09:00  INFO 14156 --- [lotteon] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-16T11:30:55.683+09:00  INFO 14156 --- [lotteon] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T11:30:55.845+09:00  WARN 14156 --- [lotteon] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-16T11:30:55.990+09:00  INFO 14156 --- [lotteon] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@469c11a2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1c4f31ea, org.springframework.security.web.context.SecurityContextHolderFilter@15edd94a, org.springframework.security.web.header.HeaderWriterFilter@7c5d8c8c, org.springframework.web.filter.CorsFilter@12791516, org.springframework.security.web.authentication.logout.LogoutFilter@437ea4fc, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@282d3dc1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@50b346d9, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1b1ddfe, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2c5081d7, org.springframework.security.web.access.ExceptionTranslationFilter@2cc7447d, org.springframework.security.web.access.intercept.AuthorizationFilter@790461aa]
+2024-04-16T11:30:56.146+09:00  WARN 14156 --- [lotteon] [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@6ef7520d. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-16T11:30:56.146+09:00  INFO 14156 --- [lotteon] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@6ef7520d
+2024-04-16T11:30:56.163+09:00  INFO 14156 --- [lotteon] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-04-16T11:30:56.182+09:00  INFO 14156 --- [lotteon] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/lotteon'
+2024-04-16T11:30:56.188+09:00  INFO 14156 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : Started LotteonApplication in 2.494 seconds (process running for 2.767)
+2024-04-16T11:58:32.000+09:00  INFO 14156 --- [lotteon] [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/lotteon]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-04-16T11:58:32.000+09:00  INFO 14156 --- [lotteon] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-04-16T11:58:32.001+09:00  INFO 14156 --- [lotteon] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-04-16T16:12:10.203+09:00  INFO 17876 --- [lotteon] [Test worker] kr.co.lotteon.LotteonApplicationTests    : Starting LotteonApplicationTests using Java 17.0.9 with PID 17876 (started by java in C:\Users\java\Desktop\workspace\lotteon-team1\lotteon)
+2024-04-16T16:12:10.204+09:00  INFO 17876 --- [lotteon] [Test worker] kr.co.lotteon.LotteonApplicationTests    : No active profile set, falling back to 1 default profile: "default"
+2024-04-16T16:12:10.673+09:00  INFO 17876 --- [lotteon] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-16T16:12:10.706+09:00  INFO 17876 --- [lotteon] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 28 ms. Found 1 JPA repository interface.
+2024-04-16T16:12:10.781+09:00  WARN 17876 --- [lotteon] [Test worker] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[kr.co.lotteon]' package. Please check your configuration.
+2024-04-16T16:12:10.976+09:00  INFO 17876 --- [lotteon] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-16T16:12:11.015+09:00  INFO 17876 --- [lotteon] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-16T16:12:11.036+09:00  INFO 17876 --- [lotteon] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-04-16T16:12:11.180+09:00  INFO 17876 --- [lotteon] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-16T16:12:11.196+09:00  INFO 17876 --- [lotteon] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-04-16T16:12:11.404+09:00  INFO 17876 --- [lotteon] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4ab90d01
+2024-04-16T16:12:11.406+09:00  INFO 17876 --- [lotteon] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-04-16T16:12:11.436+09:00  WARN 17876 --- [lotteon] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-04-16T16:12:11.928+09:00  INFO 17876 --- [lotteon] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-16T16:12:11.974+09:00  INFO 17876 --- [lotteon] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:12:12.174+09:00  WARN 17876 --- [lotteon] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-16T16:12:12.365+09:00  INFO 17876 --- [lotteon] [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@63ead376, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1a1d7832, org.springframework.security.web.context.SecurityContextHolderFilter@633dce39, org.springframework.security.web.header.HeaderWriterFilter@3393aa46, org.springframework.web.filter.CorsFilter@639c5ab4, org.springframework.security.web.authentication.logout.LogoutFilter@f6b128b, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6567de86, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1e8c741c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@60f70c9e, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@272cec71, org.springframework.security.web.access.ExceptionTranslationFilter@7959fbe3, org.springframework.security.web.access.intercept.AuthorizationFilter@48463900]
+2024-04-16T16:12:12.588+09:00  WARN 17876 --- [lotteon] [Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@29511cf9. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-16T16:12:12.588+09:00  INFO 17876 --- [lotteon] [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@29511cf9
+2024-04-16T16:12:12.622+09:00  INFO 17876 --- [lotteon] [Test worker] kr.co.lotteon.LotteonApplicationTests    : Started LotteonApplicationTests in 2.58 seconds (process running for 3.275)
+2024-04-16T16:12:12.924+09:00  INFO 17876 --- [lotteon] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:12:12.926+09:00  INFO 17876 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-04-16T16:12:12.931+09:00  INFO 17876 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-04-16T16:20:21.428+09:00  INFO 13024 --- [lotteon] [Test worker] kr.co.lotteon.LotteonApplicationTests    : Starting LotteonApplicationTests using Java 17.0.9 with PID 13024 (started by java in C:\Users\java\Desktop\workspace\lotteon-team1\lotteon)
+2024-04-16T16:20:21.429+09:00  INFO 13024 --- [lotteon] [Test worker] kr.co.lotteon.LotteonApplicationTests    : No active profile set, falling back to 1 default profile: "default"
+2024-04-16T16:20:21.806+09:00  WARN 13024 --- [lotteon] [Test worker] o.s.w.c.s.GenericWebApplicationContext   : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.support.BeanDefinitionOverrideException: Invalid bean definition with name 'modelMapper' defined in class path resource [kr/co/lotteon/config/RootConfig.class]: Cannot register bean definition [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=rootConfig; factoryMethodName=modelMapper; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [kr/co/lotteon/config/RootConfig.class]] for bean 'modelMapper' since there is already [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=queryDslConfig; factoryMethodName=modelMapper; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [kr/co/lotteon/config/QueryDslConfig.class]] bound.
+2024-04-16T16:20:21.811+09:00  INFO 13024 --- [lotteon] [Test worker] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-04-16T16:20:21.821+09:00 ERROR 13024 --- [lotteon] [Test worker] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The bean 'modelMapper', defined in class path resource [kr/co/lotteon/config/RootConfig.class], could not be registered. A bean with that name has already been defined in class path resource [kr/co/lotteon/config/QueryDslConfig.class] and overriding is disabled.
+
+Action:
+
+Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+
+2024-04-16T16:20:21.824+09:00  WARN 13024 --- [lotteon] [Test worker] o.s.test.context.TestContextManager      : Caught exception while allowing TestExecutionListener [org.springframework.test.context.web.ServletTestExecutionListener] to prepare test instance [kr.co.lotteon.LotteonApplicationTests@4214ae8f]
+
+java.lang.IllegalStateException: Failed to load ApplicationContext for [WebMergedContextConfiguration@67eec8e1 testClass = kr.co.lotteon.LotteonApplicationTests, locations = [], classes = [kr.co.lotteon.LotteonApplication], contextInitializerClasses = [], activeProfiles = [], propertySourceDescriptors = [], propertySourceProperties = ["org.springframework.boot.test.context.SpringBootTestContextBootstrapper=true"], contextCustomizers = [org.springframework.boot.test.autoconfigure.actuate.observability.ObservabilityContextCustomizerFactory$DisableObservabilityContextCustomizer@1f, org.springframework.boot.test.autoconfigure.properties.PropertyMappingContextCustomizer@0, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverContextCustomizer@a43ce46, org.springframework.boot.test.context.filter.ExcludeFilterContextCustomizer@7a560583, org.springframework.boot.test.json.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer@616fe72b, org.springframework.boot.test.mock.mockito.MockitoContextCustomizer@0, org.springframework.boot.test.web.client.TestRestTemplateContextCustomizer@708400f6, org.springframework.boot.test.context.SpringBootTestAnnotation@9d5ebd9c], resourceBasePath = "src/main/webapp", contextLoader = org.springframework.boot.test.context.SpringBootContextLoader, parent = null]
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:180) ~[spring-test-6.1.5.jar:6.1.5]
+	at org.springframework.test.context.support.DefaultTestContext.getApplicationContext(DefaultTestContext.java:130) ~[spring-test-6.1.5.jar:6.1.5]
+	at org.springframework.test.context.web.ServletTestExecutionListener.setUpRequestContextIfNecessary(ServletTestExecutionListener.java:191) ~[spring-test-6.1.5.jar:6.1.5]
+	at org.springframework.test.context.web.ServletTestExecutionListener.prepareTestInstance(ServletTestExecutionListener.java:130) ~[spring-test-6.1.5.jar:6.1.5]
+	at org.springframework.test.context.TestContextManager.prepareTestInstance(TestContextManager.java:260) ~[spring-test-6.1.5.jar:6.1.5]
+	at org.springframework.test.context.junit.jupiter.SpringExtension.postProcessTestInstance(SpringExtension.java:163) ~[spring-test-6.1.5.jar:6.1.5]
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$10(ClassBasedTestDescriptor.java:378) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.executeAndMaskThrowable(ClassBasedTestDescriptor.java:383) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$invokeTestInstancePostProcessors$11(ClassBasedTestDescriptor.java:378) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at java.base/java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:197) ~[na:na]
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179) ~[na:na]
+	at java.base/java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1625) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[na:na]
+	at java.base/java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:499) ~[na:na]
+	at java.base/java.util.stream.StreamSpliterators$WrappingSpliterator.forEachRemaining(StreamSpliterators.java:310) ~[na:na]
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:735) ~[na:na]
+	at java.base/java.util.stream.Streams$ConcatSpliterator.forEachRemaining(Streams.java:734) ~[na:na]
+	at java.base/java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:762) ~[na:na]
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.invokeTestInstancePostProcessors(ClassBasedTestDescriptor.java:377) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$instantiateAndPostProcessTestInstance$6(ClassBasedTestDescriptor.java:290) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.instantiateAndPostProcessTestInstance(ClassBasedTestDescriptor.java:289) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$4(ClassBasedTestDescriptor.java:279) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at java.base/java.util.Optional.orElseGet(Optional.java:364) ~[na:na]
+	at org.junit.jupiter.engine.descriptor.ClassBasedTestDescriptor.lambda$testInstancesProvider$5(ClassBasedTestDescriptor.java:278) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.jupiter.engine.execution.TestInstancesProvider.getTestInstances(TestInstancesProvider.java:31) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$prepare$0(TestMethodTestDescriptor.java:106) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:105) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.prepare(TestMethodTestDescriptor.java:69) ~[junit-jupiter-engine-5.10.2.jar:5.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$prepare$2(NodeTestTask.java:123) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.prepare(NodeTestTask.java:123) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:90) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511) ~[na:na]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54) ~[junit-platform-engine-1.10.2.jar:1.10.2]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:107) ~[junit-platform-launcher-1.8.2.jar:1.8.2]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:88) ~[junit-platform-launcher-1.8.2.jar:1.8.2]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:54) ~[junit-platform-launcher-1.8.2.jar:1.8.2]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:67) ~[junit-platform-launcher-1.8.2.jar:1.8.2]
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:52) ~[junit-platform-launcher-1.8.2.jar:1.8.2]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:114) ~[junit-platform-launcher-1.8.2.jar:1.8.2]
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:86) ~[junit-platform-launcher-1.8.2.jar:1.8.2]
+	at org.junit.platform.launcher.core.DefaultLauncherSession$DelegatingLauncher.execute(DefaultLauncherSession.java:86) ~[junit-platform-launcher-1.8.2.jar:1.8.2]
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.processAllTestClasses(JUnitPlatformTestClassProcessor.java:119) ~[na:na]
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor$CollectAllTestClassesExecutor.access$000(JUnitPlatformTestClassProcessor.java:94) ~[na:na]
+	at org.gradle.api.internal.tasks.testing.junitplatform.JUnitPlatformTestClassProcessor.stop(JUnitPlatformTestClassProcessor.java:89) ~[na:na]
+	at org.gradle.api.internal.tasks.testing.SuiteTestClassProcessor.stop(SuiteTestClassProcessor.java:62) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568) ~[na:na]
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36) ~[na:na]
+	at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24) ~[na:na]
+	at org.gradle.internal.dispatch.ContextClassLoaderDispatch.dispatch(ContextClassLoaderDispatch.java:33) ~[na:na]
+	at org.gradle.internal.dispatch.ProxyDispatchAdapter$DispatchingInvocationHandler.invoke(ProxyDispatchAdapter.java:94) ~[na:na]
+	at jdk.proxy1/jdk.proxy1.$Proxy2.stop(Unknown Source) ~[na:na]
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker$3.run(TestWorker.java:193) ~[na:na]
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.executeAndMaintainThreadName(TestWorker.java:129) ~[na:na]
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:100) ~[na:na]
+	at org.gradle.api.internal.tasks.testing.worker.TestWorker.execute(TestWorker.java:60) ~[na:na]
+	at org.gradle.process.internal.worker.child.ActionExecutionWorker.execute(ActionExecutionWorker.java:56) ~[na:na]
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:113) ~[na:na]
+	at org.gradle.process.internal.worker.child.SystemApplicationClassLoaderWorker.call(SystemApplicationClassLoaderWorker.java:65) ~[na:na]
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.run(GradleWorkerMain.java:69) ~[gradle-worker.jar:na]
+	at worker.org.gradle.process.internal.worker.GradleWorkerMain.main(GradleWorkerMain.java:74) ~[gradle-worker.jar:na]
+Caused by: org.springframework.beans.factory.support.BeanDefinitionOverrideException: Invalid bean definition with name 'modelMapper' defined in class path resource [kr/co/lotteon/config/RootConfig.class]: Cannot register bean definition [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=rootConfig; factoryMethodName=modelMapper; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [kr/co/lotteon/config/RootConfig.class]] for bean 'modelMapper' since there is already [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=queryDslConfig; factoryMethodName=modelMapper; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [kr/co/lotteon/config/QueryDslConfig.class]] bound.
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.registerBeanDefinition(DefaultListableBeanFactory.java:1017) ~[spring-beans-6.1.5.jar:6.1.5]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForBeanMethod(ConfigurationClassBeanDefinitionReader.java:277) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitionsForConfigurationClass(ConfigurationClassBeanDefinitionReader.java:144) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.annotation.ConfigurationClassBeanDefinitionReader.loadBeanDefinitions(ConfigurationClassBeanDefinitionReader.java:120) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.processConfigBeanDefinitions(ConfigurationClassPostProcessor.java:428) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.annotation.ConfigurationClassPostProcessor.postProcessBeanDefinitionRegistry(ConfigurationClassPostProcessor.java:289) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanDefinitionRegistryPostProcessors(PostProcessorRegistrationDelegate.java:349) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.PostProcessorRegistrationDelegate.invokeBeanFactoryPostProcessors(PostProcessorRegistrationDelegate.java:118) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.invokeBeanFactoryPostProcessors(AbstractApplicationContext.java:788) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:606) ~[spring-context-6.1.5.jar:6.1.5]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:754) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:456) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:334) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.test.context.SpringBootContextLoader.lambda$loadContext$3(SpringBootContextLoader.java:137) ~[spring-boot-test-3.2.4.jar:3.2.4]
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:58) ~[spring-core-6.1.5.jar:6.1.5]
+	at org.springframework.util.function.ThrowingSupplier.get(ThrowingSupplier.java:46) ~[spring-core-6.1.5.jar:6.1.5]
+	at org.springframework.boot.SpringApplication.withHook(SpringApplication.java:1454) ~[spring-boot-3.2.4.jar:3.2.4]
+	at org.springframework.boot.test.context.SpringBootContextLoader$ContextLoaderHook.run(SpringBootContextLoader.java:553) ~[spring-boot-test-3.2.4.jar:3.2.4]
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:137) ~[spring-boot-test-3.2.4.jar:3.2.4]
+	at org.springframework.boot.test.context.SpringBootContextLoader.loadContext(SpringBootContextLoader.java:108) ~[spring-boot-test-3.2.4.jar:3.2.4]
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContextInternal(DefaultCacheAwareContextLoaderDelegate.java:225) ~[spring-test-6.1.5.jar:6.1.5]
+	at org.springframework.test.context.cache.DefaultCacheAwareContextLoaderDelegate.loadContext(DefaultCacheAwareContextLoaderDelegate.java:152) ~[spring-test-6.1.5.jar:6.1.5]
+	... 86 common frames omitted
+
+2024-04-16T16:20:22.865+09:00  INFO 14156 --- [lotteon] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:20:22.869+09:00  INFO 14156 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-04-16T16:20:22.874+09:00  INFO 14156 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-04-16T16:20:24.200+09:00  INFO 13556 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : Starting LotteonApplication using Java 17.0.9 with PID 13556 (C:\Users\java\Desktop\workspace\lotteon-team1\lotteon\build\classes\java\main started by java in C:\Users\java\Desktop\workspace\lotteon-team1\lotteon)
+2024-04-16T16:20:24.202+09:00  INFO 13556 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : No active profile set, falling back to 1 default profile: "default"
+2024-04-16T16:20:24.319+09:00  INFO 13556 --- [lotteon] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-04-16T16:20:24.319+09:00  INFO 13556 --- [lotteon] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-04-16T16:20:24.604+09:00  WARN 13556 --- [lotteon] [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.support.BeanDefinitionOverrideException: Invalid bean definition with name 'modelMapper' defined in class path resource [kr/co/lotteon/config/RootConfig.class]: Cannot register bean definition [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=rootConfig; factoryMethodName=modelMapper; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [kr/co/lotteon/config/RootConfig.class]] for bean 'modelMapper' since there is already [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=queryDslConfig; factoryMethodName=modelMapper; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [kr/co/lotteon/config/QueryDslConfig.class]] bound.
+2024-04-16T16:20:24.609+09:00  INFO 13556 --- [lotteon] [restartedMain] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2024-04-16T16:20:24.625+09:00 ERROR 13556 --- [lotteon] [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+The bean 'modelMapper', defined in class path resource [kr/co/lotteon/config/RootConfig.class], could not be registered. A bean with that name has already been defined in class path resource [kr/co/lotteon/config/QueryDslConfig.class] and overriding is disabled.
+
+Action:
+
+Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
+
+2024-04-16T16:21:28.840+09:00  INFO 4792 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : Starting LotteonApplication using Java 17.0.9 with PID 4792 (C:\Users\java\Desktop\workspace\lotteon-team1\lotteon\build\classes\java\main started by java in C:\Users\java\Desktop\workspace\lotteon-team1\lotteon)
+2024-04-16T16:21:28.841+09:00  INFO 4792 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : No active profile set, falling back to 1 default profile: "default"
+2024-04-16T16:21:28.948+09:00  INFO 4792 --- [lotteon] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-04-16T16:21:28.948+09:00  INFO 4792 --- [lotteon] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-04-16T16:21:29.284+09:00  INFO 4792 --- [lotteon] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-16T16:21:29.312+09:00  INFO 4792 --- [lotteon] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 1 JPA repository interface.
+2024-04-16T16:21:29.392+09:00  WARN 4792 --- [lotteon] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[kr.co.lotteon]' package. Please check your configuration.
+2024-04-16T16:21:29.629+09:00  INFO 4792 --- [lotteon] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-04-16T16:21:29.635+09:00  INFO 4792 --- [lotteon] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-04-16T16:21:29.635+09:00  INFO 4792 --- [lotteon] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-04-16T16:21:29.660+09:00  INFO 4792 --- [lotteon] [restartedMain] o.a.c.c.C.[.[localhost].[/lotteon]       : Initializing Spring embedded WebApplicationContext
+2024-04-16T16:21:29.661+09:00  INFO 4792 --- [lotteon] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 711 ms
+2024-04-16T16:21:29.743+09:00  INFO 4792 --- [lotteon] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-16T16:21:29.771+09:00  INFO 4792 --- [lotteon] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-16T16:21:29.791+09:00  INFO 4792 --- [lotteon] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-04-16T16:21:29.910+09:00  INFO 4792 --- [lotteon] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-16T16:21:29.924+09:00  INFO 4792 --- [lotteon] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-04-16T16:21:30.097+09:00  INFO 4792 --- [lotteon] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5e47a057
+2024-04-16T16:21:30.099+09:00  INFO 4792 --- [lotteon] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-04-16T16:21:30.131+09:00  WARN 4792 --- [lotteon] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-04-16T16:21:30.575+09:00  INFO 4792 --- [lotteon] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-16T16:21:30.602+09:00  INFO 4792 --- [lotteon] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:21:30.796+09:00  WARN 4792 --- [lotteon] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-16T16:21:30.938+09:00  INFO 4792 --- [lotteon] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@7931ba9e, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@3d7c6ae6, org.springframework.security.web.context.SecurityContextHolderFilter@2670b296, org.springframework.security.web.header.HeaderWriterFilter@35b122e6, org.springframework.web.filter.CorsFilter@520aa12, org.springframework.security.web.authentication.logout.LogoutFilter@5918aa9d, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6e610ed5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@571a5498, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5c0928db, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@18acd976, org.springframework.security.web.access.ExceptionTranslationFilter@1dac8058, org.springframework.security.web.access.intercept.AuthorizationFilter@c391608]
+2024-04-16T16:21:31.102+09:00  WARN 4792 --- [lotteon] [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@1b1b890b. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-16T16:21:31.102+09:00  INFO 4792 --- [lotteon] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@1b1b890b
+2024-04-16T16:21:31.118+09:00  INFO 4792 --- [lotteon] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-04-16T16:21:31.136+09:00  INFO 4792 --- [lotteon] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/lotteon'
+2024-04-16T16:21:31.141+09:00  INFO 4792 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : Started LotteonApplication in 2.527 seconds (process running for 2.808)
+2024-04-16T16:21:34.584+09:00  INFO 4792 --- [lotteon] [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/lotteon]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-04-16T16:21:34.585+09:00  INFO 4792 --- [lotteon] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-04-16T16:21:34.585+09:00  INFO 4792 --- [lotteon] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2024-04-16T16:22:53.034+09:00  INFO 4792 --- [lotteon] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:22:53.036+09:00  INFO 4792 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-04-16T16:22:53.040+09:00  INFO 4792 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-04-16T16:22:54.846+09:00  INFO 16612 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : Starting LotteonApplication using Java 17.0.9 with PID 16612 (C:\Users\java\Desktop\workspace\lotteon-team1\lotteon\build\classes\java\main started by java in C:\Users\java\Desktop\workspace\lotteon-team1\lotteon)
+2024-04-16T16:22:54.847+09:00  INFO 16612 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : No active profile set, falling back to 1 default profile: "default"
+2024-04-16T16:22:54.979+09:00  INFO 16612 --- [lotteon] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-04-16T16:22:54.979+09:00  INFO 16612 --- [lotteon] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-04-16T16:22:55.334+09:00  INFO 16612 --- [lotteon] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-16T16:22:55.359+09:00  INFO 16612 --- [lotteon] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 21 ms. Found 1 JPA repository interface.
+2024-04-16T16:22:55.434+09:00  WARN 16612 --- [lotteon] [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[kr.co.lotteon]' package. Please check your configuration.
+2024-04-16T16:22:55.659+09:00  INFO 16612 --- [lotteon] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2024-04-16T16:22:55.665+09:00  INFO 16612 --- [lotteon] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-04-16T16:22:55.665+09:00  INFO 16612 --- [lotteon] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.19]
+2024-04-16T16:22:55.691+09:00  INFO 16612 --- [lotteon] [restartedMain] o.a.c.c.C.[.[localhost].[/lotteon]       : Initializing Spring embedded WebApplicationContext
+2024-04-16T16:22:55.691+09:00  INFO 16612 --- [lotteon] [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 712 ms
+2024-04-16T16:22:55.771+09:00  INFO 16612 --- [lotteon] [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-16T16:22:55.799+09:00  INFO 16612 --- [lotteon] [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-16T16:22:55.819+09:00  INFO 16612 --- [lotteon] [restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-04-16T16:22:55.938+09:00  INFO 16612 --- [lotteon] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-16T16:22:55.951+09:00  INFO 16612 --- [lotteon] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-04-16T16:22:56.077+09:00  INFO 16612 --- [lotteon] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@728d8305
+2024-04-16T16:22:56.078+09:00  INFO 16612 --- [lotteon] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-04-16T16:22:56.108+09:00  WARN 16612 --- [lotteon] [restartedMain] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-04-16T16:22:56.546+09:00  INFO 16612 --- [lotteon] [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-16T16:22:56.572+09:00  INFO 16612 --- [lotteon] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:22:56.756+09:00  WARN 16612 --- [lotteon] [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-16T16:22:56.894+09:00  INFO 16612 --- [lotteon] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@742a5cbb, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@4abe55cb, org.springframework.security.web.context.SecurityContextHolderFilter@37518c75, org.springframework.security.web.header.HeaderWriterFilter@43d8cdc9, org.springframework.web.filter.CorsFilter@3d6b3e7c, org.springframework.security.web.authentication.logout.LogoutFilter@d45186c, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@437f7368, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@494a10b0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1154d6ae, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5920c655, org.springframework.security.web.access.ExceptionTranslationFilter@259ac269, org.springframework.security.web.access.intercept.AuthorizationFilter@3940fd48]
+2024-04-16T16:22:57.050+09:00  WARN 16612 --- [lotteon] [restartedMain] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@4ce73b41. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-16T16:22:57.050+09:00  INFO 16612 --- [lotteon] [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will not secure org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@4ce73b41
+2024-04-16T16:22:57.066+09:00  INFO 16612 --- [lotteon] [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-04-16T16:22:57.083+09:00  INFO 16612 --- [lotteon] [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/lotteon'
+2024-04-16T16:22:57.088+09:00  INFO 16612 --- [lotteon] [restartedMain] kr.co.lotteon.LotteonApplication         : Started LotteonApplication in 2.45 seconds (process running for 2.733)
+2024-04-16T16:22:58.351+09:00  INFO 16612 --- [lotteon] [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/lotteon]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-04-16T16:22:58.352+09:00  INFO 16612 --- [lotteon] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-04-16T16:22:58.352+09:00  INFO 16612 --- [lotteon] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 0 ms
+2024-04-16T16:23:02.463+09:00  INFO 16612 --- [lotteon] [http-nio-8080-exec-9] kr.co.lotteon.controller.MyController    : userDTO : UserDTO(user_id=test11, user_pw=abc1234, user_name=테스트, user_birth=2024-04-16T15:46:33, user_hp=01012345678, user_email=test11@naver.com, user_grade=ace, user_role=user, user_zip=1234, user_addr1=부산시 부산진구, user_addr2=1423, user_promo=Y, user_status=null, user_regDate=2024-04-16T15:47:14, user_visit_Date=null, user_provider=null, user_update=null, user_profile=null, user_point=0, userpoint_point_no=0)
+2024-04-16T16:24:19.966+09:00  INFO 16612 --- [lotteon] [http-nio-8080-exec-10] kr.co.lotteon.controller.MyController    : userDTO : UserDTO(user_id=test11, user_pw=abc1234, user_name=테스트, user_birth=2024-04-16T15:46:33, user_hp=01012345678, user_email=test11@naver.com, user_grade=ace, user_role=user, user_zip=1234, user_addr1=부산시 부산진구, user_addr2=1423, user_promo=Y, user_status=null, user_regDate=2024-04-16T15:47:14, user_visit_Date=null, user_provider=null, user_update=null, user_profile=null, user_point=0, userpoint_point_no=0)
+2024-04-16T16:24:20.367+09:00  INFO 16612 --- [lotteon] [http-nio-8080-exec-2] kr.co.lotteon.controller.MyController    : userDTO : UserDTO(user_id=test11, user_pw=abc1234, user_name=테스트, user_birth=2024-04-16T15:46:33, user_hp=01012345678, user_email=test11@naver.com, user_grade=ace, user_role=user, user_zip=1234, user_addr1=부산시 부산진구, user_addr2=1423, user_promo=Y, user_status=null, user_regDate=2024-04-16T15:47:14, user_visit_Date=null, user_provider=null, user_update=null, user_profile=null, user_point=0, userpoint_point_no=0)
+2024-04-16T16:24:21.046+09:00  INFO 16612 --- [lotteon] [http-nio-8080-exec-8] kr.co.lotteon.controller.MyController    : userDTO : UserDTO(user_id=test11, user_pw=abc1234, user_name=테스트, user_birth=2024-04-16T15:46:33, user_hp=01012345678, user_email=test11@naver.com, user_grade=ace, user_role=user, user_zip=1234, user_addr1=부산시 부산진구, user_addr2=1423, user_promo=Y, user_status=null, user_regDate=2024-04-16T15:47:14, user_visit_Date=null, user_provider=null, user_update=null, user_profile=null, user_point=0, userpoint_point_no=0)
+2024-04-16T16:44:12.080+09:00  INFO 16612 --- [lotteon] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:44:12.084+09:00  INFO 16612 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-04-16T16:44:12.091+09:00  INFO 16612 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-04-16T16:44:38.834+09:00  INFO 9104 --- [lotteon] [Test worker] kr.co.lotteon.LotteonApplicationTests    : Starting LotteonApplicationTests using Java 17.0.9 with PID 9104 (started by java in C:\Users\java\Desktop\workspace\lotteon-team1\lotteon)
+2024-04-16T16:44:38.835+09:00  INFO 9104 --- [lotteon] [Test worker] kr.co.lotteon.LotteonApplicationTests    : No active profile set, falling back to 1 default profile: "default"
+2024-04-16T16:44:39.352+09:00  INFO 9104 --- [lotteon] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-04-16T16:44:39.381+09:00  INFO 9104 --- [lotteon] [Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 1 JPA repository interface.
+2024-04-16T16:44:39.467+09:00  WARN 9104 --- [lotteon] [Test worker] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[kr.co.lotteon]' package. Please check your configuration.
+2024-04-16T16:44:39.683+09:00  INFO 9104 --- [lotteon] [Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-04-16T16:44:39.716+09:00  INFO 9104 --- [lotteon] [Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.4.Final
+2024-04-16T16:44:39.735+09:00  INFO 9104 --- [lotteon] [Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-04-16T16:44:39.881+09:00  INFO 9104 --- [lotteon] [Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-04-16T16:44:39.897+09:00  INFO 9104 --- [lotteon] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-04-16T16:44:40.060+09:00  INFO 9104 --- [lotteon] [Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3a116ca6
+2024-04-16T16:44:40.061+09:00  INFO 9104 --- [lotteon] [Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-04-16T16:44:40.092+09:00  WARN 9104 --- [lotteon] [Test worker] org.hibernate.orm.deprecation            : HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2024-04-16T16:44:40.579+09:00  INFO 9104 --- [lotteon] [Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-04-16T16:44:40.894+09:00  INFO 9104 --- [lotteon] [Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:44:41.204+09:00  WARN 9104 --- [lotteon] [Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-04-16T16:44:41.476+09:00  INFO 9104 --- [lotteon] [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@33a0b857, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@b3c7c75, org.springframework.security.web.context.SecurityContextHolderFilter@47184859, org.springframework.security.web.header.HeaderWriterFilter@157e0f6b, org.springframework.web.filter.CorsFilter@55e75ce0, org.springframework.security.web.authentication.logout.LogoutFilter@15d0f2a3, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6d92bfaf, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@11564455, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@173c0722, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3325f17, org.springframework.security.web.access.ExceptionTranslationFilter@5ca896af, org.springframework.security.web.access.intercept.AuthorizationFilter@13157620]
+2024-04-16T16:44:41.776+09:00  WARN 9104 --- [lotteon] [Test worker] o.s.s.c.a.web.builders.WebSecurity       : You are asking Spring Security to ignore org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@2258228f. This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+2024-04-16T16:44:41.776+09:00  INFO 9104 --- [lotteon] [Test worker] o.s.s.web.DefaultSecurityFilterChain     : Will not secure org.springframework.boot.autoconfigure.security.servlet.StaticResourceRequest$StaticResourceRequestMatcher@2258228f
+2024-04-16T16:44:41.815+09:00  INFO 9104 --- [lotteon] [Test worker] kr.co.lotteon.LotteonApplicationTests    : Started LotteonApplicationTests in 3.151 seconds (process running for 3.78)
+2024-04-16T16:44:42.167+09:00  INFO 9104 --- [lotteon] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T16:44:42.169+09:00  INFO 9104 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-04-16T16:44:42.172+09:00  INFO 9104 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

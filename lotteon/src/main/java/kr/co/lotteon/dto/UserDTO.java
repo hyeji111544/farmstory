@@ -1,24 +1,18 @@
-package kr.co.lotteon.entity;
+package kr.co.lotteon.dto;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @ToString
-@Entity
-@Table(name="user")
-public class User {
-    @Id
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class UserDTO {
+
+    //user
     private String userId;
     private String userPw;
     private String userName;
@@ -32,11 +26,10 @@ public class User {
     private String userAddr2;
     private String userPromo;
     private String userStatus;
-    @CreationTimestamp
     private LocalDateTime userRegDate;
-    private LocalDateTime userVisit_Date;
+    private LocalDateTime userVisitDate;
     private String userProvider;
     private LocalDateTime userUpdate;
     private String userProfile;
     private int userPoint;
- }
+}
