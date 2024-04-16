@@ -1,0 +1,107 @@
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layout/adminLayout.html}">
+<!--내용 시작-->
+    <section id="admin-product-list" layout:fragment="content">
+        <nav>
+            <h3>공지사항</h3>
+            <p>
+                HOME > 고객센터 > <strong>공지사항</strong>
+            </p>
+        </nav>
+        <!-- 상품목록 컨텐츠 시작 -->
+        <section>
+            <div>
+                <select name="search">
+                    <option value="search1">유형선택</option>
+                    <option value="search1">고객서비스</option>
+                    <option value="search1">이벤트당첨</option>
+                    <option value="search1">안전거래</option>
+                    <option value="search1">위해상품</option>
+                </select>
+            </div>
+            <table>
+                <tr>
+                    <th><input type="checkbox" name="all"/></th>
+                    <th>번호</th>
+                    <th>유형</th>
+                    <th>제목</th>
+                    <th>조회</th>
+                    <th>날짜</th>
+                    <th>관리</th>
+                </tr>
+
+                <tr>
+                    <td><input type="checkbox" name="상품코드1"/></td>
+                    <td>100</td>
+                    <td>고객서비스</td>
+                    <td>[안내] 해외결제 사칭 문자 주의</td>
+                    <td>120</td>
+                    <td>00.00.00</td>
+                    <td>
+                        <a href="#">[삭제]</a><br>
+                        <a href="#">[수정]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="상품코드2"/></td>
+                    <td>99</td>
+                    <td>이벤트 당첨</td>
+                    <td>[발표] G.Live X SK스토아(하남쭈꾸미),이벤트 당첨자</td>
+                    <td>120</td>
+                    <td>00.00.00</td>
+                    <td>
+                        <a href="#">[삭제]</a><br>
+                        <a href="#">[수정]</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" name="상품코드3"/></td>
+                    <td>98</td>
+                    <td>안전거래</td>
+                    <td>[안내] 로젠택배 반품/교환 수거지시 지연 안내</td>
+                    <td>120</td>
+                    <td>00.00.00</td>
+                    <td>
+                        <a href="#">[삭제]</a><br>
+                        <a href="#">[수정]</a>
+                    </td>
+                </tr>
+
+
+            </table>
+
+
+            <input type="button" value="선택삭제" />
+            <a th:href="@{/admin/cs/notice/write}"><input type="button" value="작성하기" style="float: right;" /></a>
+
+
+            <div class="paging">
+                <span class="prev">
+                    <a href="#"><&nbsp;이전</a>
+                </span>
+                <span class="num">
+                    <a href="#" class="on">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                </span>
+                <span class="next">
+                    <a href="#">다음&nbsp;></a>
+                </span>
+                </div>
+
+
+        </section>
+
+
+        <p class="ico info">
+            <strong>Tip!</strong>
+            전자상거래 등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성 등을 양식에 따라 입력할 수 있습니다.
+        </p>
+
+
+
+        <!-- 상품목록 컨텐츠 끝 -->
+    </section>
+<!--내용 끝-->
+</html>
