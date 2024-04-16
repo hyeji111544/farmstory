@@ -53,7 +53,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final DateTimePath<java.time.LocalDateTime> userUpdate = createDateTime("userUpdate", java.time.LocalDateTime.class);
 
-    public final DateTimePath<java.time.LocalDateTime> userVisit_Date = createDateTime("userVisit_Date", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> userVisitDate = createDateTime("userVisitDate", java.time.LocalDateTime.class);
 
     public final StringPath userZip = createString("userZip");
 

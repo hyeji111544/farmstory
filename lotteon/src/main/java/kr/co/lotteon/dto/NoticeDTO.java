@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class NoticeDTO {
-
+// 카멜 표기법으로 수정할 것
     private Integer notice_no;
     private String notice_title;
     private String notice_content;

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UsedpointDTO {
+public class pointHistoryDTO {
 
     private String pointUsedNo;
     private LocalDateTime pointUsed;

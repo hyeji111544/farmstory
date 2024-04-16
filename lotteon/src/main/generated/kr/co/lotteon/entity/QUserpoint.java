@@ -10,31 +10,31 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QUserpoint is a Querydsl query type for Userpoint
+ * QUserPoint is a Querydsl query type for UserPoint
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QUserpoint extends EntityPathBase<Userpoint> {
+public class QUserPoint extends EntityPathBase<UserPoint> {
 
-    private static final long serialVersionUID = 1812520674L;
+    private static final long serialVersionUID = 1782968002L;
 
-    public static final QUserpoint userpoint = new QUserpoint("userpoint");
+    public static final QUserPoint userPoint = new QUserPoint("userPoint");
 
-    public final StringPath pointBalance = createString("pointBalance");
+    public final NumberPath<Integer> pointBalance = createNumber("pointBalance", Integer.class);
 
     public final NumberPath<Integer> pointNo = createNumber("pointNo", Integer.class);
 
     public final StringPath userId = createString("userId");
 
-    public QUserpoint(String variable) {
-        super(Userpoint.class, forVariable(variable));
+    public QUserPoint(String variable) {
+        super(UserPoint.class, forVariable(variable));
     }
 
-    public QUserpoint(Path<? extends Userpoint> path) {
+    public QUserPoint(Path<? extends UserPoint> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QUserpoint(PathMetadata metadata) {
-        super(Userpoint.class, metadata);
+    public QUserPoint(PathMetadata metadata) {
+        super(UserPoint.class, metadata);
     }
 
 }

@@ -19,21 +19,21 @@ public class QQna extends EntityPathBase<Qna> {
 
     public static final QQna qna = new QQna("qna");
 
-    public final StringPath qna_cate = createString("qna_cate");
+    public final StringPath qnaCate = createString("qnaCate");
 
-    public final StringPath qna_content = createString("qna_content");
+    public final StringPath qnaContent = createString("qnaContent");
 
-    public final DateTimePath<java.time.LocalDateTime> qna_date = createDateTime("qna_date", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> qnaDate = createDateTime("qnaDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> qna_no = createNumber("qna_no", Integer.class);
+    public final NumberPath<Integer> qnaNo = createNumber("qnaNo", Integer.class);
 
-    public final StringPath qna_status = createString("qna_status");
+    public final StringPath qnaStatus = createString("qnaStatus");
 
-    public final StringPath qna_title = createString("qna_title");
+    public final StringPath qnaTitle = createString("qnaTitle");
 
-    public final StringPath qna_type = createString("qna_type");
+    public final StringPath qnaType = createString("qnaType");
 
-    public final StringPath user_id = createString("user_id");
+    public final StringPath userId = createString("userId");
 
     public QQna(String variable) {
         super(Qna.class, forVariable(variable));

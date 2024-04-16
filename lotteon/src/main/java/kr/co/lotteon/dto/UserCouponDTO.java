@@ -10,13 +10,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User_couponDTO {
-
-    private String couponId;
+public class UserCouponDTO {
+    private int couponId;
+    private String userId;
+    private int cpNo;
     private LocalDateTime ucpDate;
     private LocalDateTime ucpUseDate;
     private String ucpStatus;
-    private String userId;
-    private String cpNo;
-
 }

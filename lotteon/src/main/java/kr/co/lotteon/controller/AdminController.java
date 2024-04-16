@@ -1,12 +1,8 @@
 package kr.co.lotteon.controller;
 
-import ch.qos.logback.classic.Logger;
-import groovy.util.logging.Slf4j;
 import kr.co.lotteon.dto.Cate02DTO;
-import kr.co.lotteon.dto.ProductDTO;
 import kr.co.lotteon.service.AdminService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,17 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import java.util.List;
 import kr.co.lotteon.dto.NoticeDTO;
 import kr.co.lotteon.dto.PageRequestDTO;
 import kr.co.lotteon.dto.PageResponseDTO;
-import kr.co.lotteon.service.AdminService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
@@ -71,6 +61,7 @@ public class AdminController {
         return "/admin/product/register";
     }
 
+    // ??
     @PutMapping("/admin/product/cate")
     public ResponseEntity<?> changeCate(@RequestBody String cate01_no, Model model){
 

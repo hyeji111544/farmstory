@@ -19,7 +19,7 @@ public class QWish extends EntityPathBase<Wish> {
 
     public static final QWish wish = new QWish("wish");
 
-    public final StringPath prodNo = createString("prodNo");
+    public final NumberPath<Integer> prodNo = createNumber("prodNo", Integer.class);
 
     public final StringPath userId = createString("userId");
 

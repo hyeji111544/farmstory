@@ -17,12 +17,12 @@ public class Notice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer notice_no;
-    private String notice_title;
-    private String notice_content;
-    private String notice_type;
-    private String notice_cate;
+    private int noticeNo;
+    private String noticeTitle;
+    private String noticeContent;
 
     @CreationTimestamp
-    private LocalDateTime notice_date;
+    private LocalDateTime noticeDate;
+    private String noticeType;
+    private String noticeCate;
 }

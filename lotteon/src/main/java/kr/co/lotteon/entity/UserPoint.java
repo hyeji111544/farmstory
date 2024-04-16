@@ -13,10 +13,9 @@ import lombok.*;
 @ToString
 @Entity
 @Table(name="userpoint")
-public class Userpoint {
-
+public class UserPoint {
     @Id
     private int pointNo;
     private String userId;
-    private String pointBalance;
+    private int pointBalance;
 }

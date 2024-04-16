@@ -15,18 +15,14 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Entity
-@Table(name="user_coupon")
-public class User_coupon {
-
+@Table(name="usercoupon")
+public class UserCoupon {
     @Id
     private int couponId;
-
+    private String userId;
+    private int cpNo;
     @CreationTimestamp
     private LocalDateTime ucpDate;
     private LocalDateTime ucpUseDate;
-
     private String ucpStatus;
-    private String userId;
-    private String cpNo;
-
 }

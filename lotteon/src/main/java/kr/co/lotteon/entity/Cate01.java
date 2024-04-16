@@ -18,6 +18,6 @@ import java.time.LocalDateTime;
 @Table(name="cate01")
 public class Cate01 {
     @Id
-    private String cate01_no;
-    private String cate01_name;
+    private String cate01No;
+    private String cate01Name;
  }

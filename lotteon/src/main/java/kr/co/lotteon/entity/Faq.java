@@ -14,15 +14,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "faq")
 public class Faq {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer faq_no;
-    private String faq_title;
-    private String faq_content;
-    private String faq_type;
-    private String faq_cate;
+    private int faqNo;
+    private String faqTitle;
+    private String faqContent;
 
     @CreationTimestamp
-    private LocalDateTime faq_date;
+    private LocalDateTime faqDate;
+    private String faqType;
+    private String faqCate;
 }

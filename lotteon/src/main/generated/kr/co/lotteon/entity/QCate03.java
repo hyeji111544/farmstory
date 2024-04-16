@@ -19,11 +19,11 @@ public class QCate03 extends EntityPathBase<Cate03> {
 
     public static final QCate03 cate03 = new QCate03("cate03");
 
-    public final StringPath cate02_no = createString("cate02_no");
+    public final StringPath cate02No = createString("cate02No");
 
-    public final StringPath cate03_name = createString("cate03_name");
+    public final StringPath cate03Name = createString("cate03Name");
 
-    public final StringPath cate03_no = createString("cate03_no");
+    public final StringPath cate03No = createString("cate03No");
 
     public QCate03(String variable) {
         super(Cate03.class, forVariable(variable));

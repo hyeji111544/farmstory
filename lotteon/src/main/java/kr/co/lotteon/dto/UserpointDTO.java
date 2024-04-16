@@ -9,9 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserpointDTO {
-
-    //user_point
     private int pointNo;
     private String userId;
-    private String pointBalance;
+    private int pointBalance;
 }

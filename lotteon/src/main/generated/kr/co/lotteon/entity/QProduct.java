@@ -19,43 +19,37 @@ public class QProduct extends EntityPathBase<Product> {
 
     public static final QProduct product = new QProduct("product");
 
-    public final StringPath cate_code = createString("cate_code");
+    public final StringPath cateCode = createString("cateCode");
 
-    public final NumberPath<Integer> discount = createNumber("discount", Integer.class);
+    public final StringPath prodBusinessType = createString("prodBusinessType");
 
-    public final StringPath prod_business_type = createString("prod_business_type");
+    public final StringPath prodCompany = createString("prodCompany");
 
-    public final StringPath prod_company = createString("prod_company");
+    public final NumberPath<Integer> prodDeliveryFee = createNumber("prodDeliveryFee", Integer.class);
 
-    public final NumberPath<Integer> prod_delivery_fee = createNumber("prod_delivery_fee", Integer.class);
+    public final NumberPath<Integer> prodDiscount = createNumber("prodDiscount", Integer.class);
 
-    public final StringPath prod_info = createString("prod_info");
+    public final StringPath prodInfo = createString("prodInfo");
 
-    public final StringPath prod_name = createString("prod_name");
+    public final StringPath prodName = createString("prodName");
 
-    public final NumberPath<Integer> prod_no = createNumber("prod_no", Integer.class);
+    public final NumberPath<Integer> prodNo = createNumber("prodNo", Integer.class);
 
-    public final StringPath prod_org = createString("prod_org");
+    public final StringPath prodOrg = createString("prodOrg");
 
-    public final NumberPath<Integer> prod_point = createNumber("prod_point", Integer.class);
+    public final NumberPath<Integer> prodPrice = createNumber("prodPrice", Integer.class);
 
-    public final NumberPath<Integer> prod_price = createNumber("prod_price", Integer.class);
+    public final DateTimePath<java.time.LocalDateTime> prodRdate = createDateTime("prodRdate", java.time.LocalDateTime.class);
 
-    public final DateTimePath<java.time.LocalDateTime> prod_rdate = createDateTime("prod_rdate", java.time.LocalDateTime.class);
+    public final StringPath prodReceipt = createString("prodReceipt");
 
-    public final StringPath prod_receipt = createString("prod_receipt");
+    public final StringPath prodSeller = createString("prodSeller");
 
-    public final StringPath prod_seller = createString("prod_seller");
+    public final NumberPath<Integer> prodSold = createNumber("prodSold", Integer.class);
 
-    public final NumberPath<Integer> prod_sold = createNumber("prod_sold", Integer.class);
+    public final StringPath prodStatus = createString("prodStatus");
 
-    public final StringPath prod_status = createString("prod_status");
-
-    public final NumberPath<Integer> prod_stock = createNumber("prod_stock", Integer.class);
-
-    public final StringPath prod_tax = createString("prod_tax");
-
-    public final StringPath thumb = createString("thumb");
+    public final StringPath prodTax = createString("prodTax");
 
     public QProduct(String variable) {
         super(Product.class, forVariable(variable));

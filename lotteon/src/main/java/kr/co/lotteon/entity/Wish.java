@@ -17,15 +17,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name="wish")
 public class Wish {
-
     @Id
     private int wishNo;
-
+    private String userId;
+    private int prodNo;
     @CreationTimestamp
     private LocalDateTime wishRdate;
-
     private String wishStatus;
-    private String userId;
-    private String prodNo;
-
 }

@@ -34,7 +34,7 @@ public class User {
     private String userStatus;
     @CreationTimestamp
     private LocalDateTime userRegDate;
-    private LocalDateTime userVisit_Date;
+    private LocalDateTime userVisitDate;
     private String userProvider;
     private LocalDateTime userUpdate;
     private String userProfile;

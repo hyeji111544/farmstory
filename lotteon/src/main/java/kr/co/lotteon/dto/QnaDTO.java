@@ -1,7 +1,6 @@
 package kr.co.lotteon.dto;
 
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,12 +10,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class QnaDTO {
-
-    private Integer qna_no;
-    private String qna_title;
-    private String qna_content;
-    private String qna_type;
-    private String qna_cate;
-    private String qna_status;
-    private LocalDateTime qna_date;
+    private Integer qnaNo;
+    private String userId;
+    private String qnaTitle;
+    private String qnaContent;
+    private LocalDateTime qnaDate;
+    private String qnaType;
+    private String qnaCate;
+    private String qnaStatus;
 }
