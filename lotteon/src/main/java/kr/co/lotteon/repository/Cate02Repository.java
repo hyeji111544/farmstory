@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface Cate02Repository extends JpaRepository<Cate02, String> {
+    // ??
     List<Cate02> findByCate01No(String cate01No);
 
 }

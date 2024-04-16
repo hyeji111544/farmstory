@@ -19,17 +19,17 @@ public class QFaq extends EntityPathBase<Faq> {
 
     public static final QFaq faq = new QFaq("faq");
 
-    public final StringPath faq_cate = createString("faq_cate");
+    public final StringPath faqCate = createString("faqCate");
 
-    public final StringPath faq_content = createString("faq_content");
+    public final StringPath faqContent = createString("faqContent");
 
-    public final DateTimePath<java.time.LocalDateTime> faq_date = createDateTime("faq_date", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> faqDate = createDateTime("faqDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Integer> faq_no = createNumber("faq_no", Integer.class);
+    public final NumberPath<Integer> faqNo = createNumber("faqNo", Integer.class);
 
-    public final StringPath faq_title = createString("faq_title");
+    public final StringPath faqTitle = createString("faqTitle");
 
-    public final StringPath faq_type = createString("faq_type");
+    public final StringPath faqType = createString("faqType");
 
     public QFaq(String variable) {
         super(Faq.class, forVariable(variable));

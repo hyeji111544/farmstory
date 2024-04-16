@@ -1,7 +1,6 @@
 package kr.co.lotteon.dto;
 
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,8 +10,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class UserDTO {
-
-    //user
     private String userId;
     private String userPw;
     private String userName;

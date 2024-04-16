@@ -19,9 +19,9 @@ public class QCate01 extends EntityPathBase<Cate01> {
 
     public static final QCate01 cate01 = new QCate01("cate01");
 
-    public final StringPath cate01_name = createString("cate01_name");
+    public final StringPath cate01Name = createString("cate01Name");
 
-    public final StringPath cate01_no = createString("cate01_no");
+    public final StringPath cate01No = createString("cate01No");
 
     public QCate01(String variable) {
         super(Cate01.class, forVariable(variable));

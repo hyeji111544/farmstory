@@ -10,18 +10,18 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QUser_coupon is a Querydsl query type for User_coupon
+ * QUserCoupon is a Querydsl query type for UserCoupon
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QUser_coupon extends EntityPathBase<User_coupon> {
+public class QUserCoupon extends EntityPathBase<UserCoupon> {
 
-    private static final long serialVersionUID = -169848297L;
+    private static final long serialVersionUID = -934386380L;
 
-    public static final QUser_coupon user_coupon = new QUser_coupon("user_coupon");
+    public static final QUserCoupon userCoupon = new QUserCoupon("userCoupon");
 
     public final NumberPath<Integer> couponId = createNumber("couponId", Integer.class);
 
-    public final StringPath cpNo = createString("cpNo");
+    public final NumberPath<Integer> cpNo = createNumber("cpNo", Integer.class);
 
     public final DateTimePath<java.time.LocalDateTime> ucpDate = createDateTime("ucpDate", java.time.LocalDateTime.class);
 
@@ -31,16 +31,16 @@ public class QUser_coupon extends EntityPathBase<User_coupon> {
 
     public final StringPath userId = createString("userId");
 
-    public QUser_coupon(String variable) {
-        super(User_coupon.class, forVariable(variable));
+    public QUserCoupon(String variable) {
+        super(UserCoupon.class, forVariable(variable));
     }
 
-    public QUser_coupon(Path<? extends User_coupon> path) {
+    public QUserCoupon(Path<? extends UserCoupon> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QUser_coupon(PathMetadata metadata) {
-        super(User_coupon.class, metadata);
+    public QUserCoupon(PathMetadata metadata) {
+        super(UserCoupon.class, metadata);
     }
 
 }

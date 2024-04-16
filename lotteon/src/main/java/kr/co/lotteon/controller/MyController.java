@@ -1,6 +1,5 @@
 package kr.co.lotteon.controller;
 
-import groovy.util.logging.Log;
 import kr.co.lotteon.dto.UserDTO;
 import kr.co.lotteon.service.MyService;
 import lombok.RequiredArgsConstructor;

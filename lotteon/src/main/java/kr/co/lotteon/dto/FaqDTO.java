@@ -11,11 +11,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class FaqDTO {
-
-    private Integer faq_no;
-    private String faq_title;
-    private String faq_content;
-    private String faq_type;
-    private String faq_cate;
-    private LocalDateTime faq_date;
+    private int faqNo;
+    private String faqTitle;
+    private String faqContent;
+    private LocalDateTime faqDate;
+    private String faqType;
+    private String faqCate;
 }

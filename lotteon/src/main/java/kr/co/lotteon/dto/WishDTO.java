@@ -1,8 +1,7 @@
 package kr.co.lotteon.dto;
 
-import jakarta.persistence.Id;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,9 +10,9 @@ import org.hibernate.annotations.CreationTimestamp;
 @AllArgsConstructor
 @Builder
 public class WishDTO {
-
-    private String wishRdate;
+    private int wishNo;
+    private String userId;
+    private int prodNo;
+    private LocalDateTime wishRdate;
     private String wishStatus;
-    private String prodNo;
-
 }

@@ -15,7 +15,7 @@ import lombok.*;
 @Table(name="cate03")
 public class Cate03 {
     @Id
-    private String cate03_no;
-    private String cate02_no;
-    private String cate03_name;
+    private String cate03No;
+    private String cate03Name;
+    private String cate02No;
  }

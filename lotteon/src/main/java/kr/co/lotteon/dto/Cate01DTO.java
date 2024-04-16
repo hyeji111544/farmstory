@@ -9,8 +9,6 @@ import lombok.*;
 @ToString
 @Builder
 public class Cate01DTO {
-
-    private String cate01_no;
-    private String cate01_name;
-
+    private String cate01No;
+    private String cate01Name;
 }

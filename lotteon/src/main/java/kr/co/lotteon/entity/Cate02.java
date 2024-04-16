@@ -17,12 +17,7 @@ import org.hibernate.mapping.Value;
 @Table(name="cate02")
 public class Cate02 {
     @Id
-    @Column(name="cate02_no")
     private String cate02No;
-
-    @Column(name="cate01_no")
-    private String cate01No;
-
-    @Column(name="cate02_name")
     private String cate02Name;
+    private String cate01No;
  }

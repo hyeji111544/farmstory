@@ -27,7 +27,7 @@ public class MemberController {
     public String terms(Model model, String user_role){
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setUser_role(user_role);
+        userDTO.setUserRole(user_role);
         TermsDTO termsDTO = termsService.selectTerms();
         model.addAttribute(termsDTO);
         model.addAttribute(userDTO);

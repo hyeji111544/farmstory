@@ -7,23 +7,21 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
+@ToString
 @Entity
-@Table(name = "qna")
-public class Qna {
+@Table(name="pointhistory")
+public class PointHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer qnaNo;
-    private String userId;
-    private String qnaTitle;
-    private String qnaContent;
+    private int pointHisNo;
+    private int pointNo;
+    private String changePoint;
 
     @CreationTimestamp
-    private LocalDateTime qnaDate;
-    private String qnaType;
-    private String qnaCate;
-    private String qnaStatus;
+    private LocalDateTime changeDate;
+    private String changeCode;
 }
