@@ -1,14 +1,20 @@
 package kr.co.lotteon.controller;
 
-import groovy.util.logging.Slf4j;
+import groovy.util.logging.Log;
+import kr.co.lotteon.dto.UserDTO;
+import kr.co.lotteon.service.MyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
 public class MyController {
+
+    private final MyService myService;
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
@@ -24,7 +30,10 @@ public class MyController {
 
     //마이페이지-정보 이동
     @GetMapping("/my/info")
-    public String myInfo(){
+    public String myInfo(Model model, String userId){
+        UserDTO userDTO = myService.selectUserInfo(userId);
+        model.addAttribute("userDTO", userDTO);
+        log.info("userDTO : " + userDTO);
         return "/my/info";
     }
 
