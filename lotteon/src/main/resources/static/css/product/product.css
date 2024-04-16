@@ -907,7 +907,7 @@
   margin-top: 4px;
 }
 #product > .cart > form > table article img {width: 80px;}
-#product > .cart > form > .total {
+#product > .cart > .total {
   float: right;
   width: 360px;
   height: 412px;
@@ -918,7 +918,7 @@
   box-sizing: border-box;
 }
 
-#product > .cart > form > .total > h2 {
+#product > .cart > .total > h2 {
   width: 100%;
   font-weight: bold;
   font-size: 16px;
@@ -928,26 +928,26 @@
   box-sizing: border-box;
   color: #1e1e1e;
 }
-#product > .cart > form > .total > table {width: 100%;}
-#product > .cart > form > .total > table tr {}
-#product > .cart > form > .total > table tr:nth-last-child(2) {}
-#product > .cart > form > .total > table tr:nth-last-child(1) td {font-size: 20px;}
-#product > .cart > form > .total > table tr:nth-last-child(1) td:last-child {
+#product > .cart > .total > table {width: 100%;}
+#product > .cart > .total > table tr {}
+#product > .cart > .total > table tr:nth-last-child(2) {}
+#product > .cart > .total > table tr:nth-last-child(1) td {font-size: 20px;}
+#product > .cart > .total > table tr:nth-last-child(1) td:last-child {
   color: #ff006c;  
   font-size: 20px;
   font-weight: bold;
 }
 
-#product > .cart > form > .total > table td {
+#product > .cart > .total > table td {
   padding: 10px 0;
   font-size: 14px;
   color: #555;
 }
 
-#product > .cart > form > .total > table td:last-child {
+#product > .cart > .total > table td:last-child {
   text-align: right;
 }
-#product > .cart > form > .total > input[type=submit] {
+#product > .cart > .total > input[type=submit] {
   width: 100%;
   height: 56px;
   font-size: 26px;

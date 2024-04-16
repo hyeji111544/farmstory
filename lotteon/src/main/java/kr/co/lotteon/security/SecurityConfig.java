@@ -39,7 +39,6 @@ public class SecurityConfig {
                                     .requestMatchers("/").permitAll()
                                     .requestMatchers("/article/**").permitAll()
                                     //.requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                                    .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                                     .requestMatchers("/manager/**").hasAnyAuthority("ADMIN", "MANAGER")
                                     .anyRequest().permitAll()
         );
