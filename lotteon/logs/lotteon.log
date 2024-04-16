@@ -4660,3 +4660,6 @@ org.thymeleaf.exceptions.TemplateProcessingException: Could not parse as express
 2024-04-16T11:14:30.342+09:00  INFO 5736 --- [lotteon] [http-nio-8080-exec-1] o.a.c.c.C.[.[localhost].[/lotteon]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2024-04-16T11:14:30.342+09:00  INFO 5736 --- [lotteon] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2024-04-16T11:14:30.343+09:00  INFO 5736 --- [lotteon] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-04-16T11:47:12.261+09:00  INFO 5736 --- [lotteon] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-04-16T11:47:12.264+09:00  INFO 5736 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-04-16T11:47:12.268+09:00  INFO 5736 --- [lotteon] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
