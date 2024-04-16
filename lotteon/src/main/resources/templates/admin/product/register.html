@@ -3,7 +3,42 @@
     layout:decorate="~{/layout/adminLayout.html}">
 <!--내용 시작-->
     <section id="admin-product-register" layout:fragment="content">
+        <script>
+            function onSelect(){
+                var selectElement = document.getElementsByName('cate01_no')[0]; // cate01_no 드롭다운 요소 가져오기
+                var selectedValue = selectElement.value;
+
+                console.log(selectedValue);
+                const jsonDate = {
+                    cate01_no : selectedValue
+                };
+                fetchPut(`/lotteon/admin/product/cate`, jsonDate)
+                    .then(data => {
+                        console.log(data);
+                        updateSecondDropdown(data);
+
+                    })
+                    .catch(error=>{
+                        console.error(error);
+                    });
+
+                function updateSecondDropdown(cate02Data) {
+                    var selectElement = document.getElementsByName('cate02_no')[0];
+                    selectElement.innerHTML = '<option value="">2차 분류 선택</option>';
+
+                    // 받은 데이터로 옵션 추가
+                    cate02Data.forEach(function(item) {
+                        var optionElement = document.createElement('option');
+                        optionElement.value = item.cate02_no;
+                        optionElement.textContent = item.name;
+                        selectElement.appendChild(optionElement);
+                    });
+                }
+            }
+        </script>
         <nav>
+            <script th:src="@{/js/util.js}"></script>
+
             <h3>상품등록</h3>
             <p>
                 HOME > 상품관리 > <strong>상품등록</strong>
@@ -23,24 +58,20 @@
                         <tr>
                             <td>1차 분류</td>
                             <td>
-                                <select name="category1">
-                                    <option value="cate0">1차 분류 선택</option>
+                                <select name="cate01_no" onchange="onSelect()">
+                                    <option value="">1차 분류 선택</option>
                                     <option value="AA">패션·의류·뷰티</option>
-                                    <option value="cate12">가전·디지털</option>
-                                    <option value="cate13">식품·생필품</option>
-                                    <option value="cate14">홈·문구·취미</option>
+                                    <option value="BB">가전·디지털</option>
+                                    <option value="CC">식품·생필품</option>
+                                    <option value="DD">홈·문구·취미</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>2차 분류</td>
                             <td>
-                                <select name="category2">
-                                    <option value="cate0">2차 분류 선택</option>
-                                    <option value="01">남성의류</option>
-                                    <option value="cate22">여성의류</option>
-                                    <option value="cate23">잡화</option>
-                                    <option value="cate24">뷰티</option>
+                                <select name="cate02_no">
+                                    <option value="">2차 분류 선택</option>
                                 </select>
                             </td>
                         </tr>
@@ -56,46 +87,46 @@
                     <table>
                         <tr>
                             <td>상품명</td>
-                            <td><input type="text" name="#"/></td>
+                            <td><input type="text" name="prod_name"/></td>
                         </tr>
                         <tr>
                             <td>기본설명</td>
                             <td>
                                 <span>상품명 하단에 상품에 대한 추가적인 설명이 필요한 경우에 입력</span>
-                                <input type="text" name="#"/>
+                                <input type="text" name="prod_info"/>
                             </td>
                         </tr>
                         <tr>
                             <td>제조사</td>
-                            <td><input type="text" name="#"/></td>
+                            <td><input type="text" name="prod_company"/></td>
                         </tr>
                         <tr>
                             <td>판매가격</td>
-                            <td><input type="text" name="#"/>원</td>
+                            <td><input type="text" name="prod_price"/>원</td>
                         </tr>
                         <tr>
                             <td>할인율</td>
                             <td>
                                 <span>0을 입력하면 할인율 없음</span>
-                                <input type="text" name="#"/>원
+                                <input type="text" name="discount"/>원
                             </td>
                         </tr>
                         <tr>
                             <td>포인트</td>
                             <td>
                                 <span>0을 입력하면 포인트 없음</span>
-                                <input type="text" name="#"/>점
+                                <input type="text" name="prod_point"/>점
                             </td>
                         </tr>
                         <tr>
                             <td>재고수량</td>
-                            <td><input type="text" name="#"/>개</td>
+                            <td><input type="text" name="prod_stock"/>개</td>
                         </tr>
                         <tr>
                             <td>배송비</td>
                             <td>
                                 <span>0을 입력하면 배송비 무료</span>
-                                <input type="text" name="#"/>원
+                                <input type="text" name="prod_delivery_fee"/>원
                             </td>
                         </tr>
                         <tr>
@@ -130,23 +161,23 @@
                     <table>
                         <tr>
                             <td>상품상태</td>
-                            <td><input type="text" name="" value="새상품"/></td>
+                            <td><input type="text" name="prod_status" value="새상품"/></td>
                         </tr>
                         <tr>
                             <td>부가세 면세여부</td>
-                            <td><input type="text" name="" value="과세상품"/></td>
+                            <td><input type="text" name="prod_tax" value="과세상품"/></td>
                         </tr>
                         <tr>
                             <td>영수증발행</td>
-                            <td><input type="text" name="" value="발행가능 - 신용카드 전표, 온라인 현금영수증"/></td>
+                            <td><input type="text" name="prod_receipt" value="발행가능 - 신용카드 전표, 온라인 현금영수증"/></td>
                         </tr>
                         <tr>
                             <td>사업자구분</td>
-                            <td><input type="text" name="" value="사업자 판매자"/></td>
+                            <td><input type="text" name="prod_business_type" value="사업자 판매자"/></td>
                         </tr>
                         <tr>
                             <td>원산지</td>
-                            <td><input type="text" name="" value="국내산"/></td>
+                            <td><input type="text" name="prod_org" value="국내산"/></td>
                         </tr>
                     </table>
                 </section>
