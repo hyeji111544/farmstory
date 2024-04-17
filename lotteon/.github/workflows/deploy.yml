@@ -47,12 +47,12 @@ jobs:
         
       # 빌드
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./lotteon/gradlew build
         shell: bash
         
       # 빌드된 결과물을 zip 파일로 압축
       - name: Make zip file
-        run: zip -r ./$GITHUB_SHA.zip .
+        run: zip -r ./lotteon/$GITHUB_SHA.zip .
         shell: bash
 
       # AWS 자격 증명 구성
@@ -65,7 +65,7 @@ jobs:
           
       # script files 복사
       - name: Copy script
-        run: cp ./scripts/*.sh ./deploy
+        run: cp ./lotteon/scripts/*.sh ./lotteon/deploy
       
       # S3에 빌드 결과 업로드
       - name: Upload to S3
