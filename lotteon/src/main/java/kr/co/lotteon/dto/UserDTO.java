@@ -1,6 +1,10 @@
 package kr.co.lotteon.dto;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -13,7 +17,7 @@ public class UserDTO {
     private String userId;
     private String userPw;
     private String userName;
-    private LocalDateTime userBirth;
+    private LocalDate userBirth;
     private String userHp;
     private String userEmail;
     private String userGrade;
@@ -23,10 +27,24 @@ public class UserDTO {
     private String userAddr2;
     private String userPromo;
     private String userStatus;
+
+    @CreationTimestamp
     private LocalDateTime userRegDate;
+
     private LocalDateTime userVisitDate;
     private String userProvider;
     private LocalDateTime userUpdate;
     private String userProfile;
     private int userPoint;
+    
+    // Seller 컬럼
+    private String sellerId;
+    private String businessNum;
+    private String company;
+    private String sellerHp;
+    private String sellerName;
+    private String licenseNum;
+    private String sellerGrade;
+    private String fax;
+
 }

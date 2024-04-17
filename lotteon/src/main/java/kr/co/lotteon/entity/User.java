@@ -7,6 +7,7 @@ import jakarta.persistence.Transient;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -22,7 +23,7 @@ public class User {
     private String userId;
     private String userPw;
     private String userName;
-    private LocalDateTime userBirth;
+    private LocalDate userBirth;
     private String userHp;
     private String userEmail;
     private String userGrade;

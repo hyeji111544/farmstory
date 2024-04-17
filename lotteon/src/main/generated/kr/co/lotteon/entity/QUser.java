@@ -23,7 +23,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath userAddr2 = createString("userAddr2");
 
-    public final DateTimePath<java.time.LocalDateTime> userBirth = createDateTime("userBirth", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> userBirth = createDate("userBirth", java.time.LocalDate.class);
 
     public final StringPath userEmail = createString("userEmail");
 

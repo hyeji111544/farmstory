@@ -12,7 +12,7 @@
                 const agree1 = document.getElementsByName('agree1')[0];
                 const agree2 = document.getElementsByName('agree2')[0];
                 const agree3 = document.getElementsByName('agree3')[0];
-                const agree4 = document.getElementsByName('agree4')[0];
+                const userPromo = document.getElementsByName('userPromo')[0];
                 const agree = document.getElementsByClassName('agree')[0];
 
 
@@ -23,20 +23,20 @@
                         const userRole = document.getElementsByName('role')[0];
                         console.log(userRole.value);
                         if (userRole.value === 'user') {
-                            if (agree4.checked) {
-                                let agree4value = "Y"
-                                window.location.href = "/lotteon/member/register?agree4="+agree4value;
+                            if (userPromo.checked) {
+                                let userPromovalue = "Y"
+                                window.location.href = "/lotteon/member/register?userPromo="+userPromovalue;
                             } else {
-                                let agree4value = "N"
-                                window.location.href = "/lotteon/member/register?agree4=" + agree4value;
+                                let userPromovalue = "N"
+                                window.location.href = "/lotteon/member/register?userPromo=" + userPromovalue;
                             }
                         } else if (userRole.value === 'seller') {
-                            if (agree4.checked) {
-                                let agree4value = "Y"
-                                window.location.href = "/lotteon/member/registerSeller?agree4=" + agree4value;
+                            if (userPromo.checked) {
+                                let userPromovalue = "Y"
+                                window.location.href = "/lotteon/member/registerSeller?userPromo=" + userPromovalue;
                             } else {
-                                let agree4value = "N"
-                                window.location.href = "/lotteon/member/registerSeller?agree4=" + agree4value;
+                                let userPromovalue = "N"
+                                window.location.href = "/lotteon/member/registerSeller?userPromo=" + userPromovalue;
                             }
                         }
                     }else {
@@ -51,7 +51,7 @@
 
             <nav>
                 <h1>약관동의</h1>
-                <input type="hidden" name="role" th:value="${userDTO.user_role}">
+                <input type="hidden" name="role" th:value="${userDTO.userRole}">
             </nav>
             <section>
                 <h3><span class="essential">(필수)</span>케이마켓 이용약관</h3>
@@ -70,7 +70,7 @@
             <section>
                 <h3><span class="optional">(선택)</span>위치정보 이용약관</h3>
                 <textarea class="location" readonly>[[${termsDTO.location}]]</textarea>
-                <label><input type="checkbox" name="agree4" value="Y"/>동의합니다.</label>
+                <label><input type="checkbox" name="userPromo" value="Y"/>동의합니다.</label>
             </section>
 
             <div>
