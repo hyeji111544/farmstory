@@ -39,7 +39,11 @@ jobs:
       - name: copy Application.properties
         run: echo "${{ secrets.APP_PROPERTIES }}" > ./src/main/resources/application.properties
         shell: bash
-        
+
+      - name: Change to project directory
+        run: cd ./lotteon-team1/lotteon
+
+
       # gradle 권한 설정
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
