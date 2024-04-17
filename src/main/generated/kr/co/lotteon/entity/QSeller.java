@@ -31,9 +31,9 @@ public class QSeller extends EntityPathBase<Seller> {
 
     public final StringPath sellerHp = createString("sellerHp");
 
-    public final StringPath sellerId = createString("sellerId");
-
     public final StringPath sellerName = createString("sellerName");
+
+    public final StringPath sellerNo = createString("sellerNo");
 
     public final StringPath userId = createString("userId");
 

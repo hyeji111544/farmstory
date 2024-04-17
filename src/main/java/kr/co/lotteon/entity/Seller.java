@@ -16,7 +16,7 @@ import lombok.*;
 public class Seller {
 
     @Id
-    private String sellerId;
+    private String sellerNo;
     private String userId;
     private String company;
     private String sellerName;

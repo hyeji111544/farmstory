@@ -38,12 +38,12 @@ public class MemberService {
     //Seller 회원 등록
     public int registerSeller(UserDTO userDTO){
         // 랜덤 난수로 sellerId 생성
-        String sellerId = UUID.randomUUID().toString().substring(0, 8) + userDTO.getUserId();
+        String sellerNo = UUID.randomUUID().toString().substring(0, 8) + userDTO.getUserId();
         String encoded = passwordEncoder.encode(userDTO.getUserPw());
 
         SellerDTO saveSellerDTO = new SellerDTO();
         userDTO.setUserPw(encoded);
-        saveSellerDTO.setSellerId(sellerId);
+        saveSellerDTO.setSellerNo(sellerNo);
         saveSellerDTO.setUserId(userDTO.getUserId());
         saveSellerDTO.setSellerName(userDTO.getSellerName());
         saveSellerDTO.setSellerHp(userDTO.getSellerHp());
