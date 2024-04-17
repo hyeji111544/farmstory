@@ -24,4 +24,6 @@ public class Faq {
     private LocalDateTime faqDate;
     private String faqType;
     private String faqCate;
+
+    private int faqHit;
 }

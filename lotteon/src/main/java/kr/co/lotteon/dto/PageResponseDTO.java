@@ -11,7 +11,7 @@ import java.util.List;
 @ToString
 public class PageResponseDTO {
 
-    private List<NoticeDTO> dtoList;
+    private List<?> dtoList;
     private String cate;
     private String type;
     private String keyword;
@@ -24,7 +24,7 @@ public class PageResponseDTO {
     private boolean prev, next;
 
     @Builder
-    public PageResponseDTO(PageRequestDTO pageRequestDTO, List<NoticeDTO> dtoList, int total){
+    public PageResponseDTO(PageRequestDTO pageRequestDTO, List<?> dtoList, int total){
         this.cate = pageRequestDTO.getCate();
         this.type = pageRequestDTO.getType();
         this.keyword = pageRequestDTO.getKeyword();

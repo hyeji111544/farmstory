@@ -39,5 +39,4 @@ public class User {
     private String userProvider;
     private LocalDateTime userUpdate;
     private String userProfile;
-
  }
