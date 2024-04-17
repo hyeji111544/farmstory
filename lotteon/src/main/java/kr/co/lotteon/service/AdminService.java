@@ -27,14 +27,14 @@ public class AdminService {
     private final ModelMapper modelMapper;
     private final Cate02Repository cate02Repository;
 
-    // ??
+    // 대분류 선택에 따른 중분류 조회
     public ResponseEntity<List<Cate02DTO>> selectCate02(String cate01No) {
-        log.info("selectCateService....:" + cate01No);
+        //log.info("selectCateService....:"+cate01No);
         List<Cate02> listCate02 = cate02Repository.findByCate01No(cate01No);
-        log.info("selectCateService1...:" + listCate02);
+        //log.info("selectCateService1...:"+listCate02);
 
         List<Cate02DTO> dtoList = listCate02.stream()
-                .map(entity -> modelMapper.map(entity, Cate02DTO.class))
+                .map(entity-> modelMapper.map(entity, Cate02DTO.class))
                 .toList();
 
         return ResponseEntity.ok().body(dtoList);
