@@ -102,28 +102,4 @@ public class AdminController {
         return "redirect:/admin/product/list";
     }
 
-    // 관리자 고객센터 공지사항 목록 이동
-    @GetMapping("/admin/cs/notice/list")
-    public String csNoticeList(Model model, PageRequestDTO pageRequestDTO){
-
-        PageResponseDTO pageResponseDTO = adminService.selectNoticeAdmin(pageRequestDTO);
-        log.info("pageResponseDTO : " + pageResponseDTO);
-        model.addAttribute(pageResponseDTO);
-
-        return "/admin/cs/notice/list";
-    }
-
-    // 관리자 고객센터 공지사항 등록폼 불러오기
-    @GetMapping("/admin/cs/notice/write")
-    public String csNoticeWriteForm(){
-        return "/admin/cs/notice/write";
-    }
-
-    // 관리자 고객센터 공지사항 등록
-    @PostMapping("/admin/cs/notice/write")
-    public String csNoticeWrite(NoticeDTO noticeDTO){
-
-        adminService.insertNoticeAdmin(noticeDTO);
-        return "redirect:/admin/cs/notice/list";
-    }
 }

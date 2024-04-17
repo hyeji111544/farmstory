@@ -37,6 +37,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath prodOrg = createString("prodOrg");
 
+    public final NumberPath<Integer> prodPoint = createNumber("prodPoint", Integer.class);
+
     public final NumberPath<Integer> prodPrice = createNumber("prodPrice", Integer.class);
 
     public final DateTimePath<java.time.LocalDateTime> prodRdate = createDateTime("prodRdate", java.time.LocalDateTime.class);
@@ -48,6 +50,8 @@ public class QProduct extends EntityPathBase<Product> {
     public final NumberPath<Integer> prodSold = createNumber("prodSold", Integer.class);
 
     public final StringPath prodStatus = createString("prodStatus");
+
+    public final NumberPath<Integer> prodStock = createNumber("prodStock", Integer.class);
 
     public final StringPath prodTax = createString("prodTax");
 
