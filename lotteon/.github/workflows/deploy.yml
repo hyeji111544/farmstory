@@ -42,7 +42,7 @@ jobs:
         
       # gradle 권한 설정
       - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+        run: chmod +x ./gradle
         shell: bash
         
       # 빌드
