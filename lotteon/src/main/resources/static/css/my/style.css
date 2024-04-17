@@ -20,6 +20,28 @@ input, textarea {
     width: 100%;
 }
 
+/* 커스텀 */
+.UserInfo {
+    display: inline-block;
+    margin: 10px 0;
+    margin-left: 100px;
+}
+.UserInfo > p:nth-child(1) {
+    font-size: 30px;
+    font-weight: bold;
+}
+.UserInfo > p:nth-child(1):after {
+    content: '님';
+}
+.UserInfo > p:nth-child(2) {
+    font-size: 20px;
+    padding-top: 6px;
+}
+.UserInfo > p:nth-child(2):after {
+    content: ' 등급';
+    font-size: 16px;
+}
+
 /* 헤더영역 */
 header {
     width: 100%;
@@ -303,7 +325,7 @@ footer p > strong {
     top: -2px;
     width: 8px;
     height: 13px;
-    background-image: url('../images/my_sprites.png');
+    background-image: url('../../images/my/my_sprites.png');
     background-position: -160px -50px;
 }
 
@@ -347,7 +369,7 @@ footer p > strong {
     width: 35px;
     height: 14px;
     margin-top: -10px;
-    background-image: url('../images/my_sprites.png');
+    background-image: url('../../images/my/my_sprites.png');
     background-position: 0 -279px;
     font-size: 0;
 }
@@ -413,7 +435,7 @@ footer p > strong {
     display: block;
     width: 90px;
     height: 19px;            
-    background-image: url('../images/my_sprites.png');
+    background-image: url('../../images/my/my_sprites.png');
     font-size: 0;            
 }
 
@@ -447,7 +469,7 @@ footer p > strong {
     width: 84px;
     height: 20px;
     font-size: 0px;
-    background-image: url('../images/my_rating_star.png');
+    background-image: url('../../images/my/my_rating_star.png');
     background-repeat: no-repeat;
     background-position: 36px 0px;    
 }
@@ -466,7 +488,7 @@ footer p > strong {
 #my > .home > section > .myinfo > h3 {
     width: 96px;
     height: 15px;
-    background-image: url('../images/my_sprites.png');
+    background-image: url('../../images/my/my_sprites.png');
     background-position: -144px -281px;
     font-size: 0;
 }
@@ -495,7 +517,7 @@ footer p > strong {
 #my > .home > section > .myinfo > div > div > span {
     display: inline-block;
     height: 11px;
-    background-image: url('../images/my_sprites.png');
+    background-image: url('../../images/my/my_sprites.png');
     font-size: 0;
 }
 
@@ -517,7 +539,7 @@ footer p > strong {
     width: 33px;
     height: 11px;
     margin-left: 10px;
-    background-image: url('../images/my_sprites.png');
+    background-image: url('../../images/my/my_sprites.png');
     background-position: -423px -822px;
     font-size: 0;
 }
@@ -1220,11 +1242,13 @@ footer p > strong {
     padding: 2px;
     box-sizing: border-box;
     border: 1px solid #999;
+    border: 0;
 }
 
 #my > .info > section > article > table .address > input {
     display: block;
     width: 300px;
+    min-width: 200px;
     margin-top: 2px;
 }
 
@@ -1258,7 +1282,7 @@ footer p > strong {
     width: 160px;
     height: 30px;
     margin: 10px auto;
-    background-image: url('../images/btn_my_change.png');
+    background-image: url('../../images/my/btn_my_change.png');
     color: #fff;
     font-family: '돋움';
     border: none;

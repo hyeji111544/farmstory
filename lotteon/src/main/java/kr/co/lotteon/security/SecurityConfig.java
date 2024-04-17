@@ -23,8 +23,8 @@ public class SecurityConfig {
                                         .loginPage("/user/login")               // login 호출 URL
                                         .defaultSuccessUrl("/")     // login 성공 주소
                                         .failureUrl("/user/login?success=100")  // login 실패 주소
-                                        .usernameParameter("uid")               // login시 사용할 name 파라미터
-                                        .passwordParameter("pass")
+                                        .usernameParameter("user_id")               // login시 사용할 name 파라미터
+                                        .passwordParameter("user_pw")
                                     );
 
         // 로그아웃 설정

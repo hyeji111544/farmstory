@@ -20,9 +20,9 @@ public class SecurityUserService implements UserDetailsService {
 
     // 인증 수행
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("SecurityUserService : "+username);
-        Optional<User> result = userRepository.findById(username);
+    public UserDetails loadUserByUsername(String user_name) throws UsernameNotFoundException {
+        log.info("SecurityUserService : "+user_name);
+        Optional<User> result = userRepository.findById(user_name);
 
         UserDetails userDetails = null;
 

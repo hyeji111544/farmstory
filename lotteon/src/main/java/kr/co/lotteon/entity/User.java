@@ -19,26 +19,23 @@ import java.time.LocalDateTime;
 @Table(name="user")
 public class User {
     @Id
-    private String uid;
-    private String pass;
-    private String name;
-    private String email;
-    private String nick;
-    private String hp;
-    private String role;
-    private String level;
-
-    private String zip;
-    private String addr1;
-    private String addr2;
-    private String regip;
-
+    private String userId;
+    private String userPw;
+    private String userName;
+    private LocalDateTime userBirth;
+    private String userHp;
+    private String userEmail;
+    private String userGrade;
+    private String userRole;
+    private String userZip;
+    private String userAddr1;
+    private String userAddr2;
+    private String userPromo;
+    private String userStatus;
     @CreationTimestamp
-    private LocalDateTime regDate;
-    private LocalDateTime leaveDate;
-    private String provider;
-    // account 칼럼 join 조회용
-    @Transient
-    private int point;
-
+    private LocalDateTime userRegDate;
+    private LocalDateTime userVisitDate;
+    private String userProvider;
+    private LocalDateTime userUpdate;
+    private String userProfile;
  }
