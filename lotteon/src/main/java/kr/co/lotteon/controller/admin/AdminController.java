@@ -1,21 +1,17 @@
-package kr.co.lotteon.controller;
+package kr.co.lotteon.controller.admin;
 
 import kr.co.lotteon.dto.Cate02DTO;
-import kr.co.lotteon.service.AdminService;
+import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import kr.co.lotteon.dto.NoticeDTO;
-import kr.co.lotteon.dto.PageRequestDTO;
-import kr.co.lotteon.dto.PageResponseDTO;
+
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -82,28 +78,6 @@ public class AdminController {
 
     }
 
-    // 관리자 고객센터 공지사항 목록 이동
-    @GetMapping("/admin/cs/notice/list")
-    public String csNoticeList(Model model, PageRequestDTO pageRequestDTO){
 
-        PageResponseDTO pageResponseDTO = adminService.selectNoticeAdmin(pageRequestDTO);
-        log.info("pageResponseDTO : " + pageResponseDTO);
-        model.addAttribute(pageResponseDTO);
 
-        return "/admin/cs/notice/list";
-    }
-
-    // 관리자 고객센터 공지사항 등록폼 불러오기
-    @GetMapping("/admin/cs/notice/write")
-    public String csNoticeWriteForm(){
-        return "/admin/cs/notice/write";
-    }
-
-    // 관리자 고객센터 공지사항 등록
-    @PostMapping("/admin/cs/notice/write")
-    public String csNoticeWrite(NoticeDTO noticeDTO){
-
-        adminService.insertNoticeAdmin(noticeDTO);
-        return "redirect:/admin/cs/notice/list";
-    }
 }
