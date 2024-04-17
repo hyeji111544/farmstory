@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminController {
 
     private final AdminService adminService;
+    private final ProductService productService;
 
     // 관리자 인덱스페이지 이동
     @GetMapping("/admin/index")
@@ -45,7 +46,25 @@ public class AdminController {
 // admin - product //
     // 관리자 상품 목록 이동
     @GetMapping("/admin/product/list")
-    public String productList(){
+    public String productList(Model model, ProductPageRequestDTO productPageRequestDTO){
+
+        ProductPageResponseDTO pageResponseDTO = null;
+
+        // productPageRequestDTO가 null인 경우, 기본값으로 객체 생성
+        if (productPageRequestDTO == null) {
+            productPageRequestDTO = new ProductPageRequestDTO();
+        }
+
+        // productPageRequestDTO의 keyword 속성이 null인 경우, 전체 상품 목록 조회
+        if (productPageRequestDTO.getKeyword() == null) {
+            pageResponseDTO = productService.selectProductsForAdmin(productPageRequestDTO);
+        } else {
+            // keyword 속성이 있는 경우, 키워드를 포함하는 상품 목록 조회
+            //pageResponseDTO = productService.searchProductsForAdmin(productPageRequestDTO);
+        }
+
+        model.addAttribute(pageResponseDTO);
+        log.info("here....!!!"+pageResponseDTO);
 
         return "/admin/product/list";
     }
@@ -57,27 +76,53 @@ public class AdminController {
         return "/admin/product/register";
     }
 
-    // ??
+    // 관리자 상품등록시 대분류에 따른 중분류 자동출력
     @PutMapping("/admin/product/cate")
-    public ResponseEntity<?> changeCate(@RequestBody String cate01_no, Model model){
-
+    public ResponseEntity<?> changeCate(@RequestBody Cate02DTO cate02DTO){
+        String cate01No = cate02DTO.getCate01No();
         try {
-            ResponseEntity<List<Cate02DTO>> selectedCate02 = adminService.selectCate02(cate01_no);
-            log.info("selectCate....:"+selectedCate02);
-
+            ResponseEntity<List<Cate02DTO>> selectedCate02 = adminService.selectCate02(cate01No);
             List<Cate02DTO> cate02DTOList = selectedCate02.getBody();
-            log.info("selectCate2....:"+cate02DTOList);
 
             return ResponseEntity.ok().body(cate02DTOList);
 
         }catch (Exception e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found");
         }
-
     }
 
+   // 관리자 상품 등록
+    @PostMapping("/admin/product/register")
+    public String registerProduct(ProductDTO productDTO, ProductimgDTO productimgDTO){
+        log.info(productDTO.toString());
+        log.info(productimgDTO.toString());
+        productService.registerProduct(productDTO, productimgDTO);
 
+        return "redirect:/admin/product/list";
+    }
 
+    // 관리자 고객센터 공지사항 목록 이동
+    @GetMapping("/admin/cs/notice/list")
+    public String csNoticeList(Model model, PageRequestDTO pageRequestDTO){
+
+        PageResponseDTO pageResponseDTO = adminService.selectNoticeAdmin(pageRequestDTO);
+        log.info("pageResponseDTO : " + pageResponseDTO);
+        model.addAttribute(pageResponseDTO);
+
+        return "/admin/cs/notice/list";
+    }
+
+    // 관리자 고객센터 공지사항 등록폼 불러오기
+    @GetMapping("/admin/cs/notice/write")
+    public String csNoticeWriteForm(){
+        return "/admin/cs/notice/write";
+    }
+
+    // 관리자 고객센터 공지사항 등록
+    @PostMapping("/admin/cs/notice/write")
+    public String csNoticeWrite(NoticeDTO noticeDTO){
+
+        adminService.insertNoticeAdmin(noticeDTO);
+        return "redirect:/admin/cs/notice/list";
+    }
 }
