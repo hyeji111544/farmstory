@@ -25,4 +25,7 @@ public class Notice {
     private LocalDateTime noticeDate;
     private String noticeType;
     private String noticeCate;
+
+
+    private int noticeHit;
 }

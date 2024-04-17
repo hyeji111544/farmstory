@@ -1,8 +1,6 @@
 package kr.co.lotteon.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,10 +16,13 @@ import java.time.LocalDateTime;
 @Table(name="product")
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int prodNo;
     private String prodName;
     private int prodPrice;
     private int prodDiscount;
+    private int prodPoint;
+    private int prodStock;
     private String prodInfo;
     private String prodOrg;
     private int prodSold;
@@ -36,4 +37,14 @@ public class Product {
     private String prodBusinessType;
     private String prodReceipt;
     private String prodTax;
+
+    // 이미지 출력을 위한 테이블 추가
+    @Transient
+    private String thumb190;
+    @Transient
+    private String thumb230;
+    @Transient
+    private String thumb456;
+    @Transient
+    private String thumb940;
  }

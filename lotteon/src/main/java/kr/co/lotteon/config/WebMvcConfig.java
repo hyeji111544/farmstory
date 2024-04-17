@@ -2,7 +2,9 @@ package kr.co.lotteon.config;
 
 import kr.co.lotteon.intercepter.Appinfointercepter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,17 +19,34 @@ public class WebMvcConfig implements WebMvcConfigurer {
         resourcePath : 연결시킬 외부 디렉토리 주소
                        - C://Users/xxxx/xxxx 처럼 주소 전체를 입력해야함 (C만 빼고)
      */
-    private String connectPath = "/imagePath/**";
+    //private String connectPath = "/imagePath/**";
 
+    //
+    //private String resourcePath = "file:///Users/Java/Desktop/WorkSpace/lotteon-team1/lotteon/uploads";
     // 배포
-    private String resourcePath = "file:///home/farmStory/prodImg/";
+    // private String resourcePath = "file:///home/farmStory/prodImg/";
 
 
+    @Autowired
+    private ResourceLoader resourceLoader;
+
+    @Value("uploads/")
+    private String resourcePath;
+
+    /*
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(connectPath)
                 .addResourceLocations(resourcePath);
     }
+    */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/static/admin/**").addResourceLocations("classpath:/admin/");
+        registry.addResourceHandler("/uploads/**").addResourceLocations(resourceLoader.getResource(resourcePath));
+
+    }
+
 
     // 버전 정보 띄우기
     @Autowired

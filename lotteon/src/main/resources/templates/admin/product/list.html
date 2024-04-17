@@ -35,49 +35,17 @@
                     <th>관리</th>
                 </tr>
 
-                <tr>
+                <tr th:each="product, index:${productPageResponseDTO.dtoList}" id="product">
                     <td><input type="checkbox" name="상품코드"/></td>
-                    <td><img src="../images/sample_thumb.jpg" class="thumb"></td>
-                    <td>201603292</td>
-                    <td>FreeMovement BLUEFORCE</td>
-                    <td>36,000</td>
-                    <td>10</td>
-                    <td>360</td>
-                    <td>400</td>
-                    <td>홍길동</td>
-                    <td>126</td>
-                    <td>
-                        <a href="#">[삭제]</a>
-                        <a href="#">[수정]</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="상품코드"/></td>
-                    <td><img src="../images/sample_thumb.jpg" class="thumb"></td>
-                    <td>201603292</td>
-                    <td>FreeMovement BLUEFORCE</td>
-                    <td>36,000</td>
-                    <td>10</td>
-                    <td>360</td>
-                    <td>400</td>
-                    <td>홍길동</td>
-                    <td>126</td>
-                    <td>
-                        <a href="#">[삭제]</a>
-                        <a href="#">[수정]</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" name="상품코드"/></td>
-                    <td><img src="../images/sample_thumb.jpg" class="thumb"></td>
-                    <td>201603292</td>
-                    <td>FreeMovement BLUEFORCE</td>
-                    <td>36,000</td>
-                    <td>10</td>
-                    <td>360</td>
-                    <td>400</td>
-                    <td>홍길동</td>
-                    <td>126</td>
+                    <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb"></td>
+                    <td>[[${product.prodNo}]]</td>
+                    <td>[[${product.prodName}]]</td>
+                    <td>[[${product.prodPrice}]]</td>
+                    <td>[[${product.prodDiscount}]]</td>
+                    <td>[[${product.prodPoint}]]</td>
+                    <td>[[${product.prodStock}]]</td>
+                    <td>[[${product.prodSeller}]]</td>
+                    <td>126(조회?)</td>
                     <td>
                         <a href="#">[삭제]</a>
                         <a href="#">[수정]</a>
@@ -91,22 +59,18 @@
 
 
             <div class="paging">
-                <span class="prev">
-                    <a href="#"><&nbsp;이전</a>
+                <div class="paging">
+                <span class="prev" th:if="${productPageResponseDTO.prev}" >
+                  <a th:href="@{/admin/product/list(pg=${productPageResponseDTO.start - 1})}"><&nbsp;이전</a>
                 </span>
-                <span class="num">
-                    <a href="#" class="on">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">6</a>
-                    <a href="#">7</a>
+                    <span class="num" th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
+                  <a th:if="${num != 0}" th:href="@{/admin/product/list(pg=${num})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
                 </span>
-                <span class="next">
-                    <a href="#">다음&nbsp;></a>
+                    <span class="next" th:if="${productPageResponseDTO.next}">
+                     <a th:href="@{/admin/product/list(pg=${productPageResponseDTO.end + 1})}">다음&nbsp;></a>
                 </span>
                 </div>
+            </div>
 
         </section>
 
