@@ -26,6 +26,5 @@ public class Notice {
     private String noticeType;
     private String noticeCate;
 
-
     private int noticeHit;
 }

@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 public class SellerDTO {
 
-    private String sellerId;
+    private String sellerNo;
     private String company;
     private String userId;
     private String sellerName;
