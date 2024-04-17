@@ -17,4 +17,6 @@ public class TermsService {
     public TermsDTO selectTerms(){
         return termsMapper.selectTerms();
     }
+
+
 }

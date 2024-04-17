@@ -17,4 +17,5 @@ public class FaqDTO {
     private LocalDateTime faqDate;
     private String faqType;
     private String faqCate;
+    private int faqHit;
 }

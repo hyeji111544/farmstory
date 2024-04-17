@@ -20,26 +20,26 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // 인증 설정 (로그인)
         httpSecurity.formLogin(login -> login
-                                        .loginPage("/user/login")               // login 호출 URL
+                                        .loginPage("/member/login")               // login 호출 URL
                                         .defaultSuccessUrl("/")     // login 성공 주소
-                                        .failureUrl("/user/login?success=100")  // login 실패 주소
-                                        .usernameParameter("user_id")               // login시 사용할 name 파라미터
-                                        .passwordParameter("user_pw")
+                                        .failureUrl("/member/login?success=100")  // login 실패 주소
+                                        .usernameParameter("userId")               // login시 사용할 name 파라미터
+                                        .passwordParameter("userPw")
                                     );
 
         // 로그아웃 설정
         httpSecurity.logout(logout -> logout
                                 .invalidateHttpSession(true)            // session 무효화 -> logout 후 새로운 session 시작
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")) // logout 호출 URL
-                                .logoutSuccessUrl("/user/login?success=300"));
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")) // logout 호출 URL
+                                .logoutSuccessUrl("/member/login?success=300"));
 
 
         // 인가 설정
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                                     .requestMatchers("/").permitAll()
-                                    .requestMatchers("/article/**").permitAll()
+                                    //.requestMatchers("/article/**").permitAll()
                                     //.requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-                                    .requestMatchers("/manager/**").hasAnyAuthority("ADMIN", "MANAGER")
+                                    //.requestMatchers("/manager/**").hasAnyAuthority("ADMIN", "MANAGER")
                                     .anyRequest().permitAll()
         );
 
