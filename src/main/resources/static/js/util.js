@@ -112,6 +112,7 @@ function validateNumber(input) {
         if (input.value.startsWith('.')) {
             input.value = '0' + input.value;
         }
+    }
 
 }
 

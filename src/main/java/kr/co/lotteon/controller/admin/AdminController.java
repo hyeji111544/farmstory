@@ -1,7 +1,7 @@
 package kr.co.lotteon.controller.admin;
 
 import kr.co.lotteon.dto.*;
-import kr.co.lotteon.service.ProductService;
+import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AdminController {
 
     private final AdminService adminService;
-    private final ProductService productService;
+    private final AdminProductService adminproductService;
 
     // 관리자 인덱스페이지 이동
     @GetMapping("/admin/index")
@@ -58,7 +58,7 @@ public class AdminController {
 
         // productPageRequestDTO의 keyword 속성이 null인 경우, 전체 상품 목록 조회
         if (productPageRequestDTO.getKeyword() == null) {
-            pageResponseDTO = productService.selectProductsForAdmin(productPageRequestDTO);
+            pageResponseDTO = adminproductService.selectProductsForAdmin(productPageRequestDTO);
         } else {
             // keyword 속성이 있는 경우, 키워드를 포함하는 상품 목록 조회
             //pageResponseDTO = productService.searchProductsForAdmin(productPageRequestDTO);
@@ -97,9 +97,9 @@ public class AdminController {
     public String registerProduct(ProductDTO productDTO, ProductimgDTO productimgDTO){
         log.info(productDTO.toString());
         log.info(productimgDTO.toString());
-        productService.registerProduct(productDTO, productimgDTO);
+        adminproductService.registerProduct(productDTO, productimgDTO);
 
-        return "redirect:/admin/product/list";
+        return "redirect:/admin/product/register";
     }
 
 }

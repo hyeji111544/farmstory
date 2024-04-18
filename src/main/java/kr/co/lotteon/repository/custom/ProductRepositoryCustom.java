@@ -13,4 +13,10 @@ public interface ProductRepositoryCustom {
     
     // ADMIN 페이지 프로덕트 조회
     public Page<Tuple> selectProducts(ProductPageRequestDTO pageRequestDTO, Pageable pageable);
+
+    // cate 로 프로덕트 조회
+    public Page<Tuple> selectProductsByCate(ProductPageRequestDTO pageRequestDTO, Pageable pageable);
+
+    // 프로덕트 상세 조회
+    public Tuple selectProduct(int prodNo);
 }

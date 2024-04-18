@@ -20,6 +20,10 @@ public class ProductDTO {
     private String prodInfo;
     private String prodOrg;
     private int prodSold;
+
+    private int tReviewCount;
+    private int tReviewScore;
+
     private LocalDateTime prodRdate;
     private String prodCompany;
     private int prodDeliveryFee;
