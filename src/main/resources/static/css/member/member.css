@@ -458,6 +458,31 @@ header {
   font-size: 14px;
   font-weight: 500;
 }
+#member > .register table tr > td > .regInput {
+  display: inline-block;
+}
+.regBtn #btnCheckEmail{
+  display: inline-block;
+  padding: 0 8px;
+  width: 100px;
+  height: 31px;
+  border: 1px solid #dfe5ed;
+  vertical-align: middle;
+  cursor: pointer;
+}
+#member > .register table tr > td .regBtn {
+  display: inline-block;
+  padding: 0 8px;
+  width: 100px;
+  height: 31px;
+  border: 1px solid #dfe5ed;
+  vertical-align: middle;
+  cursor: pointer;
+}
+#member > .register table tr > td > .resultText {
+  display: block;
+}
+
 #member > .register table input {
   padding: 0 8px;
   height: 31px;
@@ -474,7 +499,7 @@ header {
 #member > .register table .addr input {
   margin-top: 6px;
 }
-#member > .register table .addr th {
+#member > .register table .addr td:nth-child(1) {
   padding-left: 30px;
 }
 
@@ -532,7 +557,7 @@ header {
   font-weight: 500;
 }
 
-#member > .registerSeller table th {
+#member > .registerSeller table td:nth-child(1) {
   width: 200px;
   padding: 20px 20px;
   vertical-align: top;
@@ -571,7 +596,7 @@ header {
 #member > .registerSeller table .addr input {
   margin-top: 6px;
 }
-#member > .registerSeller table .addr th {
+#member > .registerSeller table .addr td:nth-child(1) {
   padding-left: 30px;
 }
 
