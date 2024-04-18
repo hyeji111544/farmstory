@@ -53,9 +53,40 @@ public class ProductService {
                 .build();
     }
 
+
     // 상품 상세보기 페이지로 이동
     public ProductDTO selectProduct(int prodNo) {
         Tuple tuple = productRepository.selectProduct(prodNo);
+    }
+  
+    // 어드민 물건등록 기능
+    public void registerProduct(ProductDTO productDTO, ProductimgDTO productimgDTO){
+
+        Product product = modelMapper.map(productDTO, Product.class);
+
+        Productimg uploadedImages = new Productimg();
+
+        uploadedImages.setThumb190(fileUpload(productimgDTO.getMultThumb190(), "thumb190"));
+        uploadedImages.setThumb230(fileUpload(productimgDTO.getMultThumb230(), "thumb230"));
+        uploadedImages.setThumb456(fileUpload(productimgDTO.getMultThumb456(), "thumb456"));
+        uploadedImages.setThumb940(fileUpload(productimgDTO.getMultThumb940(), "thumb940"));
+        log.info(uploadedImages.getThumb190());
+
+        Product savedProduct = productRepository.save(product);
+        log.info("saved product: " + savedProduct);
+        uploadedImages.setProdNo(savedProduct.getProdNo());
+        log.info("saved product1.....: " + savedProduct.getProdNo());
+        Productimg savedProductimg = productimgRepository.save(uploadedImages);
+        log.info("registerProduct....."+savedProductimg.toString());
+
+
+    }
+
+    //이미지 업로드 메서드
+    @Value("uploads/")
+    private String fileUploadPath;
+    public String fileUpload(MultipartFile images, String thumbnailSize){
+        String path = new File(fileUploadPath).getAbsolutePath();
 
         Product product = tuple.get(0, Product.class);
         Productimg productImg = tuple.get(1, Productimg.class);

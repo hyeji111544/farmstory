@@ -27,6 +27,8 @@ public class QQna extends EntityPathBase<Qna> {
 
     public final NumberPath<Integer> qnaNo = createNumber("qnaNo", Integer.class);
 
+    public final StringPath qnaReply = createString("qnaReply");
+
     public final StringPath qnaStatus = createString("qnaStatus");
 
     public final StringPath qnaTitle = createString("qnaTitle");

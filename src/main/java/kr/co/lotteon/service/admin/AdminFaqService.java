@@ -34,4 +34,55 @@ public class AdminFaqService {
         Faq savedFaq = adminFaqRepository.save(faq);
         log.info("savedFaq ={}", savedFaq.toString());
     }
+
+    // 관리자페이지 고객센터 메뉴 자주묻는질문 특정 글 불러오기
+    public FaqDTO FaqAdminView(int faqNo){
+
+        // .orElse(null); optional 객체가 비어있을경우 대비
+        Faq faq = adminFaqRepository.findById(faqNo).orElse(null);
+        log.info("특정 글 불러오기 modify {}",faq);
+        if(faq !=null){
+            // DTO로 변환후에 반환
+            return modelMapper.map(faq, FaqDTO.class);
+        }
+        return null; // 해당 번호의 글이 없는 경우 null반환
+    }
+
+    // 관리자페이지 고객센터 메뉴 자주묻는질문 리스트 출력
+    public PageResponseDTO FaqAdminSelect(PageRequestDTO pageRequestDTO){
+
+        Pageable pageable = pageRequestDTO.getPageable("FaqNo");
+
+        Page<Faq> pageFaq = adminFaqRepository.findAll(pageable);
+
+        log.info("FaqAdminSelect...1 : " + pageFaq);
+
+        List<FaqDTO> dtoList = pageFaq.getContent().stream()
+                .map(faq -> modelMapper.map(faq, FaqDTO.class))
+                .toList();
+
+        log.info("FaqAdminSelect...2 : " + dtoList);
+
+        int total = (int) pageFaq.getTotalElements();
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(dtoList)
+                .total(total)
+                .build();
+    }
+    // 관리자페이지 고객센터 메뉴 자주묻는질문 글 수정
+    public void faqAdminUpdate(FaqDTO faqDTO){
+
+        // 게시글 번호
+        int faqNo = faqDTO.getFaqNo();
+
+        Faq faq = modelMapper.map(faqDTO, Faq.class);
+        Faq savedFaq = adminFaqRepository.save(faq);
+    }
+
+    // 관리자페이지 고객센터 메뉴 자주묻는질문 글 삭제
+    public void faqAdminDelete(int faqNo){
+        adminFaqRepository.deleteById(faqNo);
+    }
 }
