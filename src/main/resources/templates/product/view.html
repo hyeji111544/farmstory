@@ -16,25 +16,25 @@
         <!-- 상품 전체 정보 내용 -->
         <article class="info">
             <div class="image">
-                <img src="https://via.placeholder.com/460x460" alt="상품이미지"/>
+                <img th:src="@{/uploads/__${product.thumb456}__}" alt="상품이미지"/>
             </div>
             <div class="summary">
                 <nav>
                     <h1>(주)판매자명</h1>
-                    <h2>상품번호&nbsp;:&nbsp;<span>10010118412</span></h2>
+                    <h2>상품번호&nbsp;:&nbsp;<span>[[${product.prodNo}]]</span></h2>
                 </nav>
                 <nav>
-                    <h3>상품명</h3>
-                    <p>상품설명 출력</p>
+                    <h3>[[${product.prodName}]]</h3>
+                    <p>[[${product.prodInfo}]]</p>
                     <h5 class="rating star4"><a href="#">상품평보기</a></h5>
                 </nav>
                 <nav>
                     <div class="org_price">
-                        <del>30,000</del>
-                        <span>10%</span>
+                        <del th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" id="prodPrice"></del>
+                        <span>[[${product.prodDiscount}]]%</span>
                     </div>
                     <div class="dis_price">
-                        <ins>27,000</ins>
+                        <ins th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                     </div>
                 </nav>
                 <nav>
@@ -75,9 +75,7 @@
                 <h1>상품정보</h1>
             </nav>
             <!-- 상품상세페이지 이미지 -->
-            <img src="https://via.placeholder.com/860x460" alt="상세페이지1">
-            <img src="https://via.placeholder.com/860x460" alt="상세페이지2">
-            <img src="https://via.placeholder.com/860x460" alt="상세페이지3">
+            <img th:src="@{/uploads/__${product.thumb940}__}" alt="상세페이지1">
         </article>
 
         <!-- 상품 정보 제공 고시 내용 -->

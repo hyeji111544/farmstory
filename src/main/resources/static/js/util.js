@@ -112,6 +112,7 @@ async function fetchPut(url, jsonData) {
         if (input.value.startsWith('.')) {
             input.value = '0' + input.value;
         }
+    }
 
       <!--다음 지도검색-->
 function postcode() {
