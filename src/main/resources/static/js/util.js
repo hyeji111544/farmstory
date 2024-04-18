@@ -99,7 +99,7 @@ async function fetchPut(url, jsonData) {
     }
 }
 
-    function validateNumber(input) {
+function validateNumber(input) {
         // 입력값에서 숫자 및 소수점을 제외한 문자 제거
         input.value = input.value.replace(/[^0-9.]/g, '');
 
@@ -112,8 +112,36 @@ async function fetchPut(url, jsonData) {
         if (input.value.startsWith('.')) {
             input.value = '0' + input.value;
         }
+}
 
-      <!--다음 지도검색-->
+function showInputValid(inputs){
+    for(const input of inputs){
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    }
+}
+
+function showInputInvalid(inputs){
+    for(const input of inputs) {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+    }
+}
+
+function showResultValid(result, message){
+    result.classList.remove('invalid-feedback');
+    result.classList.add('valid-feedback');
+    result.innerText = message;
+}
+
+function showResultInvalid(result, message){
+    result.classList.remove('valid-feedback');
+    result.classList.add('invalid-feedback');
+    result.innerText = message;
+}
+
+
+<!--다음 지도검색-->
 function postcode() {
     new daum.Postcode({
         oncomplete: function (data) {
