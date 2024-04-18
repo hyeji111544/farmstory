@@ -112,6 +112,7 @@ function validateNumber(input) {
         if (input.value.startsWith('.')) {
             input.value = '0' + input.value;
         }
+
 }
 
 function showInputValid(inputs){
@@ -188,5 +189,4 @@ function postcode() {
             document.getElementById("userAddr2").focus();
         }
     }).open();
-
 }

@@ -88,7 +88,7 @@ public class ProductService {
     }
 
     //이미지 업로드 메서드
-    @Value("lotteon/uploads/")
+    @Value("uploads/")
     private String fileUploadPath;
     public String fileUpload(MultipartFile images, String thumbnailSize){
         String path = new File(fileUploadPath).getAbsolutePath();
