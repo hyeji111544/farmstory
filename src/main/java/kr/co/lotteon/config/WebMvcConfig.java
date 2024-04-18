@@ -35,7 +35,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/admin/**").addResourceLocations("classpath:/admin/");
-        registry.addResourceHandler("/uploads/**").addResourceLocations("/lotteon/uploads/");
+        registry.addResourceHandler("/uploads/**").addResourceLocations(resourcePath);
     }
 
 
