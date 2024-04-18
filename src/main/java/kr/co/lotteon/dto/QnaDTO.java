@@ -18,4 +18,5 @@ public class QnaDTO {
     private String qnaType;
     private String qnaCate;
     private String qnaStatus;
+    private String qnaReply;
 }
