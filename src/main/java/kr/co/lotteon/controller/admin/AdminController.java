@@ -10,7 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -92,7 +94,7 @@ public class AdminController {
         }
     }
 
-   // 관리자 상품 등록
+    // 관리자 상품 등록
     @PostMapping("/admin/product/register")
     public String registerProduct(ProductDTO productDTO, ProductimgDTO productimgDTO){
         log.info(productDTO.toString());
@@ -100,6 +102,44 @@ public class AdminController {
         adminproductService.registerProduct(productDTO, productimgDTO);
 
         return "redirect:/admin/product/register";
+    }
+
+    // 관리자 상품 옵션 등록 페이지 이동
+    @GetMapping("/admin/product/option")
+    public String registerProductOption(Model model, @RequestParam("prodNo") int prodNo){
+        Map<String, Object> resultMap = adminproductService.selectProductOption(prodNo);
+        ProductDTO productDTO = (ProductDTO) resultMap.get("productDTO");
+        List<ProdOptionDTO> optionDTOList = (List<ProdOptionDTO>) resultMap.get("optionDTOList");
+
+        log.info("productDTO : " + productDTO);
+        log.info("optionDTOList : " + optionDTOList);
+
+        model.addAttribute("productDTO", productDTO);
+        model.addAttribute("optionDTOList", optionDTOList);
+
+        return "/admin/product/option";
+    }
+    
+    // 관리자 상품 옵션 등록
+    @PostMapping("/admin/product/option")
+    public void registerProductOption(@RequestBody Map<String, List<List<List<String>>>> requestData){
+        List<List<List<String>>> allOpts = requestData.get("allOpts");
+
+        log.info("allOpts : " + allOpts);
+        List<ProdOptionDTO> optionDTOs = new ArrayList<>();
+        for (List<List<String>> option : allOpts) {
+            for (List<String> detail : option) {
+                ProdOptionDTO optionDTO = new ProdOptionDTO();
+                optionDTO.setProdNo(Integer.parseInt(detail.get(0)));
+                optionDTO.setOptName(detail.get(1));
+                optionDTO.setOptValue(detail.get(2));
+                optionDTO.setOptPrice(Integer.parseInt(detail.get(3)));
+                optionDTO.setOptStock(Integer.parseInt(detail.get(4)));
+                optionDTOs.add(optionDTO);
+            }
+        }
+        log.info("optionDTOs : " + optionDTOs);
+
     }
 
 }

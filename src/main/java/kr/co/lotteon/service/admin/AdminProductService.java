@@ -2,8 +2,10 @@ package kr.co.lotteon.service.admin;
 
 import com.querydsl.core.Tuple;
 import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.ProdOption;
 import kr.co.lotteon.entity.Product;
 import kr.co.lotteon.entity.Productimg;
+import kr.co.lotteon.repository.ProdOptionRepository;
 import kr.co.lotteon.repository.ProductRepository;
 import kr.co.lotteon.repository.ProductimgRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -30,6 +31,7 @@ public class AdminProductService {
     private final ModelMapper modelMapper;
     private final ProductRepository productRepository;
     private final ProductimgRepository productimgRepository;
+    private final ProdOptionRepository optionRepository;
 
     // 어드민 페이지 물건 조회 메서드 (+ 검색)
     public ProductPageResponseDTO selectProductsForAdmin(ProductPageRequestDTO productPageRequestDTO){
@@ -138,4 +140,28 @@ public class AdminProductService {
                 return null;
         }
     }
+
+    // 상품리스트에서 상품 수정으로 넘어갈때 상품 정보 조회
+    public Map<String, Object> selectProductOption(int prodNo){
+        Optional<Product> optProduct = productRepository.findById(prodNo);
+
+        ProductDTO productDTO = new ProductDTO();
+        List<ProdOptionDTO> optionDTOList = new ArrayList<>();
+        if (optProduct.isPresent()){
+            productDTO = modelMapper.map(optProduct, ProductDTO.class);
+            List<ProdOption> optionList = optionRepository.findByProdNo(optProduct.get().getProdNo());
+            if (!optionList.isEmpty()){
+                for (ProdOption options : optionList) {
+                    ProdOptionDTO optionDTO = modelMapper.map(options, ProdOptionDTO.class);
+                    optionDTOList.add(optionDTO);
+                }
+            }
+        }
+        log.info("optionDTOList : " + optionDTOList);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("productDTO", productDTO);
+        resultMap.put("optionDTOList", optionDTOList);
+        return resultMap;
+    };
 }
