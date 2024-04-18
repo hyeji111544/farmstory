@@ -32,18 +32,18 @@ public class ProductService {
         Page<Tuple> pageProd = productRepository.selectProductsByCate(pageRequestDTO, pageable);
         log.info("selectProdsByCate...."+pageProd.toString());
         List<ProductDTO> products = pageProd.getContent().stream()
-                                        .map(tuple -> {
-                                            Product product = tuple.get(0, Product.class);
-                                            Productimg productImg = tuple.get(1, Productimg.class);
+                .map(tuple -> {
+                    Product product = tuple.get(0, Product.class);
+                    Productimg productImg = tuple.get(1, Productimg.class);
 
-                                            // Productimg에서 썸네일 정보를 가져와서 ProductDTO에 설정
-                                            if (productImg != null) {
-                                                product.setThumb190(productImg.getThumb190());
-                                            }
+                    // Productimg에서 썸네일 정보를 가져와서 ProductDTO에 설정
+                    if (productImg != null) {
+                        product.setThumb190(productImg.getThumb190());
+                    }
 
-                                            return modelMapper.map(product, ProductDTO.class);
-                                        })
-                                        .toList();
+                    return modelMapper.map(product, ProductDTO.class);
+                })
+                .toList();
 
         int total = (int) pageProd.getTotalElements();
         return ProductPageResponseDTO.builder()

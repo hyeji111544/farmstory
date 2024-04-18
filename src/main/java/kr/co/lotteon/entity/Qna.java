@@ -2,6 +2,7 @@ package kr.co.lotteon.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -25,5 +26,7 @@ public class Qna {
     private LocalDateTime qnaDate;
     private String qnaType;
     private String qnaCate;
+    @ColumnDefault("검토중")
     private String qnaStatus;
+    private String qnaReply;
 }

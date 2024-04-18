@@ -37,8 +37,8 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: hyeji111544@gmail.com
-        password: tlme osvq zpvx wvkl
+        username: skdlawo5985@gmail.com
+        password: fvcc crac dsyc okix
         properties:
             mail:
                 smtp:
@@ -70,7 +70,7 @@ spring:
 # 파일 업로드 설정
 file:
     upload:
-        path: file:./uploads/
+        path: uploads/
 
     # 개발용
     prodImg:
