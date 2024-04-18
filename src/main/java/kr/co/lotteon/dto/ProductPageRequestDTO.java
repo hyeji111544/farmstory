@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 @AllArgsConstructor
 public class ProductPageRequestDTO {
 
+    private String sort = null;
+
     @Builder.Default
     private int prodNo =1;
 
@@ -25,9 +27,10 @@ public class ProductPageRequestDTO {
 
     //private String cate;
 
-    /* 검색을 위한 type, keyword 선언 */
+    /* 검색을 위한 type, keyword, cateCode 선언 */
     private String type;
     private String keyword;
+    private String cateCode;
 
     public Pageable getPageable(String sort){
         return PageRequest.of(this.pg - 1, this.size, Sort.by(sort).descending());

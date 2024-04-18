@@ -27,6 +27,9 @@ public class Product {
     private String prodOrg;
     private int prodSold;
 
+    private int tReviewCount;
+    private int tReviewScore;
+
     @CreationTimestamp
     private LocalDateTime prodRdate;
     private String prodCompany;
@@ -37,6 +40,7 @@ public class Product {
     private String prodBusinessType;
     private String prodReceipt;
     private String prodTax;
+
 
     // 이미지 출력을 위한 테이블 추가
     @Transient
