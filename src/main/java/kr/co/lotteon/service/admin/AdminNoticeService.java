@@ -55,7 +55,7 @@ public class AdminNoticeService {
         log.info("NoticeAdminSelect...1 : " + pageNotice);
 
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()
-                .map(article -> modelMapper.map(article, NoticeDTO.class))
+                .map(notice -> modelMapper.map(notice, NoticeDTO.class))
                 .toList();
 
         log.info("NoticeAdminSelect...2 : " + dtoList);
@@ -77,7 +77,6 @@ public class AdminNoticeService {
         Notice notice = modelMapper.map(noticeDTO, Notice.class);
         Notice savedNotice = adminNoticeRepository.save(notice);
     }
-
 
     // 관리자페이지 고객센터 메뉴 공지사항 글 삭제
     public void noticeAdminDelete(int noticeNo){
