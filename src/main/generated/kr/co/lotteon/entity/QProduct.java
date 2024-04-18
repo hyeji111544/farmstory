@@ -55,6 +55,10 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath prodTax = createString("prodTax");
 
+    public final NumberPath<Integer> tReviewCount = createNumber("tReviewCount", Integer.class);
+
+    public final NumberPath<Integer> tReviewScore = createNumber("tReviewScore", Integer.class);
+
     public QProduct(String variable) {
         super(Product.class, forVariable(variable));
     }
