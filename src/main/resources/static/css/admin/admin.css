@@ -394,8 +394,60 @@ button[type=submit] {
     float: right;
     width: 100px;
 }
-
-
+#btnOptAdd {
+    border: 1px solid #e6e6e6;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+#btnNewOptAdd {
+    display: inline-block;
+    float: right;
+    margin: 10px;
+    border: 1px solid #e6e6e6;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+.optAddTable tr > td {
+    text-align: center;
+}
+.optAddTable tr > td > input {
+    width: 140px;
+    height: 40px;
+    padding-top: 4px;
+    outline: none;
+    border: 0;
+    border-bottom: 1px solid #999999;
+}
+.optAddTable tr > td > .btnOptDetailAdd {
+    display: inline-block;
+    width: 30px;
+    border: 1px solid #e6e6e6;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+.optAddTable tr > td > .optDetail {
+    display: inline-block;
+}
+.optAddTable tr:nth-child(1) > td:nth-child(3) {
+    border-left: 0;
+}
+.optAddTable tr > td:nth-child(2) {
+     width: 200px;
+}
+.optAddTable tr > td:nth-child(3) {
+    border-left: 1px solid #666666;
+}
+.optAddTable tr > td > .optDetail > input {
+    width: 150px;
+    height: 40px;
+    padding: 0 4px -2px 4px;
+    margin: 0 20px;
+    outline: none;
+    border: 0;
+    border-bottom: 1px solid #999999;
+}
 
 /* 상품목록 : product-list */
 #admin-product-list {}
