@@ -3,142 +3,48 @@
       layout:decorate="~{/layout/productLayout.html}">
 <!--내용 시작-->
     <section class="list" layout:fragment="content">
+        <script>
+            function sort(sortType){
+                const currentUrl = new URL(window.location.href);
+
+                currentUrl.searchParams.set('sort', sortType);
+
+                window.location.href = currentUrl.toString();
+            }
+
+        </script>
       <!-- 제목, 페이지 네비게이션 -->
       <nav>
         <h1>상품목록</h1>
         <p>HOME > <span>패션·의류·뷰티</span> > <strong>남성의류</strong></p>
+
       </nav>
 
       <!-- 정렬 메뉴 -->
-      <ul class="sort">
-          <li><a href="#" class="on">판매많은순</a></li>
-          <li><a href="#">낮은가격순</a></li>
-          <li><a href="#">높은가격순</a></li>
-          <li><a href="#">평점높은순</a></li>
-          <li><a href="#">후기많은순</a></li>
-          <li><a href="#">최근등록순</a></li>
-      </ul>
+
+        <ul class="sort">
+            <li><a href="#" onclick="sort('prodSole')"> 판매많은순</a></li>
+            <li><a href="#" onclick="sort('prodLowPrice')"> 낮은가격순</a></li>
+            <li><a href="#" onclick="sort('prodHighPrice')"> 높은가격순</a></li>
+            <li><a href="#" onclick="sort('prodScore')"> 평점높은순</a></li>
+            <li><a href="#" onclick="sort('prodReview')"> 후기많은순</a></li>
+            <li><a href="#" onclick="sort('prodRdate')"> 최근등록순</a></li>
+        </ul>
 
       <!-- 상품목록 -->
       <section class="productBox">
-        <article>
-          <h1>01</h1>
-          <a href="#">
+        <article th:each="product, index:${productPageResponseDTO.dtoList}" id="product">
+            <a th:href="@{'/product/view?cateCode=' + ${product.cateCode} + '&sort='+ ${setSortType} + '&prodNo=' +  ${product.prodNo}}">
             <div class="thumb">
-              <img src="https://via.placeholder.com/230x230" alt="t1" />
+              <img th:src="@{/uploads/__${product.thumb190}__}" alt="t1" />
             </div>
-            <h2>[특가] DCOVERS 디커버스 무지 쿨톤티 3종세트 1+1+1</h2>
+            <h2>[[${product.prodName}]]</h2>
             <div class="org_price">
-              <del>30,000</del>
-              <span>10%</span>
+              <del th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" id="prodPrice"></del>
+              <span th:text="${product.prodDiscount} + '%'"></span>
             </div>
             <div class="dis_price">
-              <ins>27,000</ins>
-              <span class="free">무료배송</span>
-            </div>
-            <div class="score_review">
-              <b>★<span>4.9</span></b>
-              <b>| 리뷰<span>12</span></b>
-            </div>
-          </a>
-        </article>
-        <article>
-          <h1>01</h1>
-          <a href="#">
-            <div class="thumb">
-              <img src="https://via.placeholder.com/230x230" alt="t1" />
-            </div>
-            <h2>[특가] DCOVERS 디커버스 무지 쿨톤티 3종세트 1+1+1</h2>
-            <div class="org_price">
-              <del>30,000</del>
-              <span>10%</span>
-            </div>
-            <div class="dis_price">
-              <ins>27,000</ins>
-              <span class="free">무료배송</span>
-            </div>
-            <div class="score_review">
-              <b>★<span>4.9</span></b>
-              <b>| 리뷰<span>12</span></b>
-            </div>
-          </a>
-        </article>
-        <article>
-          <h1>01</h1>
-          <a href="#">
-            <div class="thumb">
-              <img src="https://via.placeholder.com/230x230" alt="t1" />
-            </div>
-            <h2>[특가] DCOVERS 디커버스 무지 쿨톤티 3종세트 1+1+1</h2>
-            <div class="org_price">
-              <del>30,000</del>
-              <span>10%</span>
-            </div>
-            <div class="dis_price">
-              <ins>27,000</ins>
-              <span class="free">무료배송</span>
-            </div>
-            <div class="score_review">
-              <b>★<span>4.9</span></b>
-              <b>| 리뷰<span>12</span></b>
-            </div>
-          </a>
-        </article>
-        <article>
-          <h1>01</h1>
-          <a href="#">
-            <div class="thumb">
-              <img src="https://via.placeholder.com/230x230" alt="t1" />
-            </div>
-            <h2>[특가] DCOVERS 디커버스 무지 쿨톤티 3종세트 1+1+1</h2>
-            <div class="org_price">
-              <del>30,000</del>
-              <span>10%</span>
-            </div>
-            <div class="dis_price">
-              <ins>27,000</ins>
-              <span class="free">무료배송</span>
-            </div>
-            <div class="score_review">
-              <b>★<span>4.9</span></b>
-              <b>| 리뷰<span>12</span></b>
-            </div>
-          </a>
-        </article>
-        <article>
-          <h1>01</h1>
-          <a href="#">
-            <div class="thumb">
-              <img src="https://via.placeholder.com/230x230" alt="t1" />
-            </div>
-            <h2>[특가] DCOVERS 디커버스 무지 쿨톤티 3종세트 1+1+1</h2>
-            <div class="org_price">
-              <del>30,000</del>
-              <span>10%</span>
-            </div>
-            <div class="dis_price">
-              <ins>27,000</ins>
-              <span class="free">무료배송</span>
-            </div>
-            <div class="score_review">
-              <b>★<span>4.9</span></b>
-              <b>| 리뷰<span>12</span></b>
-            </div>
-          </a>
-        </article>
-        <article>
-          <h1>01</h1>
-          <a href="#">
-            <div class="thumb">
-              <img src="https://via.placeholder.com/230x230" alt="t1" />
-            </div>
-            <h2>[특가] DCOVERS 디커버스 무지 쿨톤티 3종세트 1+1+1</h2>
-            <div class="org_price">
-              <del>30,000</del>
-              <span>10%</span>
-            </div>
-            <div class="dis_price">
-              <ins>27,000</ins>
+              <ins th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
               <span class="free">무료배송</span>
             </div>
             <div class="score_review">
@@ -151,20 +57,14 @@
 
       <!-- 상품목록 페이지번호 -->
       <div class="paging">
-        <span class="prev">
-          <a href="#"><&nbsp;이전</a>
-        </span>
-        <span class="num">
-          <a href="#" class="on">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-          <a href="#">6</a>
-          <a href="#">7</a>
-        </span>
-        <span class="next">
-          <a href="#">다음&nbsp;></a>
+       <span class="prev" th:if="${productPageResponseDTO.prev}" >
+                  <a th:href="@{/admin/product/list(pg=${productPageResponseDTO.start - 1})}"><&nbsp;이전</a>
+                </span>
+        <span class="num" th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
+                  <a th:if="${num != 0}" th:href="@{/admin/product/list(pg=${num})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                </span>
+        <span class="next" th:if="${productPageResponseDTO.next}">
+                     <a th:href="@{/admin/product/list(pg=${productPageResponseDTO.end + 1})}">다음&nbsp;></a>
         </span>
       </div>
 

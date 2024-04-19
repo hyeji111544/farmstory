@@ -100,19 +100,21 @@ async function fetchPut(url, jsonData) {
 }
 
 function validateNumber(input) {
-        // 입력값에서 숫자 및 소수점을 제외한 문자 제거
-        input.value = input.value.replace(/[^0-9.]/g, '');
+    // 입력값에서 숫자 및 소수점을 제외한 문자 제거
+    input.value = input.value.replace(/[^0-9.]/g, '');
 
-        // 소수점이 두 번 이상 나타나지 않도록 제어
-        if (input.value.split('.').length > 2) {
-            input.value = input.value.replace(/\.+$/, '');
-        }
+    // 소수점이 두 번 이상 나타나지 않도록 제어
+    if (input.value.split('.').length > 2) {
+        input.value = input.value.replace(/\.+$/, '');
+    }
 
-        // 소수점으로 시작하거나 두 번째 소수점을 입력하는 경우 첫 번째 소수점만 유지
-        if (input.value.startsWith('.')) {
-            input.value = '0' + input.value;
-        }
+    // 소수점으로 시작하거나 두 번째 소수점을 입력하는 경우 첫 번째 소수점만 유지
+    if (input.value.startsWith('.')) {
+        input.value = '0' + input.value;
+    }
 }
+
+
 
 function showInputValid(inputs){
     for(const input of inputs){
@@ -188,5 +190,4 @@ function postcode() {
             document.getElementById("userAddr2").focus();
         }
     }).open();
-
 }

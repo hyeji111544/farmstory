@@ -19,7 +19,7 @@ public class AdminNoticeController {
 
     private final AdminNoticeService adminNoticeService;
 
-    // 관리자 고객센터 공지사항 목록 이동
+    // 관리자 고객센터 공지사항 리스트 출력
     @GetMapping("/admin/cs/notice/list")
     public String csNoticeList(Model model, PageRequestDTO pageRequestDTO){
 
