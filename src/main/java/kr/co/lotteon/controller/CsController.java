@@ -32,13 +32,16 @@ public class CsController {
 // cs-faq //
     // faq 글목록 이동
     @GetMapping("/cs/faq/list")
-    public String faqList(){
+    public String faqList(Model model){
+
+        model.addAttribute("list",csService.faqList());
         return "/cs/faq/list";
     }
 
-    // faq 글보기 이동
+    // faq 글보기
     @GetMapping("/cs/faq/view")
-    public String faqView(){
+    public String faqView(Model model, int faqNo){
+        model.addAttribute("view",csService.faqView(faqNo));
         return "/cs/faq/view";
     }
 
