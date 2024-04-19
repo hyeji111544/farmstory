@@ -1,0 +1,301 @@
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layout/adminLayout.html}">
+<!--내용 시작-->
+    <section id="admin-product-register" layout:fragment="content">
+        <script>
+            // 옵션 추가
+            function addOptionBlock() {
+                const optAddTuple = document.getElementsByClassName('optAddTuple');
+                const optAddTable = document.getElementById('optAddTable');
+                const tbody = optAddTable.getElementsByTagName('tbody')[0];
+                if (optAddTuple.length >= 4) {
+                    alert("더 이상 옵션을 추가하실수 없습니다.")
+                }else{
+                    const optTuple = `<tr class="optAddTuple">
+                                        <td>옵션 ${optAddTuple.length + 1}<span class="btnOptTupleDelete">삭제</span></td>
+                                        <td>
+                                            <input type="text" class="optName" placeholder="옵션명"/>
+                                        </td>
+                                        <td>
+                                            <span class="btnOptDetailAdd"">추가</span>
+                                        </td>
+                                        <td class="optDetailBox">
+                                            <div class="optDetail">
+                                                <input type="text" class="optValue" placeholder="옵션값"/>
+                                                <input type="text" class="optPrice" placeholder="옵션가격"/>
+                                                <input type="text" class="optStock" placeholder="옵션재고"/>
+                                                <span class="btnOptDetailDelete">삭제</span>
+                                            </div>
+                                        </td>
+                                    </tr>`
+                    tbody.insertAdjacentHTML('beforeend', optTuple);
+                }
+            }
+
+            // 옵션 디테일 추가
+            window.onload = function () {
+                addEventListener('click', function (e){
+                    if (e.target.className === "btnOptDetailAdd"){
+                        const optDetailTr = e.target.parentElement.parentElement;
+                        const optDetailBox = optDetailTr.querySelector('.optDetailBox');
+                        const optDetail = optDetailTr.querySelectorAll('.optDetail');
+                        if (optDetail.length >= 4) {
+                            alert("더 이상 옵션값을 추가하실수 없습니다.")
+                        }else{
+                            const optDetailTuple = `<div class="optDetail">
+                                                <input type="text" class="optValue" placeholder="옵션값"/>
+                                                <input type="text" class="optPrice" placeholder="옵션가격"/>
+                                                <input type="text" class="optStock" placeholder="옵션재고"/>
+                                                <span class="btnOptDetailDelete">삭제</span>
+                                            </div>`
+                            optDetailBox.insertAdjacentHTML('beforeend', optDetailTuple);
+                        }
+                    }else if (e.target.className === "btnOptDetailDelete") {
+                        const optDetailDiv = e.target.parentElement;
+                        optDetailDiv.remove();
+                    }else if (e.target.className === "btnOptTupleDelete") {
+                        const optTupleTr = e.target.parentElement.parentElement;
+                        optTupleTr.remove();
+                    }
+
+                })
+
+                const btnNewOptAdd = document.getElementById('btnNewOptAdd');
+                btnNewOptAdd.onclick = function (){
+                    const optAddTuple = document.getElementsByClassName('optAddTuple');
+                    const prodNo = document.getElementsByName('prodNo')[0].value;
+
+                    const allOpts = [];
+                    Array.from(optAddTuple).forEach(function (eachOpt) {
+                        const optDetailBox = eachOpt.querySelector('.optDetailBox');
+                        const optName = eachOpt.querySelector('.optName');
+                        const optValue = Array.from(optDetailBox.querySelectorAll('.optValue'));
+                        const optPrice = Array.from(optDetailBox.querySelectorAll('.optPrice'));
+                        const optStock = Array.from(optDetailBox.querySelectorAll('.optStock'));
+                        const opt = [];
+
+                        for (let j = 0; j < optValue.length; j++) {
+                            const optDetail = [];
+                            optDetail.push(prodNo);
+                            optDetail.push(optName.value);
+                            optDetail.push(optValue[j].value);
+                            optDetail.push(optPrice[j].value);
+                            optDetail.push(optStock[j].value);
+                            opt.push(optDetail);
+                        }
+                        allOpts.push(opt);
+                    })
+
+                    const jsonData = {
+                        "allOpts" : allOpts
+                    }
+                    fetch("/lotteon/admin/product/option", {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                        })
+                        .catch(err => console.log(err));
+
+                }
+            }
+        </script>
+        <nav>
+            <script th:src="@{/js/util.js}"></script>
+
+            <h3>상품등록</h3>
+            <p>
+                HOME > 상품관리 > <strong>상품등록</strong>
+            </p>
+        </nav>
+        <!-- 상품등록 컨텐츠 시작 -->
+        <article>
+            <form th:action="@{/admin/product/register}" method="post" id="prodRegisterForm" enctype="multipart/form-data">
+
+                <!-- 상품분류 -->
+                <section>
+                    <h4>상품분류</h4>
+                    <table>
+                        <tr>
+                            <td>1차 분류</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>2차 분류</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </section>
+                <!-- 기본정보 -->
+                <section>
+                    <h4>기본정보</h4>
+                    <input type="hidden" name="prodNo" th:value="${productDTO.prodNo}">
+                    <table>
+                        <tr>
+                            <td>상품명</td>
+                            <td>[[${productDTO.prodName}]]</td>
+                        </tr>
+                        <tr>
+                            <td>기본설명</td>
+                            <td>[[${productDTO.prodInfo}]]</td>
+                        </tr>
+                        <tr>
+                            <td>제조사</td>
+                            <td>[[${productDTO.prodCompany}]]</td>
+                        </tr>
+                        <tr>
+                            <td>판매가격</td>
+                            <td>[[${productDTO.prodPrice}]]</td>
+                        </tr>
+                        <tr>
+                            <td>할인율</td>
+                            <td>[[${productDTO.prodDiscount}]]</td>
+                        </tr>
+                        <tr>
+                            <td>포인트</td>
+                            <td>[[${productDTO.prodPoint}]]</td>
+                        </tr>
+                        <tr>
+                            <td>재고수량</td>
+                            <td>[[${productDTO.prodStock}]]</td>
+                        </tr>
+                        <tr>
+                            <td>배송비</td>
+                            <td>[[${productDTO.prodDeliveryFee}]]</td>
+                        </tr>
+                        <tr>
+                            <td>상품 썸네일</td>
+                            <td>
+                                <span>크기 190 x 190, 상품 목록에 출력될 이미지 입니다. </span>
+                                <input type="file" name="multThumb190"/>
+
+                                <span>크기 230 x 230, 상품 메인에 출력될 이미지 입니다. </span>
+                                <input type="file" name="multThumb230"/>
+
+                                <span>크기 456 x 456, 상품 상세에 출력될 이미지 입니다. </span>
+                                <input type="file" name="multThumb456"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>상세 상품정보</td>
+                            <td>
+                                <span>크기 가로 940px 높이 제약없음, 크기 최대 1MB, 상세페이지 상품정보에 출력될 이미지 입니다.</span>
+                                <input type="file" name="multThumb940"/>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+
+                <!-- 옵션 정보 -->
+                <section>
+                    <h4 style="display: inline-block">등록된 상품 옵션</h4>
+                    <p>
+                        하나의 상품에 최대 4개의 옵션을 설정할 수 있습니다.
+                    </p>
+                    <table class="optAddTable">
+                        <tr>
+                            <td>구분</td>
+                            <td>옵션명</td>
+                            <td>옵션정보</td>
+                        </tr>
+                        <tr th:if="${optionDTOList.isEmpty()}">
+                            <td>옵션</td>
+                            <td colspan="2">등록된 옵션 없음</td>
+                        </tr>
+                        <!--반복문 이상하게 걸렸음-->
+                        <tr class="optAddTuple" th:if="${optionDTOList != null}" th:each="optionDTO, index : ${optionDTOList}">
+                            <td>옵션 [[${index.index+1}]]</td>
+                            <td>
+                                <input type="text" class="optName" th:value="${optionDTO.optName}"/>
+                            </td>
+                            <td class="optDetailBox">
+                                <div class="optDetail">
+                                    <input type="text" readonly th:value="${optionDTO.optValue}"/>
+                                    <input type="text" readonly th:value="${optionDTO.optPrice}"/>
+                                    <input type="text" readonly th:value="${optionDTO.optStock}"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+
+                <!-- 옵션 정보 등록 -->
+                <section>
+                    <h4 style="display: inline-block">상품 옵션 등록</h4>
+                    <span id="btnOptAdd" onclick="addOptionBlock()">옵션 추가 + </span>
+                    <p>
+                        하나의 상품에 최대 4개의 옵션을 설정할 수 있습니다.
+                    </p>
+                    <table class="optAddTable" id="optAddTable">
+                        <tr>
+                            <td>구분</td>
+                            <td>옵션명</td>
+                            <td colspan="2">옵션정보</td>
+                        </tr>
+                        <tr class="optAddTuple">
+                            <td>옵션 1<span class="btnOptTupleDelete">삭제</span></td>
+                            <td>
+                                <input type="text" class="optName" placeholder="옵션명"/>
+                            </td>
+                            <td>
+                                <span class="btnOptDetailAdd">추가</span>
+                            </td>
+                            <td class="optDetailBox">
+                                <div class="optDetail">
+                                    <input type="text" class="optValue" placeholder="옵션값"/>
+                                    <input type="text" class="optPrice" placeholder="옵션가격"/>
+                                    <input type="text" class="optStock" placeholder="옵션재고"/>
+                                    <span class="btnOptDetailDelete">삭제</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <span id="btnNewOptAdd">신규 옵션 등록</span>
+                </section>
+
+                <!-- 상품정보 제공 고시 -->
+                <section style="margin-top: 40px">
+                    <h4>상품정보 제공고시</h4>
+                    <p>
+                        [전자상거래에 관한 상품정보 제공에 관한 고시] 항목에 의거 등록해야 되는 정보입니다.
+                    </p>
+                    <table>
+                        <tr>
+                            <td>상품상태</td>
+                            <td><input type="text" name="prodStatus" value="새상품"/></td>
+                        </tr>
+                        <tr>
+                            <td>부가세 면세여부</td>
+                            <td><input type="text" name="prodTax" value="과세상품"/></td>
+                        </tr>
+                        <tr>
+                            <td>영수증발행</td>
+                            <td><input type="text" name="prodReceipt" value="발행가능 - 신용카드 전표, 온라인 현금영수증"/></td>
+                        </tr>
+                        <tr>
+                            <td>사업자구분</td>
+                            <td><input type="text" name="prodBusinessType" value="사업자 판매자"/></td>
+                        </tr>
+                        <tr>
+                            <td>원산지</td>
+                            <td><input type="text" name="prodOrg" value="국내산"/></td>
+                        </tr>
+                    </table>
+                </section>
+
+                <input type="submit" value="등록하기"/>
+            </form>
+        </article>
+
+        <p class="ico alert">
+            <strong>Warning!</strong>
+            전자상거래 등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성 등을 양식에 따라 입력할 수 있습니다.
+        </p>
+        <!-- 상품등록 컨텐츠 끝 -->
+    </section>
+<!--내용 끝-->
+</html>

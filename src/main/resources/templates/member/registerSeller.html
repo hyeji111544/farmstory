@@ -8,100 +8,628 @@
 		<script th:src="@{/js/util.js}"></script>
 		<script>
 
+			//유효성 검사에 사용할 상태변수
+			let isUidOk   = false;
+			let isPassOk  = false;
+			let isNameOk  = false;
+			let isEmailOk = false;
+			let isHpOk    = false;
+			let isCompanyOk = false;
+			let isLicenseOk = false;
+			let isbusinessOk = false;
+			let isFaxOk = false;
+
+			// 유효성 검사에 사용할 정규표현식
+			const reUid   = /^[a-z]+[a-z0-9]{8,19}$/g;
+			const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
+			const reName  = /^[가-힣]{2,10}$/
+			const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+			const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
+			const reCompany =/\(주\)/;
+			const reLicense =/([0-9]{3})-?([0-9]{2})-?([0-9]{5})/;
+			let reBusiness =/^(?:[가-힣]{2,}-\d{5}|제 \d{1}-\d{2}-\d{2}-\d{4}호|\d{4}-[가-힣]{2,}-\d{4}[가-힣])$/;
+			let reFax = /^\d{2,3}-\d{3,4}-\d{4}$/;
+
+
 			window.onload = function (){
 
+				//아이디 태그
+				const userId = document.getElementById('userId');
+				const resultUid = document.getElementById('resultUid');
+
+				//패스워드 태그
+				const userPw = document.getElementById('userPw');
+				const userPwCheck = document.getElementById('userPwCheck');
+				const resultPw = document.getElementById('resultPw');
+
+				//판매자 이름 태그
+				const sellerName = document.getElementById('sellerName');
+				const resultSellerName = document.getElementById('resultSellerName');
+
+				//사용자 이름 태그
+				const userName = document.getElementById('userName');
+				const resultUserName = document.getElementById('resultUserName');
+
+				//판매자 전화번호 태그
+				const sellerHp = document.getElementById('sellerHp');
+				const resultSellerHp = document.getElementById('resultSellerHp');
+
+				//전화번호 태그
+				const userHp = document.getElementById('userHp');
+				const resultHp = document.getElementById('resultHp');
+
+				//이메일 태그
+				const userEmail = document.getElementById('userEmail');
+				const resultEmail = document.getElementById('resultEmail');
+				const checkUserEmail = document.getElementById('checkUserEmail');
+				const checkEmailCode = document.getElementById('checkEmailCode');
+				const checkCodeLabel = document.getElementById('checkCodeLabel');
+				const inputEmailCode = document.getElementById('inputEmailCode');
+				const resultEmailCode = document.getElementById('resultEmailCode');
+
+				//회사명 태그
+				const company = document.getElementById('company');
+				const resultCompany = document.getElementById('resultCompany');
+
+
+				//사업자번호 태그
+				const businessNum = document.getElementById('businessNum');
+				const resultBusinessNum = document.getElementById('resultBusinessNum');
+
+
+				//통신판매업 신고 번호 태그
+				const licenseNum = document.getElementById('licenseNum');
+				const resultLicenseNum = document.getElementById('resultLicenseNum');
+
+				//팩스번호 태그
+				const fax = document.getElementById('fax');
+				const resultFax = document.getElementById('resultFax');
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 아이디 유효성 & 중복 체크 //
+				userId.addEventListener('blur', function () {
+
+					const value = userId.value;
+					const type = "userId";
+					// 1. 정규표현식 통과
+					if (!value.match(reUid)) {
+						resultUid.innerText = "유효하지 않은 아이디입니다.";
+						resultUid.style.color = "red";
+						userId.style.border = "1px solid red";
+						isUidOk = false;
+						return;
+					}
+					//2. 중복체크 (DB)
+					fetch(`/lotteon/member/checkUser/${type}/${value}`) //DB에서 중복체크하고 올 controller
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+
+								if (data.result > 0) {
+									//중복일 경우
+									resultUid.innerText = "중복된 아이디입니다.";
+									resultUid.style.color = "red";
+									userId.style.border = "1px solid red";
+									isUidOk = false;
+								} else {
+									//중복일 경우
+									resultUid.innerText = "사용가능한 아이디입니다.";
+									resultUid.style.color = "green";
+									userId.style.border = "1px solid green";
+									isUidOk = true;
+								}
+							})
+							.catch(err => console.log(err))
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 1차 비밀번호 유효성체크
+				userPw.addEventListener('blur', function () {
+					const value = userPw.value;
+					const type = "userPw";
+					// 1. 정규표현식 통과
+					if (!value.match(rePass)) {
+						resultPw.innerText = "유효하지 않은 패스워드입니다.";
+						resultPw.style.color = "red";
+						userPw.style.border = "1px solid red";
+						isPassOk = false;
+						return; // 여기서 끝!
+					} else {
+						resultPw.innerText = "사용가능한 비밀번호입니다.";
+						resultPw.style.color = "green";
+						userPw.style.border = "1px solid green";
+						isPassOk = true;
+						return; // 여기서 끝!
+					}
+				});
+
+				// 2차 비밀번호 체크
+				userPwCheck.addEventListener('input', function () {
+
+					const value = userPw.value;
+					const type = "userPw";
+					// 1. 정규표현식 통과
+					if (userPw.value == userPwCheck.value) {
+
+						if (!value.match(rePass)) {
+							resultPwCheck.innerText = "유효하지 않은 패스워드입니다.";
+							resultPwCheck.style.color = "red";
+							userPwCheck.style.border = "1px solid red";
+							isPassOk = false;
+							return; // 여기서 끝!
+						} else {
+							resultPwCheck.innerText = "패스워드가 일치합니다.";
+							resultPwCheck.style.color = "green";
+							userPwCheck.style.border = "1px solid green";
+							isPassOk = true;
+							return; // 여기서 끝!
+						}
+
+					} else {
+						resultPwCheck.innerText = "패스워드가 일치하지 않습니다.";
+						resultPwCheck.style.color = "red";
+						userPwCheck.style.border = "1px solid red";
+						isPassOk = false;
+						return; // 여기서 끝
+					}
+
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 이름 유효성 체크
+				userName.addEventListener('blur', function () {
+					const value = userName.value;
+					const type = "userName";
+
+					// 1. 정규표현식 통과
+					if (!value.match(reName)) {
+						resultName.innerText = "유효하지 않은 이름형식입니다.";
+						resultName.style.color = "red";
+						userName.style.border = "1px solid red";
+						isNameOk = false;
+						return; // 여기서 끝!
+					} else {
+						resultName.innerText = "";
+						userName.style.border = "1px solid green";
+						isNameOk = true;
+						return;
+					}
+
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 판매자이름 유효성 체크
+				sellerName.addEventListener('blur', function () {
+					const value = sellerName.value;
+					const type = "sellerName";
+
+					// 1. 정규표현식 통과
+					if (!value.match(reName)) {
+						resultSellerName.innerText = "유효하지 않은 이름형식입니다.";
+						resultSellerName.style.color = "red";
+						sellerName.style.border = "1px solid red";
+						isNameOk = false;
+						return; // 여기서 끝!
+					} else {
+						resultSellerName.innerText = "";
+						sellerName.style.border = "1px solid green";
+						isNameOk = true;
+						return;
+					}
+
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 전화번호 유효성 & 중복 체크 //
+				userHp.addEventListener('blur', function () {
+
+					const value = userHp.value;
+					const type = "userHp";
+					// 1. 정규표현식 통과
+					if (!value.match(reHp)) {
+						resultHp.innerText = "유효하지 않은 전화번호입니다.";
+						resultHp.style.color = "red";
+						userHp.style.border = "1px solid red";
+						isHpOk = false;
+						return; // 여기서 끝!
+					}
+
+					// 2. 중복 체크 (DB)
+					fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+
+								if (data.result > 0) {
+									// 중복일 경우
+									resultHp.innerText = "중복된 전화번입니다.";
+									resultHp.style.color = "red";
+									userHp.style.border = "1px solid red";
+									isHpOk = false;
+								} else {
+									// 중복이 아닐경우
+									resultHp.innerText = "사용가능한 전화입니다.";
+									resultHp.style.color = "green";
+									userHp.style.border = "1px solid green";
+									isHpOk = true;
+								}
+							})
+							.catch(err => console.log(err))
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 전화번호 유효성 & 중복 체크 //
+				sellerHp.addEventListener('blur', function () {
+
+					const value = sellerHp.value;
+					const type = "sellerHp";
+					// 1. 정규표현식 통과
+					if (!value.match(reHp)) {
+						resultSellerHp.innerText = "유효하지 않은 전화번호입니다.";
+						resultSellerHp.style.color = "red";
+						sellerHp.style.border = "1px solid red";
+						isHpOk = false;
+						return; // 여기서 끝!
+					}
+
+					// 2. 중복 체크 (DB)
+					fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+
+								if (data.result > 0) {
+									// 중복일 경우
+									resultSellerHp.innerText = "중복된 전화번입니다.";
+									resultSellerHp.style.color = "red";
+									sellerHp.style.border = "1px solid red";
+									isHpOk = false;
+								} else {
+									// 중복이 아닐경우
+									resultSellerHp.innerText = "사용가능한 전화입니다.";
+									resultSellerHp.style.color = "green";
+									sellerHp.style.border = "1px solid green";
+									isHpOk = true;
+								}
+							})
+							.catch(err => console.log(err))
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
+
+				// 이메일 유효성 & 중복 체크
+				checkUserEmail.onclick = function () {
+					const value = userEmail.value;
+					const type = "userEmail";
+					// 1. 정규표현식 통과
+					if (!value.match(reEmail)) {
+						resultEmail.innerText = "유효하지 않은 이메일 형식입니다.";
+						resultEmail.style.color = "red";
+						userEmail.style.border = "1px solid red";
+						isEmailOk = false;
+						return; // 여기서 끝!
+					}
+
+					// 2. 중복 체크 (DB)
+					fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+
+								if (data.result > 0) {
+									// 중복일 경우
+									resultEmail.innerText = "중복된 이메일입니다.";
+									resultEmail.style.color = "red";
+									userEmail.style.border = "1px solid red";
+									isEmailOk = false;
+								} else {
+									// 중복이 아닐경우
+									resultEmail.innerText = "사용가능한 이메일입니다.";
+									resultEmail.style.color = "green";
+									userEmail.style.border = "1px solid green";
+									isEmailOk = false;
+									checkCodeLabel.style.display = "block";
+								}
+							})
+							.catch(err => console.log(err))
+				};
+
+				//이메일 인증코드 발급 및 중복 체크
+				checkEmailCode.onclick = function () {
+					// 사용자가 입력한 코드
+					const inputCode = inputEmailCode.value;
+
+					fetch(`/lotteon/member/checkEmailCode/${inputCode}`)
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+								if (data.result > 0) {
+									resultEmailCode.innerText = "인증번호가 일치하지 않습니다.";
+									resultEmailCode.style.color = "red";
+									inputEmailCode.style.border = "1px solid red";
+									isEmailOk = false;
+								} else {
+									resultEmailCode.innerText = "인증번호가 인증되었습니다.";
+									resultEmailCode.style.color = "green";
+									inputEmailCode.style.border = "1px solid green";
+									isEmailOk = true;
+								}
+							})
+							.catch(err => console.log(err))
+
+				}
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 회사명 유효성 & 중복 체크 //
+				company.addEventListener('blur', function () {
+
+					const value = company.value;
+					const type = "company";
+					// 1. 정규표현식 통과
+					if (!value.match(reCompany)) {
+						resultCompany.innerText = "유효하지 않은 회사명입니다.";
+						resultCompany.style.color = "red";
+						company.style.border = "1px solid red";
+						isCompanyOk = false;
+						return; // 여기서 끝!
+					}
+
+					// 2. 중복 체크 (DB)
+					fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+
+								if (data.result > 0) {
+									// 중복일 경우
+									resultCompany.innerText = "중복된 회사명입니다.";
+									resultCompany.style.color = "red";
+									company.style.border = "1px solid red";
+									isCompanyOk = false;
+								} else {
+									// 중복이 아닐경우
+									resultCompany.innerText = "사용가능한 회사명입니다.";
+									resultCompany.style.color = "green";
+									company.style.border = "1px solid green";
+									isCompanyOk = true;
+								}
+							})
+							.catch(err => console.log(err))
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 사업자 등록번호 유효성 & 중복 체크 //
+				businessNum.addEventListener('blur', function () {
+
+					const value = businessNum.value;
+					const type = "businessNum";
+					// 1. 정규표현식 통과
+					if (!value.match(reBusiness)) {
+						resultBusinessNum.innerText = "유효하지 않은 사업자 번호입니다.";
+						resultBusinessNum.style.color = "red";
+						businessNum.style.border = "1px solid red";
+						isbusinessOk = false;
+						return; // 여기서 끝!
+					}
+
+					// 2. 중복 체크 (DB)
+					fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+
+								if (data.result > 0) {
+									// 중복일 경우
+									resultBusinessNum.innerText = "중복된 사업자 번호입니다.";
+									resultBusinessNum.style.color = "red";
+									businessNum.style.border = "1px solid red";
+									isbusinessOk = false;
+								} else {
+									// 중복이 아닐경우
+									resultBusinessNum.innerText = "사용가능한 사업자 번호입니다.";
+									resultBusinessNum.style.color = "green";
+									businessNum.style.border = "1px solid green";
+									isbusinessOk = true;
+								}
+							})
+							.catch(err => console.log(err))
+				});
+				////////////////////////////////////////////////////////////////////////////////
+				// 통신판매업 신고 유효성 & 중복 체크 //
+				licenseNum.addEventListener('blur', function () {
+
+					const value = licenseNum.value;
+					const type = "licenseNum";
+					// 1. 정규표현식 통과
+					if (!value.match(reLicense)) {
+						resultLicenseNum.innerText = "유효하지 않은 라이센스번호입니다.";
+						resultLicenseNum.style.color = "red";
+						licenseNum.style.border = "1px solid red";
+						isLicenseOk = false;
+						return; // 여기서 끝!
+					}
+
+					// 2. 중복 체크 (DB)
+					fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+
+								if (data.result > 0) {
+									// 중복일 경우
+									resultLicenseNum.innerText = "중복된 라이센스입니다.";
+									resultLicenseNum.style.color = "red";
+									licenseNum.style.border = "1px solid red";
+									isLicenseOk = false;
+								} else {
+									// 중복이 아닐경우
+									resultLicenseNum.innerText = "사용가능한 라이센스입니다.";
+									resultLicenseNum.style.color = "green";
+									licenseNum.style.border = "1px solid green";
+									isLicenseOk = true;
+								}
+							})
+							.catch(err => console.log(err))
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 팩스번호 유효성 & 중복 체크 //
+				fax.addEventListener('blur', function () {
+
+					const value = fax.value;
+					const type = "fax";
+					// 1. 정규표현식 통과
+					if (!value.match(reFax)) {
+						resultFax.innerText = "유효하지 않은 팩스번호입니다.";
+						resultFax.style.color = "red";
+						fax.style.border = "1px solid red";
+						isFaxOk = false;
+						return; // 여기서 끝!
+					}
+
+					// 2. 중복 체크 (DB)
+					fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+
+								if (data.result > 0) {
+									// 중복일 경우
+									resultFax.innerText = "중복된 팩스 번호입니다.";
+									resultFax.style.color = "red";
+									fax.style.border = "1px solid red";
+									isFaxOk = false;
+								} else {
+									// 중복이 아닐경우
+									resultFax.innerText = "사용가능한 팩스 번호입니다.";
+									resultFax.style.color = "green";
+									fax.style.border = "1px solid green";
+									isFaxOk = true;
+								}
+							})
+							.catch(err => console.log(err))
+				});
+				////////////////////////////////////////////////////////////////////////////////
+
+				//다음 주소 열기
 				const btnZip = document.getElementById('btnZip');
 
 				btnZip.onclick = function (e) {
 					e.preventDefault();
 					postcode();
 				}
-
 			}
-
 		</script>
 
-		<div class="registerSeller">
+		<div class="register">
 			<nav>
 				<h1>판매자 회원가입</h1>
 			</nav>
-
-			<form th:action="@{/member/registerSeller}" method="POST">
+			<form th:action="@{/member/registerSeller}" name="registerSellerForm" method="POST">
 				<section>
 					<table>
 						<caption>필수 정보입력</caption>
 						<tr>
 							<th><span class="essential">*</span>아이디</th>
 							<td>
-								<input type="text" name="userId" placeholder="아이디를 입력" required />
+								<input type="text" id="userId" name="userId" placeholder="아이디를 입력" required />
 								<span class="msgSId">&nbsp;&nbsp;영문, 숫자로 4~12자까지 설정해 주세요.</span>
+								<span id="resultUid" class="resultText"></span>
+								<p class="resultUid"></p>
 							</td>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>비밀번호</th>
 							<td>
-								<input type="password" name="userPw" placeholder="비밀번호를 입력" required />
+								<input type="password" id="userPw" name="userPw" placeholder="비밀번호를 입력" required />
 								<span class="msgPass">&nbsp;&nbsp;영문, 숫자, 특수문자를 조합하여 8~12자까지 설정해 주세요.</span>
+								<span id="resultPw" class="resultText"></span>
+								<p class="resultPw"></p>
 							</td>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>비밀번호확인</th>
 							<td>
-								<input type="password" name="userPwCheck" placeholder="비밀번호를 확인" required />
+								<input type="password" id="userPwCheck" name="userPwCheck" placeholder="비밀번호를 확인" required />
 								<span class="msgPass">&nbsp;&nbsp;비밀번호 재입력</span>
+								<span id="resultPwCheck" class="resultText"></span>
+								<p class="resultPwCheck"></p>
 							</td>
 						</tr>
 					</table>
 				</section>
-
 				<section>
 					<table>
 						<caption>판매자 정보입력</caption>
 						<tr>
 							<th><span class="essential">*</span>회사명</th>
 							<td>
-								<input type="text" name="company" placeholder="회사명 입력" required />
+								<input type="text" id="company" name="company" placeholder="회사명 입력" required />
 								<span class="msgCompany">&nbsp;&nbsp;(주)포함 입력, 예) (주)케이마켓</span>
+								<span id="resultCompany" class="resultText"></span>
+								<p class="resultCompany"></p>
 							</td>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>대표자</th>
 							<td>
-								<input type="text" name="sellerName" placeholder="대표자 입력" required />
+								<input type="text" id="sellerName" name="sellerName" placeholder="대표자 입력" required />
+								<span id="resultSellerName" class="resultText"></span>
+								<p class="resultSellerName"></p>
 							</td>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>사업자등록번호</th>
 							<td>
-								<input type="text" name="businessNum" placeholder="사업자등록번호 입력" required />
+								<input type="text" id="businessNum" name="businessNum" placeholder="사업자등록번호 입력" required />
 								<span class="msgCorp">&nbsp;&nbsp;- 표시 포함 12자리 입력, 예) 123-45-67890</span>
+								<span id="resultBusinessNum" class="resultText"></span>
+								<p class="resultBusinessNum"></p>
 							</td>
 
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>통신판매업신고 번호</th>
 							<td>
-								<input type="text" name="licenseNum" placeholder="통신판매업신고 입력" required />
+								<input type="text" id="licenseNum" name="licenseNum" placeholder="통신판매업신고 입력" required />
 								<span class="msgOnline">&nbsp;&nbsp;- 표시 포함, 예) 강남-12345, 제 1-01-23-4567호, 2017-경기성남-0011</span>
+								<span id="resultLicenseNum" class="resultText"></span>
+								<p class="resultLicenseNum"></p>
 							</td>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>전화번호</th>
 							<td>
-								<input type="text" name="sellerHp" placeholder="전화번호 입력" required />
+								<input type="text" id="sellerHp" name="sellerHp" placeholder="전화번호 입력" required />
 								<span class="msgTel">&nbsp;&nbsp;- 표시 포함, 지역번호 포함, 예) 02-234-1234</span>
+								<span id="resultHp" class="resultText"></span>
+								<p class="resultHp"></p>
 							</td>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>팩스번호</th>
 							<td>
-								<input type="text" name="fax" placeholder="팩스번호 입력" required />
+								<input type="text" id="fax" name="fax" placeholder="팩스번호 입력" required />
 								<span class="msgFax">&nbsp;&nbsp;- 표시 포함, 지역번호 포함, 예) 02-234-1234</span>
+								<span id="resultFax" class="resultText"></span>
+								<p class="resultFax"></p>
 							</td>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>EMAIL</th>
-							<td><input type="email" name="userEmail" placeholder="이메일 입력" required /></td>
+							<td>
+								<!--이메일 입력 필드-->
+								<input type="email" id="userEmail" name="userEmail" placeholder="이메일 입력" required style="display: inline-block"/>
+								<button id="checkUserEmail">인증코드발송</button>
+								<span id="resultEmail" class="resultText"></span>
+
+								<!--이메일 인증코드 필드-->
+								<label id="checkCodeLabel" style="width: 100%; display: none">
+									<input type="text" id="inputEmailCode" name="inputEmailCode" placeholder="인증코드 입력" required style="display: inline-block"/>
+									<button id="checkEmailCode">인증코드확인</button>
+									<span id="resultEmailCode" class="resultText"></span>
+								</label>
+							</td>
 						</tr>
 						<tr class="addr">
 							<th>회사주소</th>
@@ -125,7 +653,9 @@
 						<caption>판매자 정보입력</caption>
 						<tr>
 							<th><span class="essential">*</span>이름</th>
-							<td><input type="text" name="userName" placeholder="이름을 입력" required /></td>
+							<td><input type="text" id="userName" name="userName" placeholder="이름을 입력" required /></td>
+							<span id="resultUserName" class="resultText"></span>
+							<p class="resultUserName"></p>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>생일</th>
@@ -135,8 +665,10 @@
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>휴대폰</th>
-							<td><input type="text" name="userHp" maxlength="13" placeholder="휴대폰번호 입력" required />
+							<td><input type="text" id="userHp" name="userHp" maxlength="13" placeholder="휴대폰번호 입력" required />
 								<span class="msgHp">&nbsp;&nbsp;- 포함 13자리를 입력하세요.</span>
+								<span id="resultUserHp" class="resultText"></span>
+								<p class="resultUserHp"></p>
 							</td>
 							<input type="hidden" name="userPromo" th:value="${userPromo}"/>
 						</tr>

@@ -26,7 +26,7 @@
                 <h2>공지사항 전체 내용입니다.</h2>
               </nav>
               <table>
-                <tr th:each="notice, index:${pageResponseDTO.dtoList}">
+                <tr th:each="notice, index:${pageResponseDTO.dtoList}" th:if="${index.index} &lt; 6">
                   <td>
                     <a th:href="@{/cs/notice/view(noticeNo=${notice.noticeNo})}" th:text="${notice.noticeType + ' ' + notice.noticeTitle}">
                     </a>
