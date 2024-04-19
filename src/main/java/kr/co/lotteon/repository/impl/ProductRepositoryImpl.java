@@ -63,7 +63,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             orderSpecifier = qProduct.prodSold.desc();
             limitCount = 5;
         }else if (sort != null && sort.startsWith("prodRdate")) {
-            orderSpecifier = qProduct.prodRdate.asc();
+            orderSpecifier = qProduct.prodRdate.desc();
         }else if (sort != null && sort.startsWith("prodScore")) {
             orderSpecifier = qProduct.tReviewScore.desc();
         }else if (sort != null && sort.startsWith("prodHit")) {

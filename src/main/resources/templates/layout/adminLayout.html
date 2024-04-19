@@ -2,7 +2,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
     <meta charset="UTF-8">
-    <title>롯데ON::관리자 페이지</title>
+    <title>롯데ON::1조 관리자 페이지</title>
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
     <script th:src="@{https://kit.fontawesome.com/20962f3e4b.js}" crossorigin="anonymous"></script>
@@ -15,10 +15,10 @@
     <div id="admin-wrapper">
         <header>
             <div>
-                <a href="./index.html" class="logo"><img th:src="@{/images/admin/admin_logo.png}" alt="admin_logo"/></a>
+                <a th:href="@{/admin/index}" class="logo"><img th:src="@{/images/admin/admin_logo.png}" alt="admin_logo"/></a>
                 <p>
                     <span>홍길동님 반갑습니다.</span>
-                    <a th:href="@{/index}">HOME |</a>
+                    <a th:href="@{/}">HOME |</a>
                     <a href="#">로그아웃 |</a>
                     <a th:href="@{/cs/index}">고객센터</a>
                 </p>
