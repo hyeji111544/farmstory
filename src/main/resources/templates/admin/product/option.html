@@ -4,6 +4,13 @@
 <!--내용 시작-->
     <section id="admin-product-register" layout:fragment="content">
         <script>
+
+            // 이미지 애니메이션
+            function imageScale() {
+
+                const bigImage = ``;
+            }
+
             // 옵션 추가
             function addOptionBlock() {
                 const optAddTuple = document.getElementsByClassName('optAddTuple');
@@ -28,7 +35,7 @@
                                                 <span class="btnOptDetailDelete">삭제</span>
                                             </div>
                                         </td>
-                                    </tr>`
+                                    </tr>`;
                     tbody.insertAdjacentHTML('beforeend', optTuple);
                 }
             }
@@ -48,7 +55,7 @@
                                                 <input type="text" class="optPrice" placeholder="옵션가격"/>
                                                 <input type="text" class="optStock" placeholder="옵션재고"/>
                                                 <span class="btnOptDetailDelete">삭제</span>
-                                            </div>`
+                                            </div>`;
                             optDetailBox.insertAdjacentHTML('beforeend', optDetailTuple);
                         }
                     }else if (e.target.className === "btnOptDetailDelete") {
@@ -123,8 +130,6 @@
                         <tr>
                             <td>1차 분류</td>
                             <td></td>
-                        </tr>
-                        <tr>
                             <td>2차 분류</td>
                             <td></td>
                         </tr>
@@ -134,61 +139,81 @@
                 <section>
                     <h4>기본정보</h4>
                     <input type="hidden" name="prodNo" th:value="${productDTO.prodNo}">
-                    <table>
+                    <table class="optionTable">
                         <tr>
                             <td>상품명</td>
                             <td>[[${productDTO.prodName}]]</td>
-                        </tr>
-                        <tr>
                             <td>기본설명</td>
                             <td>[[${productDTO.prodInfo}]]</td>
                         </tr>
                         <tr>
                             <td>제조사</td>
                             <td>[[${productDTO.prodCompany}]]</td>
-                        </tr>
-                        <tr>
                             <td>판매가격</td>
                             <td>[[${productDTO.prodPrice}]]</td>
                         </tr>
                         <tr>
                             <td>할인율</td>
                             <td>[[${productDTO.prodDiscount}]]</td>
-                        </tr>
-                        <tr>
                             <td>포인트</td>
                             <td>[[${productDTO.prodPoint}]]</td>
                         </tr>
                         <tr>
                             <td>재고수량</td>
                             <td>[[${productDTO.prodStock}]]</td>
-                        </tr>
-                        <tr>
                             <td>배송비</td>
                             <td>[[${productDTO.prodDeliveryFee}]]</td>
                         </tr>
                         <tr>
                             <td>상품 썸네일</td>
-                            <td>
-                                <span>크기 190 x 190, 상품 목록에 출력될 이미지 입니다. </span>
-                                <input type="file" name="multThumb190"/>
-
-                                <span>크기 230 x 230, 상품 메인에 출력될 이미지 입니다. </span>
-                                <input type="file" name="multThumb230"/>
-
-                                <span>크기 456 x 456, 상품 상세에 출력될 이미지 입니다. </span>
-                                <input type="file" name="multThumb456"/>
+                            <td colspan="3">
+                                <div style="display: flex; justify-content: space-between">
+                                    <label style="width: 250px;">
+                                        <img th:src="@{/uploads/__${productDTO.thumb190}__}" class="thumb190" style="width: 250px;">
+                                        <span>크기 190 x 190</span>
+                                    </label>
+                                    <label style="width: 250px;">
+                                        <img th:src="@{/uploads/__${productDTO.thumb230}__}" class="thumb230" style="width: 250px;">
+                                        <span>크기 230 x 230</span>
+                                    </label>
+                                    <label style="width: 250px;">
+                                        <img th:src="@{/uploads/__${productDTO.thumb456}__}" class="thumb456" style="width: 250px;">
+                                        <span>크기 456 x 456</span>
+                                    </label>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-top: 20px">
+                                    <label style="width: 250px;">
+                                        <span style="font-size: 14px;">상품 이미지 변경</span>
+                                        <input type="file" name="multThumb190"/>
+                                    </label>
+                                    <label style="width: 250px;">
+                                        <span style="font-size: 14px;">상품 이미지 변경</span>
+                                        <input type="file" name="multThumb230"/>
+                                    </label>
+                                    <label style="width: 250px;">
+                                        <span style="font-size: 14px;">상품 이미지 변경</span>
+                                        <input type="file" name="multThumb456"/>
+                                    </label>
+                                </div>
                             </td>
                         </tr>
                         <tr>
                             <td>상세 상품정보</td>
-                            <td>
+                            <td colspan="3">
                                 <span>크기 가로 940px 높이 제약없음, 크기 최대 1MB, 상세페이지 상품정보에 출력될 이미지 입니다.</span>
                                 <input type="file" name="multThumb940"/>
                             </td>
                         </tr>
                     </table>
                 </section>
+
+                <!---->
+                <div class="bigImageBox">
+
+                </div>
+
+
+                <!---->
 
                 <!-- 옵션 정보 -->
                 <section>

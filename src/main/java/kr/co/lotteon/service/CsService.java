@@ -1,11 +1,10 @@
 package kr.co.lotteon.service;
 
-import kr.co.lotteon.dto.NoticeDTO;
-import kr.co.lotteon.dto.PageRequestDTO;
-import kr.co.lotteon.dto.PageResponseDTO;
-import kr.co.lotteon.dto.QnaDTO;
+import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.Faq;
 import kr.co.lotteon.entity.Notice;
 import kr.co.lotteon.entity.Qna;
+import kr.co.lotteon.repository.FaqRepository;
 import kr.co.lotteon.repository.NoticeRepository;
 import kr.co.lotteon.repository.QnaRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +23,7 @@ public class CsService {
 
     private final QnaRepository qnaRepository;
     private final NoticeRepository noticeRepository;
+    private final FaqRepository faqRepository;
     private final ModelMapper modelMapper;
 
     // notice 리스트
@@ -113,6 +113,24 @@ public class CsService {
         if(qna !=null){
             // DTO로 변환후에 반환
             return modelMapper.map(qna, QnaDTO.class);
+        }
+        return null; // 해당 번호의 글이 없는 경우 null반환
+    }
+
+    // faq 리스트
+    public List<Faq> faqList(){
+        return faqRepository.findAll();
+    }
+
+    // faq view 불러오기
+    public FaqDTO faqView(int faqNo){
+
+        // .orElse(null); optional 객체가 비어있을경우 대비
+        Faq faq = faqRepository.findById(faqNo).orElse(null);
+        log.info("특정 글 불러오기 view {}",faq);
+        if(faq !=null){
+            // DTO로 변환후에 반환
+            return modelMapper.map(faq, FaqDTO.class);
         }
         return null; // 해당 번호의 글이 없는 경우 null반환
     }

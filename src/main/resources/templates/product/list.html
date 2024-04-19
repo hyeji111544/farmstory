@@ -16,14 +16,20 @@
       <!-- 제목, 페이지 네비게이션 -->
       <nav>
         <h1>상품목록</h1>
-        <p>HOME > <span>패션·의류·뷰티</span> > <strong>남성의류</strong></p>
+          <p>HOME >
+              <span th:if="${resultMap.cate01Name != null}" th:text="${resultMap.cate01Name}"></span>
+              <span th:if="${resultMap.cate01Name != null and resultMap.cate02Name != null}"> > </span>
+              <strong th:if="${resultMap.cate02Name != null}" th:text="${resultMap.cate02Name}"></strong>
+              <span th:if="${resultMap.cate02Name != null and resultMap.cate03Name != null}"> > </span>
+              <span th:if="${resultMap.cate03Name != null}" th:text="${resultMap.cate03Name}"></span>
+          </p>
 
       </nav>
 
       <!-- 정렬 메뉴 -->
 
         <ul class="sort">
-            <li><a href="#" onclick="sort('prodSole')"> 판매많은순</a></li>
+            <li><a href="#" onclick="sort('prodSold')"> 판매많은순</a></li>
             <li><a href="#" onclick="sort('prodLowPrice')"> 낮은가격순</a></li>
             <li><a href="#" onclick="sort('prodHighPrice')"> 높은가격순</a></li>
             <li><a href="#" onclick="sort('prodScore')"> 평점높은순</a></li>

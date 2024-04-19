@@ -7,10 +7,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.entity.QProduct;
 import kr.co.lotteon.entity.QProductimg;
-import kr.co.lotteon.entity.QUser;
-import kr.co.lotteon.entity.User;
 import kr.co.lotteon.repository.custom.ProductRepositoryCustom;
-import kr.co.lotteon.repository.custom.UserRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,8 +23,8 @@ import java.util.List;
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private QProduct qProduct = QProduct.product;
-    private QProductimg qProductimg = QProductimg.productimg;
+    private final QProduct qProduct = QProduct.product;
+    private final QProductimg qProductimg = QProductimg.productimg;
 
 
     //ADMIN 페이지 프로덕트 조회
@@ -35,7 +32,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     public Page<Tuple> selectProducts(ProductPageRequestDTO pageRequestDTO, Pageable pageable) {
 
         QueryResults<Tuple> results = jpaQueryFactory
-                .select(qProduct, qProductimg.thumb230)
+                .select(qProduct, qProductimg)
                 .from(qProduct)
                 .join(qProductimg)
                 .on(qProduct.prodNo.eq(qProductimg.prodNo))
@@ -92,7 +89,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         OrderSpecifier<?> orderSpecifier = null;
         log.info("here1 : " + sort);
 
-        if (sort != null && sort.startsWith("prodSole")){
+        if (sort != null && sort.startsWith("prodSold")){
             orderSpecifier = qProduct.prodSold.desc();
         }else if (sort != null && sort.startsWith("prodLowPrice")) {
             orderSpecifier = qProduct.prodPrice.asc();
@@ -103,7 +100,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }else if (sort != null && sort.startsWith("prodReview")) {
             orderSpecifier = qProduct.tReviewCount.desc();
         }else if (sort != null && sort.startsWith("prodRdate")) {
-            orderSpecifier = qProduct.prodRdate.asc();
+            orderSpecifier = qProduct.prodRdate.desc();
+        }else if (sort != null && sort.startsWith("prodHit")) {
+            orderSpecifier = qProduct.prodHit.desc();
+        }else if (sort != null && sort.startsWith("prodDiscount")){
+            orderSpecifier = qProduct.prodDiscount.desc();
         }else {
             orderSpecifier = qProduct.prodSold.desc();
         }

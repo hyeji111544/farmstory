@@ -2,6 +2,7 @@ package kr.co.lotteon.controller;
 
 import groovy.util.logging.Slf4j;
 import kr.co.lotteon.dto.*;
+import kr.co.lotteon.service.ProdCateService;
 import kr.co.lotteon.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,20 +22,49 @@ public class ProductController {
 
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     private final ProductService productService;
+    private final ProdCateService prodCateService;
 
     // 상품 목록 이동
     @GetMapping("/product/list")
     public String prodList(@RequestParam("cateCode") String cateCode, ProductPageRequestDTO productPageRequestDTO, Model model){
-        log.info("selectProductsCate.........:"+cateCode);
         ProductPageResponseDTO pageResponseDTO;
         productPageRequestDTO.setCateCode(cateCode);
         pageResponseDTO = productService.selectProductsByCate(productPageRequestDTO);
-        //서비스 호출 . cate01, cate 02 조회 해서 가져와서 model
         String setSortType = productPageRequestDTO.getSort();
         model.addAttribute("setSortType", setSortType);
         model.addAttribute(pageResponseDTO);
-        // model.add
-        log.info("selectProductsByCateCode: " + pageResponseDTO);
+        String cate01 = "";
+        String cate02 = "";
+        String cate03 = "";
+        // cateCode AA / 101 / A101
+        if (cateCode.length() == 2){
+            cate01 = cateCode.substring(0,2);
+        }else if (cateCode.length() == 5) {
+            cate01 = cateCode.substring(0,2);
+            cate02 = cateCode.substring(2,5);
+        }else if (cateCode.length() > 5) {
+            cate01 = cateCode.substring(0,2);
+            cate02 = cateCode.substring(2,5);
+            cate03 = cateCode.substring(5,9);
+        }
+        log.info("cate01 : " + cate01);
+        log.info("cate02 : " + cate02);
+        log.info("cate03 : " + cate03);
+
+        Map<String, String> resultMap = prodCateService.findCateName(cate01, cate02, cate03);
+        log.info("resultMap : " + resultMap);
+        model.addAttribute("resultMap", resultMap);
+
+        // 사이드 카테고리바 출력
+        Map<String, List<?>> cateMap = prodCateService.selectProdCate();
+        List<Cate01DTO> cate01DTOs = (List<Cate01DTO>) cateMap.get("cate01DTOs");
+        List<Cate02DTO> cate02DTOs = (List<Cate02DTO>) cateMap.get("cate02DTOs");
+        List<Cate03DTO> cate03DTOs = (List<Cate03DTO>) cateMap.get("cate03DTOs");
+
+        model.addAttribute("cate01DTOs", cate01DTOs);
+        model.addAttribute("cate02DTOs", cate02DTOs);
+        model.addAttribute("cate03DTOs", cate03DTOs);
+
         return "/product/list";
     }
 
@@ -43,6 +74,16 @@ public class ProductController {
         log.info("prodView....!!!"+prodNo);
         ProductDTO productDTO = productService.selectProduct(prodNo);
         model.addAttribute("product", productDTO);
+
+        // 사이드 카테고리바 출력
+        Map<String, List<?>> cateMap = prodCateService.selectProdCate();
+        List<Cate01DTO> cate01DTOs = (List<Cate01DTO>) cateMap.get("cate01DTOs");
+        List<Cate02DTO> cate02DTOs = (List<Cate02DTO>) cateMap.get("cate02DTOs");
+        List<Cate03DTO> cate03DTOs = (List<Cate03DTO>) cateMap.get("cate03DTOs");
+
+        model.addAttribute("cate01DTOs", cate01DTOs);
+        model.addAttribute("cate02DTOs", cate02DTOs);
+        model.addAttribute("cate03DTOs", cate03DTOs);
         return "/product/view";
     }
 
