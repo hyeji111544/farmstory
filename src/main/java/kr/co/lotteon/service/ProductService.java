@@ -6,6 +6,7 @@ import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.ProductPageResponseDTO;
 import kr.co.lotteon.entity.Product;
 import kr.co.lotteon.entity.Productimg;
+import kr.co.lotteon.entity.Seller;
 import kr.co.lotteon.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,32 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
+    // 인덱스 페이지 상품 조회
+    public List<ProductDTO> selectIndexProducts(String sort){
+        List<Tuple> tuples = productRepository.selectIndexProducts(sort);
+
+        List<ProductDTO> productDTOs = new ArrayList<>();
+
+        for (Tuple tuple : tuples) {
+            Product product = tuple.get(0, Product.class);
+            Productimg productImg = tuple.get(1, Productimg.class);
+            if (product != null) {
+                ProductDTO productDTO = new ProductDTO();
+                // Product 정보를 ProductDTO로 매핑
+                modelMapper.map(product, productDTO);
+                // Productimg 정보를 ProductDTO에 설정
+                if (productImg != null) {
+                    productDTO.setThumb230(productImg.getThumb230());
+                }
+                // 리스트에 ProductDTO 추가
+                productDTOs.add(productDTO);
+            }
+        }
+
+        return productDTOs;
+    }
+
+    // 카테고리 눌러서 상품 조회
     public ProductPageResponseDTO selectProductsByCate(ProductPageRequestDTO pageRequestDTO){
 
         Pageable pageable = pageRequestDTO.getPageable("prodNo");

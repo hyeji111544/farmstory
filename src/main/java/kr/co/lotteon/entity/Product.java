@@ -29,6 +29,7 @@ public class Product {
 
     private int tReviewCount;
     private int tReviewScore;
+    private int prodHit;
 
     @CreationTimestamp
     private LocalDateTime prodRdate;

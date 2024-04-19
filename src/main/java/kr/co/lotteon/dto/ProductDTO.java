@@ -27,6 +27,7 @@ public class ProductDTO {
     private LocalDateTime prodRdate;
     private String prodCompany;
     private int prodDeliveryFee;
+    private int prodHit;
     private String cateCode;
     private String prodStatus;
     private String prodSeller;
@@ -39,4 +40,5 @@ public class ProductDTO {
     private String thumb230;
     private String thumb456;
     private String thumb940;
+
 }
