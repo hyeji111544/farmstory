@@ -120,12 +120,17 @@ public class AdminController {
         return "/admin/product/option";
     }
     
-    // 관리자 상품 옵션 등록
+    /* 
+        관리자 상품 옵션 등록
+          - 3중 배열로된 추가할 옵션 정보를 파라미터로 받아옴
+          - [ [ [이름1,값,가격,재고], [이름1,값,가격,재고] ],[ [이름2,값,가격,재고], [이름2,값,가격,재고] ] ]
+     */
     @PostMapping("/admin/product/option")
-    public void registerProductOption(@RequestBody Map<String, List<List<List<String>>>> requestData){
+    public ResponseEntity<?> registerProductOption(@RequestBody Map<String, List<List<List<String>>>> requestData){
         List<List<List<String>>> allOpts = requestData.get("allOpts");
-
         log.info("allOpts : " + allOpts);
+        
+        // 파라미터로 받은 3중 배열을 List<prodOptionDTO>로 가공
         List<ProdOptionDTO> optionDTOs = new ArrayList<>();
         for (List<List<String>> option : allOpts) {
             for (List<String> detail : option) {
@@ -139,6 +144,8 @@ public class AdminController {
             }
         }
         log.info("optionDTOs : " + optionDTOs);
+
+        return adminproductService.registerProdOption(optionDTOs);
 
     }
 

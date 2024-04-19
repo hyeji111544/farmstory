@@ -26,16 +26,6 @@ public class CsService {
     private final NoticeRepository noticeRepository;
     private final ModelMapper modelMapper;
 
-    // 고객센터 문의글 등록
-    public void insertQna(QnaDTO qnaDTO){
-
-        // qnaDTO를 Qna엔티티로 변환
-        Qna qna = modelMapper.map(qnaDTO, Qna.class);
-        log.info("qna ={}", qna.toString());
-        // 매핑된 Notice 엔티티를 DB에 저장
-        Qna savedQna = qnaRepository.save(qna);
-        log.info("savedQna ={}", savedQna.toString());
-    }
     // notice 리스트
     public List<Notice> noticeList(){
         return noticeRepository.findAll();
@@ -75,10 +65,55 @@ public class CsService {
         }
         return null; // 해당 번호의 글이 없는 경우 null반환
     }
+    // 고객센터 qna 등록
+    public void insertQna(QnaDTO qnaDTO){
+
+        // qnaDTO를 Qna엔티티로 변환
+        Qna qna = modelMapper.map(qnaDTO, Qna.class);
+        log.info("qna ={}", qna.toString());
+        // 매핑된 Notice 엔티티를 DB에 저장
+        Qna savedQna = qnaRepository.save(qna);
+        log.info("savedQna ={}", savedQna.toString());
+    }
 
     //  qna 리스트
     public List<Qna> qnaList(){
         return qnaRepository.findAll();
     }
 
+    // qna page 리스트 출력
+    public PageResponseDTO selectQnaPages(PageRequestDTO pageRequestDTO){
+
+        Pageable pageable = pageRequestDTO.getPageable("qnaNo");
+
+        Page<Qna> pageQna = qnaRepository.findAll(pageable);
+
+        log.info("selectQnaPages...1 : " + pageQna);
+
+        List<QnaDTO> dtoList = pageQna.getContent().stream()
+                .map(qna -> modelMapper.map(qna, QnaDTO.class))
+                .toList();
+
+        log.info("selectQnaPages...2 : " + dtoList);
+
+        int total = (int) pageQna.getTotalElements();
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(dtoList)
+                .total(total)
+                .build();
+    }
+    // qna view 불러오기
+    public QnaDTO qnaView(int qnaNo){
+
+        // .orElse(null); optional 객체가 비어있을경우 대비
+        Qna qna = qnaRepository.findById(qnaNo).orElse(null);
+        log.info("특정 글 불러오기 view {}",qna);
+        if(qna !=null){
+            // DTO로 변환후에 반환
+            return modelMapper.map(qna, QnaDTO.class);
+        }
+        return null; // 해당 번호의 글이 없는 경우 null반환
+    }
 }

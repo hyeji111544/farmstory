@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -89,7 +90,7 @@ public class AdminProductService {
     }
 
     //이미지 업로드 메서드
-    @Value("uploads/")
+    @Value("${file.upload.path}")
     private String fileUploadPath;
     public String fileUpload(MultipartFile images, String thumbnailSize){
         String path = new File(fileUploadPath).getAbsolutePath();
@@ -163,5 +164,21 @@ public class AdminProductService {
         resultMap.put("productDTO", productDTO);
         resultMap.put("optionDTOList", optionDTOList);
         return resultMap;
-    };
+    }
+    
+    // 상품 신규 옵션 등록
+    public ResponseEntity<?> registerProdOption(List<ProdOptionDTO> optionDTOs){
+        List<ProdOptionDTO> saveOptionList = new ArrayList<>();
+        // for문 배열로 설정한 옵션
+        for (ProdOptionDTO optionDTO : optionDTOs){
+            log.info(optionDTO.toString());
+            ProdOption prodOption = modelMapper.map(optionDTO, ProdOption.class);
+            ProdOption saveOption = optionRepository.save(prodOption);
+            saveOptionList.add(modelMapper.map(saveOption, ProdOptionDTO.class));
+        }
+        // json 형식으로 변환
+        Map<String, List<ProdOptionDTO>> resultMap = new HashMap<>();
+        resultMap.put("saveOptionList", saveOptionList);
+        return ResponseEntity.ok().body(resultMap);
+    }
 }

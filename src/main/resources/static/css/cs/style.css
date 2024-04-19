@@ -586,7 +586,7 @@ footer p > strong {
 
 #cs > .notice > .view > article > .content {
   width: 100%;
-  height: 100%;        
+  height: 50%;
   border-bottom: 1px solid #e9e9e9;
   padding: 26px;
   box-sizing: border-box;
@@ -597,7 +597,12 @@ footer p > strong {
   line-height: 32px;
 }
 
-
+#cs .notice .view article .btnList {
+  display: block;
+  text-align: center;
+  background-color: #9e9e9e;
+  color: white;
+}
 
 
 /* faq 공통 */
@@ -871,7 +876,22 @@ footer p > strong {
   padding: 16px;
   border-bottom: 1px solid #ccc;
 }
+
+#cs > .qna > .list > article > table td:nth-child(2) {
+  width: 100px;
+  height: 50px;
+  text-align: right;
+  font-size: 14px;
+}
+#cs > .qna > .list > article > table td:nth-child(3) {
+  width: 100px;
+  height: 50px;
+  text-align: right;
+  font-size: 14px;
+}
 #cs > .qna > .list > article > table td:last-child {
+  width: 100px;
+  height: 50px;
   text-align: center;
   font-size: 14px;
 }
@@ -879,11 +899,11 @@ footer p > strong {
   font-size: 16px;
 }
 
-#cs > .notice > .list > article > .page {
+#cs > .qna > .list > article > .page {
   text-align: center;
   margin-top: 26px;
 }
-#cs > .notice > .list > article > .page > a {
+#cs > .qna > .list > article > .page > a {
   display: inline-block;
   width: 34px;
   height: 34px;
@@ -894,6 +914,7 @@ footer p > strong {
   font-weight: bold;
   vertical-align: bottom;
 }
+/* qna list*/
 #cs > .qna > .list > article > .page > .prev {
   font-size: 20px;
   background-image: url('../images/cs_sprites.png');
@@ -933,10 +954,21 @@ footer p > strong {
   border-bottom: 1px solid #e9e9e9;
   box-sizing: border-box;
 }
+
 #cs > .qna > .view > article > nav > .title {
   margin-bottom: 6px;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
+}
+#cs > .qna > .view > article > nav > .title2 {
+  margin-bottom: 6px;
+  font-size: 28px;
+  font-weight: bold;
+}
+#cs > .qna > .view > article > nav > .reply{
+  margin-left: 35px;
+  margin-top: 15px;
+  font-size: 16px;
 }
 
 #cs > .qna > .view > article > nav > .date {        
@@ -945,8 +977,8 @@ footer p > strong {
 }
 
 #cs > .qna > .view > article > .content {
-  width: 100%;
-  height: 100%;        
+  width: 30%;
+  height: 20%;
   border-bottom: 1px solid #e9e9e9;
   padding: 26px;
   box-sizing: border-box;
@@ -955,6 +987,13 @@ footer p > strong {
 #cs > .qna > .view > article > .content * {
   font-size: 16px;
   line-height: 32px;
+}
+#cs .qna .view article .btnList {
+  display: block;
+  text-align: center;
+  background-color: #9e9e9e;
+  color: white;
+  margin-top: 20%;
 }
 
 /* qna - 글쓰기 */
@@ -971,7 +1010,7 @@ footer p > strong {
 #cs > .qna > .write > article table td {
   padding: 16px;
   border-bottom: 1px solid #ccc;
-  font-size: 16px;        
+  font-size: 16px;
 }
 
 #cs > .qna > .write > article table td:first-child {

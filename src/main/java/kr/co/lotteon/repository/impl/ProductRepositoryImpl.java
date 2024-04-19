@@ -30,12 +30,12 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private QProductimg qProductimg = QProductimg.productimg;
 
 
-    //ADMIN 페이지 프로덕트 조화
+    //ADMIN 페이지 프로덕트 조회
     @Override
     public Page<Tuple> selectProducts(ProductPageRequestDTO pageRequestDTO, Pageable pageable) {
 
         QueryResults<Tuple> results = jpaQueryFactory
-                .select(qProduct, qProductimg)
+                .select(qProduct, qProductimg.thumb230)
                 .from(qProduct)
                 .join(qProductimg)
                 .on(qProduct.prodNo.eq(qProductimg.prodNo))
@@ -49,6 +49,40 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         long total = results.getTotal();
         log.info("total : {}", total);
         return new PageImpl<>(content, pageable, total);
+    }
+    // Index 페이지 상품 조회
+    @Override
+    public List<Tuple> selectIndexProducts(String sort){
+
+        OrderSpecifier<?> orderSpecifier = null;
+        int limitCount = 8;
+
+        if (sort != null && sort.startsWith("prodDiscount")){
+            orderSpecifier = qProduct.prodDiscount.desc();
+        }else if (sort != null && sort.startsWith("prodSold")) {
+            orderSpecifier = qProduct.prodSold.desc();
+            limitCount = 5;
+        }else if (sort != null && sort.startsWith("prodRdate")) {
+            orderSpecifier = qProduct.prodRdate.asc();
+        }else if (sort != null && sort.startsWith("prodScore")) {
+            orderSpecifier = qProduct.tReviewScore.desc();
+        }else if (sort != null && sort.startsWith("prodHit")) {
+            orderSpecifier = qProduct.prodHit.desc();
+        }else {
+            orderSpecifier = qProduct.prodSold.desc();
+        }
+
+
+        return jpaQueryFactory
+                .select(qProduct, qProductimg)
+                .from(qProduct)
+                .join(qProductimg)
+                .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                .orderBy(orderSpecifier)
+                .limit(limitCount)
+                .fetchResults()
+                .getResults();
+
     }
 
     // cate 로 프로덕트 조회

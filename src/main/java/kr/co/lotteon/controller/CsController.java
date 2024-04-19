@@ -63,14 +63,13 @@ public class CsController {
 // cs-qna //
     // qna 글목록 이동
     @GetMapping("/cs/qna/list")
-    public String qnaList(){
-        return "/cs/qna/list";
-    }
+    public String qnaList(Model model, PageRequestDTO pageRequestDTO){
 
-    // qna 글보기 이동
-    @GetMapping("/cs/qna/view")
-    public String qnaView(){
-        return "/cs/qna/view";
+        PageResponseDTO pageResponseDTO = csService.selectQnaPages(pageRequestDTO);
+        log.info("pageResponseDTO : " + pageResponseDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
+        return "/cs/qna/list";
     }
 
     // qna 글쓰기 이동
@@ -83,9 +82,15 @@ public class CsController {
     @PostMapping("/cs/qna/write")
     public String qnaWrite(QnaDTO qnaDTO){
 
-        qnaDTO.setUserId("gudals");
+        qnaDTO.setUserId("gudals1234");
         csService.insertQna(qnaDTO);
         log.info("QnaDTO {}", qnaDTO);
         return "redirect:/cs/qna/list";
+    }
+    // qna 글보기
+    @GetMapping("/cs/qna/view")
+    public String qnaView(Model model, int qnaNo){
+        model.addAttribute("view",csService.qnaView(qnaNo));
+        return "/cs/qna/view";
     }
 }
