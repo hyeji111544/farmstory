@@ -39,11 +39,11 @@
         <div class="menu">
             <div>
                 <ul>
-                    <li><a href="#">히트상품</a></li>
-                    <li><a href="#">추천상품</a></li>
-                    <li><a href="#">최신상품</a></li>
-                    <li><a href="#">인기상품</a></li>
-                    <li><a href="#">할인상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodHit'}">히트상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodScore'}">추천상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodRdate'}">최신상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodSold'}">인기상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodDiscount'}">할인상품</a></li>
                 </ul>
                 <ul>
                     <li><a href="#">쿠폰존</a></li>
@@ -59,40 +59,24 @@
         <aside>
             <ul class="category">
                 <li><i class="fa fa-bars" aria-hidden="true"></i>카테고리</li>
-                <li>
-                    <a th:href="@{/product/list(cateCode='AA')}"><i class="fas fa-tshirt"></i>패션·의류·뷰티</a>
+                <!--1차 카테고리-->
+                <li th:each="cate01 : ${cate01DTOs}">
+                    <a th:href="@{/product/list(cateCode=${cate01.cate01No})}">
+                        <i class="fas fa-home" ></i>[[${cate01.cate01Name}]]<i class="fas fa-angle-right"></i>
+                    </a>
+                    <!--2차 카테고리-->
                     <ol>
-                        <li><a th:href="@{/product/list(cateCode='AA101')}">남성의류</a></li>
-                        <li><a th:href="@{/product/list(cateCode='AA102')}">여성의류</a></li>
-                        <li><a th:href="@{/product/list(cateCode='AA103')}">잡화</a></li>
-                        <li><a th:href="@{/product/list(cateCode='AA104')}">뷰티</a></li>
-                    </ol>
-                </li>
-                <li>
-                    <a th:href="@{/product/list(cateCode='BB')}"><i class="fas fa-laptop"></i>가전·디지털</a>
-                    <ol>
-                        <li><a th:href="@{/product/list(cateCode='BB201')}">노트북/PC</a></li>
-                        <li><a th:href="@{/product/list(cateCode='BB202')}">가전</a></li>
-                        <li><a th:href="@{/product/list(cateCode='BB203')}">휴대폰</a></li>
-                        <li><a th:href="@{/product/list(cateCode='BB204')}">기타</a></li>
-                    </ol>
-                </li>
-                <li>
-                    <a th:href="@{/product/list(cateCode='CC')}"><i class="fas fa-utensils"></i>식품·생필품</a>
-                    <ol>
-                        <li><a th:href="@{/product/list(cateCode='CC301')}">신선식품</a></li>
-                        <li><a th:href="@{/product/list(cateCode='CC302')}">가공식품</a></li>
-                        <li><a th:href="@{/product/list(cateCode='CC303')}">건강식품</a></li>
-                        <li><a th:href="@{/product/list(cateCode='CC304')}">생필품</a></li>
-                    </ol>
-                </li>
-                <li>
-                    <a th:href="@{/product/list(cateCode='DD')}"><i class="fas fa-home"></i>홈·문구·취미</a>
-                    <ol>
-                        <li><a th:href="@{/product/list(cateCode='DD401')}">가구/DIY</a></li>
-                        <li><a th:href="@{/product/list(cateCode='DD402')}">침구·커튼</a></li>
-                        <li><a th:href="@{/product/list(cateCode='DD403')}">생활용품</a></li>
-                        <li><a th:href="@{/product/list(cateCode='DD404')}">사무용품</a></li>
+                        <li th:each="cate02 : ${cate02DTOs}" th:if="${cate02.cate01No eq cate01.cate01No}">
+                            <a th:href="@{/product/list(cateCode=${cate02.cate01No}+${cate02.cate02No})}" th:text="${cate02.cate02Name}">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                            <!--3차 카테고리-->
+                            <ol>
+                                <li th:each="cate03 : ${cate03DTOs}" th:if="${cate03.cate02No eq cate02.cate02No}">
+                                    <a th:href="@{/product/list(cateCode=${cate02.cate01No}+${cate03.cate02No}+${cate03.cate03No})}" th:text="${cate03.cate03Name}"></a>
+                                </li>
+                            </ol>
+                        </li>
                     </ol>
                 </li>
             </ul>

@@ -88,11 +88,11 @@
         <div class="menu">
           <div>
             <ul>
-              <li><a href="#">히트상품</a></li>
-              <li><a href="#">추천상품</a></li>
-              <li><a href="#">최신상품</a></li>
-              <li><a href="#">인기상품</a></li>
-              <li><a href="#">할인상품</a></li>
+              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodHit'}">히트상품</a></li>
+              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodScore'}">추천상품</a></li>
+              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodRdate'}">최신상품</a></li>
+              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodSold'}">인기상품</a></li>
+              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodDiscount'}">할인상품</a></li>
             </ul>
             <ul>
               <li><a th:href="@{/cs/notice/list}">공지사항</a></li>
@@ -136,9 +136,9 @@
             <h1><i class="fas fa-crown"></i>베스트상품</h1>
             <ol>
               <li th:each="soldItem, index:${sold}">
-                <a href="#">
+                <a th:href="@{'/product/view?prodNo='+${soldItem.prodNo}}">
                   <div class="thumb">
-                    <i>1</i>
+                    <i th:text="${index.count}"></i>
                     <img  th:src="@{/uploads/__${soldItem.thumb230}__}"  alt="item1" />
                   </div>
                   <h2>[[${soldItem.prodName}]]</h2>
@@ -189,7 +189,7 @@
           <section class="hit">
             <h3><span>히트상품</span></h3>
             <article th:each="hitItem , index:${hit}">
-              <a href="#">
+              <a th:href="@{'/product/view?prodNo='+${hitItem.prodNo}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${hitItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -210,7 +210,7 @@
           <section class="recommend">
             <h3><span>추천상품</span></h3>
             <article th:each="scoreItem, index:${score}">
-              <a href="#">
+              <a th:href="@{'/product/view?prodNo='+${scoreItem.prodNo}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${scoreItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -231,7 +231,7 @@
           <section class="new">
             <h3><span>최신상품</span></h3>
             <article th:each="rDateItem, index:${rDate}">
-              <a href="#">
+              <a th:href="@{'/product/view?prodNo='+${rDateItem.prodNo}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${rDateItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -252,7 +252,7 @@
           <section class="discount">
             <h3><span>할인상품</span></h3>
             <article th:each="discountItem, index:${discount}">
-              <a href="#">
+              <a th:href="@{'/product/view?prodNo='+${discountItem.prodNo}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${discountItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>

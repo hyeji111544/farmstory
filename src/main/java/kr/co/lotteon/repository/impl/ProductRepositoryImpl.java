@@ -92,7 +92,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         OrderSpecifier<?> orderSpecifier = null;
         log.info("here1 : " + sort);
 
-        if (sort != null && sort.startsWith("prodSole")){
+        if (sort != null && sort.startsWith("prodSold")){
             orderSpecifier = qProduct.prodSold.desc();
         }else if (sort != null && sort.startsWith("prodLowPrice")) {
             orderSpecifier = qProduct.prodPrice.asc();
@@ -103,7 +103,11 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }else if (sort != null && sort.startsWith("prodReview")) {
             orderSpecifier = qProduct.tReviewCount.desc();
         }else if (sort != null && sort.startsWith("prodRdate")) {
-            orderSpecifier = qProduct.prodRdate.asc();
+            orderSpecifier = qProduct.prodRdate.desc();
+        }else if (sort != null && sort.startsWith("prodHit")) {
+            orderSpecifier = qProduct.prodHit.desc();
+        }else if (sort != null && sort.startsWith("prodDiscount")){
+            orderSpecifier = qProduct.prodDiscount.desc();
         }else {
             orderSpecifier = qProduct.prodSold.desc();
         }
