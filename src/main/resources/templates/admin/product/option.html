@@ -4,6 +4,13 @@
 <!--내용 시작-->
     <section id="admin-product-register" layout:fragment="content">
         <script>
+
+            // 이미지 애니메이션
+            function imageScale() {
+
+                const bigImage = ``;
+            }
+
             // 옵션 추가
             function addOptionBlock() {
                 const optAddTuple = document.getElementsByClassName('optAddTuple');
@@ -28,7 +35,7 @@
                                                 <span class="btnOptDetailDelete">삭제</span>
                                             </div>
                                         </td>
-                                    </tr>`
+                                    </tr>`;
                     tbody.insertAdjacentHTML('beforeend', optTuple);
                 }
             }
@@ -48,7 +55,7 @@
                                                 <input type="text" class="optPrice" placeholder="옵션가격"/>
                                                 <input type="text" class="optStock" placeholder="옵션재고"/>
                                                 <span class="btnOptDetailDelete">삭제</span>
-                                            </div>`
+                                            </div>`;
                             optDetailBox.insertAdjacentHTML('beforeend', optDetailTuple);
                         }
                     }else if (e.target.className === "btnOptDetailDelete") {
@@ -199,6 +206,14 @@
                         </tr>
                     </table>
                 </section>
+
+                <!---->
+                <div class="bigImageBox">
+
+                </div>
+
+
+                <!---->
 
                 <!-- 옵션 정보 -->
                 <section>
