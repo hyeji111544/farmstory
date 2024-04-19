@@ -74,6 +74,7 @@ public class MemberController {
         return ResponseEntity.ok().body(data);
     }
 
+    //회원가입 유효성 검사
     @GetMapping("member/checkEmailCode/{inputCode}")
     public ResponseEntity<?> checkEmailCode(HttpSession session, @PathVariable("inputCode") String inputCode){
         // 서버에서 발급한 인증 코드

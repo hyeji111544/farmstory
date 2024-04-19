@@ -65,6 +65,53 @@ public class MemberService {
                 // 사용가능
                 return result;
             }
+        }  else if (type.equals("company")){
+            //회사명 중복검사
+            Optional<Seller> optSeller = sellerRepository.findByCompany(value);
+            //Optional 비어있는지 체크
+            if(optSeller.isPresent()){
+                //사용 불가능
+                result = 1;
+                return  result;
+            }else {
+                // 사용 가능
+                return result;
+            }
+        } else if (type.equals("licenseNum")) {
+            //통신판매업 중복검사
+            Optional<Seller> optSeller = sellerRepository.findByLicenseNum(value);
+            //Optional 비어있는지 체크
+            if (optSeller.isPresent()) {
+                //사용 불가능
+                result = 1;
+                return result;
+            } else {
+                // 사용 가능
+                return result;
+            }
+        } else if (type.equals("businessNum")) {
+            Optional<Seller> optSeller = sellerRepository.findByBusinessNum(value);
+            //Optional 비어있는지 체크
+            if (optSeller.isPresent()) {
+                //사용 불가능
+                result = 1;
+                return result;
+            }else {
+                //사용 가능
+                return  result;
+            }
+        } else if (type.equals("sellerName")){
+            //판매자이름 중복검사
+            Optional<Seller> optSeller = sellerRepository.findBySellerName(value);
+            //Optional 비어있는지 체크
+            if (optSeller.isPresent()) {
+                //사용 불가능
+                result = 1;
+                return result;
+            }else {
+                //사용 가능
+                return  result;
+            }
         } else if (type.equals("userEmail")) {
             //이메일 중복검사
             Optional<User> optUser = userRepository.findByUserEmail(value);
@@ -79,8 +126,19 @@ public class MemberService {
                 sendEmailConde(session ,value);
                 return result;
             }
+        } else if (type.equals("sellerHp")){
+            //판매자번호 중복검사
+            Optional<Seller> optSeller = sellerRepository.findBySellerHp(value);
+            //Optional 비어있는지 체크
+            if (optSeller.isPresent()) {
+                //사용 불가능
+                result = 1;
+                return result;
+            }else {
+                //사용 가능
+                return  result;
+            }
         }
-
 
         return result;
     }
