@@ -26,7 +26,7 @@
                 <h2>공지사항 전체 내용입니다.</h2>
               </nav>
               <table>
-                <tr th:each="notice, index:${pageResponseDTO.dtoList}" th:if="${index.index} &lt; 6">
+                <tr th:each="notice, index:${pageResponseDTO.dtoList}" th:if="${index.index} &lt; 5">
                   <td>
                     <a th:href="@{/cs/notice/view(noticeNo=${notice.noticeNo})}" th:text="${notice.noticeType + ' ' + notice.noticeTitle}">
                     </a>
@@ -38,7 +38,7 @@
               <div class="page">
                 <span class="prev">
                     <!-- 이전 버튼 -->
-                    <a th:if="${pageResponseDTO.prev}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.start-1})}"><&nbsp;이전</a>
+                    <a th:if="${pageResponseDTO.prev}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.start-1})}"><이전</a>
                 </span>
                 <!-- 페이지 링크 -->
                 <span class="num">
@@ -48,7 +48,7 @@
                 </span>
                 <!-- 다음 버튼 -->
                 <span class="next">
-                    <a th:if="${pageResponseDTO.next}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.end+1})}">다음</a>
+                    <a th:if="${pageResponseDTO.next}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.end+1})}">다음></a>
                 </span>
               </div>
 
