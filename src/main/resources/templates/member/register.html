@@ -265,7 +265,6 @@
 				}
 
 
-
 				//다음 주소 열기
 				const btnZip = document.getElementById('btnZip');
 
@@ -273,6 +272,42 @@
 					e.preventDefault();
 					postcode();
 				}
+
+				// 최종 유효성 검사 확인
+				document.registerForm.onsubmit = function (){
+
+					if(!isUidOk){
+						alertModal('아이디가 유효하지 않습니다.');
+						return false;
+					}
+
+					if(!isPassOk){
+						alertModal('비밀번호가 유효하지 않습니다.');
+						return false;
+					}
+
+					if(!isNameOk){
+						alertModal('이름이 유효하지 않습니다.');
+						return false;
+					}
+
+					if(!isNickOk){
+						alertModal('별명이 유효하지 않습니다.');
+						return false;
+					}
+
+					if(!isEmailOk){
+						alertModal('이메일이 유효하지 않습니다.');
+						return false;
+					}
+
+					if(!isHpOk){
+						alertModal('휴대폰이 유효하지 않습니다.');
+						return false;
+					}
+
+					// 폼 전송
+					return true;
 
 
 			}
