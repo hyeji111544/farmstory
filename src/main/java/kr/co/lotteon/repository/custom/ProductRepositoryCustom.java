@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface ProductRepositoryCustom {
@@ -14,6 +16,8 @@ public interface ProductRepositoryCustom {
     // ADMIN 페이지 프로덕트 조회
     public Page<Tuple> selectProducts(ProductPageRequestDTO pageRequestDTO, Pageable pageable);
 
+    // Index 페이지 상품 조회
+    public List<Tuple> selectIndexProducts(String sort);
     // cate 로 프로덕트 조회
     public Page<Tuple> selectProductsByCate(ProductPageRequestDTO pageRequestDTO, Pageable pageable);
 

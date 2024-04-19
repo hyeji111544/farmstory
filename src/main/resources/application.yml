@@ -73,8 +73,7 @@ file:
     upload:
         path: uploads/
 
-
     # 배포용
-#    upload:
-#        path: /home/lotteon/uploads/
+    #upload:
+        #path: /home/lotteon/uploads/
 

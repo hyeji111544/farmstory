@@ -26,7 +26,7 @@
 
 #product h6.rating {
     font-size: 11px;
-    background-image: url('../images/rating_star.png');
+    background-image: url('../../images/rating_star.png');
     background-repeat: no-repeat;
     background-position: 36px 0px;
     background-size: auto 100%;
@@ -41,7 +41,7 @@
     width: 150px;
     height: 20px;
     font-size: 0px;
-    background-image: url(../images/ico_rating_star.png);
+    background-image: url(../../images/ico_rating_star.png);
     background-repeat: no-repeat;
     background-position: 36px 0px;
     text-indent: 86px;
@@ -59,10 +59,10 @@
     background-repeat: no-repeat;
 }
 
-#product .badge.power {background-image: url('../images/ico_power_dealer.gif');}
-#product .badge.great {background-image: url('../images/ico_great_seller.gif');}
+#product .badge.power {background-image: url('../../images/ico_power_dealer.gif');}
+#product .badge.great {background-image: url('../../images/ico_great_seller.gif');}
 #product .badge.power.great {
-    background: url('../images/ico_power_dealer.gif') no-repeat, url('../images/ico_great_seller.gif') no-repeat 63px;
+    background: url('../../images/ico_power_dealer.gif') no-repeat, url('../../images/ico_great_seller.gif') no-repeat 63px;
     width: 160px;
 }
 
@@ -161,7 +161,7 @@
   vertical-align: text-bottom;
   width: 55px;
   height: 13px;
-  background: url('../images/ico_free_delivery.gif') no-repeat;
+  background: url('../../images/product/ico_free_delivery.gif') no-repeat;
   margin-top: 4px;
 }
 
@@ -196,7 +196,7 @@
     margin: 0 2px;
     padding: 8px 9px;
     border: 1px solid #c4c4c4;
-    background: url() 0 0 repeat-x;
+    background: url(#) 0 0 repeat-x;
     color: #000;
     font-size: 12px;
     text-align: center;
@@ -329,7 +329,7 @@
     width: 30px;
     height: 18px;
     top: 4px;
-    background-image: url('../images/sp_icon.png');
+    background-image: url('../../images/sp_icon.png');
     font-size: 0;
     vertical-align: text-top;
     margin-right: 2px;
@@ -373,7 +373,7 @@
     width: 16px;
     height: 9px;
     margin-top: 10px;
-    background-image: url('../images/sp_icon.png');
+    background-image: url('../../images/sp_icon.png');
     background-position: -196px 0;
     font-size: 0;
 }
@@ -539,10 +539,10 @@
 #product > .view > .info > .summary .count > .increase:hover {background-position: -72px -74px;}
 #product > .view > .info > .summary .count > input[name=num] {
 	position: absolute;
-	left: 30px;
+	left: 26px;
 	top: 0;
-	width: 30px;
-	height: 21px;
+	width: 40px;
+	height: 22px;
 	border: 1px solid #ececec;
 	font-size: 14px;
 	text-align: center;								
@@ -585,7 +585,6 @@
 
 #product > .view > .info > .summary > .button > input {
     float: left;
-    width: 49%;
     height: 50px;
     margin: 2px;
     font-size: 20px;
@@ -593,12 +592,24 @@
     border-radius: 2px;
     cursor: pointer;
 }
+
+/* 상품 상세 페이지 cart, order, wish 버튼 */
 #product > .view > .info > .summary > .button > .cart {
+    width: 49%;
     background: #fff;
     border: 1px solid #d9d9d9;
     color: #233549;
 }
+
+#product > .view > .info > .summary > .button > .wish {
+    width: 49%;
+    background: #fff;
+    border: 1px solid #d9d9d9;
+    color: #233549;
+}
+
 #product > .view > .info > .summary > .button > .order {
+    width: 98%;
     background: #2e8de5;
     border: 1px solid #217fd7;
     color: #fff;
@@ -699,7 +710,7 @@
     margin: 0 2px;
     padding: 8px 9px;
     border: 1px solid #c4c4c4;
-    background: url() 0 0 repeat-x;
+    background: url(#) 0 0 repeat-x;
     color: #000;
     font-size: 12px;
     text-align: center;
@@ -1490,7 +1501,7 @@
   vertical-align: text-bottom;
   width: 55px;
   height: 13px;
-  background: url('../images/ico_free_delivery.gif') no-repeat;
+  background: url('../../images/product/ico_free_delivery.gif') no-repeat;
   margin-top: 4px;
 }
 
@@ -1530,7 +1541,7 @@
   margin: 0 2px;
   padding: 8px 9px;
   border: 1px solid #c4c4c4;
-  background: url() 0 0 repeat-x;
+  background: url(#) 0 0 repeat-x;
   color: #000;
   font-family: Tahoma;
   font-size: 12px;
