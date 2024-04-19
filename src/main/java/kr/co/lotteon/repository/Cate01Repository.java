@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface Cate01Repository extends JpaRepository<Cate01, String> {
-
+    public Cate01 findByCate01No(String cate01No);
 }

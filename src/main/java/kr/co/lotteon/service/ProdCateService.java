@@ -55,4 +55,29 @@ public class ProdCateService {
         cateMap.put("cate03DTOs", cate03DTOs);
         return cateMap;
     }
+
+    // 카테고리 이름 찾기
+    public Map<String, String> findCateName(String cate01, String cate02, String cate03){
+
+        Map<String, String> resultMap = new HashMap<>();
+
+        Cate01 findCate01 = cate01Repository.findByCate01No(cate01);
+        String cate01Name = findCate01 != null ? findCate01.getCate01Name() : null;
+        resultMap.put("cate01Name", cate01Name);
+        log.info("cate01Name : " + cate01Name);
+
+        if (cate02 != null){
+            Cate02 findCate02 = cate02Repository.findByCate02No(cate02);
+            String cate02Name = findCate02 != null ? findCate02.getCate02Name() : null;
+            resultMap.put("cate02Name", cate02Name);
+        }
+
+        if (cate03 != null){
+            Cate03 findCate03 = cate03Repository.findByCate03No(cate03);
+            String cate03Name = findCate03 != null ? findCate03.getCate03Name() : null;
+            resultMap.put("cate03Name", cate03Name);
+        }
+
+        return resultMap;
+    }
 }
