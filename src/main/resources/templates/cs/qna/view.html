@@ -24,27 +24,22 @@
             </aside>
             <article>
               <nav>
-                <h2 class="title">[가입] 가입 문의내용</h2>                
+                <h2 class="title" th:text="${view.qnaCate + ' ' + view.qnaTitle}">[가입] 가입 문의내용</h2>
                 <p>
-                  <span>chh***</span>
-                  <span>2022-11-21</span>
+                  <span th:text="${view.userId}" style="margin-right: 10px;"></span>
+                  <span th:text="${#temporals.format(view.qnaDate, 'yyyy-MM-dd')}" style="text-align: right; color: #9e9e9e" ></span>
                 </p>
               </nav>
-
               <div class="content">
-                <p>
-                  개인회원에서 법인회원(사업자 회원)으로 전환은 불가하므로 법인회원(사업자 회원) 전환은 신규 가입으로 진행을 해야 합니다.
-                </p>
-                <p>
-                  ※ 피싱 관련 피해신고<br /><br />
-                  ▶ 경찰청 사이버수사국 (국번없이)182 :
-                  http://cyberbureau.police.go.kr<br />
-                  ▶ KISA 인터넷침해대응센터 (국번없이)118 :
-                  http://www.krcert.or.kr<br />
-                  감사합니다.<br />
-                </p>
+                <p th:text="${view.qnaContent}"></p>
               </div>
-              <a href="./list.html" class="btnList">목록보기</a>
+              <nav>
+                <h2 class="title2" th:text="${'☞[답변]' + ' '+ view.qnaTitle}"></h2>
+                <p class="reply">
+                    <td th:text="${view.qnaReply}"></td>
+                </p>
+              </nav>
+              <a th:href="@{/cs/qna/list}" class="btnList">목록</a>
             </article>
           </section>
         </div>
