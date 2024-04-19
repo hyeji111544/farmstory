@@ -13,7 +13,7 @@
                     alert("더 이상 옵션을 추가하실수 없습니다.")
                 }else{
                     const optTuple = `<tr class="optAddTuple">
-                                        <td>옵션 ${optAddTuple.length + 1}</td>
+                                        <td>옵션 ${optAddTuple.length + 1}<span class="btnOptTupleDelete">삭제</span></td>
                                         <td>
                                             <input type="text" class="optName" placeholder="옵션명"/>
                                         </td>
@@ -25,6 +25,7 @@
                                                 <input type="text" class="optValue" placeholder="옵션값"/>
                                                 <input type="text" class="optPrice" placeholder="옵션가격"/>
                                                 <input type="text" class="optStock" placeholder="옵션재고"/>
+                                                <span class="btnOptDetailDelete">삭제</span>
                                             </div>
                                         </td>
                                     </tr>`
@@ -46,16 +47,24 @@
                                                 <input type="text" class="optValue" placeholder="옵션값"/>
                                                 <input type="text" class="optPrice" placeholder="옵션가격"/>
                                                 <input type="text" class="optStock" placeholder="옵션재고"/>
+                                                <span class="btnOptDetailDelete">삭제</span>
                                             </div>`
                             optDetailBox.insertAdjacentHTML('beforeend', optDetailTuple);
                         }
+                    }else if (e.target.className === "btnOptDetailDelete") {
+                        const optDetailDiv = e.target.parentElement;
+                        optDetailDiv.remove();
+                    }else if (e.target.className === "btnOptTupleDelete") {
+                        const optTupleTr = e.target.parentElement.parentElement;
+                        optTupleTr.remove();
                     }
+
                 })
 
                 const btnNewOptAdd = document.getElementById('btnNewOptAdd');
                 btnNewOptAdd.onclick = function (){
                     const optAddTuple = document.getElementsByClassName('optAddTuple');
-                    const prodNo = 24;
+                    const prodNo = document.getElementsByName('prodNo')[0].value;
 
                     const allOpts = [];
                     Array.from(optAddTuple).forEach(function (eachOpt) {
@@ -124,6 +133,7 @@
                 <!-- 기본정보 -->
                 <section>
                     <h4>기본정보</h4>
+                    <input type="hidden" name="prodNo" th:value="${productDTO.prodNo}">
                     <table>
                         <tr>
                             <td>상품명</td>
@@ -197,8 +207,8 @@
                             <td colspan="2">등록된 옵션 없음</td>
                         </tr>
                         <!--반복문 이상하게 걸렸음-->
-                        <tr class="optAddTuple" th:if="${optionDTOList != null}" th:each="optionDTO : ${optionDTOList}">
-                            <td>옵션 1</td>
+                        <tr class="optAddTuple" th:if="${optionDTOList != null}" th:each="optionDTO, index : ${optionDTOList}">
+                            <td>옵션 [[${index.index+1}]]</td>
                             <td>
                                 <input type="text" class="optName" th:value="${optionDTO.optName}"/>
                             </td>
@@ -227,7 +237,7 @@
                             <td colspan="2">옵션정보</td>
                         </tr>
                         <tr class="optAddTuple">
-                            <td>옵션 1</td>
+                            <td>옵션 1<span class="btnOptTupleDelete">삭제</span></td>
                             <td>
                                 <input type="text" class="optName" placeholder="옵션명"/>
                             </td>
@@ -239,11 +249,7 @@
                                     <input type="text" class="optValue" placeholder="옵션값"/>
                                     <input type="text" class="optPrice" placeholder="옵션가격"/>
                                     <input type="text" class="optStock" placeholder="옵션재고"/>
-                                </div>
-                                <div class="optDetail">
-                                    <input type="text" class="optValue" placeholder="옵션값"/>
-                                    <input type="text" class="optPrice" placeholder="옵션가격"/>
-                                    <input type="text" class="optStock" placeholder="옵션재고"/>
+                                    <span class="btnOptDetailDelete">삭제</span>
                                 </div>
                             </td>
                         </tr>

@@ -1,8 +1,6 @@
 package kr.co.lotteon.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -14,6 +12,7 @@ import lombok.*;
 @Table(name = "prodoption")
 public class ProdOption {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int optNo;
     public int prodNo;
     public String optName;
