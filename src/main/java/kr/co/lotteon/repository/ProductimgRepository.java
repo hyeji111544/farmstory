@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductimgRepository extends JpaRepository<Productimg, Integer> {
-    // 대분류 선택에 따른 중분류 조회
-
+    // prodNo로 전체 이미지 조회
+    public Productimg findByProdNo(int prodNo);
 }

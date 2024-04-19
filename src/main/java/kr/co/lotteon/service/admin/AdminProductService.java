@@ -46,7 +46,7 @@ public class AdminProductService {
                     Product product = tuple.get(0, Product.class);
                     Productimg productImg = tuple.get(1, Productimg.class);
 
-                    // Productimg에서 썸네일 정보를 가져와서 ProductDTO에 설정
+                    //Productimg에서 썸네일 정보를 가져와서 ProductDTO에 설정
                     if (productImg != null) {
                         product.setThumb190(productImg.getThumb190());
                         product.setThumb230(productImg.getThumb230());
@@ -144,13 +144,19 @@ public class AdminProductService {
 
     // 상품리스트에서 상품 수정으로 넘어갈때 상품 정보 조회
     public Map<String, Object> selectProductOption(int prodNo){
+        // 상품 조회
         Optional<Product> optProduct = productRepository.findById(prodNo);
-
+    
         ProductDTO productDTO = new ProductDTO();
         List<ProdOptionDTO> optionDTOList = new ArrayList<>();
+        Productimg productimg = new Productimg();
+
         if (optProduct.isPresent()){
+            // 옵션 조회
             productDTO = modelMapper.map(optProduct, ProductDTO.class);
             List<ProdOption> optionList = optionRepository.findByProdNo(optProduct.get().getProdNo());
+            // 이미지 조회
+            productimg = productimgRepository.findByProdNo(optProduct.get().getProdNo());
             if (!optionList.isEmpty()){
                 for (ProdOption options : optionList) {
                     ProdOptionDTO optionDTO = modelMapper.map(options, ProdOptionDTO.class);
@@ -159,6 +165,11 @@ public class AdminProductService {
             }
         }
         log.info("optionDTOList : " + optionDTOList);
+
+        productDTO.setThumb190(productimg.getThumb190());
+        productDTO.setThumb230(productimg.getThumb230());
+        productDTO.setThumb456(productimg.getThumb456());
+        productDTO.setThumb940(productimg.getThumb940());
 
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("productDTO", productDTO);

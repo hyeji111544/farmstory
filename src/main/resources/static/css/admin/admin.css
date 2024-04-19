@@ -481,6 +481,18 @@ button[type=submit] {
     padding-left: 10px;
     text-align: left!important;
 }
+/* 상품수정 : product-option */
+.optionTable tr > td {
+    width: 325px;
+}
+.optionTable tr > td:nth-child(1), td:nth-child(3) {
+    width: 200px!important;
+    background: #f6f6f6;
+
+}
+
+
+
 
 /* 상품목록 : product-list */
 #admin-product-list {}
