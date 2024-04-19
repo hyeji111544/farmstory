@@ -24,7 +24,7 @@ spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         password: Abcd1234!
-        url: jdbc:mysql://127.0.0.1:3306/lotteon
+        url: jdbc:mysql://3.39.72.175/lotteon
         username: team1
 
     devtools:
@@ -70,10 +70,11 @@ spring:
 # 파일 업로드 설정
 file:
     # 개발용
-    #upload:
-        #path: uploads/
+    upload:
+        path: uploads/
+
 
     # 배포용
-    upload:
-        path: /home/lotteon/uploads/
+#    upload:
+#        path: /home/lotteon/uploads/
 
