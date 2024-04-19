@@ -206,7 +206,8 @@
 
 				////////////////////////////////////////////////////////////////////////////////
 				// 이메일 유효성 & 중복 체크
-				checkUserEmail.onclick = function () {
+				checkUserEmail.onclick = function (e) {
+					e.preventDefault();
 					const value = userEmail.value;
 					const type = "userEmail";
 					// 1. 정규표현식 통과
@@ -243,7 +244,8 @@
 				};
 
 				//이메일 인증코드 발급 및 중복 체크
-				checkEmailCode.onclick = function () {
+				checkEmailCode.onclick = function (e) {
+					e.preventDefault();
 					// 사용자가 입력한 코드
 					const inputCode = inputEmailCode.value;
 
