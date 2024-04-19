@@ -16,7 +16,7 @@
 			let isHpOk    = false;
 			let isCompanyOk = false;
 			let isLicenseOk = false;
-			let isbusinessOk = false;
+			let isBusinessOk = false;
 			let isFaxOk = false;
 
 			// 유효성 검사에 사용할 정규표현식
@@ -24,10 +24,11 @@
 			const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
 			const reName  = /^[가-힣]{2,10}$/
 			const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+			const reSellerHp    = /^\d{2,3}-\d{3,4}-\d{4}$/;
 			const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
 			const reCompany =/\(주\)/;
-			const reLicense =/([0-9]{3})-?([0-9]{2})-?([0-9]{5})/;
-			let reBusiness =/^(?:[가-힣]{2,}-\d{5}|제 \d{1}-\d{2}-\d{2}-\d{4}호|\d{4}-[가-힣]{2,}-\d{4}[가-힣])$/;
+			const reBusiness =/([0-9]{3})-?([0-9]{2})-?([0-9]{5})/;
+			let reLicense =/^(?:[가-힣]{2,}-\d{5}|제 \d{1}-\d{2}-\d{2}-\d{4}호|\d{4}-[가-힣]{2,}-\d{4}[가-힣])$/;
 			let reFax = /^\d{2,3}-\d{3,4}-\d{4}$/;
 
 
@@ -56,7 +57,7 @@
 
 				//전화번호 태그
 				const userHp = document.getElementById('userHp');
-				const resultHp = document.getElementById('resultHp');
+				const resultUserHp = document.getElementById('resultUserHp');
 
 				//이메일 태그
 				const userEmail = document.getElementById('userEmail');
@@ -176,6 +177,28 @@
 				});
 
 				////////////////////////////////////////////////////////////////////////////////
+				// 판매자 이름 유효성 체크
+				userName.addEventListener('blur', function () {
+					const value = userName.value;
+					const type = "userName";
+
+					// 1. 정규표현식 통과
+					if (!value.match(reName)) {
+						resultUserName.innerText = "유효하지 않은 이름형식입니다.";
+						resultUserName.style.color = "red";
+						userName.style.border = "1px solid red";
+						isNameOk = false;
+						return; // 여기서 끝!
+					} else {
+						resultUserName.innerText = "";
+						userName.style.border = "1px solid green";
+						isNameOk = true;
+						return;
+					}
+
+				});
+
+				////////////////////////////////////////////////////////////////////////////////
 				// 이름 유효성 체크
 				userName.addEventListener('blur', function () {
 					const value = userName.value;
@@ -227,8 +250,8 @@
 					const type = "userHp";
 					// 1. 정규표현식 통과
 					if (!value.match(reHp)) {
-						resultHp.innerText = "유효하지 않은 전화번호입니다.";
-						resultHp.style.color = "red";
+						resultUserHp.innerText = "유효하지 않은 전화번호입니다.";
+						resultUserHp.style.color = "red";
 						userHp.style.border = "1px solid red";
 						isHpOk = false;
 						return; // 여기서 끝!
@@ -242,14 +265,14 @@
 
 								if (data.result > 0) {
 									// 중복일 경우
-									resultHp.innerText = "중복된 전화번입니다.";
-									resultHp.style.color = "red";
+									resultUserHp.innerText = "중복된 전화번입니다.";
+									resultUserHp.style.color = "red";
 									userHp.style.border = "1px solid red";
 									isHpOk = false;
 								} else {
 									// 중복이 아닐경우
-									resultHp.innerText = "사용가능한 전화입니다.";
-									resultHp.style.color = "green";
+									resultUserHp.innerText = "사용가능한 전화입니다.";
+									resultUserHp.style.color = "green";
 									userHp.style.border = "1px solid green";
 									isHpOk = true;
 								}
@@ -258,13 +281,13 @@
 				});
 
 				////////////////////////////////////////////////////////////////////////////////
-				// 전화번호 유효성 & 중복 체크 //
+				// 판매자 전화번호 유효성 & 중복 체크 //
 				sellerHp.addEventListener('blur', function () {
 
 					const value = sellerHp.value;
 					const type = "sellerHp";
 					// 1. 정규표현식 통과
-					if (!value.match(reHp)) {
+					if (!value.match(reSellerHp)) {
 						resultSellerHp.innerText = "유효하지 않은 전화번호입니다.";
 						resultSellerHp.style.color = "red";
 						sellerHp.style.border = "1px solid red";
@@ -298,7 +321,8 @@
 				////////////////////////////////////////////////////////////////////////////////
 
 				// 이메일 유효성 & 중복 체크
-				checkUserEmail.onclick = function () {
+				checkUserEmail.onclick = function (e) {
+					e.preventDefault();
 					const value = userEmail.value;
 					const type = "userEmail";
 					// 1. 정규표현식 통과
@@ -335,7 +359,8 @@
 				};
 
 				//이메일 인증코드 발급 및 중복 체크
-				checkEmailCode.onclick = function () {
+				checkEmailCode.onclick = function (e) {
+					e.preventDefault();
 					// 사용자가 입력한 코드
 					const inputCode = inputEmailCode.value;
 
@@ -408,7 +433,7 @@
 						resultBusinessNum.innerText = "유효하지 않은 사업자 번호입니다.";
 						resultBusinessNum.style.color = "red";
 						businessNum.style.border = "1px solid red";
-						isbusinessOk = false;
+						isBusinessOk = false;
 						return; // 여기서 끝!
 					}
 
@@ -423,13 +448,13 @@
 									resultBusinessNum.innerText = "중복된 사업자 번호입니다.";
 									resultBusinessNum.style.color = "red";
 									businessNum.style.border = "1px solid red";
-									isbusinessOk = false;
+									isBusinessOk = false;
 								} else {
 									// 중복이 아닐경우
 									resultBusinessNum.innerText = "사용가능한 사업자 번호입니다.";
 									resultBusinessNum.style.color = "green";
 									businessNum.style.border = "1px solid green";
-									isbusinessOk = true;
+									isBusinessOk = true;
 								}
 							})
 							.catch(err => console.log(err))
@@ -517,6 +542,62 @@
 				btnZip.onclick = function (e) {
 					e.preventDefault();
 					postcode();
+
+					// 최종 유효성 검사 확인
+					const submit = document.getElementsByClassName('join')[0];
+
+					submit.onclick = function (e) {
+
+						if (!isUidOk) {
+							alert('아이디가 유효하지 않습니다.');
+							return false;
+						}
+
+						if (!isPassOk) {
+							alert('비밀번호가 유효하지 않습니다.');
+							return false;
+						}
+
+						if (!isNameOk) {
+							alert('이름이 유효하지 않습니다.');
+							return false;
+						}
+
+						if (!isEmailOk) {
+							alert('이메일이 유효하지 않습니다.');
+							return false;
+						}
+
+						if (!isHpOk) {
+							alert('휴대폰이 유효하지 않습니다.');
+							return false;
+						}
+
+						if (!isCompanyOk){
+							alert('회사명이 유효하지 않습니다.')
+							return  false;
+						}
+
+						if (!isLicenseOk){
+							alert('통신판매업 신고 번호가 유효하지 않습니다.')
+							return  false;
+						}
+
+						if (!isBusinessOk){
+							alert('사업자 번호가 유효하지 않습니다.')
+							return  false;
+						}
+
+						if (!isFaxOk){
+							alert('팩스 번호가 유효하지 않습니다.')
+							return  false;
+						}
+
+						// 폼 전송
+						// return true;
+
+
+					}
 				}
 			}
 		</script>
@@ -592,8 +673,8 @@
 							<th><span class="essential">*</span>통신판매업신고 번호</th>
 							<td>
 								<input type="text" id="licenseNum" name="licenseNum" placeholder="통신판매업신고 입력" required />
-								<span class="msgOnline">&nbsp;&nbsp;- 표시 포함, 예) 강남-12345, 제 1-01-23-4567호, 2017-경기성남-0011</span>
 								<span id="resultLicenseNum" class="resultText"></span>
+								<span class="msgOnline" style="display: block; margin-top: 4px">띄워쓰기 주의 / - 표시 포함 / 예) 강남-12345, 제 1-01-23-4567호, 2017-경기성남-0011</span>
 								<p class="resultLicenseNum"></p>
 							</td>
 						</tr>
@@ -602,8 +683,8 @@
 							<td>
 								<input type="text" id="sellerHp" name="sellerHp" placeholder="전화번호 입력" required />
 								<span class="msgTel">&nbsp;&nbsp;- 표시 포함, 지역번호 포함, 예) 02-234-1234</span>
-								<span id="resultHp" class="resultText"></span>
-								<p class="resultHp"></p>
+								<span id="resultSellerHp" class="resultText"></span>
+								<p class="resultSellerHp"></p>
 							</td>
 						</tr>
 						<tr>
@@ -653,9 +734,11 @@
 						<caption>판매자 정보입력</caption>
 						<tr>
 							<th><span class="essential">*</span>이름</th>
-							<td><input type="text" id="userName" name="userName" placeholder="이름을 입력" required /></td>
-							<span id="resultUserName" class="resultText"></span>
-							<p class="resultUserName"></p>
+							<td>
+								<input type="text" id="userName" name="userName" placeholder="이름을 입력" required />
+								<span id="resultUserName" class="resultText"></span>
+								<p class="resultUserName"></p>
+							</td>
 						</tr>
 						<tr>
 							<th><span class="essential">*</span>생일</th>
