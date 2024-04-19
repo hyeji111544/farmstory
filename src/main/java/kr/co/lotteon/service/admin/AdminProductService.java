@@ -90,7 +90,7 @@ public class AdminProductService {
     }
 
     //이미지 업로드 메서드
-    @Value("uploads/")
+    @Value("${file.upload.path}")
     private String fileUploadPath;
     public String fileUpload(MultipartFile images, String thumbnailSize){
         String path = new File(fileUploadPath).getAbsolutePath();
