@@ -329,7 +329,6 @@
     width: 30px;
     height: 18px;
     top: 4px;
-    background-image: url('../../images/sp_icon.png');
     font-size: 0;
     vertical-align: text-top;
     margin-right: 2px;
@@ -516,7 +515,7 @@
 #product > .view > .info > .summary > .prodOption {
     display: block;
     width: 100%;
-    padding: 10px 0;
+    padding-bottom: 10px;
 }
 #product > .view > .info > .summary > .prodOption > .btnSelectOption {
     width: 450px;

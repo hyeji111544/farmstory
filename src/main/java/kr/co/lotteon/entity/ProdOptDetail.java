@@ -10,12 +10,15 @@ import lombok.*;
 @Builder
 @ToString
 @Entity
-@Table(name = "prodoption")
-public class ProdOption {
+@Table(name = "prodoptdetail")
+public class ProdOptDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int optNo;
+    public int optDetailNo;
     public int prodNo;
-    public String optName;
-    public String optValue;
+    public int optNo1;
+    public int optNo2;
+    public int optNo3;
+    public int optPrice;
+    public int optStock;
 }

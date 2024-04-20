@@ -4,9 +4,12 @@ import com.querydsl.core.Tuple;
 import kr.co.lotteon.dto.ProductDTO;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.ProductPageResponseDTO;
+import kr.co.lotteon.dto.ResponseOptionDTO;
+import kr.co.lotteon.entity.ProdOption;
 import kr.co.lotteon.entity.Product;
 import kr.co.lotteon.entity.Productimg;
 import kr.co.lotteon.entity.Seller;
+import kr.co.lotteon.repository.ProdOptionRepository;
 import kr.co.lotteon.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProdOptionRepository prodOptionRepository;
     private final ModelMapper modelMapper;
 
     // 인덱스 페이지 상품 조회
@@ -96,4 +100,12 @@ public class ProductService {
         return modelMapper.map(product, ProductDTO.class);
 
     }
+
+    // 상품 옵션 조회
+    public ResponseOptionDTO selectProductOption(int prodNo){
+        return prodOptionRepository.selectProductOption(prodNo);
+
+
+
+    };
 }

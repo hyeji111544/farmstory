@@ -23,10 +23,6 @@ public class QProdOption extends EntityPathBase<ProdOption> {
 
     public final NumberPath<Integer> optNo = createNumber("optNo", Integer.class);
 
-    public final NumberPath<Integer> optPrice = createNumber("optPrice", Integer.class);
-
-    public final NumberPath<Integer> optStock = createNumber("optStock", Integer.class);
-
     public final StringPath optValue = createString("optValue");
 
     public final NumberPath<Integer> prodNo = createNumber("prodNo", Integer.class);

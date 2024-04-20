@@ -5,6 +5,8 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
+import kr.co.lotteon.entity.ProdOption;
+import kr.co.lotteon.entity.QProdOption;
 import kr.co.lotteon.entity.QProduct;
 import kr.co.lotteon.entity.QProductimg;
 import kr.co.lotteon.repository.custom.ProductRepositoryCustom;
@@ -18,13 +20,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Slf4j
-@Repository
 @RequiredArgsConstructor
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final QProduct qProduct = QProduct.product;
     private final QProductimg qProductimg = QProductimg.productimg;
+    private final QProdOption qProdOption = QProdOption.prodOption;
 
 
     //ADMIN 페이지 프로덕트 조회
@@ -83,6 +85,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     // cate 로 프로덕트 조회
+    @Override
     public Page<Tuple> selectProductsByCate(ProductPageRequestDTO pageRequestDTO, Pageable pageable){
         String sort = pageRequestDTO.getSort();
         String seletedCate = pageRequestDTO.getCateCode();
