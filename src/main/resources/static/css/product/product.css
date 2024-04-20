@@ -511,19 +511,71 @@
     content: "원";
 }
 
+
+/*옵션*/
+#product > .view > .info > .summary > .prodOption {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+}
+#product > .view > .info > .summary > .prodOption > .btnSelectOption {
+    width: 450px;
+    height: 40px;
+    font-size: 16px;
+    outline: none;
+    margin-top: 10px;
+    text-align: left;
+    padding: 0 10px;
+    background-color: white;
+    border: 1px solid rgb(234, 234, 234);
+    cursor: pointer;
+}
+#product > .view > .info > .summary > .prodOption > .SelectOption {
+    display: none;
+    width: 450px;
+    height: auto;
+    font-size: 16px;
+}
+#product > .view > .info > .summary > .prodOption > .SelectOption li {
+    display: block;
+    box-sizing: border-box;
+    width: 450px;
+    height: 40px;
+    border: 1px solid rgb(234, 234, 234);
+    font-size: 16px;
+    padding: 0 10px;
+    align-content: center;
+    cursor: pointer;
+}
+#product > .view > .info > .summary > .prodOption > .SelectOption li:hover {
+    background-color: rgb(234, 234, 234);
+}
+
+#product > .view > .info > .summary > .selectedOption {
+    border-top: 1px solid #999999;
+    border-bottom: 1px solid #999999;
+}
+#product > .view > .info > .summary > .selectedOption > div {
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgb(234, 234, 234);
+}
+#product > .view > .info > .summary > .selectedOption  h4 {
+    font-size: 18px;
+    padding: 10px 0;
+}
 #product > .view > .info > .summary .count {
-	position: relative;
-	width: 100px;
+	display: inline-block;
+	width: 126px;
 	height: 40px;
-} 
+}
 #product > .view > .info > .summary .count > button {
-	position: absolute;
-  width: 21px;
-  height: 21px;
-  background-image: url('../../images/product/ico_sprites.png');
-  font-size: 0;
-  background-color: transparent;
-  border: none;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    background-color: #ececec;
+    color: #3b3b3b;
+    border: none;
+    cursor: pointer;
 }
 #product > .view > .info > .summary .count > .decrease {
 	left:0;
@@ -538,16 +590,30 @@
 }
 #product > .view > .info > .summary .count > .increase:hover {background-position: -72px -74px;}
 #product > .view > .info > .summary .count > input[name=num] {
-	position: absolute;
-	left: 26px;
-	top: 0;
 	width: 40px;
-	height: 22px;
+	height: 40px;
 	border: 1px solid #ececec;
-	font-size: 14px;
-	text-align: center;								
+	font-size: 20px;
+	text-align: center;
+    margin: 0 -4px;
+}
+#product > .view > .info > .summary .optionPrice {
+    display: inline-block;
+    margin-left: 190px;
+    text-align: right;
+    width: 126px;
+    height: 40px;
+    font-size: 20px;
+    line-height: 40px;
+}
+#product > .view > .info > .summary .optionPrice > span {
+    font-size: 18px;
+}
+#product > .view > .info > .summary .optionPrice > span:nth-child(2){
+    cursor: pointer;
 }
 
+/**/
 #product > .view > .info > .summary .total {
     overflow: hidden;
     margin-top: 16px;
