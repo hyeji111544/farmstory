@@ -394,93 +394,79 @@ button[type=submit] {
     float: right;
     width: 100px;
 }
-#btnOptAdd {
-    border: 1px solid #e6e6e6;
-    padding: 5px 10px;
+.registerOption {
+    display: flex;
+    flex-direction: column;
+    width: 1080px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    height: auto;
+    border: 1px solid red;
+}
+.registerOption > div > div:nth-child(5) {
+    width: 100px;
+}
+.registerOption > div > div:nth-child(6) {
+    width: 100px;
+}
+.registerOption > div > div:nth-child(5) > input{
+    width: 80px;
+}
+.registerOption > div > div:nth-child(6) > input{
+    width: 80px;
+}
+.regOptTitle {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border-bottom: 1px solid #e6e6e6;
+}
+.regOptTitle > div {
+    width: 160px;
+    padding: 10px;
+    text-align: center;
+    box-sizing: border-box;
+}
+.regOptTitle > div > span {
+    width: 30px;
+    padding: 4px;
     margin-left: 10px;
+    border-radius: 4px;
+    background-color: #ececec;
+    box-sizing: border-box;
     cursor: pointer;
 }
-#btnNewOptAdd {
+.regOptContent {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border-top: 1px solid #e6e6e6;
+}
+.regOptContent > div {
+    width: 200px;
+    padding: 10px;
+    align-content: center;
+    box-sizing: border-box;
+    text-align: left;
+}
+.regOptContent > div > input {
     display: inline-block;
-    float: right;
-    margin: 10px;
-    border: 1px solid #e6e6e6;
-    padding: 5px 10px;
-    margin-left: 10px;
-    cursor: pointer;
-}
-.optAddTable tr > td {
-    text-align: center;
-}
-.optAddTable tr > td:nth-child(1) {
-    text-align: center;
-}
-.optAddTable tr > td > input {
+    outline: none;
     width: 140px;
-    height: 40px;
-    padding-top: 4px;
-    outline: none;
     border: 0;
-    border-bottom: 1px solid #999999;
+    border-bottom: 1px solid #e6e6e6;
 }
-.optAddTable tr > td > .btnOptDetailAdd {
-    position: absolute;
-    top: 20px;
-    width: 40px;
-    border: 1px solid #e6e6e6;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-.optAddTable tr > td > .optDetail {
-    position: relative;
+.regOptContent > div > span {
     display: inline-block;
-}
-.optAddTable tr:nth-child(1) > td:nth-child(3) {
-    border-left: 0;
-}
-.optAddTable tr > td:nth-child(2) {
-     width: 200px;
-}
-.optAddTable tr > td:nth-child(3) {
-    position: relative;
-    border-left: 1px solid #666666;
-}
-.optAddTable tr > td > .optDetail > input {
-    width: 150px;
-    height: 40px;
-    padding: 0 4px -2px 4px;
-    margin: 0 10px;
     outline: none;
-    border: 0;
-    border-bottom: 1px solid #999999;
-}
-.optAddTable tr > td > .optDetail > span {
-    position: absolute;
-    text-align: center;
-    top: 10px;
-    display: inline-block;
     width: 30px;
-    height: 14px;
-    border: 1px solid #e6e6e6;
-    padding: 5px 10px;
+    padding: 2px;
+    border-radius: 4px;
+    background-color: #ececec;
+    box-sizing: border-box;
     cursor: pointer;
 }
-.btnOptTupleDelete {
-    text-align: center;
-    display: inline-block;
-    margin-left: 30px;
-    width: 30px;
-    height: 18px;
-    border: 1px solid #e6e6e6;
-    padding: 5px 10px;
-    background-color: white;
-    cursor: pointer;
-}
-.optDetailBox {
-    width: 600px;
-    padding-left: 10px;
-    text-align: left!important;
-}
+
 /* 상품수정 : product-option */
 .optionTable tr > td {
     width: 325px;
@@ -491,6 +477,7 @@ button[type=submit] {
 
 }
 .bigImageBox {
+    display: none;
     width: 100%;
     height: 100%;
     z-index: 999;

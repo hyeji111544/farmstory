@@ -5,6 +5,52 @@
     <!-- 상품 상세페이지 시작 -->
     <section class="view" layout:fragment="content">
         <script>
+            // 옵션 항목 출력 버튼
+            function dropOption() {
+                const optionList = event.target.nextElementSibling;
+                if (optionList.style.display === "block") {
+                    optionList.style.display = "none"; // 옵션 박스 숨기기
+                } else {
+                    optionList.style.display = "block"; // 옵션 박스 보이기
+                }
+            }
+            // 옵션 선택
+            function selectOption() {
+                const selectedOption = event.target.parentNode.parentNode.parentNode.parentNode.querySelector('.selectedOption');
+                const optionList = event.target.parentNode.parentNode;
+                const optionName = event.target.innerText; // 옵션 이름
+                const optionValue = event.target.nextElementSibling.value; // 옵션 가격
+                const selectedOptionName = selectedOption.querySelectorAll('h4'); // 선택된 옵션 이름들
+
+                // 이미 선택된 옵션인지 체크
+                let optionCheck = 0;
+                Array.from(selectedOptionName).forEach(function (name){
+                    if (name.innerText === optionName){
+                        alert("이미 선택된 옵션입니다.");
+                        optionCheck = 1;
+                        optionList.style.display = "none";
+                    }
+                })
+
+                // 이미 선택된 옵션이 아닐경우
+                if (optionCheck === 0) {
+                    const selected = `<div>
+                                    <h4>${optionName}</h4>
+                                    <div class="count">
+                                        <button class="decrease" onclick="changeNum(-1)">-</button>
+                                        <input type="text" name="num" class="numInput" value="1" oninput="changeNum(0)"/>
+                                        <button class="increase" onclick="changeNum(1)">+</button>
+                                    </div>
+                                    <div class="optionPrice">
+                                        <span>${optionValue}원</span>
+                                        <span>x</span>
+                                    </div>
+                                </div>`;
+                    selectedOption.insertAdjacentHTML('beforeend', selected);
+                    optionList.style.display = "none";
+                }
+            }
+
             /* 3일후 계산하여 배송예정일에 출력 */
             document.addEventListener('DOMContentLoaded', function() {
                 // 오늘 날짜 구하기
@@ -30,7 +76,7 @@
 
             /* +, - 버튼 눌렀을 때 동작하며 할인 금액 계산하여 총 액에나타나게함 */
             function changeNum(change) {
-                var numInput = document.getElementById("numInput");
+                var numInput = event.target.parentNode.querySelector('input');
                 var inputPrice = document.getElementById("totalPrice");
                 //파싱된 형태 그대로 가져와서 ',' 쉼표를 제거하여 사용함.
                 var priceText = document.getElementById("disPrice").innerText;
@@ -104,11 +150,42 @@
                 </nav>
                 <img src="../images/vip_plcc_banner.png" alt="100원만 결제해도 1만원 적립!" class="banner" />
 
-                <div class="count">
-                    <button class="decrease" onclick="changeNum(-1)">-</button>
-                    <input type="number" name="num" id="numInput" value="1" oninput="changeNum(0)"/>
-                    <button class="increase" onclick="changeNum(1)">+</button>
+                <!--
+                    옵션 선택 박스 (product.css 515줄)
+                    - 옵션이 없는 상품은 옵션 선택 태그 출력 x
+                    - 옵션이 있는 상품은 옵션을 선택하지 않으면 다음으로 넘어가지 않음
+                -->
+                <div class="prodOption">
+                    <button class="btnSelectOption" onclick="dropOption()">옵션 제목</button>
+                    <ul class="SelectOption">
+                        <label>
+                        <li onclick="selectOption()">검정</li>
+                            <input type="hidden" value="19000">
+                        </label>
+                        <label>
+                            <li onclick="selectOption()">노랑</li>
+                            <input type="hidden" value="19000">
+                        </label>
+                    </ul>
                 </div>
+
+                <div class="selectedOption">
+                    <div>
+                        <h4>검정색</h4>
+                        <div class="count">
+                            <button class="decrease" onclick="changeNum(-1)">-</button>
+                            <input type="text" name="num" class="numInput" value="1" oninput="changeNum(0)"/>
+                            <button class="increase" onclick="changeNum(1)">+</button>
+                        </div>
+                        <div class="optionPrice">
+                            <span>200,000원</span>
+                            <span>x</span>
+                        </div>
+                    </div>
+
+                </div>
+
+
 
                 <div class="total">
                     <span id="totalPrice" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></span>

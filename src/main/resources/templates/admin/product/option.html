@@ -110,6 +110,94 @@
 
                 }
             }
+
+            //
+            function addOption1(){
+                const registerOption = event.target.parentNode.parentNode.parentNode;
+
+                const option1Tag = `<div class="regOptContent">
+                                        <div>1</div>
+                                        <div>
+                                            <input type="text" class="optName1" placeholder="옵션1"/>
+                                            <span class="btnAddOpt2" onclick="addOption1()">추가</span>
+                                        </div>
+                                        <div>
+                                            <input type="text" class="optName2" placeholder="옵션2"/>
+                                            <span class="btnAddOpt2" onclick="addOption2()">추가</span>
+                                        </div>
+                                        <div>
+                                            <input type="text" class="optName3" placeholder="옵션3"/>
+                                            <span class="btnAddOpt2" onclick="addOption3()">추가</span>
+                                        </div>
+                                        <div>
+                                            <input type="text" class="optPrice" placeholder="가격"/>
+                                        </div>
+                                        <div>
+                                            <input type="text" class="optStock" placeholder="재고"/>
+                                        </div>
+                                    </div>`
+                registerOption.insertAdjacentHTML('beforeend', option1Tag);
+            }
+
+            function addOption2(){
+                const regOptContent = event.target.parentNode.parentNode;
+                const opt1Name1 = regOptContent.querySelector('.optName1').value;
+
+                if (opt1Name1 != "") {
+                    const option2Tag = `<div class="regOptContent" style="border-top: 0">
+                                            <div>1</div>
+                                            <div>
+                                                <input type="text" class="optName1" value="${opt1Name1}"/>
+                                            </div>
+                                            <div>
+                                                <input type="text" class="optName2" placeholder="옵션2"/>
+                                            </div>
+                                            <div>
+                                                <input type="text" class="optName3" placeholder="옵션3"/>
+                                            </div>
+                                            <div>
+                                                <input type="text" class="optPrice" placeholder="가격"/>
+                                            </div>
+                                            <div>
+                                                <input type="text" class="optStock" placeholder="재고"/>
+                                            </div>
+                                        </div>`
+                    regOptContent.insertAdjacentHTML('afterend', option2Tag);
+                }else {
+                    alert("첫번째 옵션을 입력해주세요.")
+                }
+            }
+
+            function addOption3(){
+                const regOptContent = event.target.parentNode.parentNode;
+                const opt1Name1 = regOptContent.querySelector('.optName1').value;
+                const opt1Name2 = regOptContent.querySelector('.optName2').value;
+
+                if (opt1Name1 != "" && opt1Name2 != "") {
+                    const option3Tag = `<div class="regOptContent" style="border-top: 0">
+                                            <div>1</div>
+                                            <div>
+                                                <input type="text" class="optName1" value="${opt1Name1}"/>
+                                            </div>
+                                            <div>
+                                                <input type="text" class="optName2" value="${opt1Name2}"/>
+                                            </div>
+                                            <div>
+                                                <input type="text" class="optName3" placeholder="옵션3"/>
+                                            </div>
+                                            <div>
+                                                <input type="text" class="optPrice" placeholder="가격"/>
+                                            </div>
+                                            <div>
+                                                <input type="text" class="optStock" placeholder="재고"/>
+                                            </div>
+                                        </div>`
+                    regOptContent.insertAdjacentHTML('afterend', option3Tag);
+                }else {
+                    alert("첫번째 옵션과 두번째 옵션을 입력해주세요.")
+                }
+            }
+
         </script>
         <nav>
             <script th:src="@{/js/util.js}"></script>
@@ -251,34 +339,54 @@
                 <!-- 옵션 정보 등록 -->
                 <section>
                     <h4 style="display: inline-block">상품 옵션 등록</h4>
-                    <span id="btnOptAdd" onclick="addOptionBlock()">옵션 추가 + </span>
                     <p>
                         하나의 상품에 최대 4개의 옵션을 설정할 수 있습니다.
                     </p>
-                    <table class="optAddTable" id="optAddTable">
-                        <tr>
-                            <td>구분</td>
-                            <td>옵션명</td>
-                            <td colspan="2">옵션정보</td>
-                        </tr>
-                        <tr class="optAddTuple">
-                            <td>옵션 1<span class="btnOptTupleDelete">삭제</span></td>
-                            <td>
-                                <input type="text" class="optName" placeholder="옵션명"/>
-                            </td>
-                            <td>
-                                <span class="btnOptDetailAdd">추가</span>
-                            </td>
-                            <td class="optDetailBox">
-                                <div class="optDetail">
-                                    <input type="text" class="optValue" placeholder="옵션값"/>
-                                    <input type="text" class="optPrice" placeholder="옵션가격"/>
-                                    <input type="text" class="optStock" placeholder="옵션재고"/>
-                                    <span class="btnOptDetailDelete">삭제</span>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                    <div class="registerOption">
+                        <div class="regOptTitle">
+                            <div>구분</div>
+                            <div>옵션1</div>
+                            <div>옵션2</div>
+                            <div>옵션3</div>
+                            <div>가격</div>
+                            <div>재고</div>
+                        </div>
+                        <div class="regOptContent">
+                            <div>옵션 이름</div>
+                            <div>
+                                <input type="text" class="optName1" placeholder="옵션1 이름 ex) size"/>
+                            </div>
+                            <div>
+                                <input type="text" class="optName2" placeholder="옵션2 이름 ex) color"/>
+                            </div>
+                            <div>
+                                <input type="text" class="optName3" placeholder="옵션3 이름"/>
+                            </div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <div class="regOptContent">
+                            <div>1</div>
+                            <div>
+                                <input type="text" class="optName1" placeholder="옵션1"/>
+                                <span class="btnAddOpt2" onclick="addOption1()">추가</span>
+                            </div>
+                            <div>
+                                <input type="text" class="optName2" placeholder="옵션2"/>
+                                <span class="btnAddOpt2" onclick="addOption2()">추가</span>
+                            </div>
+                            <div>
+                                <input type="text" class="optName3" placeholder="옵션3"/>
+                                <span class="btnAddOpt2" onclick="addOption3()">추가</span>
+                            </div>
+                            <div>
+                                <input type="text" class="optPrice" placeholder="가격"/>
+                            </div>
+                            <div>
+                                <input type="text" class="optStock" placeholder="재고"/>
+                            </div>
+                        </div>
+                    </div>
                     <span id="btnNewOptAdd">신규 옵션 등록</span>
                 </section>
 
