@@ -526,7 +526,7 @@
     text-align: left;
     padding: 0 10px;
     background-color: white;
-    border: 1px solid rgb(234, 234, 234);
+    border: 1px solid #7f7f7f;
     cursor: pointer;
 }
 #product > .view > .info > .summary > .prodOption > .SelectOption {
@@ -534,11 +534,13 @@
     width: 450px;
     height: auto;
     font-size: 16px;
+    box-sizing: border-box;
+    border: 1px solid #7f7f7f;
 }
 #product > .view > .info > .summary > .prodOption > .SelectOption li {
     display: block;
     box-sizing: border-box;
-    width: 450px;
+    width: 448px;
     height: 40px;
     border: 1px solid rgb(234, 234, 234);
     font-size: 16px;

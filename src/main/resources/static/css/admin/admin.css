@@ -394,6 +394,85 @@ button[type=submit] {
     float: right;
     width: 100px;
 }
+.makeOption {
+    display: flex;
+    flex-direction: column;
+    width: 1080px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    height: auto;
+    border: 1px solid red;
+}
+.makeOption > div {
+    width: 150px;
+    padding: 10px;
+    border-bottom: 1px solid #e6e6e6;
+    box-sizing: border-box;
+}
+.makeOption > div:nth-child(1) > div {
+    padding-left: 50px;
+}
+.makeOption > div > div:nth-child(1) {
+    width: 150px;
+    padding: 10px;
+    text-align: center;
+    border: 0;
+}
+.makeOption > div > div {
+    width: 300px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-left: 1px solid #e6e6e6;
+}
+.makeOption > .regOptTitle {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    align-items: center;
+}
+.makeOption > .regOptContent {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    align-items: center;
+}
+.makeOption > .regOptContent input {
+    display: inline-block;
+    width: 180px;
+    height: 30px;
+    margin: 4px 0;
+    line-height: 30px;
+    vertical-align: top;
+    border: 1px solid #e6e6e6;
+    outline-color: #c4c4c4;
+}
+.makeOption > .regOptContent span {
+    display: inline-block;
+    width: 40px;
+    height: 30px;
+    margin: 4px 0;
+    text-align: center;
+    line-height: 30px;
+    box-sizing: border-box;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    background-color: #e6e6e6;
+    cursor: pointer;
+}
+#btnNewOptAdd {
+    display: inline-block;
+    height: 30px;
+    padding: 0 4px;
+    margin: 4px 0;
+    text-align: center;
+    line-height: 30px;
+    box-sizing: border-box;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    background-color: #e6e6e6;
+    cursor: pointer;
+}
+
 .registerOption {
     display: flex;
     flex-direction: column;
@@ -403,67 +482,64 @@ button[type=submit] {
     height: auto;
     border: 1px solid red;
 }
-.registerOption > div > div:nth-child(5) {
-    width: 100px;
-}
-.registerOption > div > div:nth-child(6) {
-    width: 100px;
-}
-.registerOption > div > div:nth-child(5) > input{
-    width: 80px;
-}
-.registerOption > div > div:nth-child(6) > input{
-    width: 80px;
-}
-.regOptTitle {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
+.registerOption > div {
+    padding: 10px;
     border-bottom: 1px solid #e6e6e6;
+    box-sizing: border-box;
 }
-.regOptTitle > div {
-    width: 160px;
+.registerOption > div:nth-child(1) > div {
+    text-align: center;
+}
+.registerOption > div > div:nth-child(1) {
+    width: 100px;
     padding: 10px;
     text-align: center;
-    box-sizing: border-box;
-}
-.regOptTitle > div > span {
-    width: 30px;
-    padding: 4px;
-    margin-left: 10px;
-    border-radius: 4px;
-    background-color: #ececec;
-    box-sizing: border-box;
-    cursor: pointer;
-}
-.regOptContent {
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    border-top: 1px solid #e6e6e6;
-}
-.regOptContent > div {
-    width: 200px;
-    padding: 10px;
-    align-content: center;
-    box-sizing: border-box;
-    text-align: left;
-}
-.regOptContent > div > input {
-    display: inline-block;
-    outline: none;
-    width: 140px;
     border: 0;
-    border-bottom: 1px solid #e6e6e6;
 }
-.regOptContent > div > span {
-    display: inline-block;
-    outline: none;
-    width: 30px;
-    padding: 2px;
-    border-radius: 4px;
-    background-color: #ececec;
+.registerOption > div > div:nth-last-child(1) {
+    width: 100px;
+    padding: 10px;
+    text-align: center;
+}
+.registerOption > div > div {
+    width: 150px;
+    padding: 10px;
     box-sizing: border-box;
+    border-left: 1px solid #e6e6e6;
+}
+.registerOption > .regOptTitle {
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    align-items: center;
+}
+.registerOption > .regOptContent {
+    display: flex;
+    box-sizing: border-box;
+    padding: 0 10px;
+    width: 100%;
+    align-items: center;
+}
+.registerOption > .regOptContent input {
+    display: inline-block;
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: top;
+    border: 1px solid #e6e6e6;
+    outline-color: #c4c4c4;
+}
+.registerOption > .regOptContent span {
+    display: inline-block;
+    width: 40px;
+    height: 30px;
+    margin: 4px 0;
+    text-align: center;
+    line-height: 30px;
+    box-sizing: border-box;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    background-color: #e6e6e6;
     cursor: pointer;
 }
 
