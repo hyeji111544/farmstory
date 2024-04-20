@@ -125,6 +125,7 @@ public class AdminController {
           - 3중 배열로된 추가할 옵션 정보를 파라미터로 받아옴
           - [ [ [이름1,값,가격,재고], [이름1,값,가격,재고] ],[ [이름2,값,가격,재고], [이름2,값,가격,재고] ] ]
      */
+    /*
     @PostMapping("/admin/product/option")
     public ResponseEntity<?> registerProductOption(@RequestBody Map<String, List<List<List<String>>>> requestData){
         List<List<List<String>>> allOpts = requestData.get("allOpts");
@@ -148,5 +149,6 @@ public class AdminController {
         return adminproductService.registerProdOption(optionDTOs);
 
     }
+     */
 
 }

@@ -12,7 +12,6 @@ import lombok.*;
 @Entity
 @Table(name="productimg")
 public class Productimg {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int imgNo;

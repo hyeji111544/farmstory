@@ -2,6 +2,7 @@ package kr.co.lotteon.controller;
 
 import groovy.util.logging.Slf4j;
 import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.ProdOption;
 import kr.co.lotteon.service.ProdCateService;
 import kr.co.lotteon.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -84,6 +85,12 @@ public class ProductController {
         model.addAttribute("cate01DTOs", cate01DTOs);
         model.addAttribute("cate02DTOs", cate02DTOs);
         model.addAttribute("cate03DTOs", cate03DTOs);
+
+
+        // 상품 옵션 정보 조회
+        ResponseOptionDTO responseOptionDTO = productService.selectProductOption(prodNo);
+        log.info("responseOptionDTO : " + responseOptionDTO);
+        model.addAttribute("OptionDTOs", responseOptionDTO);
         return "/product/view";
     }
 
