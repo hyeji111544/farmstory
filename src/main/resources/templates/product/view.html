@@ -38,42 +38,61 @@
                     btnSelectOption.innerText = optionName;
                     SelectOption.style.display = "none";
                 }else {
+                    // 마지막 옵션일 경우 선택한 옵션 정보 출력 & 옵션 선택박스 초기화
                     selectOptionNo.value = optNo;
                     btnSelectOption.innerText = optionName;
                     SelectOption.style.display = "none";
+
+                    // 사용자가 선택한 옵션 이름과 옵션 번호를 문자열로 합치기
+                    const prodOptions = prodOption.parentNode.querySelectorAll('.prodOption');
+                    let selectedOptName = "";
+                    let selectedOptNo = "";
+                    Array.from(prodOptions).forEach(function (option, index) {
+                        const optName = option.querySelector('.btnSelectOption').innerText;
+                        const optNo = option.querySelector('.selectOptionNo').value;
+                        if (index > 0) {selectedOptName += "_";}
+                        if (index > 0) {selectedOptNo += "_";}
+                        selectedOptName += optName;
+                        selectedOptNo += optNo;
+                    })
+
                     // 이미 선택된 옵션인지 체크
                     let optionCheck = 0;
+                    const selectedOption = document.getElementsByClassName("selectedOption")[0];
+                    const selectedOptionName = selectedOption.querySelectorAll('h4');
+
+                    Array.from(selectedOptionName).forEach(function (h4) {
+                        if (h4.innerText === selectedOptName){
+                            optionCheck = 1;
+                            alert("이미 선택된 옵션입니다.");
+                            let optionMap = [[${OptionDTOs.optionMap}]];
+                            const optionName = Object.keys(optionMap)
+                            Array.from(btnSelectOptionAll).forEach(function (optionBtn, index){
+                                optionBtn.innerText = optionName[index];
+                            })
+                        }else {
+                            optionCheck = 0;
+                        }
+                    })
+
                     // 이미 선택된 옵션이 아닐경우
                     if (optionCheck === 0) {
-                        const prodOptions = prodOption.parentNode.querySelectorAll('.prodOption');
-                        let selectedOptName = "";
-                        let selectedOptNo = "";
-                        Array.from(prodOptions).forEach(function (option, index) {
-                            const optName = option.querySelector('.btnSelectOption').innerText;
-                            const optNo = option.querySelector('.selectOptionNo').value;
-                            console.log(optName);
-                            console.log(optNo);
-                            if (index > 0) {selectedOptName += "_";}
-                            if (index > 0) {selectedOptNo += "_";}
-                            selectedOptName += optName;
-                            selectedOptNo += optNo;
-                        })
-                        console.log(selectedOptName);
-                        console.log(selectedOptNo);
+
                         const matchingDTOs = findOptionInfo(selectedOptNo);
 
                         const selected = `<div>
-                                    <h4>${selectedOptName}</h4>
-                                    <div class="count">
-                                        <button class="decrease" onclick="changeNum(-1)">-</button>
-                                        <input type="text" name="num" class="numInput" value="1" oninput="changeNum(0)"/>
-                                        <button class="increase" onclick="changeNum(1)">+</button>
-                                    </div>
-                                    <div class="optionPrice">
-                                        <span>${matchingDTOs.optPrice}원</span>
-                                        <span>x</span>
-                                    </div>
-                                </div>`;
+                                            <h4>${selectedOptName}</h4>
+                                            <div class="count">
+                                                <button class="decrease" onclick="changeNum(-1)">-</button>
+                                                <input type="text" name="num" class="numInput" value="1" oninput="changeNum(0)"/>
+                                                <button class="increase" onclick="changeNum(1)">+</button>
+                                            </div>
+                                            <div class="optionPrice">
+                                                <span>${matchingDTOs.optPrice}원</span>
+                                                <input type="hidden" name="optDetailNo" value="${matchingDTOs.optDetailNo}"/>
+                                                <span>x</span>
+                                            </div>
+                                        </div>`;
                         selectedOption.insertAdjacentHTML('beforeend', selected);
                         let optionMap = [[${OptionDTOs.optionMap}]];
                         const optionName = Object.keys(optionMap)
@@ -136,7 +155,11 @@
                 }
             }
 
-            // 사용자가 선택한 옵션에 알맞은 재고와 가격 찾는 함수
+            /*
+                사용자가 선택한 옵션에 알맞은 재고와 가격 찾는 함수
+                - model 참조로 받아온 DTO에서 상품 옵션 조회
+                - 사용자가 옵션들을 선택하면 optNo값을 받아와서 일치하는 상품 가격과 재고 조회 가능
+             */
             let OptionDetailDTOs = [[${OptionDTOs.optionDetailDTOs}]];
             function findOptionInfo(optionNos) {
                 const optionNosArray = optionNos.split('_');
@@ -155,6 +178,14 @@
                 );
                 return matchingDTO;
             }
+
+            /*
+                구매하기 버튼 누를시 넘겨야하는 정보
+                - prodNo
+                - optDetailNo // 선택된 상품 옵션 수량조절 태그쪽에 input의 value값으로 숨겨둠
+                - 상품 수량
+                - 회원 아이디
+             */
         </script>
 
         <!-- 제목, 페이지 네비게이션 -->
