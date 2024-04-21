@@ -160,7 +160,7 @@
                 - model 참조로 받아온 DTO에서 상품 옵션 조회
                 - 사용자가 옵션들을 선택하면 optNo값을 받아와서 일치하는 상품 가격과 재고 조회 가능
              */
-            let OptionDetailDTOs = [[${OptionDTOs.optionDetailDTOs}]];
+            let OptionDetailDTOs = [[${OptionDTOs.prodOptDetailDTOS}]];
             function findOptionInfo(optionNos) {
                 const optionNosArray = optionNos.split('_');
                 let optNo1 = optionNosArray[0];

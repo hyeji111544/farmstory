@@ -1,6 +1,7 @@
 package kr.co.lotteon.controller.admin;
 
 import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.ProdOptDetail;
 import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -119,36 +120,78 @@ public class AdminController {
 
         return "/admin/product/option";
     }
-    
-    /* 
-        관리자 상품 옵션 등록
-          - 3중 배열로된 추가할 옵션 정보를 파라미터로 받아옴
-          - [ [ [이름1,값,가격,재고], [이름1,값,가격,재고] ],[ [이름2,값,가격,재고], [이름2,값,가격,재고] ] ]
-     */
+
     /*
-    @PostMapping("/admin/product/option")
-    public ResponseEntity<?> registerProductOption(@RequestBody Map<String, List<List<List<String>>>> requestData){
-        List<List<List<String>>> allOpts = requestData.get("allOpts");
-        log.info("allOpts : " + allOpts);
-        
-        // 파라미터로 받은 3중 배열을 List<prodOptionDTO>로 가공
-        List<ProdOptionDTO> optionDTOs = new ArrayList<>();
-        for (List<List<String>> option : allOpts) {
-            for (List<String> detail : option) {
-                ProdOptionDTO optionDTO = new ProdOptionDTO();
-                optionDTO.setProdNo(Integer.parseInt(detail.get(0)));
-                optionDTO.setOptName(detail.get(1));
-                optionDTO.setOptValue(detail.get(2));
-                optionDTO.setOptPrice(Integer.parseInt(detail.get(3)));
-                optionDTO.setOptStock(Integer.parseInt(detail.get(4)));
-                optionDTOs.add(optionDTO);
-            }
-        }
-        log.info("optionDTOs : " + optionDTOs);
+        상품 옵션 등록
+        - 사용자가 입력한 상품 옵션 (최대 3개까지) / prodOption1,2,3
+            - [상품 번호, 옵션 이름, 옵션 값]
+            ex) [ [22, 사이즈, small] / [22, 사이즈, large] / [22, 색상, black] / [22, 색상, blue] ... ]
 
-        return adminproductService.registerProdOption(optionDTOs);
+        - 사용자가 입력한 상품 옵션의 연관관계(prodOptDetail)
+            - [번호, 옵션1 값, 옵션2 값, 옵션3 값, 가격, 재고]
+            ex) [ [1, small, black, 남성, 2000원, 100개] / [1, small, black, 여성, 3000원, 100개] ... ]
 
-    }
+        - body에서 json데이터 꺼낸 후 각각 이중 List로 변환
+            - 자바스크립트에서 배열로 데이터를 전송했기 떄문에 이중 List로 변환
+
+        - 각각의  이중 List들을 List<DTO>로 변환 후 service로 전달
      */
+    @PostMapping("/admin/product/regOption")
+    public ResponseEntity<?> registerOption(@RequestBody Map<String, Object> requestData){
+        ArrayList<ArrayList<String>> prodOption1List = (ArrayList<ArrayList<String>>) requestData.get("prodOption1");
+        ArrayList<ArrayList<String>> prodOption2List = (ArrayList<ArrayList<String>>) requestData.get("prodOption2");
+        ArrayList<ArrayList<String>> prodOption3List = (ArrayList<ArrayList<String>>) requestData.get("prodOption3");
+        ArrayList<ArrayList<String>> prodOptionDTOList = (ArrayList<ArrayList<String>>) requestData.get("prodOptionDTO");
+        int prodNo = Integer.parseInt(prodOption1List.get(0).get(0));
+
+        // option1 List<ProdOptionDTO>로 변환
+        List<ProdOptionDTO> optionDTO1 = new ArrayList<>();
+        for (ArrayList<String> eachOption : prodOption1List){
+            ProdOptionDTO optionDTO = new ProdOptionDTO();
+            optionDTO.setProdNo(Integer.parseInt(eachOption.get(0)));
+            optionDTO.setOptName(eachOption.get(1));
+            optionDTO.setOptValue(eachOption.get(2));
+            optionDTO1.add(optionDTO);
+        }
+        log.info("optionDTO1 : " + optionDTO1);
+
+        // option2 List<ProdOptionDTO>로 변환
+        List<ProdOptionDTO> optionDTO2 = new ArrayList<>();
+        for (ArrayList<String> eachOption : prodOption2List){
+            ProdOptionDTO optionDTO = new ProdOptionDTO();
+            optionDTO.setProdNo(Integer.parseInt(eachOption.get(0)));
+            optionDTO.setOptName(eachOption.get(1));
+            optionDTO.setOptValue(eachOption.get(2));
+            optionDTO2.add(optionDTO);
+        }
+        log.info("optionDTO2 : " + optionDTO2);
+
+        // option3 List<ProdOptionDTO>로 변환
+        List<ProdOptionDTO> optionDTO3 = new ArrayList<>();
+        for (ArrayList<String> eachOption : prodOption3List){
+            ProdOptionDTO optionDTO = new ProdOptionDTO();
+            optionDTO.setProdNo(Integer.parseInt(eachOption.get(0)));
+            optionDTO.setOptName(eachOption.get(1));
+            optionDTO.setOptValue(eachOption.get(2));
+            optionDTO3.add(optionDTO);
+        }
+        log.info("optionDTO3 : " + optionDTO3);
+
+        // prodOptDetail List<prodOptDetailDTO>로 변환
+        List<prodOptDetailDTO> optDetailDTOS = new ArrayList<>();
+        for (ArrayList<String> eachDetail : prodOptionDTOList){
+            prodOptDetailDTO OptDetailDTO = new prodOptDetailDTO();
+            OptDetailDTO.setProdNo(prodNo);
+            OptDetailDTO.setOptDetailNo(Integer.parseInt(eachDetail.get(0)));
+            OptDetailDTO.setOptPrice(Integer.parseInt(eachDetail.get(4)));
+            OptDetailDTO.setOptStock(Integer.parseInt(eachDetail.get(5)));
+            optDetailDTOS.add(OptDetailDTO);
+        }
+        log.info("optDetailDTOS : " + optDetailDTOS);
+
+        return adminproductService.registerProdOption(optionDTO1, optionDTO2, optionDTO3, optDetailDTOS);
+    }
+
+
 
 }

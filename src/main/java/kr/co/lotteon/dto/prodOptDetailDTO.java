@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OptionDetailDTO {
+public class prodOptDetailDTO {
     public int optDetailNo;
     public int prodNo;
     public int optNo1;

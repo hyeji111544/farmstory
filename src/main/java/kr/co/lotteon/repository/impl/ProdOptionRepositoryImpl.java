@@ -1,8 +1,7 @@
 package kr.co.lotteon.repository.impl;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.lotteon.dto.OptionDetailDTO;
+import kr.co.lotteon.dto.prodOptDetailDTO;
 import kr.co.lotteon.dto.ProdOptionDTO;
 import kr.co.lotteon.dto.ResponseOptionDTO;
 import kr.co.lotteon.entity.*;
@@ -60,19 +59,19 @@ public class ProdOptionRepositoryImpl implements ProdOptionRepositoryCustom {
                                             .selectFrom(qProdOptDetail)
                                             .where(qProdOptDetail.prodNo.eq(prodNo))
                                             .fetch();
-        List<OptionDetailDTO> optionDetailDTOs = new ArrayList<>();
+        List<prodOptDetailDTO> prodOptDetailDTOS = new ArrayList<>();
         for (ProdOptDetail detail : optionDetail){
-            OptionDetailDTO optionDetailDTO = modelMapper.map(detail, OptionDetailDTO.class);
-            optionDetailDTOs.add(optionDetailDTO);
+            prodOptDetailDTO prodOptDetailDTO = modelMapper.map(detail, prodOptDetailDTO.class);
+            prodOptDetailDTOS.add(prodOptDetailDTO);
         }
 
         ResponseOptionDTO responseOptionDTO = new ResponseOptionDTO();
         responseOptionDTO.setOptionMap(optionMap);
-        responseOptionDTO.setOptionDetailDTOs(optionDetailDTOs);
+        responseOptionDTO.setProdOptDetailDTOS(prodOptDetailDTOS);
 
         log.info("optionMap : " + optionMap);
-        log.info("OptionDetailDTO : " + optionDetailDTOs.toString());
-        log.info("OptionDetailDTO : " + responseOptionDTO.toString());
+        log.info("prodOptDetailDTO : " + prodOptDetailDTOS.toString());
+        log.info("prodOptDetailDTO : " + responseOptionDTO.toString());
 
         return responseOptionDTO;
     }
