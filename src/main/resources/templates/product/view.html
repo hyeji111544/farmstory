@@ -32,12 +32,7 @@
                 const selectedOptionName = selectedOption.querySelectorAll('h4'); // 선택된 옵션 이름들
 
                 // 마지막 옵션인지 체크
-                if (prodOption.nextElementSibling.className === "prodOption"){
-                    // 마지막 옵션이 아닌 경우
-                    selectOptionNo.value = optNo;
-                    btnSelectOption.innerText = optionName;
-                    SelectOption.style.display = "none";
-                }else {
+                if (prodOption.nextElementSibling.className !== "prodOption"){
                     // 마지막 옵션일 경우 선택한 옵션 정보 출력 & 옵션 선택박스 초기화
                     selectOptionNo.value = optNo;
                     btnSelectOption.innerText = optionName;
@@ -55,6 +50,13 @@
                         selectedOptName += optName;
                         selectedOptNo += optNo;
                     })
+
+                    const countUnderscore = selectedOptNo.split('_').length - 1;
+                    if (countUnderscore === 0) {
+                        selectedOptNo += "_0_0";
+                    }else if (countUnderscore === 1) {
+                        selectedOptNo += "_0";
+                    }
 
                     // 이미 선택된 옵션인지 체크
                     let optionCheck = 0;
@@ -80,7 +82,15 @@
 
                         const matchingDTOs = findOptionInfo(selectedOptNo);
 
-                        const selected = `<div>
+                        if (matchingDTOs.length === 0) {
+                            alert("해당 옵션은 현재 구매 불가능합니다.");
+                            let optionMap = [[${OptionDTOs.optionMap}]];
+                            const optionName = Object.keys(optionMap)
+                            Array.from(btnSelectOptionAll).forEach(function (optionBtn, index){
+                                optionBtn.innerText = optionName[index];
+                            })
+                        }else {
+                            const selected = `<div>
                                             <h4>${selectedOptName}</h4>
                                             <div class="count">
                                                 <button class="decrease" onclick="changeNum(-1)">-</button>
@@ -90,18 +100,58 @@
                                             <div class="optionPrice">
                                                 <span>${matchingDTOs.optPrice}원</span>
                                                 <input type="hidden" name="optDetailNo" value="${matchingDTOs.optDetailNo}"/>
-                                                <span>x</span>
+                                                <span onclick="delSelectedOption()">x</span>
                                             </div>
                                         </div>`;
-                        selectedOption.insertAdjacentHTML('beforeend', selected);
-                        let optionMap = [[${OptionDTOs.optionMap}]];
-                        const optionName = Object.keys(optionMap)
-                        Array.from(btnSelectOptionAll).forEach(function (optionBtn, index){
-                            optionBtn.innerText = optionName[index];
-                        })
+                            selectedOption.insertAdjacentHTML('beforeend', selected);
+                            let optionMap = [[${OptionDTOs.optionMap}]];
+                            const optionName = Object.keys(optionMap)
+                            Array.from(btnSelectOptionAll).forEach(function (optionBtn, index){
+                                optionBtn.innerText = optionName[index];
+                            })
+                        }
                     }
+                }else {
+                    // 마지막 옵션이 아닌 경우
+                    selectOptionNo.value = optNo;
+                    btnSelectOption.innerText = optionName;
+                    SelectOption.style.display = "none";
                 }
             }
+
+            // 선택한 옵션 삭제 버튼
+            function delSelectedOption() {
+                const delSelected = event.target // 버튼
+                const optionPrice = delSelected.parentNode // 버튼의 부모
+                const SelectedOptDiv = optionPrice.parentNode // 버튼의 부모의 부모
+
+                SelectedOptDiv.remove();
+            }
+
+            /*
+                사용자가 선택한 옵션에 알맞은 재고와 가격 찾는 함수
+                - model 참조로 받아온 DTO에서 상품 옵션 조회
+                - 사용자가 옵션들을 선택하면 optNo값을 받아와서 일치하는 상품 가격과 재고 조회 가능
+             */
+            let OptionDetailDTOs = [[${OptionDTOs.prodOptDetailDTOS}]];
+            function findOptionInfo(optionNos) {
+                const optionNosArray = optionNos.split('_');
+                let optNo1 = optionNosArray[0];
+                let optNo2 = optionNosArray[1];
+                let optNo3 = optionNosArray[2];
+
+                // OptionDetailDTOs 배열 해체하여 단일 배열로 만들기
+                const flatDTOs = OptionDetailDTOs.flat();
+                console.log(flatDTOs);
+
+                // 사용자 입력과 DTO의 값 비교하여 일치하는 DTO 반환
+                // 숫자라서 == 써야함..
+                const matchingDTO = flatDTOs.find(dto =>
+                    dto.optNo1 == optNo1 && dto.optNo2 == optNo2 && dto.optNo3 == optNo3
+                );
+                return matchingDTO;
+            }
+
 
             /* 3일후 계산하여 배송예정일에 출력 */
             document.addEventListener('DOMContentLoaded', function() {
@@ -155,29 +205,6 @@
                 }
             }
 
-            /*
-                사용자가 선택한 옵션에 알맞은 재고와 가격 찾는 함수
-                - model 참조로 받아온 DTO에서 상품 옵션 조회
-                - 사용자가 옵션들을 선택하면 optNo값을 받아와서 일치하는 상품 가격과 재고 조회 가능
-             */
-            let OptionDetailDTOs = [[${OptionDTOs.prodOptDetailDTOS}]];
-            function findOptionInfo(optionNos) {
-                const optionNosArray = optionNos.split('_');
-                let optNo1 = optionNosArray[0];
-                let optNo2 = optionNosArray[1];
-                let optNo3 = optionNosArray[2];
-
-                // OptionDetailDTOs 배열 해체하여 단일 배열로 만들기
-                const flatDTOs = OptionDetailDTOs.flat();
-                console.log(flatDTOs);
-
-                // 사용자 입력과 DTO의 값 비교하여 일치하는 DTO 반환
-                // 숫자라서 == 써야함..
-                const matchingDTO = flatDTOs.find(dto =>
-                    dto.optNo1 == optNo1 && dto.optNo2 == optNo2 && dto.optNo3 == optNo3
-                );
-                return matchingDTO;
-            }
 
             /*
                 구매하기 버튼 누를시 넘겨야하는 정보

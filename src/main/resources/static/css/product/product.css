@@ -243,7 +243,7 @@
 #product > .view > .info > div {
     float: left;
     width: 50%;
-    height: 100%;
+    height: auto;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -798,12 +798,38 @@
   width: 100%;
 }
 #product > .cart > #cartList {
-  width: 840px;
-
+    display: inline-block;
+  width: 780px;
   border: 1px solid #d3d3d3;
   border-radius: 10px;
 }
-
+#product > .cart > #cartList > div:nth-child(1) {
+    display: flex;
+    justify-content: space-between;
+    height: 40px;
+}
+#product > .cart > #cartList > div:nth-child(1) > label {
+    display: flex;
+    justify-content: space-between;
+    width: 80px;
+    margin-left: 10px;
+}
+#product > .cart > #cartList > div:nth-child(1) input{
+    display: inline-block;
+    width: 20px;
+    height: 40px;
+}
+#product > .cart > #cartList > div:nth-child(1) span {
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+}
+#product > .cart > #cartList > div:nth-child(1) > a {
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    margin-right: 20px;
+}
 #cartList > .productList {
   display: flex;
   flex-wrap: wrap;
@@ -819,6 +845,7 @@
 #cartList .productSelect > a {
   width: 30px;
   height: 30px;
+    font-size: 20px;
 }
 #cartList .productInfo {
   display: flex;
@@ -831,10 +858,12 @@
 }
 #cartList .productInfo > a {
   width: 90px;
-  height: 90px;
+  height: auto;
+    align-content: center;
 }
 #cartList .productInfo > div:nth-child(3) {
-  width: 350px;
+  width: 300px;
+    align-content: center;
 }
 #cartList .productInfo > div:nth-child(3) a {
   font-size: 16px;
@@ -842,6 +871,13 @@
 }
 #cartList .productInfo > div:nth-child(3) > p {
   margin-bottom: 6px;
+}
+#cartList .productInfo > div:nth-child(3) > p:nth-child(2) {
+    font-size: 14px;
+}
+#cartList .productInfo > div:nth-child(3) > p:nth-child(3) {
+    font-size: 14px;
+    color: #0037dc;
 }
 #cartList .productInfo > div:nth-child(4) {
   display: flex;
@@ -909,7 +945,7 @@
   height: 30px;
   border: 1px solid red;
   border-radius: 4px;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 /**/
 #product > .cart > form > input[name=del] {
@@ -990,9 +1026,9 @@
   width: 360px;
   height: 412px;
   padding: 20px;
-  margin-top: 12px;
   background: #fff;
   border: 1px solid #d3d3d3;
+    border-radius: 10px;
   box-sizing: border-box;
 }
 
@@ -1038,6 +1074,7 @@
   color: #fff;
   box-sizing: border-box;
   margin-top: 10px;
+    cursor: pointer;
 }
 
 /* 주문결제 */

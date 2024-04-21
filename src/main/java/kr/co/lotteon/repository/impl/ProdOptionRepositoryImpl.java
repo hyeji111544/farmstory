@@ -59,6 +59,8 @@ public class ProdOptionRepositoryImpl implements ProdOptionRepositoryCustom {
                                             .selectFrom(qProdOptDetail)
                                             .where(qProdOptDetail.prodNo.eq(prodNo))
                                             .fetch();
+
+
         List<prodOptDetailDTO> prodOptDetailDTOS = new ArrayList<>();
         for (ProdOptDetail detail : optionDetail){
             prodOptDetailDTO prodOptDetailDTO = modelMapper.map(detail, prodOptDetailDTO.class);

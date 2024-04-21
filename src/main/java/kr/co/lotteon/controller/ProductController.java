@@ -56,15 +56,6 @@ public class ProductController {
         log.info("resultMap : " + resultMap);
         model.addAttribute("resultMap", resultMap);
 
-        // 사이드 카테고리바 출력
-        Map<String, List<?>> cateMap = prodCateService.selectProdCate();
-        List<Cate01DTO> cate01DTOs = (List<Cate01DTO>) cateMap.get("cate01DTOs");
-        List<Cate02DTO> cate02DTOs = (List<Cate02DTO>) cateMap.get("cate02DTOs");
-        List<Cate03DTO> cate03DTOs = (List<Cate03DTO>) cateMap.get("cate03DTOs");
-
-        model.addAttribute("cate01DTOs", cate01DTOs);
-        model.addAttribute("cate02DTOs", cate02DTOs);
-        model.addAttribute("cate03DTOs", cate03DTOs);
 
         return "/product/list";
     }
@@ -75,17 +66,6 @@ public class ProductController {
         log.info("prodView....!!!"+prodNo);
         ProductDTO productDTO = productService.selectProduct(prodNo);
         model.addAttribute("product", productDTO);
-
-        // 사이드 카테고리바 출력
-        Map<String, List<?>> cateMap = prodCateService.selectProdCate();
-        List<Cate01DTO> cate01DTOs = (List<Cate01DTO>) cateMap.get("cate01DTOs");
-        List<Cate02DTO> cate02DTOs = (List<Cate02DTO>) cateMap.get("cate02DTOs");
-        List<Cate03DTO> cate03DTOs = (List<Cate03DTO>) cateMap.get("cate03DTOs");
-
-        model.addAttribute("cate01DTOs", cate01DTOs);
-        model.addAttribute("cate02DTOs", cate02DTOs);
-        model.addAttribute("cate03DTOs", cate03DTOs);
-
 
         // 상품 옵션 정보 조회
         ResponseOptionDTO responseOptionDTO = productService.selectProductOption(prodNo);
