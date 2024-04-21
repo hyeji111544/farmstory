@@ -184,46 +184,70 @@
             function createOption() {
                 const btnCreateOption = event.target; // 버튼
                 const createOptSection = btnCreateOption.parentNode; // 부모
+                const optNameAll = createOptSection.querySelectorAll('.optName');
                 const registerOption = document.querySelector('.registerOption');
                 const regOptContentAll = createOptSection.querySelectorAll('.regOptContent');
                 const option1All = regOptContentAll.length >= 1 ? Array.from(regOptContentAll[0].querySelectorAll('.optValue')) : [];
                 const option2All = regOptContentAll.length >= 2 ? Array.from(regOptContentAll[1].querySelectorAll('.optValue')) : [];
                 const option3All = regOptContentAll.length >= 3 ? Array.from(regOptContentAll[2].querySelectorAll('.optValue')) : [];
-                console.log(1);
 
+                const optTitle1 = document.getElementById('optTitle1');
+                const optTitle2 = document.getElementById('optTitle2');
+                const optTitle3 = document.getElementById('optTitle3');
+
+                // 배열 반복을 통한 옵션 정보 자동 생성
                 Array.from(option1All).forEach(function (option1){
                     const optValue1 = option1.value;
-                    console.log(2);
+
+                    // 사용자가 입력한 옵션이 1개인 경우
                     if (option2All.length === 0) {
-                        console.log(22);
+                        console.log( optNameAll[0].value);
                         const optValue2 = "";
                         const optValue3 = "";
-                        aaa(registerOption, optValue1, optValue2, optValue3);
+                        createEachOption(registerOption, optValue1, optValue2, optValue3);
+
+                        optTitle1.innerText = optNameAll[0].value;
+                        optTitle2.innerText = "";
+                        optTitle3.innerText = "";
+
                     }else{
+                        // 사용자가 입력한 옵션이 2개인 경우
                         Array.from(option2All).forEach(function (option2){
                             const optValue2 = option2.value;
                             console.log(3);
                             if (option3All.length === 0) {
                                 const optValue3 = "";
-                                aaa(registerOption, optValue1, optValue2, optValue3);
+                                createEachOption(registerOption, optValue1, optValue2, optValue3);
+
+                                optTitle1.innerText = optNameAll[0].value;
+                                optTitle2.innerText = optNameAll[1].value;
+                                optTitle3.innerText = "";
+
                             }else{
+                                // 사용자가 입력한 옵션이 3개인 경우
                                 Array.from(option3All).forEach(function (option3){
                                     const optValue3 = option3.value;
                                     console.log(4);
-                                    aaa(registerOption, optValue1, optValue2, optValue3);
+                                    createEachOption(registerOption, optValue1, optValue2, optValue3);
+
+                                    optTitle1.innerText = optNameAll[0].value;
+                                    optTitle2.innerText = optNameAll[1].value;
+                                    optTitle3.innerText = optNameAll[2].value;
                                 })
                             }
                         })
                     }
-
-
                 })
             }
+
             // 생성한 옵션 태그 생성하는 함수
-            function aaa(registerOption, optValue1, optValue2, optValue3) {
+            function createEachOption(registerOption, optValue1, optValue2, optValue3) {
                 const regOptNumber = document.querySelectorAll('.regOptNumber');
                 const newRegOptContent = `<div class="regOptContent">
-                                                        <div class="regOptNumber">옵션 번호 ${regOptNumber.length+1}</div>
+                                                        <div class="regOptNumber">
+                                                            옵션 번호
+                                                            <span class="optNum">${regOptNumber.length+1}</span>
+                                                            </div>
                                                         <div>
                                                             <input type="text" class="optValue1" value="${optValue1}"/>
                                                         </div>
@@ -240,12 +264,155 @@
                                                             <input type="text" class="optStock" placeholder="옵션 재고"/>
                                                         </div>
                                                         <div>
-                                                            <span onclick="deleteOptiaaonValue()">삭제</span>
+                                                            <span onclick="deleteOption()">삭제</span>
                                                         </div>
                                                     </div>
                                                     `
                 registerOption.insertAdjacentHTML('beforeend', newRegOptContent);
             }
+
+            // 자동 생성한 옵션 한줄 삭제 함수
+            function deleteOption() {
+                const deleteOption = event.target; // 버튼
+                const parentDiv = deleteOption.parentNode; // 부모
+                const regOptContent = parentDiv.parentNode; // 부모
+                const optValue1 = regOptContent.querySelector('.optValue1').value;
+                const optValue2 = regOptContent.querySelector('.optValue2').value;
+                const optValue3 = regOptContent.querySelector('.optValue3').value;
+
+                const result = confirm("[ " + optValue1 + "_" + optValue2 + "_" + optValue3 + " ] 옵션을 삭제하시겠습니까?");
+                if (result){
+                    regOptContent.remove();
+                }
+            }
+
+            // 자동 생성한 옵션 DB에 등록
+            function registerOption() {
+                const registerOption = event.target; // 버튼
+                const registerOptSection = registerOption.parentNode; // 부모
+                const registerOptionAll = registerOptSection.querySelector('.registerOption'); // 첫번째줄
+                const regOptContentAll = registerOptSection.querySelectorAll('.regOptContent'); // 첫번째줄 이후
+                const prodNo = document.getElementsByName('prodNo')[0].value; // 상품 번호 (prodNo)
+
+                /*
+                    상품 옵션 이름과 옵션 값을 배열로 저장 [prodNo, optName, optValue]
+                    ex ) [22, 사이즈, small] / [22, 사이즈, large]
+                 */
+                const optTitle1 = document.getElementById('optTitle1').innerText;
+                const optTitle2 = document.getElementById('optTitle2').innerText;
+                const optTitle3 = document.getElementById('optTitle3').innerText;
+
+                // 옵션 1
+                const prodOption1 = [];
+                const valueCheck1 = new Set(); // 중복값 확인을 위한 set
+                Array.from(regOptContentAll).forEach(function (regOpt) {
+                    const optValue1 = regOpt.querySelector('.optValue1').value;
+
+                    if (!valueCheck1.has(optValue1)){
+                        valueCheck1.add(optValue1);
+
+                        const OptNameValue = [];
+                        OptNameValue.push(prodNo);
+                        OptNameValue.push(optTitle1);
+                        OptNameValue.push(optValue1);
+                        prodOption1.push(OptNameValue);
+                        console.log(OptNameValue);
+                    }
+                })
+                console.log(prodOption1);
+
+                // 옵션 2
+                const prodOption2 = [];
+                const valueCheck2 = new Set(); // 중복값 확인을 위한 set
+                Array.from(regOptContentAll).forEach(function (regOpt) {
+                    const optValue2 = regOpt.querySelector('.optValue2').value;
+                    //const optValue3 = regOpt.querySelector('.optValue3').value;
+
+                    if (!valueCheck2.has(optValue2)){
+                        valueCheck2.add(optValue2);
+
+                        const OptNameValue = [];
+                        OptNameValue.push(prodNo);
+                        OptNameValue.push(optTitle2);
+                        OptNameValue.push(optValue2);
+                        prodOption2.push(OptNameValue);
+                        console.log(OptNameValue);
+                    }
+                })
+                console.log(prodOption2);
+
+                // 옵션 3
+                const prodOption3 = [];
+                const valueCheck3 = new Set(); // 중복값 확인을 위한 set
+                Array.from(regOptContentAll).forEach(function (regOpt) {
+                    const optValue3 = regOpt.querySelector('.optValue3').value;
+
+                    if (!valueCheck3.has(optValue3)){
+                        valueCheck3.add(optValue3);
+
+                        const OptNameValue = [];
+                        OptNameValue.push(prodNo);
+                        OptNameValue.push(optTitle3);
+                        OptNameValue.push(optValue3);
+                        prodOption3.push(OptNameValue);
+                        console.log(OptNameValue);
+                    }
+                })
+                console.log(prodOption3);
+
+                /*
+                    상품 옵션 연관 관계 및 가격,재고를 배열로 저장
+                    ex) small - black - 남성 - 3000원 - 200개
+                        small - black - 여성 - 2000원 - 100개
+                 */
+                const prodOptionDTO = [];
+                Array.from(regOptContentAll).forEach(function (regOpt) {
+                    const optNum = regOpt.querySelector('.optNum').innerText;
+                    const optValue1 = regOpt.querySelector('.optValue1').value;
+                    const optValue2 = regOpt.querySelector('.optValue2').value;
+                    const optValue3 = regOpt.querySelector('.optValue3').value;
+                    const optPrice = regOpt.querySelector('.optPrice').value;
+                    const optStock = regOpt.querySelector('.optStock').value;
+
+                    if (optPrice !== "" && optStock !== "") {
+                        const extraOptDTO = [];
+                        extraOptDTO.push(optNum);
+                        extraOptDTO.push(optValue1);
+                        extraOptDTO.push(optValue2);
+                        extraOptDTO.push(optValue3);
+                        extraOptDTO.push(optPrice);
+                        extraOptDTO.push(optStock);
+                        prodOptionDTO.push(extraOptDTO);
+                    }else{
+                        const optPriceInput = regOpt.querySelector('.optPrice');
+                        const optStockInput = regOpt.querySelector('.optStock');
+                        optPriceInput.style.border = "1px solid red";
+                        optStockInput.style.border = "1px solid red";
+                        prodOptionDTO.length = 0;
+                    }
+                })
+                console.log(prodOptionDTO);
+
+                // 서버 전송
+                const jsonData = {
+                    "prodOption1" : prodOption1,
+                    "prodOption2" : prodOption2,
+                    "prodOption3" : prodOption3,
+                    "prodOptionDTO" : prodOptionDTO
+                }
+                fetch("/lotteon/admin/product/regOption", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        alert("해당 상품에 옵션이 등록되었습니다.");
+                    })
+                    .catch(err => console.log(err))
+            }
+
         </script>
         <nav>
             <script th:src="@{/js/util.js}"></script>
@@ -427,15 +594,15 @@
                     <div class="registerOption">
                         <div class="regOptTitle">
                             <div>구분</div>
-                            <div>옵션 1</div>
-                            <div>옵션 2</div>
-                            <div>옵션 3</div>
+                            <div id="optTitle1">옵션 1</div>
+                            <div id="optTitle2">옵션 2</div>
+                            <div id="optTitle3">옵션 3</div>
                             <div>옵션 가격</div>
                             <div>옵션 재고</div>
                             <div>옵션 관리</div>
                         </div>
                     </div>
-                    <span id="da">신규 옵션 등록</span>
+                    <span id="btnRegOpt" onclick="registerOption()">신규 옵션 등록</span>
                 </section>
 
                 <!-- 상품정보 제공 고시 -->

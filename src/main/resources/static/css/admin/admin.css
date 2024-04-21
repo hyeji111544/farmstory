@@ -472,6 +472,19 @@ button[type=submit] {
     background-color: #e6e6e6;
     cursor: pointer;
 }
+#btnRegOpt {
+    display: inline-block;
+    height: 30px;
+    padding: 0 4px;
+    margin: 4px 0;
+    text-align: center;
+    line-height: 30px;
+    box-sizing: border-box;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    background-color: #e6e6e6;
+    cursor: pointer;
+}
 
 .registerOption {
     display: flex;
