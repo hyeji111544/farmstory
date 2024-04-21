@@ -22,22 +22,12 @@ public class MainController {
 
     /* 
         메인페이지
-         1. sideBar 카테고리 정보 조회
+         1. product 출력
          2. 
          3. 
      */
     @GetMapping("/")
     public String index(Model model){
-        
-        // sideBar 카테고리 정보 조회
-        Map<String, List<?>> cateMap = prodCateService.selectProdCate();
-        List<Cate01DTO> cate01DTOs = (List<Cate01DTO>) cateMap.get("cate01DTOs");
-        List<Cate02DTO> cate02DTOs = (List<Cate02DTO>) cateMap.get("cate02DTOs");
-        List<Cate03DTO> cate03DTOs = (List<Cate03DTO>) cateMap.get("cate03DTOs");
-
-        model.addAttribute("cate01DTOs", cate01DTOs);
-        model.addAttribute("cate02DTOs", cate02DTOs);
-        model.addAttribute("cate03DTOs", cate03DTOs);
 
         // index 페이지 product 출력
         String prodDiscount = "prodDiscount";

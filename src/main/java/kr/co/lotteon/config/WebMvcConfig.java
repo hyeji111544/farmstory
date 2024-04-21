@@ -1,6 +1,7 @@
 package kr.co.lotteon.config;
 
 import kr.co.lotteon.intercepter.Appinfointercepter;
+import kr.co.lotteon.service.ProdCateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -39,13 +40,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
 
-    // 버전 정보 띄우기
     @Autowired
     private AppInfo appInfo;
 
+    @Autowired
+    private ProdCateService prodCateService;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new Appinfointercepter(appInfo));
-
+        registry.addInterceptor(new Appinfointercepter(appInfo, prodCateService));
     }
+
 }

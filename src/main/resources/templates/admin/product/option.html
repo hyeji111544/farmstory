@@ -249,13 +249,13 @@
                                                             <span class="optNum">${regOptNumber.length+1}</span>
                                                             </div>
                                                         <div>
-                                                            <input type="text" class="optValue1" value="${optValue1}"/>
+                                                            <input type="text" class="optValue1" value="${optValue1}" readonly/>
                                                         </div>
                                                         <div>
-                                                            <input type="text" class="optValue2" value="${optValue2}"/>
+                                                            <input type="text" class="optValue2" value="${optValue2}" readonly/>
                                                         </div>
                                                         <div>
-                                                            <input type="text" class="optValue3" value="${optValue3}"/>
+                                                            <input type="text" class="optValue3" value="${optValue3}" readonly/>
                                                         </div>
                                                         <div>
                                                             <input type="text" class="optPrice" placeholder="옵션 가격"/>
@@ -525,31 +525,62 @@
                     <p>
                         하나의 상품에 최대 4개의 옵션을 설정할 수 있습니다.
                     </p>
-                    <table class="optAddTable">
-                        <tr>
-                            <td>구분</td>
-                            <td>옵션명</td>
-                            <td>옵션정보</td>
-                        </tr>
-                        <tr>
-                            <td>옵션</td>
-                            <td colspan="2">등록된 옵션 없음</td>
-                        </tr>
-                        <!--반복문 이상하게 걸렸음-->
-                        <tr class="optAddTuple">
-                            <td>옵션</td>
-                            <td>
-                                <input type="text" class="optName"/>
-                            </td>
-                            <td class="optDetailBox">
-                                <div class="optDetail">
-                                    <input type="text" readonly/>
-                                    <input type="text" readonly/>
-                                    <input type="text" readonly/>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                    <div class="existOptionTable">
+                        <div class="existOptionTitle">
+                            <div>구분</div>
+                            <div>옵션 이름</div>
+                            <div>옵션 값</div>
+                            <div>옵션 관리</div>
+                        </div>
+                        <div class="existOptionContent">
+                            <div>
+                                구분
+                                <input type="hidden" value="prodOtpNo" readonly/>
+                                <input type="hidden" value="prodNo" readonly/>
+                            </div>
+                            <div>
+                                <input type="text" value="prodOptName" readonly/>
+                            </div>
+                            <div>
+                                <input type="text" value="prodOptValue" readonly/>
+                            </div>
+                            <div>옵션 관리</div>
+                        </div>
+                    </div>
+
+                    <div class="existOptDetailTable">
+                        <div class="existOptDetailTitle">
+                            <div>구분</div>
+                            <div>옵션1</div>
+                            <div>옵션2</div>
+                            <div>옵션3</div>
+                            <div>옵션 가격</div>
+                            <div>옵션 재고</div>
+                            <div>옵션 관리</div>
+                        </div>
+                        <div class="existOptDetailContent">
+                            <div>
+                                <input type="text" value="optDetailNo" readonly/>
+                                <input type="hidden" value="prodNo" readonly/>
+                            </div>
+                            <div>
+                                <input type="text" value="optNo1" readonly/>
+                            </div>
+                            <div>
+                                <input type="text" value="optNo2" readonly/>
+                            </div>
+                            <div>
+                                <input type="text" value="optNo3" readonly/>
+                            </div>
+                            <div>
+                                <input type="text" value="optPrice" readonly/>
+                            </div>
+                            <div>
+                                <input type="text" value="optStock" readonly/>
+                            </div>
+                            <div>옵션 관리</div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- 옵션 정보 생성 -->
