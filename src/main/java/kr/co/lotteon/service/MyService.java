@@ -1,8 +1,9 @@
 package kr.co.lotteon.service;
 
+import kr.co.lotteon.dto.MyOrderDTO;
 import kr.co.lotteon.dto.UserDTO;
-import kr.co.lotteon.entity.User;
-import kr.co.lotteon.repository.UserRepository;
+import kr.co.lotteon.entity.*;
+import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -10,9 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +19,10 @@ import java.util.Optional;
 public class MyService {
 
     private final UserRepository userRepository;
+    private final UserCouponRepository userCouponRepository;
+    private final OrdersRepository ordersRepository;
+    private final OrderdetailRepository orderdetailRepository;
+    private final CouponsRepository couponsRepository;
     private final ModelMapper modelMapper;
 
     /*
@@ -90,4 +93,36 @@ public class MyService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("notfound");
         }
     }
+
+    // 마이페이지 - 주문내역 조회
+    public List<MyOrderDTO> selectOrders(String UserId) {
+        // userId로 Orders 조회
+        return ordersRepository.selectMyOrders(UserId);
+    }
+
+
+
+    // 마이페이지 - 쿠폰 조회
+    public List<Coupons> selectCoupons(String UserId){
+        // userId로 userCoupon 조회
+        List<UserCoupon> selectUserCoupon = userCouponRepository.findByUserId(UserId);
+
+        log.info("selectUserCoupon : " + selectUserCoupon);
+
+        // userCoupon에서 조회한 cpNo로 쿠폰 정보 조회
+        List<Coupons> haveCoupons = new ArrayList<>();
+
+        log.info("haveCoupons : " + haveCoupons);
+
+        if (selectUserCoupon !=null && selectUserCoupon.size()>0){
+            for (UserCoupon haveCpNo : selectUserCoupon){
+                Coupons findCoupon = couponsRepository.findByCpNo(haveCpNo.getCpNo());
+                haveCoupons.add(findCoupon);
+                log.info("for문 속 findCoupon : " + findCoupon);
+            }
+        }
+        log.info("마지막 haveCoupons : " + haveCoupons);
+        return haveCoupons;
+    }
+
 }

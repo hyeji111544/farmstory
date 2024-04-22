@@ -59,18 +59,18 @@
                             <th>상태</th>
                             <th>확인/신청</th>
                         </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
+                        <tr th:each="MyOrder : ${MyOrderDTOList}">
+                            <td class="date" th:text="${MyOrder.orderDate}"></td>
                             <td>
-                                <a href="#" class="thumb"><img src="https://via.placeholder.com/80x80" alt=""></a>
+                                <a href="#" class="thumb"><img th:src="@{/uploads/__${MyOrder.thumb190}__}" alt="" style="width: 80px"></a>
                                 <ul>
-                                    <li class="company">상호명</li>
-                                    <li class="prodName"><a href="#">상품명</a></li>
-                                    <li>수량 : <span class="prodCount">1</span>개 / 주문번호 : <span class="ordNo">1012211341</span></li>
-                                    <li class="prodPrice">34,000</li>
+                                    <li class="company" th:text="${MyOrder.prodCompany}"></li>
+                                    <li class="prodName"><a href="#" th:text="${MyOrder.prodName}"></a></li>
+                                    <li>수량 : <span class="prodCount" th:text="${MyOrder.count}"></span>개 / 주문번호 : <span class="ordNo" th:text="${MyOrder.orderNo}"></span></li>
+                                    <li class="prodPrice" th:text="${#numbers.formatInteger(MyOrder.detailPrice, 3, 'COMMA')}"></li>
                                 </ul>
                             </td>
-                            <td class="status">배송완료</td>
+                            <td class="status" th:text="${MyOrder.detailStatus}"></td>
                             <td class="confirm">
                                 <a href="#" class="receive">수취확인</a>
                                 <a href="#" class="review">상품평</a>
@@ -78,63 +78,7 @@
                                 <a href="#" class="exchange">교환신청</a>
                             </td>
                         </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
-                            <td>
-                                <a href="#" class="thumb"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                                <ul>
-                                    <li class="company">상호명</li>
-                                    <li class="prodName"><a href="#">상품명</a></li>
-                                    <li>수량 : <span class="prodCount">1</span>개 / 주문번호 : <span class="ordNo">1012211341</span></li>
-                                    <li class="prodPrice">34,000</li>
-                                </ul>
-                            </td>
-                            <td class="status">배송완료</td>
-                            <td class="confirm">
-                                <a href="#" class="receive">수취확인</a>
-                                <a href="#" class="review">상품평</a>
-                                <a href="#" class="refund">반품신청</a>
-                                <a href="#" class="exchange">교환신청</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
-                            <td>
-                                <a href="#" class="thumb"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                                <ul>
-                                    <li class="company">상호명</li>
-                                    <li class="prodName"><a href="#">상품명</a></li>
-                                    <li>수량 : <span class="prodCount">1</span>개 / 주문번호 : <span class="ordNo">1012211341</span></li>
-                                    <li class="prodPrice">34,000</li>
-                                </ul>
-                            </td>
-                            <td class="status">배송완료</td>
-                            <td class="confirm">
-                                <a href="#" class="receive">수취확인</a>
-                                <a href="#" class="review">상품평</a>
-                                <a href="#" class="refund">반품신청</a>
-                                <a href="#" class="exchange">교환신청</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
-                            <td>
-                                <a href="#" class="thumb"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                                <ul>
-                                    <li class="company">상호명</li>
-                                    <li class="prodName"><a href="#">상품명</a></li>
-                                    <li>수량 : <span class="prodCount">1</span>개 / 주문번호 : <span class="ordNo">1012211341</span></li>
-                                    <li class="prodPrice">34,000</li>
-                                </ul>
-                            </td>
-                            <td class="status">배송완료</td>
-                            <td class="confirm">
-                                <a href="#" class="receive">수취확인</a>
-                                <a href="#" class="review">상품평</a>
-                                <a href="#" class="refund">반품신청</a>
-                                <a href="#" class="exchange">교환신청</a>
-                            </td>
-                        </tr>
+
                     </table>
 
                     <p class="page">
