@@ -18,6 +18,7 @@
                         chk_listArr[i].checked = this.checked;
                     }
                 });
+
                 $("input[name='RowCheck']").click(function (){
                     if($("input[name='RowCheck']:checked").length == rowCnt){
                         $("input[name='allCheck']")[0].checked = true;
@@ -27,18 +28,28 @@
                 });
             });
             function deleteValue(){
-                var url = "delete"; //controller를 보내고자하는 url
-                var valueArr = new Array();
-                var list = $("input[name='RowCheck']");
-                for(var i=0; i<list.length; i++){
+                console.log("here...1");
+
+                const inputChecked = $("input[name='RowCheck']:checked");
+
+                const url = "/lotteon/admin/cs/notice/delete"; //controller를 보내고자하는 url
+                const valueArr = new Array();
+                const list = $("input[name='RowCheck']");
+                for(let i=0; i<list.length; i++){
                     if(list[i].checked){ //선택되어 있으면 배열에 값을 저장함
                         valueArr.push(list[i].value);
                     }
                 }
+
+                console.log("here...2 : " + valueArr);
+
                 if(valueArr.length == 0){
                     alert("선택된 글이 없습니다.");
                 } else{
-                    var chk = confirm("정말 삭제하시겠습니까?");
+                    const chk = confirm("정말 삭제하시겠습니까?");
+                    console.log("here...3");
+                    //fetch().then().then();
+
                     $.ajax({
                         url : url,              // 전송 URL
                         type : 'POST',          // POST방식
@@ -46,10 +57,19 @@
                         data : {
                             valueArr : valueArr // 보내고자 하는 data 변수 설정
                         },
-                        success: function (jdata){
-                            if(jdata = 1){
+                        success: function (data){
+
+                            console.log("here...4 : " + data.result);
+
+                            if(data.result > 0){
                                 alert("삭제 성공");
-                                location.replace("/admin/cs/notice/list") // list로 페이지 새로고침
+
+                                // for(const input of inputChecked){
+                                //     input.closest('tr').remove();
+                                // }
+
+                                location.replace("/lotteon/admin/cs/notice/list") // list로 페이지 새로고침
+
                             }else{
                                 alert("삭제 실패");
                             }
@@ -88,7 +108,7 @@
                 </tr>
 
                 <tr th:each="notice, index:${pageResponseDTO.dtoList}">
-                    <td><input type="checkbox" name="RowCheck"/></td>
+                    <td><input type="checkbox" th:value="${notice.noticeNo}" name="RowCheck"/></td>
                     <td th:text="${pageResponseDTO.startNo - index.index}"></td>
                     <td th:text="${notice.noticeCate}" style="white-space: nowrap;"></td>
                     <td>

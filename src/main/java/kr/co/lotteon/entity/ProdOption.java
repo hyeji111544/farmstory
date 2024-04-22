@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
+@ToString
 @Entity
 @Table(name = "prodoption")
 public class ProdOption {
@@ -17,6 +18,4 @@ public class ProdOption {
     public int prodNo;
     public String optName;
     public String optValue;
-    public int optPrice;
-    public int optStock;
 }

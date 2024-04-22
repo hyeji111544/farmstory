@@ -13,6 +13,4 @@ public class ProdOptionDTO {
     public int prodNo;
     public String optName;
     public String optValue;
-    public int optPrice;
-    public int optStock;
 }

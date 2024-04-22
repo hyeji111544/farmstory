@@ -1,17 +1,27 @@
 package kr.co.lotteon.controller;
 
 import groovy.util.logging.Slf4j;
+import jakarta.servlet.http.HttpServletRequest;
 import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.Cart;
+import kr.co.lotteon.entity.CartProduct;
+import kr.co.lotteon.entity.ProdOption;
+import kr.co.lotteon.entity.Wish;
 import kr.co.lotteon.service.ProdCateService;
 import kr.co.lotteon.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,15 +65,6 @@ public class ProductController {
         log.info("resultMap : " + resultMap);
         model.addAttribute("resultMap", resultMap);
 
-        // 사이드 카테고리바 출력
-        Map<String, List<?>> cateMap = prodCateService.selectProdCate();
-        List<Cate01DTO> cate01DTOs = (List<Cate01DTO>) cateMap.get("cate01DTOs");
-        List<Cate02DTO> cate02DTOs = (List<Cate02DTO>) cateMap.get("cate02DTOs");
-        List<Cate03DTO> cate03DTOs = (List<Cate03DTO>) cateMap.get("cate03DTOs");
-
-        model.addAttribute("cate01DTOs", cate01DTOs);
-        model.addAttribute("cate02DTOs", cate02DTOs);
-        model.addAttribute("cate03DTOs", cate03DTOs);
 
         return "/product/list";
     }
@@ -75,16 +76,74 @@ public class ProductController {
         ProductDTO productDTO = productService.selectProduct(prodNo);
         model.addAttribute("product", productDTO);
 
-        // 사이드 카테고리바 출력
-        Map<String, List<?>> cateMap = prodCateService.selectProdCate();
-        List<Cate01DTO> cate01DTOs = (List<Cate01DTO>) cateMap.get("cate01DTOs");
-        List<Cate02DTO> cate02DTOs = (List<Cate02DTO>) cateMap.get("cate02DTOs");
-        List<Cate03DTO> cate03DTOs = (List<Cate03DTO>) cateMap.get("cate03DTOs");
+        // 상품 Hit 추가
+        //productDTO.setProdHit(productDTO.getProdHit() + 1);
+        //productService.updateHit(productDTO);
 
-        model.addAttribute("cate01DTOs", cate01DTOs);
-        model.addAttribute("cate02DTOs", cate02DTOs);
-        model.addAttribute("cate03DTOs", cate03DTOs);
+        // 상품 옵션 정보 조회
+        ResponseOptionDTO responseOptionDTO = productService.selectProductOption(prodNo);
+        log.info("responseOptionDTO : " + responseOptionDTO);
+        model.addAttribute("OptionDTOs", responseOptionDTO);
         return "/product/view";
+    }
+
+    // 상품 찜하기
+    @PostMapping("/product/view/insertWish")
+    public ResponseEntity<?> insertWish(@RequestBody List<WishDTO> wishDTOs, HttpServletRequest req){
+        log.info("insertWish....: "+wishDTOs.toString());
+        // 각 WishDTO를 Wish 객체로 변환하여 저장
+        List<Wish> wishes = new ArrayList<>();
+        for (WishDTO wishDTO : wishDTOs) {
+            Wish wish = new Wish();
+            wish.setUserId(wishDTO.getUserId());
+            wish.setProdNo(wishDTO.getProdNo());
+            wish.setOptNo(wishDTO.getOptNo());
+            wish.setWishRdate(wishDTO.getWishRdate());
+            wish.setWishCount(wishDTO.getWishCount());
+            wishes.add(wish);
+        }
+
+        // 변환된 Wish 객체들을 저장
+        List<Wish> savedWishes = productService.insertWish(wishes);
+
+        if (savedWishes.isEmpty()){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }else {
+            return ResponseEntity.ok(savedWishes);
+        }
+    }
+
+    @PostMapping("/product/view/insertCart")
+    public ResponseEntity<?> insertCart(@RequestBody List<CartProductDTO> cartProductDTOs, HttpServletRequest req){
+        log.info(cartProductDTOs.toString());
+        String userId = req.getParameter("userId");
+        log.info("findUserId_forCart...: "+userId);
+        //userId 를 사용하여 CartNo 조회
+        int cartNo = productService.findCartNoByUserId(userId);
+        log.info("findUserId_forCart...1:"+String.valueOf(cartNo));
+
+        List<CartProduct> products = new ArrayList<>();
+        for (CartProductDTO cartDTO : cartProductDTOs){
+            CartProduct cartProduct = new CartProduct();
+            cartProduct.setCartNo(cartNo);
+            cartProduct.setProdNo(cartDTO.getProdNo());
+            cartProduct.setOptNo(cartDTO.getOptNo());
+            cartProduct.setCount(cartDTO.getCount());
+            products.add(cartProduct);
+        }
+
+        List<CartProduct> savedCardProds = productService.insertCart(products);
+
+        if (savedCardProds.isEmpty()){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }else {
+            return ResponseEntity.ok(savedCardProds);
+        }
+
     }
 
     // 상품 검색 이동
@@ -95,7 +154,10 @@ public class ProductController {
 
     // 장바구니 이동
     @GetMapping("/product/cart")
-    public String prodCart(){
+    public String prodCart(@RequestParam("userId") String userId, Model model){
+        int cartNo = productService.findCartNoByUserId(userId);
+        List<CartProduct> cartProducts = productService.findCartProdNo(cartNo);
+       // productService.selectsCart(userId);
         return "/product/cart";
     }
 

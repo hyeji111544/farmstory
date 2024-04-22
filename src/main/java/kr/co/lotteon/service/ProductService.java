@@ -1,13 +1,9 @@
 package kr.co.lotteon.service;
 
 import com.querydsl.core.Tuple;
-import kr.co.lotteon.dto.ProductDTO;
-import kr.co.lotteon.dto.ProductPageRequestDTO;
-import kr.co.lotteon.dto.ProductPageResponseDTO;
-import kr.co.lotteon.entity.Product;
-import kr.co.lotteon.entity.Productimg;
-import kr.co.lotteon.entity.Seller;
-import kr.co.lotteon.repository.ProductRepository;
+import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.*;
+import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -26,6 +22,11 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProdOptionRepository prodOptionRepository;
+    private final ProdOptDetailRepository prodOptDetailRepository;
+    private final CartRepository cartRepository;
+    private final CartProductRepository cartProductRepository;
+    private final WishRepository wishRepository;
     private final ModelMapper modelMapper;
 
     // 인덱스 페이지 상품 조회
@@ -86,14 +87,76 @@ public class ProductService {
         Tuple tuple = productRepository.selectProduct(prodNo);
 
         Product product = tuple.get(0, Product.class);
-        Productimg productImg = tuple.get(1, Productimg.class);
-        if (productImg != null) {
-            product.setThumb230(productImg.getThumb230());
-            product.setThumb456(productImg.getThumb456());
-            product.setThumb940(productImg.getThumb940());
+        if (product != null) {
+            product.setProdHit(product.getProdHit()+1);
+            log.info("productHit....!: "+product.toString());
+            product = productRepository.save(product);
+            Productimg productImg = tuple.get(1, Productimg.class);
+            if (productImg != null) {
+                product.setThumb230(productImg.getThumb230());
+                product.setThumb456(productImg.getThumb456());
+                product.setThumb940(productImg.getThumb940());
+            }
+        }
+        return modelMapper.map(product, ProductDTO.class);
+    }
+
+    // 상품 위시리스트 등록
+    public List<Wish> insertWish(List<Wish> wishes){
+        List<Wish> savedWishes = new ArrayList<>();
+        for (Wish wish : wishes) {
+            log.info("insertWishAtService....:" + wish.toString());
+            Wish savedWish = wishRepository.save(wish);
+            savedWishes.add(savedWish);
+        }
+        return savedWishes;
+    }
+
+    // 상품 장바구니 등록을 위한 장바구니 번호 조회
+    public int findCartNoByUserId(String userId){
+        Optional<Cart> optCart = cartRepository.findCartNoByUserId(userId);
+
+        if (optCart.isPresent()) {
+            Cart cart = optCart.get();
+            return cart.getCartNo();
+        }
+        return 0;
+    }
+
+    // 상품 장바구니 등록
+    public List<CartProduct> insertCart(List<CartProduct> cartProducts){
+        List<CartProduct> savedCartProducts = new ArrayList<>();
+        for (CartProduct cartProduct : cartProducts) {
+            log.info("insertCart....:" + cartProduct.toString());
+            CartProduct savedCart = cartProductRepository.save(cartProduct);
+            savedCartProducts.add(savedCart);
         }
 
-        return modelMapper.map(product, ProductDTO.class);
+        return savedCartProducts;
+    }
+
+
+    // 상품 옵션 조회
+    public ResponseOptionDTO selectProductOption(int prodNo){
+        return prodOptionRepository.selectProductOption(prodNo);
+    };
+
+    // 장바구니 조회
+    public List<CartProduct> findCartProdNo(int cartNo){
+
+        List<CartProduct> optCart = cartProductRepository.findByCartNo(cartNo);
+        log.info("findCartProdNo...."+optCart.toString());
+
+        return optCart;
+
+        // CartNo로 cartProduct에서 상품 조회 -> prodNo & optdetailNo 얻기
+        // optDetail테이블에서 optdetailNo로 옵션 정보 얻기 & [optNo1, optNo2, optNo3] 얻기 [optValue1, optNo2, optNo3]
+        // product 테이블에서 prodNo로 상품 정보 조회 & 상품 이미지
+
+        // optNo1, optNo2, optNo3으로 option테이블에서 옵션 이름 조회
+
+        // 
+
 
     }
 }

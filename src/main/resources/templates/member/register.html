@@ -15,7 +15,7 @@
 			let isHpOk    = false;
 
 			// 유효성 검사에 사용할 정규표현식
-			const reUid   = /^[a-z]+[a-z0-9]{8,19}$/g;
+			const reUid = /^[a-zA-Z0-9]{6,12}$/;
 			const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
 			const reName  = /^[가-힣]{2,10}$/
 			const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
@@ -334,7 +334,7 @@
 							<th><span class="essential">*</span>아이디</th>
 							<td>
 								<input type="text" id="userId" name="userId" placeholder="아이디를 입력" required />
-								<span class="msgId">영문, 숫자로 4~12자까지 설정해 주세요.</span>
+								<span class="msgId">영문, 숫자로 6~12자까지 설정해 주세요.</span>
 								<span id="resultUid" class="resultText"></span>
 								<p class="resultUid"></p>
 							</td>

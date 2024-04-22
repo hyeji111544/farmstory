@@ -1,8 +1,6 @@
 package kr.co.lotteon.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -18,10 +16,12 @@ import java.time.LocalDateTime;
 @Table(name="wish")
 public class Wish {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int wishNo;
     private String userId;
     private int prodNo;
+    private int optNo;
     @CreationTimestamp
     private LocalDateTime wishRdate;
-    private String wishStatus;
+    private int wishCount;
 }

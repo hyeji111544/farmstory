@@ -13,6 +13,7 @@ public class WishDTO {
     private int wishNo;
     private String userId;
     private int prodNo;
+    private int optNo;
     private LocalDateTime wishRdate;
-    private String wishStatus;
+    private int wishCount;
 }

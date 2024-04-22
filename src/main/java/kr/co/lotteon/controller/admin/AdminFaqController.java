@@ -6,11 +6,16 @@ import kr.co.lotteon.dto.PageResponseDTO;
 import kr.co.lotteon.service.admin.AdminFaqService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Arrays;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -85,4 +90,13 @@ public class AdminFaqController {
         return "redirect:/admin/cs/faq/list";
     }
 
+    // faq 게시글 선택 삭제
+    @PostMapping("/admin/cs/faq/delete")
+    public ResponseEntity<?> deleteFaq(@RequestBody Map<String, int[]> requestData){
+        log.info("requestData : " + requestData);
+        int[] faq_faqNos = requestData.get("faq_faqNo");
+        log.info("22222");
+        log.info("faq_faqNos = {}", Arrays.toString(faq_faqNos));
+        return adminFaqService.deleteFaq(faq_faqNos);
+    }
 }

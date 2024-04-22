@@ -19,15 +19,17 @@ public class QWish extends EntityPathBase<Wish> {
 
     public static final QWish wish = new QWish("wish");
 
+    public final NumberPath<Integer> optNo = createNumber("optNo", Integer.class);
+
     public final NumberPath<Integer> prodNo = createNumber("prodNo", Integer.class);
 
     public final StringPath userId = createString("userId");
 
+    public final NumberPath<Integer> wishCount = createNumber("wishCount", Integer.class);
+
     public final NumberPath<Integer> wishNo = createNumber("wishNo", Integer.class);
 
     public final DateTimePath<java.time.LocalDateTime> wishRdate = createDateTime("wishRdate", java.time.LocalDateTime.class);
-
-    public final StringPath wishStatus = createString("wishStatus");
 
     public QWish(String variable) {
         super(Wish.class, forVariable(variable));
