@@ -3,6 +3,8 @@ package kr.co.lotteon.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @ToString
@@ -23,5 +25,6 @@ public class OrderDetail {
     private int detailPrice;
     private int detailPoint;
     private String detailStatus;
-
+    private String prodSeller;
+    private LocalDate detailDate;
 }

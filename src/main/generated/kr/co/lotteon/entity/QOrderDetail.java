@@ -21,6 +21,8 @@ public class QOrderDetail extends EntityPathBase<OrderDetail> {
 
     public final NumberPath<Integer> count = createNumber("count", Integer.class);
 
+    public final DatePath<java.time.LocalDate> detailDate = createDate("detailDate", java.time.LocalDate.class);
+
     public final NumberPath<Integer> detailNo = createNumber("detailNo", Integer.class);
 
     public final NumberPath<Integer> detailPoint = createNumber("detailPoint", Integer.class);
@@ -34,6 +36,8 @@ public class QOrderDetail extends EntityPathBase<OrderDetail> {
     public final NumberPath<Integer> orderNo = createNumber("orderNo", Integer.class);
 
     public final NumberPath<Integer> prodNo = createNumber("prodNo", Integer.class);
+
+    public final StringPath prodSeller = createString("prodSeller");
 
     public QOrderDetail(String variable) {
         super(OrderDetail.class, forVariable(variable));

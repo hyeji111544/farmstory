@@ -19,6 +19,11 @@ header {
     height: 120px;
     background: url('../../images/admin/admin_bg_header.jpg') repeat-x;
 }
+.sellerHeader {
+    width: 100%;
+    height: 120px;
+    background: url('../../images/seller/seller_bg_header.png') repeat-x;
+}
 
 header > div {
     width: 1400px;
