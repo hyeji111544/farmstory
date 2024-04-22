@@ -1,0 +1,88 @@
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layout/adminLayout.html}">
+<!--내용 시작-->
+    <section id="admin-product-list" layout:fragment="content">
+        <nav>
+            <h3>상품목록</h3>
+            <p>
+                HOME > 상품관리 > <strong>상품목록</strong>
+            </p>
+        </nav>
+        <!-- 상품목록 컨텐츠 시작 -->
+        <section>
+            <div>
+                <select name="search">
+                    <option value="search1">상품명</option>
+                    <option value="search1">상품코드</option>
+                    <option value="search1">제조사</option>
+                    <option value="search1">판매자</option>
+                </select>
+                <input type="text" name="search">
+            </div>
+            <table>
+                <tr>
+                    <th><input type="checkbox" name="all"/></th>
+                    <th>이미지</th>
+                    <th>상품코드</th>
+                    <th>상품명</th>
+                    <th>판매가격</th>
+                    <th>할인율</th>
+                    <th>포인트</th>
+                    <th>재고</th>
+                    <th>판매자</th>
+                    <th>조회</th>
+                    <th>관리</th>
+                </tr>
+
+                <tr th:each="product, index:${productPageResponseDTO.dtoList}" id="product">
+                    <td><input type="checkbox" name="상품코드"/></td>
+                    <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb"></td>
+                    <td>[[${product.prodNo}]]</td>
+                    <td>[[${product.prodName}]]</td>
+                    <td>[[${product.prodPrice}]]</td>
+                    <td>[[${product.prodDiscount}]]</td>
+                    <td>[[${product.prodPoint}]]</td>
+                    <td>[[${product.prodStock}]]</td>
+                    <td>[[${product.prodSeller}]]</td>
+                    <td>126(조회?)</td>
+                    <td>
+                        <a href="#">[삭제]</a>
+                        <a th:href="@{/admin/product/option(prodNo=${product.prodNo})}">[수정]</a>
+                    </td>
+                </tr>
+
+            </table>
+
+
+            <input type="button" value="선택삭제" />
+
+
+            <div class="paging">
+                <div class="paging">
+                <span class="prev" th:if="${productPageResponseDTO.prev}" >
+                  <a th:href="@{/admin/product/list(pg=${productPageResponseDTO.start - 1})}"><&nbsp;이전</a>
+                </span>
+                    <span class="num" th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
+                  <a th:if="${num != 0}" th:href="@{/admin/product/list(pg=${num})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                </span>
+                    <span class="next" th:if="${productPageResponseDTO.next}">
+                     <a th:href="@{/admin/product/list(pg=${productPageResponseDTO.end + 1})}">다음&nbsp;></a>
+                </span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <p class="ico info">
+            <strong>Tip!</strong>
+            전자상거래 등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성 등을 양식에 따라 입력할 수 있습니다.
+        </p>
+
+
+
+        <!-- 상품목록 컨텐츠 끝 -->
+    </section>
+<!--내용 끝-->
+</html>
