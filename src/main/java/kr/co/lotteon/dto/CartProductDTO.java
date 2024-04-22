@@ -1,6 +1,7 @@
 package kr.co.lotteon.dto;
 
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -9,11 +10,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class WishDTO {
-    private int wishNo;
-    private String userId;
+public class CartProductDTO {
+    private int cartProdNo;
+    private int cartNo;
     private int prodNo;
     private int optNo;
-    private LocalDateTime wishRdate;
-    private int wishCount;
+    private int count;
 }

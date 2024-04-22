@@ -13,15 +13,13 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 @Entity
-@Table(name="wish")
-public class Wish {
+@Table(name="cartproduct")
+public class CartProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int wishNo;
-    private String userId;
+    private int cartProdNo;
+    private int cartNo;
     private int prodNo;
     private int optNo;
-    @CreationTimestamp
-    private LocalDateTime wishRdate;
-    private int wishCount;
+    private int count;
 }
