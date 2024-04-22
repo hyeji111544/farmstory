@@ -12,6 +12,29 @@
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css}"/>
     <link rel="stylesheet" th:href="@{/css/common.css}" />
     <link rel="stylesheet" th:href="@{/css/product/product.css}" />
+    <!--cart 페이지는 카테고리 탭이 없어야하므로 layout처리 안함-->
+
+    <script>
+        // 수량 버튼 플러스 함수
+        function btnPlusCount() {
+            const button = event.target; // 버튼
+            const label = button.parentNode; // 버튼의 부모
+            const prodCount = label.querySelector('.prodCount'); // 수량 input 태그
+
+            prodCount.value = parseInt(prodCount.value) + 1;
+        }
+        // 수량 버튼 마이너스 함수
+        function btnMinusCount() {
+            const button = event.target; // 버튼
+            const label = button.parentNode; // 버튼의 부모
+            const prodCount = label.querySelector('.prodCount'); // 수량 input 태그
+
+            if (prodCount.value > 1) {
+                prodCount.value = parseInt(prodCount.value) - 1;
+            }
+        }
+    </script>
+
 </head>
 <body>
     <div id="wrapper">
@@ -89,11 +112,11 @@
                       <p>4/17(수) 이내 도착확률 86%</p>
                     </div>
                     <div>
-                      <label for="">
-                        <button>-</button>
-                        <input type="text" value="1">
-                        <button>+</button>
-                      </label>
+                        <label for="">
+                            <button onclick="btnMinusCount()">-</button>
+                            <input class="prodCount" type="text" value="1">
+                            <button onclick="btnPlusCount()">+</button>
+                        </label>
                     </div>
                     <div>
                       <del>22000</del>
@@ -118,9 +141,9 @@
                     </div>
                     <div>
                       <label for="">
-                        <button>-</button>
-                        <input type="text" value="1">
-                        <button>+</button>
+                        <button onclick="btnMinusCount()">-</button>
+                        <input class="prodCount" type="text" value="1">
+                        <button onclick="btnPlusCount()">+</button>
                       </label>
                     </div>
                     <div>

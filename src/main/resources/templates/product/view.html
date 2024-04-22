@@ -7,12 +7,27 @@
         <script th:inline="javascript">
 
             // 옵션 항목 출력 버튼
+            // 옵션이 여러개인 경우 이전 옵션을 선택하지 않으면 다음 옵션창 drop 안됨
             function dropOption() {
                 const optionList = event.target.nextElementSibling;
-                if (optionList.style.display === "block") {
-                    optionList.style.display = "none"; // 옵션 박스 숨기기
-                } else {
-                    optionList.style.display = "block"; // 옵션 박스 보이기
+                const prodOption = event.target.parentNode; // 현재 옵션 버튼
+                const prodOptionFirst = document.getElementsByClassName('prodOption')[0];
+                if (prodOption !== prodOptionFirst){
+
+                    if (prodOption.previousElementSibling.querySelector('.selectOptionNo').value !== ""){
+
+                        if (optionList.style.display === "block") {
+                            optionList.style.display = "none"; // 옵션 박스 숨기기
+                        } else {
+                            optionList.style.display = "block"; // 옵션 박스 보이기
+                        }
+                    }
+                }else {
+                    if (optionList.style.display === "block") {
+                        optionList.style.display = "none"; // 옵션 박스 숨기기
+                    } else {
+                        optionList.style.display = "block"; // 옵션 박스 보이기
+                    }
                 }
             }
 
@@ -381,16 +396,26 @@
                 </div>
 
                 <div class="selectedOption">
-
+                    <div th:if="${OptionDTOs.optionMap.isEmpty()}">
+                        <h4 th:text="${product.prodName}">상품 이름</h4>
+                        <div class="count">
+                            <button class="decrease" onclick="changeNum(-1)">-</button>
+                            <input type="text" name="num" class="numInput" value="1" oninput="changeNum(0)"/>
+                            <button class="increase" onclick="changeNum(1)">+</button>
+                        </div>
+                        <div class="optionPrice">
+                            <span>
+                                <span th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" style="font-size: 20px"></span>원
+                            </span>
+                            <input type="text" name="optDetailNo" value=""/>
+                        </div>
+                    </div>
                 </div>
-
-
 
                 <div class="total">
                     <span id="totalPrice" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></span>
                     <em>총 상품금액</em>
                 </div>
-
 
                 <div class="button">
                     <th:block th:if="${#authentication.principal != 'anonymousUser'}">
