@@ -4,6 +4,90 @@
 
 <!--내용 시작-->
     <section id="admin-cs-list" layout:fragment="content">
+        <script>
+            window.onload = function (){
+
+                // 체크박스 선택 다중 삭제
+                const faqCheckBox = document.querySelectorAll('.faqCheckBox');
+                const faqDeleteBtn = document.getElementById('faqDeleteBtn');
+
+                faqDeleteBtn.onclick = function (e){
+                    // 삭제할 상품의 번호를 저장하는 배열
+                    let faq_faqNo = [];
+                    // forEach로 반복하며 checked된 상품 번호 찾기
+                    faqCheckBox.forEach(check => {
+                        if(check.checked){
+                            const checkBox = check;
+                            const div = checkBox.closest('tr');
+                            const faq_faqNoInput = div.querySelector('.faq_faqNo');
+                            if (faq_faqNoInput) {
+                                // faq_faqNoInput이 존재할 때만 값 추가
+                                faq_faqNo.push(faq_faqNoInput.value);
+                                console.log("FAQ faqNo:", faq_faqNo);
+                            }else{
+                                console.error('FAQ faqNo input element not found');
+                            }
+                        }
+                    })
+                    // 삭제
+                    let result = false;
+                    if(faq_faqNo.length != 0){
+                        result = confirm("선택하신 상품을 장바구니에서 삭제하시겠습니까?");
+                    }else{
+                        alert("선택된 글이 없습니다.");
+                    }
+                    if(result){
+                        const jsonData = {
+                            "faq_faqNo" : faq_faqNo
+                        }
+                        fetch("/lotteon/admin/cs/faq/delete", {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify(jsonData)
+                        })
+                            .then(response => {
+                                if(!response.ok){
+                                    throw new Error('삭제에 실패했습니다.');
+                                }
+                                return response.json()
+                            })
+                            .then(data => {
+                                if(data.data === '삭제 성공'){
+                                    for(let i=0; i<faq_faqNo.length; i++){
+
+                                        location.replace("/lotteon/admin/cs/faq/list");
+                                    }
+                                }
+                            })
+                            .catch(err => console.log(err))
+                    }else{
+                        faq_faqNo.length = 0;
+                        alert("취소되었습니다.");
+                    }
+                }
+                // 전체 선택
+                const totalCheckBox = document.getElementsByClassName('totalCheckBox')[0];
+                let checkedTurn = 0;
+
+                totalCheckBox.onclick = function (e){
+
+                    const faqCheckBox = Array.from(document.getElementsByClassName('faqCheckBox'));
+
+                    if(checkedTurn === 0){
+                        faqCheckBox.forEach(function(checkbox){
+                            checkbox.checked = true;
+                        });
+                        checkedTurn = 1;
+                    }else{
+                        faqCheckBox.forEach(function(checkbox){
+                            checkbox.checked = false;
+                        });
+                        checkedTurn = 0;
+                    }
+                }
+            }
+        </script>
+
         <nav>
             <h3>자주묻는질문 목록</h3>
             <p>
@@ -32,7 +116,7 @@
             </div>
             <table class="faq">
                 <tr>
-                    <th><input type="checkbox" name="all"/></th>
+                    <th><input type="checkbox" class="totalCheckBox" name="all"/></th>
                     <th>번호</th>
                     <th>1차유형</th>
                     <th>2차유형</th>
@@ -43,8 +127,11 @@
                 </tr>
 
                 <tr th:each="faq, index:${pageResponseDTO.dtoList}">
-                    <td><input type="checkbox" name="글번호"/></td>
-                    <td th:text="${pageResponseDTO.startNo - index.index}"></td>
+                    <td><input type="checkbox" class="faqCheckBox" name="글번호"/></td>
+                    <td>
+                        <input type="hidden" class="faq_faqNo" th:value="${faq.faqNo}">
+                        <span th:text="${pageResponseDTO.startNo - index.index}"></span>
+                    </td>
                     <td th:text="${faq.faqCate}" style="white-space: nowrap;"></td>
                     <td th:text="${faq.faqType}" style="white-space: nowrap;"></td>
                     <td>
@@ -64,7 +151,7 @@
             </table>
 
 
-            <input type="button" value="선택삭제" style="background-color: #9e9e9e; color: white; border: none; padding: 10px 20px; cursor: pointer;"/>
+            <input type="button" class="faqDeleteBtn" id="faqDeleteBtn" value="선택삭제" style="background-color: #9e9e9e; color: white; border: none; padding: 10px 20px; cursor: pointer;"/>
             <a th:href="@{/admin/cs/faq/write}"><input type="button" value="작성하기" style=" float: right; background-color: #4291e9; color: white; border: none; padding: 10px 20px; cursor: pointer;" /></a>
 
 

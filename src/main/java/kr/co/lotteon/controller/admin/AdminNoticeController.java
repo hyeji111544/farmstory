@@ -1,5 +1,6 @@
 package kr.co.lotteon.controller.admin;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.co.lotteon.dto.NoticeDTO;
 import kr.co.lotteon.dto.PageRequestDTO;
 import kr.co.lotteon.dto.PageResponseDTO;
@@ -8,9 +9,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Log4j2
@@ -83,5 +85,29 @@ public class AdminNoticeController {
     public String delete(int noticeNo){
         adminNoticeService.noticeAdminDelete(noticeNo);
         return "redirect:/admin/cs/notice/list";
+    }
+
+    //게시물 선택 삭제
+    @ResponseBody
+    @PostMapping(value = "/admin/cs/notice/delete")
+    public Map<String, Integer> deleteChecked(HttpServletRequest request){
+
+        log.info("deleteChecked!");
+
+        String[] ajaxMsg = request.getParameterValues("valueArr");
+
+        int size = ajaxMsg.length;
+        log.info("size = {}", size);
+
+        for(int i=0; i<size; i++){
+            int intValue = Integer.parseInt(ajaxMsg[i]);
+            log.info("invalues = {}", intValue);
+            adminNoticeService.noticeAdminDelete(intValue);
+        }
+
+        Map<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("result", size);
+
+        return resultMap;
     }
 }
