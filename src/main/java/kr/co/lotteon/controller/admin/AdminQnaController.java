@@ -1,5 +1,6 @@
 package kr.co.lotteon.controller.admin;
 
+import jakarta.servlet.http.HttpServletRequest;
 import kr.co.lotteon.dto.NoticeDTO;
 import kr.co.lotteon.dto.PageRequestDTO;
 import kr.co.lotteon.dto.PageResponseDTO;
@@ -8,11 +9,13 @@ import kr.co.lotteon.repository.admin.AdminQnaRepository;
 import kr.co.lotteon.service.admin.AdminQnaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -73,5 +76,29 @@ public class AdminQnaController {
     public String delete(int qnaNo){
         adminQnaService.qnaAdminDelete(qnaNo);
         return "redirect:/admin/cs/qna/list";
+    }
+    //게시물 선택 삭제
+    @ResponseBody
+    @PostMapping(value = "/admin/cs/qna/delete")
+    public ResponseEntity<?> deleteChecked(@RequestBody Map<String, int[]> requestData){
+
+        log.info("deleteChecked!");
+        log.info("requestData : " + requestData);
+        int[] ajaxMsg = requestData.get("qna_qnaNo");
+
+        int size = ajaxMsg.length;
+        log.info("size = {}", size);
+
+        for(int i=0; i<size; i++){
+            int intValue = ajaxMsg[i];
+            log.info("invalues = {}", intValue);
+            adminQnaService.qnaAdminDelete(intValue);
+        }
+
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("data", "삭제 성공");
+
+        return ResponseEntity.ok().body(resultMap);
+
     }
 }
