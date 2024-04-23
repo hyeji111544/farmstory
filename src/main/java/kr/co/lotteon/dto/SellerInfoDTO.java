@@ -22,6 +22,8 @@ public class SellerInfoDTO {
     private int oneMonthsPrice;
     private Long allCount;
     private int allPrice;
+    private int maxCount;
+    private int maxPrice;
 
     // 주문상태 출력을 위한 필드
     private Map<String, Long> statusCountMap;
