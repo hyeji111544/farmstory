@@ -3,6 +3,7 @@ package kr.co.lotteon.repository.custom;
 import com.querydsl.core.Tuple;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.entity.ProdOption;
+import kr.co.lotteon.entity.Product;
 import kr.co.lotteon.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,5 +25,8 @@ public interface ProductRepositoryCustom {
 
     // 프로덕트 상세 조회
     public Tuple selectProduct(int prodNo);
+
+    // cart 물품 조회
+    public Tuple selectProductById(int prodNo);
 
 }

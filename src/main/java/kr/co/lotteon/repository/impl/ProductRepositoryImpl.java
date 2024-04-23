@@ -5,10 +5,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
-import kr.co.lotteon.entity.ProdOption;
-import kr.co.lotteon.entity.QProdOption;
-import kr.co.lotteon.entity.QProduct;
-import kr.co.lotteon.entity.QProductimg;
+import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.custom.ProductRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -140,5 +137,17 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .on(qProduct.prodNo.eq(qProductimg.prodNo))
                 .where(qProduct.prodNo.eq(prodNo))
                 .fetchOne();
+    }
+
+    @Override
+    public Tuple selectProductById(int prodNo){
+        return jpaQueryFactory
+                .select(qProduct, qProductimg)
+                .from(qProduct)
+                .join(qProductimg)
+                .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                .where(qProduct.prodNo.eq(prodNo))
+                .fetchOne();
+
     }
 }
