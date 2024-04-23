@@ -21,4 +21,12 @@ public class ProdOptDetail {
     public int optNo3;
     public int optPrice;
     public int optStock;
+
+    //추가 : optValue 필드
+    @Transient
+    private String optValue1;
+    @Transient
+    private String optValue2;
+    @Transient
+    private String optValue3;
 }

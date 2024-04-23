@@ -156,8 +156,11 @@ public class ProductController {
     @GetMapping("/product/cart")
     public String prodCart(@RequestParam("userId") String userId, Model model){
         int cartNo = productService.findCartNoByUserId(userId);
-        List<CartProduct> cartProducts = productService.findCartProdNo(cartNo);
-       // productService.selectsCart(userId);
+        if (cartNo != 0){
+            List<CartInfoDTO> cartProducts = productService.findCartProdNo(cartNo);
+            model.addAttribute("cartProducts", cartProducts);
+        }
+
         return "/product/cart";
     }
 

@@ -15,23 +15,106 @@
     <!--cart 페이지는 카테고리 탭이 없어야하므로 layout처리 안함-->
 
     <script>
-        // 수량 버튼 플러스 함수
-        function btnPlusCount() {
-            const button = event.target; // 버튼
-            const label = button.parentNode; // 버튼의 부모
-            const prodCount = label.querySelector('.prodCount'); // 수량 input 태그
+        window.onload = function (){
+            const allCheckbox = document.querySelector('input[name="all"]');
+            const selectedCartCheckboxes = document.querySelectorAll('input[name="selectedCart"]');
 
-            prodCount.value = parseInt(prodCount.value) + 1;
-        }
-        // 수량 버튼 마이너스 함수
-        function btnMinusCount() {
-            const button = event.target; // 버튼
-            const label = button.parentNode; // 버튼의 부모
-            const prodCount = label.querySelector('.prodCount'); // 수량 input 태그
+            allCheckbox.addEventListener('click', function (){
+                selectedCartCheckboxes.forEach(function (checkbox){
+                    checkbox.checked = allCheckbox.checked;
+                });
+            });
 
-            if (prodCount.value > 1) {
-                prodCount.value = parseInt(prodCount.value) - 1;
+            const cartDelete = document.getElementById('cartDelete');
+
+            cartDelete.onclick = function (e){
+                e.preventDefault();
+                var selectedCart = document.getElementsByName('selectedCart');
+                var selectedCartList = [];
+                var rowsToDelete = [];
+
+                selectedCart.forEach(function (checkbox) {
+                    if (checkbox.checked){
+                        var inputField = checkbox.parentNode.querySelector('input[type="text"]');
+                        var cartProdNo = inputField.value;
+                        selectedCartList.push(cartProdNo);
+                        var row = checkbox.closest('.productList');
+                        rowsToDelete.push(row);
+                    }
+                });
+                console.log('Selected Cart Product Numbers:', selectedCartList);
+                console.log('Rows to Delete:', rowsToDelete);
+
+                console.log(selectedCartList);
+                var result = confirm("장바구니에서 삭제하시겠습니까?");
+                if (result){
+                    const jsonDate = {
+                        cartProdNo : selectedCartList
+                    };
+                    fetchPut(`/lotteon/cart/delete`, jsonDate)
+                        .then(data => {
+                            console.log(data); // 서버로부터 받은 데이터 출력 또는 처리
+                            alert("삭제되었습니다.");
+                            rowsToDelete.forEach(function (row) {
+                                row.remove();
+                                if (allCheckbox.checked){
+                                    allCheckbox.checked = false;
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            console.error(error); // 오류 처리
+                        });
+                }
+
+
+
             }
+
+        }
+
+        /* +, - 버튼 눌렀을 때 동작하며 할인 금액 계산하여 총 액에나타나게함 */
+        function changeNum(change) {
+            var numInput = event.target.parentNode.querySelector('input');
+            var productInfo = event.target.closest('.productInfo');
+            // 할인 전,후 가격 요소 선택
+            var orgPriceElement = productInfo.querySelector('.org_price span');
+            var inputOrgPrice = productInfo.querySelector('.org_price input.price');
+            var disPriceElement = productInfo.querySelector('.dis_price');
+            var discount = productInfo.querySelector('.dis_prod').value;
+            //var inputOrgElement = orgPriceElement.querySelector('input');
+            console.log(inputOrgPrice);
+            console.log("discount:"+discount);
+
+            var orgPriceValue = inputOrgPrice.value;
+            console.log("org :" + orgPriceValue);
+
+            var currentValue = parseInt(numInput.value) + change;
+            // 최소값은 1, 최대값은 99로 제한
+            if (currentValue < 1) {
+                currentValue = 1;
+            } else if (currentValue > 99) {
+                currentValue = 99;
+            }
+
+            numInput.value = currentValue; // 변경된 값 적용
+            console.log("갯수"+currentValue);
+
+            var orgTotalPrice = orgPriceValue * currentValue;
+            var disTotalPrice = orgPriceValue *(100 - discount) * currentValue * 0.01;
+            console.log("원금"+orgTotalPrice);
+            console.log("할인"+disTotalPrice);
+            if (!isNaN(orgTotalPrice)) {
+                // 금액 콤마 표시를 위해 포멧팅
+                var fOrgTotalPrive = new Intl.NumberFormat('ko-KR').format(orgTotalPrice);
+                orgPriceElement.innerHTML = fOrgTotalPrive;
+
+            }
+            if (!isNaN(disTotalPrice)){
+                var fDisTotalPrive = new Intl.NumberFormat('ko-KR').format(disTotalPrice);
+                disPriceElement.innerHTML = fDisTotalPrive;
+            }
+
         }
     </script>
 
@@ -83,77 +166,74 @@
               
               <!-- 제목, 페이지 네비게이션 -->
               <nav>
+                  <script th:src="@{/js/util.js}"></script>
                 <h1>장바구니</h1>
                 <p>
                   HOME > <span>패션·의류·뷰티</span> > <strong>장바구니</strong>
                 </p>
               </nav>
-                            
               <div id="cartList">
                 <!-- 장바구니 목록 -->
                 <div>
                   <label for="">
-                      <input type="checkbox">
+                      <input type="checkbox" name="all">
                       <span>전체선택</span>
                   </label>
-                  <a href="">선택 삭제</a>
+                  <a href="" id="cartDelete">선택 삭제</a>
                 </div>
                 
-                <div class="productList"> <!--productList를 반복 시키면 됨!!-->
+                <div th:each="cartProduct, index:${cartProducts}" class="productList"> <!--productList를 반복 시키면 됨!!-->
                   <div class="productSelect">
                     <a href="">x</a>
                   </div>
                   <div class="productInfo">
-                    <input type="checkbox">
-                    <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
+                    <input type="checkbox" name="selectedCart">
+                      <input type="hidden" th:value="${cartProduct.cartProdNo}">
+                    <a href="#"><img th:src="@{/uploads/__${cartProduct.thumb190}__}" alt="" style="width:80px"></a><!--80*80 사이즈로 변경-->
                     <div>
-                      <p><a href="#">상품명</a></p>
-                      <p>상품설명</p>
+                      <p><a href="#">[[${cartProduct.prodName}]]</a></p>
+                      <p>[[${cartProduct.prodInfo}]]</p>
+                        <p th:if="${cartProduct.optValue1 != null}">
+                            <span th:text="'옵션: ' + ${cartProduct.optValue1}"></span>
+                                <span th:if="${cartProduct.optValue2 != null}">
+                                    <span th:text="' ) ' + ${cartProduct.optValue2}"></span>
+                                    <span th:if="${cartProduct.optValue3 != null}">
+                                    <span th:text="' / ' + ${cartProduct.optValue3}"></span>
+                                </span>
+                            </span>
+                        </p>
                       <p>4/17(수) 이내 도착확률 86%</p>
                     </div>
                     <div>
                         <label for="">
-                            <button onclick="btnMinusCount()">-</button>
-                            <input class="prodCount" type="text" value="1">
-                            <button onclick="btnPlusCount()">+</button>
+                            <button class="decrease" onclick="changeNum(-1)">-</button>
+                            <input class="prodCount" name="num" type="text" oninput="changeNum(0)" th:value="${cartProduct.count}">
+                            <button class="increase" onclick="changeNum(1)">+</button>
                         </label>
                     </div>
                     <div>
-                      <del>22000</del>
-                      <p>20520</p>
+                        <!--할인 전 가격 출력 옵션 있는경우/ 없는경우-->
+                        <p class="org_price" th:if="${cartProduct.optPrice != null}">
+                            <span style="text-decoration: line-through; color: #7f7f7f" th:text="${#numbers.formatInteger(cartProduct.optPrice * cartProduct.count, 3, 'COMMA')}"></span>
+                            <span style="color: #ed2f2f; font-weight: bold" th:text="'↓' + ${cartProduct.prodDiscount} + '%'"></span>
+                            <input class="price" type="hidden" th:value="${cartProduct.optPrice}">
+                        </p>
+                        <p class="org_price" th:unless="${cartProduct.optPrice != null}">
+                            <span style="text-decoration: line-through; color: #7f7f7f" th:text="${#numbers.formatInteger(cartProduct.prodPrice * cartProduct.count , 3, 'COMMA')}"></span>
+                            <span style="color: #ed2f2f; font-weight: bold" th:text="'↓' + ${cartProduct.prodDiscount} + '%'"></span>
+                            <input class="price" type="hidden" th:value="${cartProduct.prodPrice}">
+                        </p>
+
+                        <!--할인 후 가격 출력 옵션 있는경우/ 없는경우-->
+                        <p class="dis_price" th:if="${cartProduct.optPrice != null}" th:text="${#numbers.formatInteger((cartProduct.prodPrice * (100 - cartProduct.prodDiscount) * cartProduct.count * 0.01), 3, 'COMMA')}"></p>
+                        <p class="dis_price" th:unless="${cartProduct.optPrice != null}" th:text="${#numbers.formatInteger((cartProduct.optPrice * (100 - cartProduct.prodDiscount) * cartProduct.count * 0.01), 3, 'COMMA')}"></p>
+                        <input class="dis_prod" type="hidden" th:value="${cartProduct.prodDiscount}">
                       <p>(100g당 1026원, 총 용량 2000g)</p>
                       <a href="">혜택변경</a>
                     </div>
                   </div>
                 </div>
 
-                <div class="productList">
-                  <div class="productSelect">
-                    <a href="">x</a>
-                  </div>
-                  <div class="productInfo">
-                    <input type="checkbox">
-                    <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                    <div>
-                      <p><a href="#">상품명</a></p>
-                      <p>상품설명</p>
-                      <p>4/17(수) 이내 도착확률 86%</p>
-                    </div>
-                    <div>
-                      <label for="">
-                        <button onclick="btnMinusCount()">-</button>
-                        <input class="prodCount" type="text" value="1">
-                        <button onclick="btnPlusCount()">+</button>
-                      </label>
-                    </div>
-                    <div>
-                      <del>22000</del>
-                      <p>20520</p>
-                      <p>(100g당 1026원, 총 용량 2000g)</p>
-                      <a href="">혜택변경</a>
-                    </div>
-                  </div>
-                </div>
               </div>
 
               <!-- 장바구니 전체합계 -->

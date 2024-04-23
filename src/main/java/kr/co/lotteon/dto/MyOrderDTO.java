@@ -20,6 +20,7 @@ public class MyOrderDTO {
     private int count;
     private int orderNo;
     private int detailPrice;
+
     private String detailStatus;
     private LocalDateTime orderDate;
 

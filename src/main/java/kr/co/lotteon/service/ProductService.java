@@ -12,8 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -142,21 +144,80 @@ public class ProductService {
     };
 
     // 장바구니 조회
-    public List<CartProduct> findCartProdNo(int cartNo){
+    public List<CartInfoDTO> findCartProdNo(int cartNo) {
 
-        List<CartProduct> optCart = cartProductRepository.findByCartNo(cartNo);
-        log.info("findCartProdNo...."+optCart.toString());
+        List<CartProduct> carts = cartProductRepository.findByCartNo(cartNo);
+        //log.info("findCartProdNo....1: " + carts.toString());
 
-        return optCart;
+        if (carts.isEmpty()) {
+            log.info("No cart products found for cartNo: " + cartNo);
+            return Collections.emptyList();
+        }
 
-        // CartNo로 cartProduct에서 상품 조회 -> prodNo & optdetailNo 얻기
-        // optDetail테이블에서 optdetailNo로 옵션 정보 얻기 & [optNo1, optNo2, optNo3] 얻기 [optValue1, optNo2, optNo3]
-        // product 테이블에서 prodNo로 상품 정보 조회 & 상품 이미지
+        // 상품조회를 위해 optNo 와 prodNo 리스트 추출
+        List<Integer> optNos = carts.stream()
+                .map(CartProduct::getOptNo)
+                .toList();
+        List<Integer> prodNos = carts.stream()
+                .map(CartProduct::getProdNo)
+                .toList();
 
-        // optNo1, optNo2, optNo3으로 option테이블에서 옵션 이름 조회
+        // prodOptDetail 조회
+        List<ProdOptDetail> optProdOptDetails = new ArrayList<>();
+        for (int optNo : optNos) {
+            ProdOptDetail optProdOptDetail = prodOptDetailRepository.selectOptDetailWihtName(optNo);
+            optProdOptDetails.add(optProdOptDetail);
+        }
+        //log.info("findCartProdNo....2: " + optProdOptDetails.toString());
 
-        // 
+
+        List<Product> products = new ArrayList<>();
+        for (int prodNo : prodNos) {
+            Tuple productTuple = productRepository.selectProductById(prodNo);
+            //log.info("selectProductById...:" + productTuple.toString());
+            Product product = productTuple.get(0, Product.class);
+            Productimg productImg = productTuple.get(1, Productimg.class);
+            if (productImg != null) {
+                product.setThumb190(productImg.getThumb190());
+            }
+            products.add(product);
+        }
+        //log.info("findCartProdNo....3: " + products.toString());
+
+        List<CartInfoDTO> cartInfoDTOs = new ArrayList<>();
+        for (int i = 0; i < carts.size(); i++) {
+            CartProduct cartProduct = carts.get(i);
+            ProdOptDetail optProdOptDetail = optProdOptDetails.get(i);
+            Product product = products.get(i);
+
+            // CartInfoDTO 객체 생성 및 설정
+            CartInfoDTO cartInfoDTO = new CartInfoDTO();
+            cartInfoDTO.setProdNo(product.getProdNo());
+            cartInfoDTO.setProdName(product.getProdName());
+            cartInfoDTO.setProdInfo(product.getProdInfo());
+            cartInfoDTO.setProdDiscount(product.getProdDiscount());
+            cartInfoDTO.setProdPrice(product.getProdPrice());
+            if (product.getThumb190() != null) {
+                cartInfoDTO.setThumb190(product.getThumb190());
+            }
+            if (optProdOptDetail != null) {
+                cartInfoDTO.setOptValue1(optProdOptDetail.getOptValue1());
+                cartInfoDTO.setOptValue2(optProdOptDetail.getOptValue2());
+                cartInfoDTO.setOptValue3(optProdOptDetail.getOptValue3());
+                cartInfoDTO.setOptStock(optProdOptDetail.getOptStock());
+                cartInfoDTO.setOptPrice(optProdOptDetail.getOptPrice());
+            }
+            cartInfoDTO.setCount(cartProduct.getCount());
+            cartInfoDTO.setCartProdNo(cartProduct.getCartProdNo());
+
+            // CartInfoDTO를 리스트에 추가
+            cartInfoDTOs.add(cartInfoDTO);
+        }
+        //log.info("findCartProdNo..."+cartInfoDTOs.toString());
+
+        return cartInfoDTOs;
 
 
     }
+
 }
