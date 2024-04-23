@@ -9,6 +9,7 @@ import kr.co.lotteon.entity.ProdOption;
 import kr.co.lotteon.entity.Wish;
 import kr.co.lotteon.service.ProdCateService;
 import kr.co.lotteon.service.ProductService;
+import kr.co.lotteon.service.TestService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,7 @@ public class ProductController {
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     private final ProductService productService;
     private final ProdCateService prodCateService;
+    private final TestService testService;
 
     // 상품 목록 이동
     @GetMapping("/product/list")
@@ -162,6 +164,18 @@ public class ProductController {
         }
 
         return "/product/cart";
+    }
+
+    // 장바구니 이동
+    @GetMapping("/product/cartTest")
+    public String prodCartTest(@RequestParam("userId") String userId, Model model){
+        int cartNo = productService.findCartNoByUserId(userId);
+        if (cartNo != 0){
+            Map<String, List<CartInfoDTO>> cartProducts = testService.findCartProdNoTest(cartNo);
+            model.addAttribute("cartProducts", cartProducts);
+        }
+
+        return "/product/cartTest";
     }
 
     // 상품 주문 이동
