@@ -1,19 +1,16 @@
 package kr.co.lotteon.repository.impl;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.MyOrderDTO;
-import kr.co.lotteon.dto.ProductDTO;
+import kr.co.lotteon.dto.MyOrderPageRequestDTO;
+import kr.co.lotteon.dto.MyOrderPageResponseDTO;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.custom.OrdersRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 @Slf4j
@@ -27,7 +24,7 @@ public class OrdersRepositoryImpl implements OrdersRepositoryCustom {
     private final QProductimg qProductimg = QProductimg.productimg;
 
     // My/Order 페이지 상품 목록 조회
-    public List<MyOrderDTO> selectMyOrders(String UserId) {
+    public MyOrderPageResponseDTO selectMyOrders(String UserId, Pageable pageable, MyOrderPageRequestDTO myOrderPageRequestDTO) {
         // Orders 테이블에서 orderDate구하고, OrderNO 조회
 
         log.info("IMPL 시작");
@@ -96,6 +93,15 @@ public class OrdersRepositoryImpl implements OrdersRepositoryCustom {
         }
         log.info("코드 끝났을때 myOrderDTOList : " + myOrderDTOList);
         log.info("IMPL 끝");
-        return myOrderDTOList;
+
+        int total = myOrderDTOList.size();
+
+        return MyOrderPageResponseDTO.builder()
+                .pageRequestDTO(myOrderPageRequestDTO)
+                .myOrderDTOList(myOrderDTOList)
+                .total(total)
+                .build();
+
+
     }
 }
