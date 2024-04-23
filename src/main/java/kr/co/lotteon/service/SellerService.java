@@ -1,5 +1,6 @@
 package kr.co.lotteon.service;
 
+import kr.co.lotteon.dto.SellerInfoDTO;
 import kr.co.lotteon.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +13,8 @@ public class SellerService {
 
     private final SellerRepository sellerRepository;
 
-    public void selectSellerInfo(String prodSeller){
-        sellerRepository.selectSellerInfo(prodSeller);
+    public SellerInfoDTO selectSellerInfo(String prodSeller){
+        return sellerRepository.selectSellerInfo(prodSeller);
     }
 
 }
