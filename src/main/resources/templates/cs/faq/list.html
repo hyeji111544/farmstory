@@ -4,27 +4,9 @@
 <!--내용 시작-->
   <section id="cs" layout:fragment="content">
 
-<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
-    <script>
-      $(function(){
-        $('.more').click(function(e){
-          e.preventDefault();
-          
-          /*
-          let item = $(this).parent().find('> li:nth-child(n+4)');
-          let isVisible = item.is(':visible');
+<script>
 
-          console.log('isVisible : ' + isVisible);
 
-          if(isVisible){
-            item.slideUp(100);
-          }else{
-            item.slideDown(100);
-          }
-          */
-
-        });
-      });
 </script>
         <div class="faq">
           <nav>
@@ -36,13 +18,26 @@
             <aside>
               <h2>자주묻는 질문</h2>
               <ul>
-                <li class="on"><a href="#">회원</a></li>
-                <li><a href="#">쿠폰/이벤트</a></li>
-                <li><a href="#">주문/결제</a></li>
-                <li><a href="#">배송</a></li>
-                <li><a href="#">취소/반품/교환</a></li>
-                <li><a href="#">여행/숙박/항공</a></li>
-                <li><a href="#">안전거래</a></li>
+                <li class="on" th:if="${list.get(0).faqCate == 'user'}"><a th:href="@{/cs/faq/list(faqCate='user')}">회원</a></li>
+                <li th:if="${list.get(0).faqCate != 'user'}"><a th:href="@{/cs/faq/list(faqCate='user')}">회원</a></li>
+
+                <li class="on" th:if="${list.get(0).faqCate == 'coupon'}"><a th:href="@{/cs/faq/list(faqCate='coupon')}">쿠폰/이벤트</a></li>
+                <li th:if="${list.get(0).faqCate != 'coupon'}"><a th:href="@{/cs/faq/list(faqCate='coupon')}">쿠폰/이벤트</a></li>
+
+                <li  class="on" th:if="${list.get(0).faqCate == 'order'}"><a th:href="@{/cs/faq/list(faqCate='order')}">주문/결제</a></li>
+                <li th:if="${list.get(0).faqCate != 'order'}"><a th:href="@{/cs/faq/list(faqCate='order')}">주문/결제</a></li>
+
+                <li  class="on" th:if="${list.get(0).faqCate == 'delivery'}"><a th:href="@{/cs/faq/list(faqCate='delivery')}">배송</a></li>
+                <li th:if="${list.get(0).faqCate != 'delivery'}"><a th:href="@{/cs/faq/list(faqCate='delivery')}">배송</a></li>
+
+                <li  class="on" th:if="${list.get(0).faqCate == 'cancel'}"><a th:href="@{/cs/faq/list(faqCate='cancel')}">취소/반품/교환</a></li>
+                <li th:if="${list.get(0).faqCate != 'cancel'}"><a th:href="@{/cs/faq/list(faqCate='cancel')}">취소/반품/교환</a></li>
+
+                <li  class="on" th:if="${list.get(0).faqCate == 'travel'}"><a th:href="@{/cs/faq/list(faqCate='travel')}">여행/숙박/항공</a></li>
+                <li th:if="${list.get(0).faqCate != 'travel'}"><a th:href="@{/cs/faq/list(faqCate='travel')}">여행/숙박/항공</a></li>
+
+                <li  class="on" th:if="${list.get(0).faqCate == 'safe'}"><a th:href="@{/cs/faq/list(faqCate='safe')}">안전거래</a></li>
+                <li th:if="${list.get(0).faqCate != 'safe'}"><a th:href="@{/cs/faq/list(faqCate='safe')}">안전거래</a></li>
               </ul>
             </aside>
             <article>              

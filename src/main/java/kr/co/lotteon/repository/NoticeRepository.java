@@ -11,4 +11,5 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer> {
 
     // 공지사항 글 리스트 출력 페이징 메서드
     public Page<Notice> findAll(Pageable pageable);
+    public Page<Notice> findByNoticeCate(String cate,Pageable pageable);
 }

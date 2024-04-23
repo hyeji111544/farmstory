@@ -26,10 +26,11 @@ public class AdminQnaController {
 
     // admin cs 문의글 목록
     @GetMapping("/admin/cs/qna/list")
-    public String csQnaList(Model model, PageRequestDTO pageRequestDTO){
+    public String csQnaList(Model model, PageRequestDTO pageRequestDTO,
+                            @RequestParam(value = "qnaCate", required = false) String qnaCate,
+                            @RequestParam(value = "qnaType", required = false) String qnaType){
 
-        PageResponseDTO pageResponseDTO = adminQnaService.qnaAdminSelect(pageRequestDTO);
-        log.info("pageResponseDTO : " + pageResponseDTO);
+        PageResponseDTO pageResponseDTO = adminQnaService.qnaAdminSelect(pageRequestDTO,qnaCate,qnaType);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
         return "/admin/cs/qna/list";

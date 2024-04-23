@@ -12,4 +12,7 @@ public interface AdminFaqRepository extends JpaRepository<Faq, Integer>, AdminFa
 
     // 자주묻는질문 글 리스트 출력 페이징 메서드
     public Page<Faq> findAll(Pageable pageable);
+
+    // 공지사항 카테고리 + 타입별 조회
+    public Page<Faq> findByFaqCateAndFaqType(String cate,String type, Pageable pageable);
 }
