@@ -1,7 +1,11 @@
 package kr.co.lotteon.repository.custom;
 
+import com.querydsl.core.Tuple;
+import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.SellerInfoDTO;
 import kr.co.lotteon.entity.Seller;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +13,12 @@ import java.util.Optional;
 
 @Repository
 public interface SellerRepositoryCustom {
+    // 판매자 관리페이지 - 홈
     public SellerInfoDTO selectSellerInfo(String prodSeller);
+
+    // 판매자 관리페이지 - 상품목록 - 상품관리 (전체 상품 목록)
+    public Page<Tuple> selectProductForSeller(String prodSeller, ProductPageRequestDTO productPageRequestDTO, Pageable pageable);
+
+    // 판매자 관리페이지 - 상품목록 - 상품관리 (검색 상품 목록)
+    public Page<Tuple> searchProductForSeller(String prodSeller, ProductPageRequestDTO productPageRequestDTO, Pageable pageable);
 }

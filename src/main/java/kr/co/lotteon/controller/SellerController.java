@@ -1,5 +1,7 @@
 package kr.co.lotteon.controller;
 
+import kr.co.lotteon.dto.ProductPageRequestDTO;
+import kr.co.lotteon.dto.ProductPageResponseDTO;
 import kr.co.lotteon.dto.SellerInfoDTO;
 import kr.co.lotteon.service.SellerService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,28 @@ public class SellerController {
         SellerInfoDTO sellerInfoDTO = sellerService.selectSellerInfo(prodSeller);
         model.addAttribute("sellerInfoDTO", sellerInfoDTO);
         return "/seller/index";
+    }
+
+    // 판매자 관리페이지 - 상품목록 - 상품관리
+    @GetMapping("/seller/product/list")
+    public String sellerProdList(String prodSeller, Model model, ProductPageRequestDTO productPageRequestDTO){
+
+        log.info("productPageRequestDTO.getKeyword() : " + productPageRequestDTO.getKeyword());
+        log.info("productPageRequestDTO.getType() : " + productPageRequestDTO.getType());
+        ProductPageResponseDTO pageResponseDTO = null;
+
+        if(productPageRequestDTO.getKeyword() == null) {
+            // 판매자의 전체 상품 목록 조회
+            pageResponseDTO = sellerService.selectProductForSeller(prodSeller, productPageRequestDTO);
+        }else {
+            log.info("하이");
+            // 판매자의 검색 상품 목록 조회
+            pageResponseDTO = sellerService.searchProductForSeller(prodSeller, productPageRequestDTO);
+        }
+        log.info("pageResponseDTO : " + pageResponseDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
+        return "/seller/product/list";
     }
 
 }

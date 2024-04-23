@@ -1,14 +1,22 @@
 package kr.co.lotteon.repository.impl;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.GraphInfoDTO;
+import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.SellerInfoDTO;
 import kr.co.lotteon.entity.OrderDetail;
 import kr.co.lotteon.entity.QOrderDetail;
+import kr.co.lotteon.entity.QProduct;
+import kr.co.lotteon.entity.QProductimg;
 import kr.co.lotteon.repository.custom.SellerRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -24,8 +32,10 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final QOrderDetail qOrderDetail = QOrderDetail.orderDetail;
+    private final QProduct qProduct = QProduct.product;
+    private final QProductimg qProductimg = QProductimg.productimg;
 
-    // seller-index 페이지 출력 정보 조회
+    // 판매자 관리페이지 - 홈 출력 정보 조회
     @Override
     public SellerInfoDTO selectSellerInfo(String prodSeller){
 
@@ -166,7 +176,88 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
 
         log.info("sellerInfoDTO : " + sellerInfoDTO);
 
+
+        // count, price 속성의 최댓값을 구함
+        OptionalInt maxCount = graphInfoList.stream()
+                .mapToInt(GraphInfoDTO::getCount)
+                .max();
+        OptionalInt maxPrice = graphInfoList.stream()
+                .mapToInt(GraphInfoDTO::getPrice)
+                .max();
+        // 최댓값이 존재하는지 확인하고, 존재한다면 값을 가져옴
+        if (maxCount.isPresent() && maxPrice.isPresent()) {
+            int count = maxCount.getAsInt();
+            int price = maxPrice.getAsInt();
+            sellerInfoDTO.setMaxCount(count);
+            sellerInfoDTO.setMaxPrice(price);
+            log.info("최댓값: " + count);
+            log.info("최댓값: " + price);
+        } else {
+            log.info("최댓값없음");
+        }
         return sellerInfoDTO;
     }
+
+    // 판매자 관리페이지 - 상품목록 - 상품관리 (전체 상품 목록)
+    public Page<Tuple> selectProductForSeller(String prodSeller, ProductPageRequestDTO productPageRequestDTO, Pageable pageable) {
+
+        // product - productImg 테이블 join / 판매자 아이디와 일치하는 경우 최신순
+        QueryResults<Tuple> selectProducts = jpaQueryFactory
+                                    .select(qProduct, qProductimg.thumb190)
+                                    .from(qProduct)
+                                    .join(qProductimg)
+                                    .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                                    .where(qProduct.prodSeller.eq(prodSeller))
+                                    .orderBy(qProduct.prodRdate.desc())
+                                    .offset(pageable.getOffset())
+                                    .limit(pageable.getPageSize())
+                                    .fetchResults();
+
+        List<Tuple> productsResults = selectProducts.getResults();
+        long total = selectProducts.getTotal();
+
+        return new PageImpl<>(productsResults, pageable, total);
+
+    }
+
+    // 판매자 관리페이지 - 상품목록 - 상품관리 (검색 상품 목록)
+    public Page<Tuple> searchProductForSeller(String prodSeller, ProductPageRequestDTO productPageRequestDTO, Pageable pageable) {
+
+        String type = productPageRequestDTO.getType();
+        String keyword = productPageRequestDTO.getKeyword();
+        BooleanExpression expression = null;
+
+        // 검색 종류에 따른 where절 표현식 생성
+        if(type.equals("prodName")){
+            expression = qProduct.prodName.contains(keyword);
+
+        }else if(type.equals("prodNo")){
+            expression = qProduct.prodNo.eq(Integer.parseInt(keyword));
+
+        }else if(type.equals("prodCompany")){
+            expression = qProduct.prodCompany.contains(keyword);
+        }
+
+        // product - productImg 테이블 join / 판매자 아이디와 일치하는 경우 / type과 keyword가 일치하는 경우 / 최신순
+        QueryResults<Tuple> selectProducts = jpaQueryFactory
+                .select(qProduct, qProductimg.thumb190)
+                .from(qProduct)
+                .join(qProductimg)
+                .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                .where(qProduct.prodSeller.eq(prodSeller))
+                .where(expression)
+                .orderBy(qProduct.prodRdate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Tuple> productsResults = selectProducts.getResults();
+        long total = selectProducts.getTotal();
+
+        return new PageImpl<>(productsResults, pageable, total);
+
+    }
+
+
 
 }
