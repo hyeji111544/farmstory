@@ -1,12 +1,16 @@
 package kr.co.lotteon.service;
 
 import kr.co.lotteon.dto.MyOrderDTO;
+import kr.co.lotteon.dto.MyOrderPageRequestDTO;
+import kr.co.lotteon.dto.MyOrderPageResponseDTO;
 import kr.co.lotteon.dto.UserDTO;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -95,9 +99,12 @@ public class MyService {
     }
 
     // 마이페이지 - 주문내역 조회
-    public List<MyOrderDTO> selectOrders(String UserId) {
+    public MyOrderPageResponseDTO selectOrders(String UserId, MyOrderPageRequestDTO myOrderPageRequestDTO) {
+        //페이징 처리
+        Pageable pageable = myOrderPageRequestDTO.getPageable("no");
+
         // userId로 Orders 조회
-        return ordersRepository.selectMyOrders(UserId);
+        return ordersRepository.selectMyOrders(UserId, pageable, myOrderPageRequestDTO);
     }
 
 

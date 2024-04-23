@@ -1,6 +1,8 @@
 package kr.co.lotteon.controller;
 
 import kr.co.lotteon.dto.MyOrderDTO;
+import kr.co.lotteon.dto.MyOrderPageRequestDTO;
+import kr.co.lotteon.dto.MyOrderPageResponseDTO;
 import kr.co.lotteon.dto.UserDTO;
 import kr.co.lotteon.entity.Coupons;
 import kr.co.lotteon.entity.OrderDetail;
@@ -82,9 +84,10 @@ public class MyController {
 
     //마이페이지-주문내역 이동
     @GetMapping("/my/order")
-    public String myOrder(String userId, Model model){
+    public String myOrder(String userId, Model model, MyOrderPageRequestDTO myOrderPageRequestDTO){
         log.info(userId);
-        List<MyOrderDTO> MyOrderDTOList = myService.selectOrders(userId);
+        MyOrderPageResponseDTO MyOrderDTOList = myService.selectOrders(userId, myOrderPageRequestDTO);
+
         model.addAttribute("MyOrderDTOList", MyOrderDTOList);
 
         return "/my/order";
