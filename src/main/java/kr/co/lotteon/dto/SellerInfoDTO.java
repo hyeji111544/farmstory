@@ -14,13 +14,13 @@ import java.util.Map;
 public class SellerInfoDTO {
 
     // 주문건수, 주문금액 출력을 위한 필드
-    private int oneDayCount;
+    private Long oneDayCount;
     private int oneDayPrice;
-    private int oneWeekCount;
+    private Long oneWeekCount;
     private int oneWeekPrice;
-    private int oneMonthsCount;
+    private Long oneMonthsCount;
     private int oneMonthsPrice;
-    private int allCount;
+    private Long allCount;
     private int allPrice;
 
     // 주문상태 출력을 위한 필드
