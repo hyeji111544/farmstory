@@ -25,19 +25,19 @@ public class AdminQnaService {
     private final ModelMapper modelMapper;
 
     // admin cs qna 리스트
-    public PageResponseDTO qnaAdminSelect(PageRequestDTO pageRequestDTO){
-
+    public PageResponseDTO qnaAdminSelect(PageRequestDTO pageRequestDTO,String qnaCate,String qnaType){
         Pageable pageable = pageRequestDTO.getPageable("qnaNo");
 
-        Page<Qna> pageQna = adminQnaRepository.findAll(pageable);
-
-        log.info("qnaAdminSelect...1 : " + pageQna);
+        Page<Qna> pageQna;
+        if(qnaCate == null && qnaType == null){
+            pageQna = adminQnaRepository.findAll(pageable);
+        }else{
+            pageQna = adminQnaRepository.findByQnaCateAndQnaType(qnaCate, qnaType, pageable);
+        }
 
         List<QnaDTO> dtoList = pageQna.getContent().stream()
                 .map(qna -> modelMapper.map(qna, QnaDTO.class))
                 .toList();
-
-        log.info("qnaAdminSelect...2 : " + dtoList);
 
         int total = (int) pageQna.getTotalElements();
 

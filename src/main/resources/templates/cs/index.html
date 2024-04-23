@@ -9,7 +9,7 @@
             <h1>공지사항<a th:href="@{/cs/notice/list}">전체보기</a></h1>
             <ul>
               <li th:each="notices, index : ${notice}" th:if="${index.index} &lt; 5">
-                <a href="#" class="title" th:text="${notices.noticeType + ' ' + notices.noticeTitle}"></a>
+                <a th:href="@{/cs/notice/view(noticeNo=${notices.noticeNo})}" class="title" th:text="${notices.noticeType + ' ' + notices.noticeTitle}"></a>
                 <span class="date" th:text="${#temporals.format(notices.noticeDate, 'yyyy-MM-dd')}"></span>
               </li>
             </ul>
@@ -20,25 +20,25 @@
             </h1>
             <ol>
               <li>
-                <a href="#"><span>회원</span></a>
+                <a th:href="@{/cs/faq/list(faqCate='user')}"><span>회원</span></a>
               </li>
               <li>
-                <a href="#"><span>쿠폰/이벤트</span></a>
+                <a th:href="@{/cs/faq/list(faqCate='coupon')}"><span>쿠폰/이벤트</span></a>
               </li>
               <li>
-                <a href="#"><span>주문/결제</span></a>
+                <a th:href="@{/cs/faq/list(faqCate='order')}"><span>주문/결제</span></a>
               </li>
               <li>
-                <a href="#"><span>배송</span></a>
+                <a th:href="@{/cs/faq/list(faqCate='delivery')}"><span>배송</span></a>
               </li>
               <li>
-                <a href="#" style="white-space: nowrap;"><span>취소/반품/교환</span></a>
+                <a th:href="@{/cs/faq/list(faqCate='cancel')}" style="white-space: nowrap;"><span>취소/반품/교환</span></a>
               </li>
               <li>
-                <a href="#" style="white-space: nowrap;"><span>여행/숙박/항공</span></a>
+                <a th:href="@{/cs/faq/list(faqCate='travel')}" style="white-space: nowrap;"><span>여행/숙박/항공</span></a>
               </li>
               <li>
-                <a href="#"><span>안전거래</span></a>
+                <a th:href="@{/cs/faq/list(faqCate='safe')}"><span>안전거래</span></a>
               </li>
             </ol>
           </section>
@@ -50,7 +50,7 @@
             </h1>
             <ul>
               <li th:each="qnas, index : ${qna}" th:if="${index.index} &lt; 5">
-                <a href="#" class="title" th:text="${qnas.qnaCate + ' ' + qnas.qnaTitle}"></a>
+                <a th:href="@{/cs/qna/view(qnaNo=${qnas.qnaNo})}" class="title" th:text="${qnas.qnaCate + ' ' + qnas.qnaTitle}"></a>
                 <p>
                   <span class="uid" th:text="${qnas.userId}"></span>
                   <span class="date" th:text="${#temporals.format(qnas.qnaDate, 'yyyy-MM-dd')}"></span>

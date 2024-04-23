@@ -13,8 +13,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -31,19 +33,19 @@ public class CsService {
         return noticeRepository.findAll();
     }
     // notice page 리스트 출력
-    public PageResponseDTO selectNoticePages(PageRequestDTO pageRequestDTO){
-
+    public PageResponseDTO selectNoticePages(PageRequestDTO pageRequestDTO,String noticeCate){
         Pageable pageable = pageRequestDTO.getPageable("noticeNo");
 
-        Page<Notice> pageNotice = noticeRepository.findAll(pageable);
-
-        log.info("selectNoticePages...1 : " + pageNotice);
+        Page<Notice> pageNotice;
+        if(noticeCate == null){
+            pageNotice = noticeRepository.findAll(pageable);
+        }else{
+            pageNotice = noticeRepository.findByNoticeCate(noticeCate, pageable);
+        }
 
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()
                 .map(notice -> modelMapper.map(notice, NoticeDTO.class))
                 .toList();
-
-        log.info("selectNoticePages...2 : " + dtoList);
 
         int total = (int) pageNotice.getTotalElements();
 
@@ -82,19 +84,18 @@ public class CsService {
     }
 
     // qna page 리스트 출력
-    public PageResponseDTO selectQnaPages(PageRequestDTO pageRequestDTO){
-
+    public PageResponseDTO selectQnaPages(PageRequestDTO pageRequestDTO,String qnaCate){
         Pageable pageable = pageRequestDTO.getPageable("qnaNo");
-
-        Page<Qna> pageQna = qnaRepository.findAll(pageable);
-
-        log.info("selectQnaPages...1 : " + pageQna);
+        Page<Qna> pageQna;
+        if(qnaCate == null){
+            pageQna = qnaRepository.findAll(pageable);
+        }else{
+            pageQna = qnaRepository.findByQnaCate(qnaCate,pageable);
+        }
 
         List<QnaDTO> dtoList = pageQna.getContent().stream()
                 .map(qna -> modelMapper.map(qna, QnaDTO.class))
                 .toList();
-
-        log.info("selectQnaPages...2 : " + dtoList);
 
         int total = (int) pageQna.getTotalElements();
 
@@ -118,20 +119,34 @@ public class CsService {
     }
 
     // faq 리스트
-    public List<Faq> faqList(){
-        return faqRepository.findAll();
+    public List<Faq> faqList(String faqCate){
+        if(faqCate == null){
+            return faqRepository.findAll();
+        }else{
+            return faqRepository.findByFaqCate(faqCate);
+        }
     }
 
-    // faq view 불러오기
+//    // faq view 불러오기
     public FaqDTO faqView(int faqNo){
 
         // .orElse(null); optional 객체가 비어있을경우 대비
         Faq faq = faqRepository.findById(faqNo).orElse(null);
+
         log.info("특정 글 불러오기 view {}",faq);
         if(faq !=null){
             // DTO로 변환후에 반환
             return modelMapper.map(faq, FaqDTO.class);
         }
         return null; // 해당 번호의 글이 없는 경우 null반환
+    }
+    //faq view
+    public FaqDTO faqViewCate(String faqCate){
+
+        List<Faq> byFaqCate = faqRepository.findByFaqCate(faqCate);
+        if(byFaqCate != null){
+            return modelMapper.map(byFaqCate, FaqDTO.class);
+        }
+        return null;
     }
 }

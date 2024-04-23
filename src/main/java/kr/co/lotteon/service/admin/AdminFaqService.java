@@ -54,19 +54,22 @@ public class AdminFaqService {
     }
 
     // 관리자페이지 고객센터 메뉴 자주묻는질문 리스트 출력
-    public PageResponseDTO FaqAdminSelect(PageRequestDTO pageRequestDTO) {
-
+    public PageResponseDTO FaqAdminSelect(PageRequestDTO pageRequestDTO,String faqCate,String faqType) {
         Pageable pageable = pageRequestDTO.getPageable("FaqNo");
-
-        Page<Faq> pageFaq = adminFaqRepository.findAll(pageable);
-
-        log.info("FaqAdminSelect...1 : " + pageFaq);
+        log.info("faqCate {}", faqCate);
+        log.info("faqType {}", faqType);
+        Page<Faq> pageFaq;
+        if(faqCate == null && faqType == null){
+            pageFaq = adminFaqRepository.findAll(pageable);
+        }else{
+            pageFaq = adminFaqRepository.findByFaqCateAndFaqType(faqCate, faqType, pageable);
+        }
 
         List<FaqDTO> dtoList = pageFaq.getContent().stream()
                 .map(faq -> modelMapper.map(faq, FaqDTO.class))
                 .toList();
 
-        log.info("FaqAdminSelect...2 : " + dtoList);
+        log.info("pageNoticeChecked {}", pageFaq);
 
         int total = (int) pageFaq.getTotalElements();
 

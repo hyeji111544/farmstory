@@ -26,10 +26,11 @@ public class AdminFaqController {
 
     // 관리자 고객센터 자주묻는질문 리스트 출력
     @GetMapping("/admin/cs/faq/list")
-    public String csFaqList(Model model, PageRequestDTO pageRequestDTO){
+    public String csFaqList(Model model, PageRequestDTO pageRequestDTO,
+                            @RequestParam(value = "faqCate", required = false) String faqCate,
+                            @RequestParam(value = "faqType", required = false) String faqType){
 
-        PageResponseDTO pageResponseDTO = adminFaqService.FaqAdminSelect(pageRequestDTO);
-        log.info("pageResponseDTO : " + pageResponseDTO);
+        PageResponseDTO pageResponseDTO = adminFaqService.FaqAdminSelect(pageRequestDTO,faqCate,faqType);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
         return "/admin/cs/faq/list";

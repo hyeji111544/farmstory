@@ -13,11 +13,11 @@
             <aside>
               <h2>공지사항</h2>
               <ul>
-                <li class="on"><a th:href="@{/cs/notice/list}">전체</a></li>
-                <li><a href="#">고객서비스</a></li>
-                <li><a href="#">안전거래</a></li>
-                <li><a href="#">위해상품</a></li>
-                <li><a href="#">이벤트당첨</a></li>
+                <li th:class="${noticeCate == null ? 'on':''}"><a th:href="@{/cs/notice/list}">전체</a></li>
+                <li th:class="${noticeCate == 'service' ? 'on':''}"><a th:href="@{/cs/notice/list(noticeCate='service')}">고객서비스</a></li>
+                <li th:class="${noticeCate == 'safe' ? 'on':''}"><a th:href="@{/cs/notice/list(noticeCate='safe')}">안전거래</a></li>
+                <li th:class="${noticeCate == 'danger' ? 'on':''}"><a th:href="@{/cs/notice/list(noticeCate='danger')}">위해상품</a></li>
+                <li th:class="${noticeCate == 'event' ? 'on':''}"><a th:href="@{/cs/notice/list(noticeCate='event')}">이벤트당첨</a></li>
               </ul>
             </aside>
             <article>
