@@ -81,7 +81,9 @@ header > .logo img {
 header > .logo a {
   font-size: 30px;
   font-weight: bold;
+  margin-bottom: 30px;
 }
+
 
 /* 메인 */
 #cs {

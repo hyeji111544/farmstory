@@ -1,9 +1,13 @@
 package kr.co.lotteon.repository.admin;
 
 import kr.co.lotteon.entity.Qna;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdminQnaRepository extends JpaRepository<Qna, Integer> {
+
+    public Page<Qna> findByQnaCateAndQnaType(String cate, String type, Pageable pageable);
 }

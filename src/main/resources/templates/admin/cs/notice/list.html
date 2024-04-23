@@ -77,7 +77,15 @@
                     });
                 }
             }
+            // // 카테고리별 조회
+            function redirectToCategory() {
+                const button = event.target; // 현재 선택한 버튼 -> select
+                const buttonValue = button.value; // 현재 선택한 버튼의 value
 
+                console.log("buttonValue : " + buttonValue)
+
+                    location.href = "/lotteon/admin/cs/notice/list?noticeCate=" + buttonValue;
+            }
         </script>
         <nav>
             <h3>공지사항 목록</h3>
@@ -88,12 +96,12 @@
         <!-- 상품목록 컨텐츠 시작 -->
         <section>
             <div>
-                <select name="search">
-                    <option value="[유형선택]">유형선택</option>
-                    <option value="[고객서비스]">고객서비스</option>
-                    <option value="[이벤트당첨]">이벤트당첨</option>
-                    <option value="[안전거래]">안전거래</option>
-                    <option value="[위해상품]">위해상품</option>
+                <select name="search" onchange="redirectToCategory()">
+                    <option value="choice">유형선택</option>
+                    <option value="service">고객서비스</option>
+                    <option value="event">이벤트당첨</option>
+                    <option value="safe">안전거래</option>
+                    <option value="danger">위해상품</option>
                 </select>
             </div>
             <table class="notice">

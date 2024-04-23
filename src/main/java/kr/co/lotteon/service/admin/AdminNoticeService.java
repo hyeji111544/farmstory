@@ -46,20 +46,21 @@ public class AdminNoticeService {
     }
 
     // 관리자페이지 고객센터 메뉴 공지사항 리스트 출력
-    public PageResponseDTO NoticeAdminSelect(PageRequestDTO pageRequestDTO){
-
+    public PageResponseDTO NoticeAdminSelect(PageRequestDTO pageRequestDTO, String noticeCate){
         Pageable pageable = pageRequestDTO.getPageable("noticeNo");
-
-        Page<Notice> pageNotice = adminNoticeRepository.findAll(pageable);
-
-        log.info("NoticeAdminSelect...1 : " + pageNotice);
+        log.info("noticeCate {}", noticeCate);
+        Page<Notice> pageNotice;
+        if(noticeCate == null){
+            pageNotice = adminNoticeRepository.findAll(pageable);
+        }else{
+            pageNotice = adminNoticeRepository.findByNoticeCate(noticeCate, pageable);
+        }
 
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()
                 .map(notice -> modelMapper.map(notice, NoticeDTO.class))
                 .toList();
 
-        log.info("NoticeAdminSelect...2 : " + dtoList);
-
+        log.info("pageNoticeChecked {}", pageNotice);
         int total = (int) pageNotice.getTotalElements();
 
         return PageResponseDTO.builder()
@@ -68,6 +69,7 @@ public class AdminNoticeService {
                 .total(total)
                 .build();
     }
+
     // 관리자페이지 고객센터 메뉴 공지사항 글 수정
     public void noticeAdminUpdate(NoticeDTO noticeDTO){
 

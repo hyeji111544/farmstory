@@ -2,6 +2,8 @@ package kr.co.lotteon.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @ToString
@@ -18,5 +20,6 @@ public class orderDetailDTO {
     private int detailPrice;
     private int detailPoint;
     private String detailStatus;
-
+    private String prodSeller;
+    private LocalDate detailDate;
 }

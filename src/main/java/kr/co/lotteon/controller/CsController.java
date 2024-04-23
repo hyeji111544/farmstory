@@ -1,5 +1,6 @@
 package kr.co.lotteon.controller;
 
+import kr.co.lotteon.dto.FaqDTO;
 import kr.co.lotteon.dto.PageRequestDTO;
 import kr.co.lotteon.dto.PageResponseDTO;
 import kr.co.lotteon.dto.QnaDTO;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,26 +34,36 @@ public class CsController {
 // cs-faq //
     // faq 글목록 이동
     @GetMapping("/cs/faq/list")
-    public String faqList(Model model){
+    public String faqList(Model model,@RequestParam(value = "faqCate", required = false) String faqCate){
 
-        model.addAttribute("list",csService.faqList());
+        model.addAttribute("list",csService.faqList(faqCate));
         return "/cs/faq/list";
     }
 
     // faq 글보기
     @GetMapping("/cs/faq/view")
-    public String faqView(Model model, int faqNo){
+    public String faqView(Model model, int faqNo,String faqCate){
+        FaqDTO faqDTO = csService.faqViewCate(faqCate);
+        log.info("faqDTO", faqDTO);
         model.addAttribute("view",csService.faqView(faqNo));
+        model.addAttribute("faqDTO",faqDTO);
+
         return "/cs/faq/view";
     }
 
     // cs-notice list //
     @GetMapping("/cs/notice/list")
-    public String noticeList(Model model, PageRequestDTO pageRequestDTO){
+    public String noticeList(Model model, PageRequestDTO pageRequestDTO,
+                             @RequestParam(value = "noticeCate", required = false) String noticeCate){
 
-    PageResponseDTO pageResponseDTO = csService.selectNoticePages(pageRequestDTO);
-    log.info("pageResponseDTO : " + pageResponseDTO);
+        log.info("noticeCate : " + noticeCate);
+
+
+    PageResponseDTO pageResponseDTO = csService.selectNoticePages(pageRequestDTO, noticeCate);
+
+    log.info("pageResponseDTO321321 : " + pageResponseDTO);
     model.addAttribute("pageResponseDTO", pageResponseDTO);
+    model.addAttribute("noticeCate", noticeCate);
 
     return "/cs/notice/list";
 }
@@ -66,10 +78,10 @@ public class CsController {
 // cs-qna //
     // qna 글목록 이동
     @GetMapping("/cs/qna/list")
-    public String qnaList(Model model, PageRequestDTO pageRequestDTO){
+    public String qnaList(Model model, PageRequestDTO pageRequestDTO,
+                          @RequestParam(value = "qnaCate", required = false) String qnaCate){
 
-        PageResponseDTO pageResponseDTO = csService.selectQnaPages(pageRequestDTO);
-        log.info("pageResponseDTO : " + pageResponseDTO);
+        PageResponseDTO pageResponseDTO = csService.selectQnaPages(pageRequestDTO,qnaCate);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
         return "/cs/qna/list";

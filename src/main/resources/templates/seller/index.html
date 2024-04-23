@@ -1,10 +1,27 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/adminLayout.html}">
+      layout:decorate="~{/layout/sellerLayout.html}">
 <!--내용 시작-->
     <section id="admin-index" layout:fragment="content">
+
+        <script>
+            window.onload = function (){
+                const graphStickAll = document.getElementsByClassName('graphStick');
+                Array.from(graphStickAll).forEach(function (graphStick){
+                    graphStick.addEventListener('mouseover', function (event){
+                        event.target.querySelector('span:nth-child(3)').style.display = "flex";
+                    });
+                    graphStick.addEventListener('mouseleave', function (event){
+                        event.target.getElementsByTagName('span')[2].style.display = "none";
+                    });
+                })
+            }
+
+
+        </script>
+
         <nav>
-            <h3>관리자 메인</h3>
+            <h3>판매자 메인</h3>
             <p>
                 HOME > <strong>메인</strong>
             </p>
@@ -12,182 +29,73 @@
 
         <h4>쇼핑몰 운영현황</h4>
         <article>
-            <table>
-                <tr>
-                    <td>
-                        <strong>주문건수(건)</strong>
-                        <span>131</span>
-                    </td>
-                    <td>
-                        <strong>주문금액(원)</strong>
-                        <span>1,130,000</span>
-                    </td>
-                    <td>
-                        <strong>회원가입(명)</strong>
-                        <span>1014</span>
-                    </td>
-                    <td>
-                        <strong>쇼핑몰 방문(명)</strong>
-                        <span>1014</span>
-                    </td>
-                    <td>
-                        <strong>신규게시물(건)</strong>
-                        <span>100</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                </tr>
-            </table>
-        </article>
+            <div class="shopInfo">
+                <div class="shopAverage">
+                    <div class="shopGroup">
+                        <img th:src="@{/images/seller/seller_admin_icon2.png}">
+                        <div>
+                            <p>총 주문건수<span th:text="${sellerInfoDTO.allCount}"></span></p>
+                            <p>신규 주문건수<span th:text="${sellerInfoDTO.oneDayCount}"></span></p>
+                            <p>주간 주문건수<span th:text="${sellerInfoDTO.oneWeekCount}"></span></p>
+                            <p>월간 주문건수<span th:text="${sellerInfoDTO.oneMonthsCount}"></span></p>
+                        </div>
+                    </div>
+                    <div class="shopGroup">
+                        <img th:src="@{/images/seller/seller_admin_icon1.png}">
+                        <div>
+                            <p>총 주문금액<span th:text="${sellerInfoDTO.allPrice}"></span></p>
+                            <p>신규 주문금액<span th:text="${sellerInfoDTO.oneDayPrice}"></span></p>
+                            <p>주간 주문금액<span th:text="${sellerInfoDTO.oneWeekPrice}"></span></p>
+                            <p>월간 주문금액<span th:text="${sellerInfoDTO.oneMonthsPrice}"></span></p>
+                        </div>
+                    </div>
+                    <div class="shopGroup">
+                        <img th:src="@{/images/seller/seller_admin_icon3.png}">
+                        <div>
+                            <p>입금 대기<span th:text="${sellerInfoDTO.statusCountMap.get('입금 대기')}"></span></p>
+                            <p>배송 준비<span th:text="${sellerInfoDTO.statusCountMap.get('배송 준비')}"></span></p>
+                            <p>배송 중<span th:text="${sellerInfoDTO.statusCountMap.get('배송 중')}"></span></p>
+                        </div>
+                    </div>
+                    <div class="shopGroup">
+                        <img th:src="@{/images/seller/seller_admin_icon1.png}">
+                        <div>
+                            <p>취소 요청<span th:text="${sellerInfoDTO.statusCountMap.get('취소 요청')}"></span></p>
+                            <p>교환 요청<span th:text="${sellerInfoDTO.statusCountMap.get('교환 요청')}"></span></p>
+                            <p>환불 요청<span th:text="${sellerInfoDTO.statusCountMap.get('환불 요청')}"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="shopGraph">
+                    <div class="graphTitle">
+                        <span class="orangeStick"></span>
+                        <span> 주문 건수 </span>
+                        <span class="redStick"></span>
+                        <span> 매출 금액 </span>
+                    </div>
+                    <div class="graphContent">
+                        <div class="graphTop">
+                            <div class="graphStick" th:each="grapgInfo : ${sellerInfoDTO.graphInfoDTO}">
+                                <span class="countStick" th:style="'height:'+(${grapgInfo.count}/${sellerInfoDTO.allCount}*500)+10" th:data-count="${grapgInfo.count}"></span>
+                                <span class="salesStick" th:style="'height:'+(${grapgInfo.price}/${sellerInfoDTO.allPrice}*500)+10" th:data-price="${grapgInfo.price}"></span>
+                                <span class="stickInfo">[[${grapgInfo.count}]]<br>[[${grapgInfo.price}]]</span>
+                            </div>
 
-        <h4>주문 업무현황</h4>
-        <article>
-            <table>
-                <tr>
-                    <td>
-                        <strong>입금대기(건)</strong>
-                        <span>100</span>
-                    </td>
-                    <td>
-                        <strong>배송준비(건)</strong>
-                        <span>100</span>
-                    </td>
-                    <td>
-                        <strong>취소요청(건)</strong>
-                        <span>100</span>
-                    </td>
-                    <td>
-                        <strong>교환요청(건)</strong>
-                        <span>100</span>
-                    </td>
-                    <td>
-                        <strong>반품요청(건)</strong>
-                        <span>100</span>
-                    </td>
-                </tr>
-            </table>
+
+                        </div>
+
+                        <div class="graphBot">
+                            <div>04.22</div>
+                            <div>04.21</div>
+                            <div>04.20</div>
+                            <div>04.19</div>
+                            <div>04.18</div>
+                            <div>04.17</div>
+                            <div>04.16</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </article>
 
         <div>
