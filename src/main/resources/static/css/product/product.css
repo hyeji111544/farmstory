@@ -830,6 +830,14 @@
     line-height: 40px;
     margin-right: 20px;
 }
+#cartList > .cartProdCompany {
+    margin: 10px 0;
+    padding: 10px 20px 0;
+    font-size: 28px;
+    font-weight: bold;
+    border-top: 1px solid #d3d3d3;
+}
+
 #cartList > .productList {
   display: flex;
   flex-wrap: wrap;
