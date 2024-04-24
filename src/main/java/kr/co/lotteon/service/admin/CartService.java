@@ -1,6 +1,7 @@
 package kr.co.lotteon.service.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import kr.co.lotteon.entity.CartProduct;
 import kr.co.lotteon.repository.CartProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,11 @@ import java.util.Optional;
 public class CartService {
     private final CartProductRepository cartProductRepository;
 
+    @Transactional
     public ResponseEntity<?> deleteProducts(HttpServletRequest req, int cartProdNo){
+
+        log.info("cartProdNo : " + cartProdNo);
+
         Optional<CartProduct> optProducts = cartProductRepository.findById(cartProdNo);
         log.info("deleteProdAtService..1:"+optProducts);
 

@@ -82,6 +82,7 @@ public class TestService {
             cartInfoDTO.setProdDiscount(product.getProdDiscount());
             cartInfoDTO.setProdPrice(product.getProdPrice());
             cartInfoDTO.setProdCompany(product.getProdCompany()); // 회사명 추가
+            cartInfoDTO.setProdDeliveryFee(product.getProdDeliveryFee()); // 배송비 추가
             if (product.getThumb190() != null) {
                 cartInfoDTO.setThumb190(product.getThumb190());
             }
