@@ -119,29 +119,6 @@
         </div>
       </header>
       <main>
-        <!--ROLE_USER 권한을 갖는다면 이 글이 보임-->
-        <h1 sec:authorize="hasRole('ADMIN')">ADMIN 권한</h1>
-
-        <!--ROLE_ADMIN 권한을 갖는다면 이 글이 보임-->
-        <h1 sec:authorize="hasRole('USER')">USER 권한</h1>
-
-        <!--어떤 권한이건 상관없이 인증이 되었다면 이 글이 보임-->
-        <div sec:authorize="isAuthenticated()">
-          어떤 권한이건 상관없이 인증이 되었다면!!
-        </div>
-
-        <!--인증시 사용된 객체에 대한 정보-->
-        <b>인증시 사용된 객체에 대한 정보:</b>
-        <div sec:authentication="principal"></div>
-
-        <!--인증시 사용된 객체의 Username (ID)-->
-        <b>객체의 Username (ID):</b>
-        <div sec:authentication="name"></div>
-
-        <!--객체의 권한-->
-        <b>객체의 권한 (role):</b>
-        <div sec:authentication="principal.authorities"></div>
-
 
         <!-- 카테고리/베스트 상품 영역 -->
         <aside>
