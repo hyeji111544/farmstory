@@ -1,11 +1,8 @@
 package kr.co.lotteon.controller;
 
-import kr.co.lotteon.dto.MyOrderDTO;
-import kr.co.lotteon.dto.MyOrderPageRequestDTO;
-import kr.co.lotteon.dto.MyOrderPageResponseDTO;
-import kr.co.lotteon.dto.UserDTO;
+import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
-import kr.co.lotteon.entity.OrderDetail;
+import kr.co.lotteon.repository.UserPointRepository;
 import kr.co.lotteon.service.MyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,6 +21,7 @@ import java.util.Random;
 public class MyController {
 
     private final MyService myService;
+    private final UserPointRepository userPointRepository;
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
@@ -87,16 +85,23 @@ public class MyController {
     public String myOrder(String userId, Model model, MyOrderPageRequestDTO myOrderPageRequestDTO){
         log.info(userId);
         MyOrderPageResponseDTO MyOrderDTOList = myService.selectOrders(userId, myOrderPageRequestDTO);
-
         model.addAttribute("MyOrderDTOList", MyOrderDTOList);
 
         return "/my/order";
     }
 
-
     //마이페이지-포인트 이동
     @GetMapping("/my/point")
-    public String myPoint(){
+    public String myPoint(String userId,
+                          Model model,
+                          PageRequestDTO pageRequestDTO){
+
+        PageResponseDTO pageResponseDTO = myService.selectPoints(userId, pageRequestDTO);
+        //userPointRepository.selectPoints(userId, pageRequestDTO);
+
+        log.info("pageResponseDTO : " +pageResponseDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+
         return "/my/point";
     }
 

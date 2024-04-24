@@ -95,6 +95,7 @@ public class OrdersRepositoryImpl implements OrdersRepositoryCustom {
         log.info("IMPL 끝");
 
         int total = myOrderDTOList.size();
+        log.info("total : " + total);
 
         return MyOrderPageResponseDTO.builder()
                 .pageRequestDTO(myOrderPageRequestDTO)
