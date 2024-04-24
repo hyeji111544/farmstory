@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class AdminNoticeService {
         log.info("savedNotice ={}", savedNotice.toString());
     }
     // 관리자페이지 고객센터 메뉴 공지사항 특정 글 불러오기
+    @Transactional
     public NoticeDTO NoticeAdminView(int noticeNo){
 
         // .orElse(null); optional 객체가 비어있을경우 대비
@@ -40,6 +42,8 @@ public class AdminNoticeService {
         log.info("특정 글 불러오기 modify {}",notice);
         if(notice !=null){
             // DTO로 변환후에 반환
+            adminNoticeRepository.incrementHitByNoticeNo(noticeNo);
+            log.info("noticeNo1 {}", noticeNo);
             return modelMapper.map(notice, NoticeDTO.class);
         }
         return null; // 해당 번호의 글이 없는 경우 null반환
@@ -48,17 +52,18 @@ public class AdminNoticeService {
     // 관리자페이지 고객센터 메뉴 공지사항 리스트 출력
     public PageResponseDTO NoticeAdminSelect(PageRequestDTO pageRequestDTO, String noticeCate){
         Pageable pageable = pageRequestDTO.getPageable("noticeNo");
-        log.info("noticeCate {}", noticeCate);
+
         Page<Notice> pageNotice;
         if(noticeCate == null){
             pageNotice = adminNoticeRepository.findAll(pageable);
         }else{
             pageNotice = adminNoticeRepository.findByNoticeCate(noticeCate, pageable);
         }
-
+        // Entity -> DTO
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()
                 .map(notice -> modelMapper.map(notice, NoticeDTO.class))
                 .toList();
+        // Notice hit ++
 
         log.info("pageNoticeChecked {}", pageNotice);
         int total = (int) pageNotice.getTotalElements();
