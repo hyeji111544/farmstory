@@ -18,66 +18,102 @@
             <aside>
               <h2>자주묻는 질문</h2>
               <ul>
-                <li class="on" th:if="${list.get(0).faqCate == 'user'}"><a th:href="@{/cs/faq/list(faqCate='user')}">회원</a></li>
-                <li th:if="${list.get(0).faqCate != 'user'}"><a th:href="@{/cs/faq/list(faqCate='user')}">회원</a></li>
-
-                <li class="on" th:if="${list.get(0).faqCate == 'coupon'}"><a th:href="@{/cs/faq/list(faqCate='coupon')}">쿠폰/이벤트</a></li>
-                <li th:if="${list.get(0).faqCate != 'coupon'}"><a th:href="@{/cs/faq/list(faqCate='coupon')}">쿠폰/이벤트</a></li>
-
-                <li  class="on" th:if="${list.get(0).faqCate == 'order'}"><a th:href="@{/cs/faq/list(faqCate='order')}">주문/결제</a></li>
-                <li th:if="${list.get(0).faqCate != 'order'}"><a th:href="@{/cs/faq/list(faqCate='order')}">주문/결제</a></li>
-
-                <li  class="on" th:if="${list.get(0).faqCate == 'delivery'}"><a th:href="@{/cs/faq/list(faqCate='delivery')}">배송</a></li>
-                <li th:if="${list.get(0).faqCate != 'delivery'}"><a th:href="@{/cs/faq/list(faqCate='delivery')}">배송</a></li>
-
-                <li  class="on" th:if="${list.get(0).faqCate == 'cancel'}"><a th:href="@{/cs/faq/list(faqCate='cancel')}">취소/반품/교환</a></li>
-                <li th:if="${list.get(0).faqCate != 'cancel'}"><a th:href="@{/cs/faq/list(faqCate='cancel')}">취소/반품/교환</a></li>
-
-                <li  class="on" th:if="${list.get(0).faqCate == 'travel'}"><a th:href="@{/cs/faq/list(faqCate='travel')}">여행/숙박/항공</a></li>
-                <li th:if="${list.get(0).faqCate != 'travel'}"><a th:href="@{/cs/faq/list(faqCate='travel')}">여행/숙박/항공</a></li>
-
-                <li  class="on" th:if="${list.get(0).faqCate == 'safe'}"><a th:href="@{/cs/faq/list(faqCate='safe')}">안전거래</a></li>
-                <li th:if="${list.get(0).faqCate != 'safe'}"><a th:href="@{/cs/faq/list(faqCate='safe')}">안전거래</a></li>
+                <li th:class="${faqCate == 'user' ? 'on':''}"><a th:href="@{/cs/faq/list(faqCate='user')}">회원</a></li>
+                <li th:class="${faqCate == 'coupon' ? 'on':''}"><a th:href="@{/cs/faq/list(faqCate='coupon')}">쿠폰/이벤트</a></li>
+                <li th:class="${faqCate == 'order' ? 'on':''}"><a th:href="@{/cs/faq/list(faqCate='order')}">주문/결제</a></li>
+                <li th:class="${faqCate == 'delivery' ? 'on':''}"><a th:href="@{/cs/faq/list(faqCate='delivery')}">배송</a></li>
+                <li th:class="${faqCate == 'cancel' ? 'on':''}"><a th:href="@{/cs/faq/list(faqCate='cancel')}">취소/반품/교환</a></li>
+                <li th:class="${faqCate == 'travel' ? 'on':''}"><a th:href="@{/cs/faq/list(faqCate='travel')}">여행/숙박/항공</a></li>
+                <li th:class="${faqCate == 'safe' ? 'on':''}"><a th:href="@{/cs/faq/list(faqCate='safe')}">안전거래</a></li>
               </ul>
             </aside>
-            <article>              
-              <nav>
+            <article>
+
+              <nav th:if="${faqCate == 'user'}">
                 <h1>회원</h1>
-                <h2>회원관련 자주묻는 질문 입니다.</h2>
+                <h2>회원 관련 자주묻는 질문 입니다.</h2>
+              </nav>
+              <nav th:if="${faqCate == 'coupon'}">
+                <h1>쿠폰/이벤트</h1>
+                <h2>쿠폰/이벤트 관련 자주묻는 질문 입니다.</h2>
+              </nav>
+              <nav th:if="${faqCate == 'order'}">
+                <h1>주문/결제</h1>
+                <h2>주문/결제 관련 자주묻는 질문 입니다.</h2>
+              </nav>
+              <nav th:if="${faqCate == 'delivery'}">
+                <h1>배송</h1>
+                <h2>배송 관련 자주묻는 질문 입니다.</h2>
+              </nav>
+              <nav th:if="${faqCate == 'cancel'}">
+                <h1>취소/반품/교환</h1>
+                <h2>취소/반품/교환 관련 자주묻는 질문 입니다.</h2>
+              </nav>
+              <nav th:if="${faqCate == 'travel'}">
+                <h1>여행/숙박/항공</h1>
+                <h2>여행/숙박/항공 관련 자주묻는 질문 입니다.</h2>
+              </nav>
+              <nav th:if="${faqCate == 'safe'}">
+                <h1>안전거래</h1>
+                <h2>안전거래 관련 자주묻는 질문 입니다.</h2>
               </nav>
 
               <div>
-                <h3>가입</h3>
+                <h3 th:if="${faqCate == 'user'}" th:text="가입"></h3>
+                <h3 th:if="${faqCate == 'coupon'}" th:text="등록방법"></h3>
+                <h3 th:if="${faqCate == 'order'}" th:text="주문내역"></h3>
+                <h3 th:if="${faqCate == 'delivery'}" th:text="배송일"></h3>
+                <h3 th:if="${faqCate == 'cancel'}" th:text="반품신청"></h3>
+                <h3 th:if="${faqCate == 'travel'}" th:text="숙박시설"></h3>
+                <h3 th:if="${faqCate == 'safe'}" th:text="주의사항"></h3>
                 <ul>
-                  <li th:each="faq : ${list}">
-                    <a th:href="@{/cs/faq/view(faqNo=${faq.faqNo})}"><span>Q.</span>[[${faq.faqTitle}]]</a>
+                  <li th:each="faq : ${list}" th:if="${faq.faqType == 'regi'}">
+                    <a th:href="@{/cs/faq/view(faqNo=${faq.faqNo}, faqCate=${faq.faqCate})}"><span>Q.</span>[[${faq.faqTitle}]]</a>
                   </li>
                   <li class="more"><a href="#">더보기</a></li>
                 </ul>
               </div>
               <div>
-                <h3>탈퇴</h3>
+                <h3 th:if="${faqCate == 'user'}" th:text="탈퇴"></h3>
+                <h3 th:if="${faqCate == 'coupon'}" th:text="유효기간"></h3>
+                <h3 th:if="${faqCate == 'order'}" th:text="결제방법"></h3>
+                <h3 th:if="${faqCate == 'delivery'}" th:text="배송지연"></h3>
+                <h3 th:if="${faqCate == 'cancel'}" th:text="주문취소"></h3>
+                <h3 th:if="${faqCate == 'travel'}" th:text="여행지추천"></h3>
+                <h3 th:if="${faqCate == 'safe'}" th:text="결제방법"></h3>
                 <ul>
-                  <li th:each="faq : ${list}">
-                    <a th:href="@{/cs/faq/view(faqNo=${faq.faqNo})}"><span>Q.</span>[[${faq.faqTitle}]]</a>
+                  <li th:each="faq : ${list}" th:if="${faq.faqType == 'leave'}">
+                    <a th:href="@{/cs/faq/view(faqNo=${faq.faqNo}, faqCate=${faq.faqCate})}"><span>Q.</span>[[${faq.faqTitle}]]</a>
                   </li>
                   <li class="more"><a href="#">더보기</a></li>
                 </ul>
               </div>
               <div>
-                <h3>회원정보</h3>
+                <h3 th:if="${faqCate == 'user'}" th:text="회원정보"></h3>
+                <h3 th:if="${faqCate == 'coupon'}" th:text="이벤트기간"></h3>
+                <h3 th:if="${faqCate == 'order'}" th:text="결제수단"></h3>
+                <h3 th:if="${faqCate == 'delivery'}" th:text="배송지변경"></h3>
+                <h3 th:if="${faqCate == 'cancel'}" th:text="환불신청"></h3>
+                <h3 th:if="${faqCate == 'travel'}" th:text="결제방법"></h3>
+                <h3 th:if="${faqCate == 'safe'}" th:text="입금계좌"></h3>
                 <ul>
                   <li th:each="faq : ${list}">
-                    <a th:href="@{/cs/faq/view(faqNo=${faq.faqNo})}"><span>Q.</span>[[${faq.faqTitle}]]</a>
+                    <a th:href="@{/cs/faq/view(faqNo=${faq.faqNo}, faqCate=${faq.faqCate})}"><span>Q.</span>[[${faq.faqTitle}]]</a>
                   </li>
                   <li class="more"><a href="#">더보기</a></li>
                 </ul>
               </div>
               <div>
-                <h3>로그인</h3>
+                <h3 th:if="${faqCate == 'user'}" th:text="로그인"></h3>
+                <h3 th:if="${faqCate == 'coupon'}" th:text="이벤트참여"></h3>
+                <h3 th:if="${faqCate == 'order'}" th:text="주문방법"></h3>
+                <h3 th:if="${faqCate == 'delivery'}" th:text="배송현황"></h3>
+                <h3 th:if="${faqCate == 'cancel'}" th:text="환불조건"></h3>
+                <h3 th:if="${faqCate == 'travel'}" th:text="비행시간"></h3>
+                <h3 th:if="${faqCate == 'safe'}" th:text="수수료"></h3>
                 <ul>
                   <li th:each="faq : ${list}">
-                    <a th:href="@{/cs/faq/view(faqNo=${faq.faqNo})}"><span>Q.</span>[[${faq.faqTitle}]]</a>
+                    <a th:href="@{/cs/faq/view(faqNo=${faq.faqNo}, faqCate=${faq.faqCate})}"><span>Q.</span>[[${faq.faqTitle}]]</a>
                   </li>
                   <li class="more"><a href="#">더보기</a></li>
                 </ul>

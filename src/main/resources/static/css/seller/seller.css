@@ -121,9 +121,11 @@
 }
 .graphStick > span:nth-child(1){
     background-color: #F3B95F;
+    border-bottom: 3px solid #F3B95F;
 }
 .graphStick > span:nth-child(2){
     background-color: #da291c;
+    border-bottom: 3px solid #da291c;
 }
 .stickInfo {
     display: none!important;
@@ -148,3 +150,6 @@
     font-size: 12px;
     font-style: italic;
 }
+
+
+#admin-cs-list > section > .qna tr > td:nth-child(5) {width: 80px; text-align: left;}

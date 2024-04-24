@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <head>
     <meta charset="UTF-8" />
     <title>롯데ON::1조 롯데 온라인 쇼핑몰</title>
@@ -69,11 +70,25 @@
       <header>
         <div class="top">
           <div>
-            <a th:if="${#authorization.expression('isAuthenticated()')}">로그인됨</a>
-            <a th:href="@{/member/login}">로그인</a>
-            <a th:href="@{/member/join}">회원가입</a>
-            <a th:href="@{/my/home}">마이페이지</a>
-            <a th:href="@{product/cart}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니</a>
+            <!--로그인 안 했을때-->
+            <th:block th:if="${!#authorization.expression('isAuthenticated()')}">
+              <a th:href="@{/member/login}">로그인</a>
+              <a th:href="@{/member/join}">회원가입</a>
+            </th:block>
+            <!--로그인 했을때-->
+            <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+              <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+              <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+
+              <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
+              <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
+
+              <a th:href="@{product/cart(UserId=${#authentication.principal.user.userId})}">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
+              </a>
+              <a th:href="@{/member/logout}">로그아웃</a>
+
+            </th:block>
           </div>
         </div>
         <div class="logo">
@@ -104,6 +119,30 @@
         </div>
       </header>
       <main>
+        <!--ROLE_USER 권한을 갖는다면 이 글이 보임-->
+        <h1 sec:authorize="hasRole('ADMIN')">ADMIN 권한</h1>
+
+        <!--ROLE_ADMIN 권한을 갖는다면 이 글이 보임-->
+        <h1 sec:authorize="hasRole('USER')">USER 권한</h1>
+
+        <!--어떤 권한이건 상관없이 인증이 되었다면 이 글이 보임-->
+        <div sec:authorize="isAuthenticated()">
+          어떤 권한이건 상관없이 인증이 되었다면!!
+        </div>
+
+        <!--인증시 사용된 객체에 대한 정보-->
+        <b>인증시 사용된 객체에 대한 정보:</b>
+        <div sec:authentication="principal"></div>
+
+        <!--인증시 사용된 객체의 Username (ID)-->
+        <b>객체의 Username (ID):</b>
+        <div sec:authentication="name"></div>
+
+        <!--객체의 권한-->
+        <b>객체의 권한 (role):</b>
+        <div sec:authentication="principal.authorities"></div>
+
+
         <!-- 카테고리/베스트 상품 영역 -->
         <aside>
         <!-- 카테고리 -->

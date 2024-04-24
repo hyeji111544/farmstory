@@ -1,9 +1,6 @@
 package kr.co.lotteon.service;
 
-import kr.co.lotteon.dto.MyOrderDTO;
-import kr.co.lotteon.dto.MyOrderPageRequestDTO;
-import kr.co.lotteon.dto.MyOrderPageResponseDTO;
-import kr.co.lotteon.dto.UserDTO;
+import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +23,10 @@ public class MyService {
     private final UserCouponRepository userCouponRepository;
     private final OrdersRepository ordersRepository;
     private final OrderdetailRepository orderdetailRepository;
+
     private final CouponsRepository couponsRepository;
     private final ModelMapper modelMapper;
+    private final UserPointRepository userPointRepository;
 
     /*
         마이페이지 출력을 위한 service
@@ -130,6 +129,36 @@ public class MyService {
         }
         log.info("마지막 haveCoupons : " + haveCoupons);
         return haveCoupons;
+    }
+
+    // 마이페이지 - 포인트내역 조회
+    public PageResponseDTO selectPoints(String userId, PageRequestDTO pageRequestDTO){
+
+        Pageable pageable = pageRequestDTO.getPageable("pointHisNo");
+
+        Page<PointHistory> pagePointHistory = userPointRepository.selectPoints(userId, pageRequestDTO, pageable);
+
+        List<PointHistoryDTO> dtoList = pagePointHistory.getContent().stream()
+                .map(history -> {
+                    PointHistoryDTO pointHistoryDTO = new PointHistoryDTO();
+                    pointHistoryDTO.setPointNo(history.getPointHisNo());
+                    pointHistoryDTO.setPointNo(history.getPointNo());
+                    pointHistoryDTO.setChangePoint(history.getChangePoint());
+                    pointHistoryDTO.setChangeDate(history.getChangeDate());
+                    pointHistoryDTO.setChangeCode(history.getChangeCode());
+                    pointHistoryDTO.setChangeType(history.getChangeType());
+
+                    return pointHistoryDTO;
+                    // for (String aa : aaaa) {}
+                })
+                .toList();
+        int total = (int) pagePointHistory.getTotalElements();
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(dtoList)
+                .total(total)
+                .build();
     }
 
 }

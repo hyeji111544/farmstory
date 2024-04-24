@@ -23,7 +23,9 @@ public class QPointHistory extends EntityPathBase<PointHistory> {
 
     public final DateTimePath<java.time.LocalDateTime> changeDate = createDateTime("changeDate", java.time.LocalDateTime.class);
 
-    public final StringPath changePoint = createString("changePoint");
+    public final NumberPath<Integer> changePoint = createNumber("changePoint", Integer.class);
+
+    public final StringPath changeType = createString("changeType");
 
     public final NumberPath<Integer> pointHisNo = createNumber("pointHisNo", Integer.class);
 

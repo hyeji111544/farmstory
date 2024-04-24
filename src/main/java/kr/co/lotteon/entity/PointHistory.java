@@ -19,9 +19,10 @@ public class PointHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int pointHisNo;
     private int pointNo;
-    private String changePoint;
+    private int changePoint;
 
     @CreationTimestamp
     private LocalDateTime changeDate;
     private String changeCode;
+    private String changeType;
 }

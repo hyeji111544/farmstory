@@ -830,6 +830,14 @@
     line-height: 40px;
     margin-right: 20px;
 }
+#cartList > .cartProdCompany {
+    margin: 10px 0;
+    padding: 10px 20px 0;
+    font-size: 28px;
+    font-weight: bold;
+    border-top: 1px solid #d3d3d3;
+}
+
 #cartList > .productList {
   display: flex;
   flex-wrap: wrap;
@@ -1662,4 +1670,140 @@
 #product > .search > .paging > .num > a.on {
   color: #fe434c;
   font-weight: bold;
+}
+
+/*  아코디언 기능 시험  */
+
+#product > .cart > #tCartList {
+    display: inline-block;
+    width: 780px;
+    border: 1px solid #d3d3d3;
+    border-radius: 10px;
+}
+
+#tCartList > div > div > h2 > .cartProdCompany {
+    padding: 10px 20px 10px 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#tCartList .productList {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    border-top: 1px solid #d3d3d3;
+    padding-bottom: 10px;
+}
+#tCartList  .productSelect {
+    display: flex;
+    width: 100%;
+    justify-content: right;
+}
+#tCartList .productSelect > a {
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+}
+#tCartList .productInfo {
+    display: flex;
+}
+#tCartList .productInfo > input {
+    width: 20px;
+    margin: 0 10px;
+    border: 1px solid red;
+    outline: none;
+}
+#tCartList .productInfo > a {
+    width: 90px;
+    height: auto;
+    align-content: center;
+}
+#tCartList .productInfo > div:nth-child(4) {
+    width: 300px;
+    align-content: center;
+}
+#tCartList .productInfo > div:nth-child(4) a {
+    font-size: 16px;
+    font-weight: bold;
+}
+#tCartList .productInfo > div:nth-child(4) > p {
+    margin-bottom: 6px;
+}
+#tCartList .productInfo > div:nth-child(4) > p:nth-child(2) {
+    font-size: 14px;
+}
+#tCartList .productInfo > div:nth-child(4) > p:nth-child(3) {
+    color: #777777;
+}
+#tCartList .productInfo > div:nth-child(4) > p:nth-child(4) {
+    font-size: 14px;
+    color: #0037dc;
+}
+#tCartList .productInfo > div:nth-child(5) {
+    display: flex;
+    width: 150px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-right: 1px solid #d3d3d3;
+    border-left: 1px solid #d3d3d3;
+}
+#tCartList .productInfo > div:nth-child(5) button {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #d3d3d3;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+}
+#tCartList .productInfo > div:nth-child(5) button:nth-child(1) {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+#tCartList .productInfo > div:nth-child(5) button:nth-child(3) {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+#tCartList .productInfo > div:nth-child(5) input {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #d3d3d3;
+    background-color: transparent;
+    box-sizing: border-box;
+    margin: 0 -5px;
+    font-size: 16px;
+    text-align: center;
+}
+#tCartList .productInfo > div:nth-child(6) {
+    display: flex;
+    width: 200px;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#tCartList .productInfo > div:nth-child(6) > del {
+    color: #777777;
+    font-size: 14px;
+}
+#tCartList .productInfo > div:nth-child(6) > p:nth-child(2) {
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 4px 0;
+}
+#tCartList .productInfo > div:nth-child(6) > p:nth-child(3) {
+    width: 100%;
+    font-size: 12px;
+    color: #777777;
+}
+#tCartList .productInfo > div:nth-child(6) > a {
+    color: red;
+    line-height: 30px;
+    width: 100px;
+    height: 30px;
+    border: 1px solid red;
+    border-radius: 4px;
+    margin: 10px 0;
 }
