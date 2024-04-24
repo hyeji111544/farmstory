@@ -1,20 +1,17 @@
 package kr.co.lotteon.security;
 
+import kr.co.lotteon.entity.Seller;
 import kr.co.lotteon.entity.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import kr.co.lotteon.repository.SellerRepository;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 @Slf4j
 @Getter
 @Setter
@@ -23,6 +20,8 @@ import java.util.Map;
 public class MyUserDetails implements UserDetails, OAuth2User {
     // User Entity
     private User user;
+    private Seller seller;
+
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -46,6 +45,7 @@ public class MyUserDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getPassword() {
+        log.info("getPassword : " + user.getUserPw());
         return user.getUserPw();
     }
 

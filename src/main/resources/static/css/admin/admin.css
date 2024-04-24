@@ -663,7 +663,7 @@ button[type=submit] {
     width: 325px;
 }
 .optionTable tr > td:nth-child(1), td:nth-child(3) {
-    width: 200px!important;
+    width: 200px;
     background: #f6f6f6;
 
 }

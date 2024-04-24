@@ -1,11 +1,13 @@
 package kr.co.lotteon.service.seller;
 
 import com.querydsl.core.Tuple;
+import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.ProductDTO;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.ProductPageResponseDTO;
 import kr.co.lotteon.dto.SellerInfoDTO;
 import kr.co.lotteon.entity.Product;
+import kr.co.lotteon.entity.Seller;
 import kr.co.lotteon.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,7 +28,15 @@ public class SellerService {
     private final ModelMapper modelMapper;
 
     // 판매자 관리페이지 - 홈
-    public SellerInfoDTO selectSellerInfo(String prodSeller){
+    public SellerInfoDTO selectSellerInfo(HttpSession session, String UserId){
+
+        Optional<Seller> optSeller = sellerRepository.findByUserId(UserId);
+        String prodSeller = null;
+        if (optSeller.isPresent()){
+            prodSeller= optSeller.get().getSellerNo();
+            session.setAttribute("prodSeller", optSeller.get().getSellerNo());
+        }
+
         return sellerRepository.selectSellerInfo(prodSeller);
     }
 

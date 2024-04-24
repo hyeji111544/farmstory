@@ -9,6 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, String>, SellerRepositoryCustom {
+    // seller 정보를 security에 저장하기 위한 JPA
+    public Optional<Seller> findByUserId(String userId);
+
     public Optional<Seller> findBySellerName(String sellerName);
     public Optional<Seller> findByCompany(String company);
     public Optional<Seller> findByLicenseNum(String licenseNum );
