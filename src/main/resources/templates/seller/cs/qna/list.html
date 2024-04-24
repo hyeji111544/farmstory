@@ -13,7 +13,7 @@
         <!-- qna 컨텐츠 시작 -->
         <section>
             <div>
-                <form th:action="@{/seller/product/cs/qna}">
+                <form th:action="@{/seller/cs/qna/list}">
                     <select name="type">
                         <option value="prodNo">상품번호</option>
                         <option value="prodQnaTitle">상품명</option>
@@ -28,8 +28,8 @@
                 <tr>
                     <th><input type="checkbox" name="all"/></th>
                     <th>번호</th>
-                    <th>상품명</th>
                     <th>제목</th>
+                    <th>상품명</th>
                     <th>작성자</th>
                     <th>작성일</th>
                     <th>상태</th>
@@ -38,14 +38,14 @@
                 <tr th:each="ProdQnaDTO : ${prodQnaList.dtoList}">
                     <td><input type="checkbox" name="글번호"/></td>
                     <td th:text="${ProdQnaDTO.prodNo}"></td>
-                    <td th:text="${ProdQnaDTO.prodName}"></td>
                     <td>
                         <span>
-                            <a th:href="@{/admin/cs/qna/view(qnaNo=${ProdQnaDTO.prodQnaNo})}">
+                            <a th:href="@{/seller/cs/qna/view(qnaNo=${ProdQnaDTO.prodQnaNo})}">
                                 <span th:text="${ProdQnaDTO.prodQnaTitle}"></span>
                             </a>
                         </span>
                     </td>
+                    <td th:text="${ProdQnaDTO.prodName}"></td>
                     <td th:text="${ProdQnaDTO.userId}"></td>
                     <td th:if="${ProdQnaDTO.prodQnaDate != null}" th:text="${#temporals.format(ProdQnaDTO.prodQnaDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
                     <td th:text="${ProdQnaDTO.prodQnaStatus}"></td>

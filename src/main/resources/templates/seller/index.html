@@ -77,15 +77,7 @@
                     </div>
                     <div class="graphContent">
                         <div class="graphTop">
-                            <div class="graphStick" th:each="grapgInfo : ${sellerInfoDTO.graphInfoDTO}">
-                                <span class="countStick"
-                                      th:style="'height:'+(${grapgInfo.count}/${sellerInfoDTO.allCount})*(${sellerInfoDTO.allCount}*190/${sellerInfoDTO.maxCount})"
-                                      th:data-count="${grapgInfo.count}"></span>
-                                <span class="salesStick"
-                                      th:style="'height:' + (${grapgInfo.price} / ${sellerInfoDTO.allPrice}) * (${sellerInfoDTO.allPrice} * 190 / ${sellerInfoDTO.maxPrice})"
-                                      th:data-price="${grapgInfo.price}"></span>
-                                <span class="stickInfo">[[${grapgInfo.count}]]<br>[[${grapgInfo.price}]]</span>
-                            </div>
+
 
 
                         </div>

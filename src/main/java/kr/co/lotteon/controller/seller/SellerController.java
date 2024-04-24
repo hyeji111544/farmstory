@@ -1,14 +1,18 @@
 package kr.co.lotteon.controller.seller;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.ProductPageResponseDTO;
 import kr.co.lotteon.dto.SellerInfoDTO;
 import kr.co.lotteon.service.seller.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.security.AuthProvider;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,8 +29,10 @@ public class SellerController {
             - detailStatus = [입금대기, 배송준비, 취소요청, 교환요청, 반품요청]
      */
     @GetMapping("/seller/index")
-    public String sellerIndex(String prodSeller, Model model){
-        SellerInfoDTO sellerInfoDTO = sellerService.selectSellerInfo(prodSeller);
+    public String sellerIndex(HttpSession session, Authentication authentication, Model model){
+        String UserId = authentication.getName();
+        SellerInfoDTO sellerInfoDTO = sellerService.selectSellerInfo(session, UserId);
+
         model.addAttribute("sellerInfoDTO", sellerInfoDTO);
         return "/seller/index";
     }

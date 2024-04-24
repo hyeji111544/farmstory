@@ -153,3 +153,186 @@
 
 
 #admin-cs-list > section > .qna tr > td:nth-child(5) {width: 80px; text-align: left;}
+
+
+/* seller/cs/qna/view */
+#sellerQnaView h4 {
+    margin-bottom: 10px;
+    margin-left: 4px;
+}
+.requestQna {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+.requestQna > .reqQnaTitle {
+    display: flex;
+    height: auto;
+    border: 1px solid #c4c4c4;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.requestQna > .reqQnaTitle > span {
+    justify-content: center;
+    padding: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.requestQna > .reqQnaTitle > span:nth-child(1){
+    width: 100px;
+    background-color: #d7d7d7;
+    text-align: center;
+}
+.requestQna > .reqQnaTitle > span:nth-child(2){
+    width: 460px;
+}
+.requestQna > .reqQnaTitle > span:nth-child(3){
+    width: 100px;
+    background-color: #d7d7d7;
+    text-align: center;
+}
+.requestQna > .reqQnaTitle > span:nth-child(4){
+    width: 400px;
+}
+
+.requestQna > .reqQnaInfo {
+    display: flex;
+    height: auto;
+    border-left: 1px solid #c4c4c4;
+    border-right: 1px solid #c4c4c4;
+}
+.requestQna > .reqQnaInfo > span {
+    justify-content: center;
+    padding: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.requestQna > .reqQnaInfo > span:nth-child(1){
+    width: 100px;
+    background-color: #d7d7d7;
+    text-align: center;
+}
+.requestQna > .reqQnaInfo > span:nth-child(2){
+    width: 460px;
+}
+.requestQna > .reqQnaInfo > span:nth-child(3){
+    width: 100px;
+    background-color: #d7d7d7;
+    text-align: center;
+}
+.requestQna > .reqQnaInfo > span:nth-child(4){
+    width: 150px;
+}
+.requestQna > .reqQnaInfo > span:nth-child(5){
+    width: 100px;
+    background-color: #d7d7d7;
+    text-align: center;
+}
+.requestQna > .reqQnaInfo > span:nth-child(6){
+    width: 150px;
+}
+
+.requestQna > .reqQnaContent {
+    display: flex;
+    height: auto;
+    min-height: 100px;
+    border: 1px solid #c4c4c4;
+
+}
+.requestQna > .reqQnaContent > span {
+    justify-content: center;
+    padding: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.requestQna > .reqQnaContent > span:nth-child(1){
+    width: 100px;
+    background-color: #d7d7d7;
+    text-align: center;
+}
+.requestQna > .reqQnaContent > span:nth-child(2){
+    width: 570px;
+}
+
+.responseQna {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 10px 0 10px;
+    box-sizing: border-box;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    background-color: #fafafa;
+    margin-top: 20px;
+}
+
+.responseQna > .resQnaBox {
+    display: flex;
+    justify-content: left;
+    min-height: 100px;
+    height: auto;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.responseQna > .resQnaBox > .resQnaInfo {
+    width: 100px;
+    background-color: #d7d7d7;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.responseQna > .resQnaBox > .resQnaInfo > p:nth-child(1){
+    margin-bottom: 20px;
+}
+.responseQna > .resQnaBox > .resQnaComment {
+    width: 840px;
+}
+.responseQna > .resQnaBox > .resQnaComment > input{
+    align-self: auto;
+    margin: 10px;
+    width: 810px;
+    font-size: 14px;
+    box-sizing: border-box;
+    border: 0;
+    outline: none;
+    padding: 0;
+    background-color: #fafafa;
+}
+.responseQna > .resQnaBox > span {
+    display: flex;
+    align-self: end;
+    width: 50px;
+    height: 30px;
+    border-radius: 4px;
+    background-color: #4291e9;
+    color: white;
+    font-size: 14px;
+    justify-content: center;
+    line-height: 30px;
+    margin: 0 10px 10px 0;
+    cursor: pointer;
+}
+.responseQna > .resQnaBox > span:nth-child(4){
+    background-color: #EB5353;
+}
+.responseQna > span {
+    display: flex;
+    align-self: end;
+    width: 100px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: #4291e9;
+    color: white;
+    font-size: 14px;
+    justify-content: center;
+    line-height: 40px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+

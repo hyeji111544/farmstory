@@ -1,8 +1,11 @@
 package kr.co.lotteon.security;
 
+import kr.co.lotteon.entity.Seller;
 import kr.co.lotteon.entity.User;
+import kr.co.lotteon.repository.SellerRepository;
 import kr.co.lotteon.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,6 +35,7 @@ public class SecurityUserService implements UserDetailsService {
             log.info("SecurityUserService user: "+user);
             userDetails = MyUserDetails.builder().user(user).build();
             log.info(userDetails.toString());
+
         }
         // Security ContextHolder에 저장
         return userDetails;
