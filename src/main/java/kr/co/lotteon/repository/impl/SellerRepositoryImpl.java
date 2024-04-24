@@ -215,6 +215,7 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
 
         List<Tuple> productsResults = selectProducts.getResults();
         long total = selectProducts.getTotal();
+        log.info("total : " + total);
 
         return new PageImpl<>(productsResults, pageable, total);
 

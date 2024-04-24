@@ -1,9 +1,9 @@
-package kr.co.lotteon.controller;
+package kr.co.lotteon.controller.seller;
 
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.ProductPageResponseDTO;
 import kr.co.lotteon.dto.SellerInfoDTO;
-import kr.co.lotteon.service.SellerService;
+import kr.co.lotteon.service.seller.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;

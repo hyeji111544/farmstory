@@ -42,23 +42,23 @@
                     <th>관리</th>
                 </tr>
 
-                <tr th:each="faq, index:${pageResponseDTO.dtoList}">
+                <tr>
                     <td><input type="checkbox" name="글번호"/></td>
-                    <td th:text="${pageResponseDTO.startNo - index.index}"></td>
-                    <td th:text="${faq.faqCate}" style="white-space: nowrap;"></td>
-                    <td th:text="${faq.faqType}" style="white-space: nowrap;"></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                     <td>
                         <span>
-                            <a th:href="@{/admin/cs/faq/view(faqNo=${faq.faqNo})}">
-                                <span th:text="${faq.faqTitle}"></span>
+                            <a>
+                                <span></span>
                             </a>
                         </span>
                     </td>
-                    <td th:text="${faq.faqHit}"></td>
-                    <td th:if="${faq.faqDate != null}" th:text="${#temporals.format(faq.faqDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
+                    <td></td>
+                    <td style="white-space: nowrap;" ></td>
                     <td>
-                        <a th:href="@{/admin/cs/faq/delete(faqNo=${faq.faqNo})}">[삭제]</a><br>
-                        <a th:href="@{/admin/cs/faq/modify(faqNo=${faq.faqNo})}">[수정]</a>
+                        <a>[삭제]</a><br>
+                        <a>[수정]</a>
                     </td>
                 </tr>
             </table>
@@ -69,20 +69,19 @@
 
 
             <div class="paging">
+                <!--
                 <span class="prev">
-                    <!-- 이전 버튼 -->
                     <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.start-1})}"><&nbsp;이전</a>
                 </span>
-                    <!-- 페이지 링크 -->
                 <span class="num">
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
                 <a th:href="@{/admin/cs/faq/list(pg=${num})}" th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'" th:text="${num}"></a>
                     </th:block>
                 </span>
-                    <!-- 다음 버튼 -->
                 <span class="next">
                     <a th:if="${pageResponseDTO.next}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.end+1})}">다음</a>
                 </span>
+                -->
                 </div>
         </section>
         <!-- 상품목록 컨텐츠 끝 -->

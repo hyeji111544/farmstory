@@ -150,3 +150,6 @@
     font-size: 12px;
     font-style: italic;
 }
+
+
+#admin-cs-list > section > .qna tr > td:nth-child(5) {width: 80px; text-align: left;}
