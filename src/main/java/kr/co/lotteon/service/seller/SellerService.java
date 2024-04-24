@@ -1,4 +1,4 @@
-package kr.co.lotteon.service;
+package kr.co.lotteon.service.seller;
 
 import com.querydsl.core.Tuple;
 import kr.co.lotteon.dto.ProductDTO;
