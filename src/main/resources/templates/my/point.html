@@ -18,13 +18,13 @@
         <div class="point">
             <ul>
                 <span class="menu_else"></span>
-                <li><a th:href="@{/my/order}">전체주문내역</a></li>
+                <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
                 <!--<li><a href="./favorite.html">관심상품</a></li>-->
-                <li><a th:href="@{/my/point}">포인트내역</a></li>
-                <li><a th:href="@{/my/coupon}">쿠폰</a></li>
-                <li><a th:href="@{/my/review}">나의리뷰</a></li>
-                <li><a th:href="@{/my/qna}">문의하기</a></li>
-                <li><a th:href="@{/my/info}">나의설정</a></li>
+                <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
+                <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
+                <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
+                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의하기</a></li>
+                <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
             </ul>
 
             <section>
@@ -56,41 +56,15 @@
                         <tr>
                             <th>날짜</th>
                             <th>구분</th>
-                            <th>주문번호</th>
                             <th>적립금액</th>
                             <th>비고</th>
                             <th>유효기간</th>
                         </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
-                            <td class="type">적립</td>
-                            <td class="ordNo">2022121001</td>
-                            <td class="point">340</td>
-                            <td class="desc">상품 구매확정</td>
-                            <td class="expire">2024-12-12</td>
-                        </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
-                            <td class="type">적립</td>
-                            <td class="ordNo">2022121001</td>
-                            <td class="point">100</td>
-                            <td class="desc">상품 리뷰 작성 추가 포인트</td>
-                            <td class="expire">2024-12-12</td>
-                        </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
-                            <td class="type">적립</td>
-                            <td class="ordNo">2022121001</td>
-                            <td class="point">340</td>
-                            <td class="desc">상품 구매확정</td>
-                            <td class="expire">2024-12-12</td>
-                        </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
-                            <td class="type">적립</td>
-                            <td class="ordNo">2022121001</td>
-                            <td class="point">340</td>
-                            <td class="desc">상품 구매확정</td>
+                        <tr id="point" th:each="point : ${pageResponseDTO.dtoList}">
+                            <td class="date">[[${point.changeDate}]]</td>
+                            <td class="type">[[${point.changeType}]]</td>
+                            <td class="point">[[${point.changePoint}]]</td>
+                            <td class="desc">[[${point.changeCode}]]</td>
                             <td class="expire">2024-12-12</td>
                         </tr>
 
