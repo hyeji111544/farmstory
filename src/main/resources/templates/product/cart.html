@@ -213,22 +213,22 @@
                     </div>
                     <div>
                         <!--할인 전 가격 출력 옵션 있는경우/ 없는경우-->
-                        <p class="org_price" th:if="${cartProduct.optPrice != null}">
+                        <p class="org_price" th:if="${cartProduct.optValue1}!= null">
                             <span style="text-decoration: line-through; color: #7f7f7f" th:text="${#numbers.formatInteger(cartProduct.optPrice * cartProduct.count, 3, 'COMMA')}"></span>
                             <span style="color: #ed2f2f; font-weight: bold" th:text="'↓' + ${cartProduct.prodDiscount} + '%'"></span>
                             <input class="price" type="hidden" th:value="${cartProduct.optPrice}">
                         </p>
-                        <p class="org_price" th:unless="${cartProduct.optPrice != null}">
+                        <p class="org_price" th:if="${cartProduct.optValue1}== null">
                             <span style="text-decoration: line-through; color: #7f7f7f" th:text="${#numbers.formatInteger(cartProduct.prodPrice * cartProduct.count , 3, 'COMMA')}"></span>
                             <span style="color: #ed2f2f; font-weight: bold" th:text="'↓' + ${cartProduct.prodDiscount} + '%'"></span>
                             <input class="price" type="hidden" th:value="${cartProduct.prodPrice}">
                         </p>
 
                         <!--할인 후 가격 출력 옵션 있는경우/ 없는경우-->
-                        <p class="dis_price" th:if="${cartProduct.optPrice != null}" th:text="${#numbers.formatInteger((cartProduct.prodPrice * (100 - cartProduct.prodDiscount) * cartProduct.count * 0.01), 3, 'COMMA')}"></p>
-                        <p class="dis_price" th:unless="${cartProduct.optPrice != null}" th:text="${#numbers.formatInteger((cartProduct.optPrice * (100 - cartProduct.prodDiscount) * cartProduct.count * 0.01), 3, 'COMMA')}"></p>
+                        <p class="dis_price" th:if="${cartProduct.optValue1} == null" th:text="${#numbers.formatInteger((cartProduct.prodPrice * (100 - cartProduct.prodDiscount) * cartProduct.count * 0.01), 3, 'COMMA')}"></p>
+                        <p class="dis_price" th:if="${cartProduct.optValue1} != null" th:text="${#numbers.formatInteger((cartProduct.optPrice * (100 - cartProduct.prodDiscount) * cartProduct.count * 0.01), 3, 'COMMA')}"></p>
                         <input class="dis_prod" type="hidden" th:value="${cartProduct.prodDiscount}">
-                      <p>(100g당 1026원, 총 용량 2000g)</p>
+                        <p>(100g당 1026원, 총 용량 2000g)</p>
                       <a href="">혜택변경</a>
                     </div>
                   </div>

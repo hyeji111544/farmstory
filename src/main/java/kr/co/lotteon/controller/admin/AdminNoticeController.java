@@ -25,10 +25,10 @@ public class AdminNoticeController {
     @GetMapping("/admin/cs/notice/list")
     public String csNoticeList(Model model, PageRequestDTO pageRequestDTO,
                                @RequestParam(value = "noticeCate", required = false) String noticeCate){
-
         PageResponseDTO pageResponseDTO = adminNoticeService.NoticeAdminSelect(pageRequestDTO, noticeCate);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
-        log.info("noticeCate {}", noticeCate);
+        model.addAttribute("noticeCate",noticeCate);
+        log.info("pageResponseDTO {}", pageResponseDTO);
         return "/admin/cs/notice/list";
     }
 

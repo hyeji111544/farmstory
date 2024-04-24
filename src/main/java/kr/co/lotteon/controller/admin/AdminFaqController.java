@@ -32,6 +32,8 @@ public class AdminFaqController {
 
         PageResponseDTO pageResponseDTO = adminFaqService.FaqAdminSelect(pageRequestDTO,faqCate,faqType);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+        model.addAttribute("faqCate",faqCate);
+        model.addAttribute("faqType",faqType);
 
         return "/admin/cs/faq/list";
     }

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,6 +42,7 @@ public class AdminFaqService {
     }
 
     // 관리자페이지 고객센터 메뉴 자주묻는질문 특정 글 불러오기
+    @Transactional
     public FaqDTO FaqAdminView(int faqNo) {
 
         // .orElse(null); optional 객체가 비어있을경우 대비
@@ -48,6 +50,7 @@ public class AdminFaqService {
         log.info("특정 글 불러오기 modify {}", faq);
         if (faq != null) {
             // DTO로 변환후에 반환
+            adminFaqRepository.incrementHitByFaqNo(faqNo);
             return modelMapper.map(faq, FaqDTO.class);
         }
         return null; // 해당 번호의 글이 없는 경우 null반환

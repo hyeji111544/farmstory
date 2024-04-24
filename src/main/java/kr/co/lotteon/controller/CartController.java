@@ -1,4 +1,4 @@
-package kr.co.lotteon.controller.admin;
+package kr.co.lotteon.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.lotteon.service.admin.CartService;

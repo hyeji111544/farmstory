@@ -34,9 +34,10 @@ public class CsController {
 // cs-faq //
     // faq 글목록 이동
     @GetMapping("/cs/faq/list")
-    public String faqList(Model model,@RequestParam(value = "faqCate", required = false) String faqCate){
+    public String faqList(Model model, String faqCate){
 
         model.addAttribute("list",csService.faqList(faqCate));
+        model.addAttribute("faqCate",faqCate);
         return "/cs/faq/list";
     }
 
@@ -44,17 +45,15 @@ public class CsController {
     @GetMapping("/cs/faq/view")
     public String faqView(Model model, int faqNo,String faqCate){
         FaqDTO faqDTO = csService.faqViewCate(faqCate);
-        log.info("faqDTO", faqDTO);
         model.addAttribute("view",csService.faqView(faqNo));
-        model.addAttribute("faqDTO",faqDTO);
+        model.addAttribute("faqCate", faqCate);
 
         return "/cs/faq/view";
     }
 
     // cs-notice list //
     @GetMapping("/cs/notice/list")
-    public String noticeList(Model model, PageRequestDTO pageRequestDTO,
-                             @RequestParam(value = "noticeCate", required = false) String noticeCate){
+    public String noticeList(Model model, PageRequestDTO pageRequestDTO, String noticeCate){
 
         log.info("noticeCate : " + noticeCate);
 
@@ -78,12 +77,15 @@ public class CsController {
 // cs-qna //
     // qna 글목록 이동
     @GetMapping("/cs/qna/list")
-    public String qnaList(Model model, PageRequestDTO pageRequestDTO,
-                          @RequestParam(value = "qnaCate", required = false) String qnaCate){
+    public String qnaList(Model model, PageRequestDTO pageRequestDTO,String qnaCate){
+
 
         PageResponseDTO pageResponseDTO = csService.selectQnaPages(pageRequestDTO,qnaCate);
+        log.info("qnaCate321 {}", qnaCate);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+        model.addAttribute("qnaCate", qnaCate);
 
+        log.info("pageResponseDTO321 {}", pageResponseDTO);
         return "/cs/qna/list";
     }
 
@@ -100,7 +102,7 @@ public class CsController {
         qnaDTO.setUserId("gudals1234");
         csService.insertQna(qnaDTO);
         log.info("QnaDTO {}", qnaDTO);
-        return "redirect:/cs/qna/list";
+        return "redirect:/cs/qna/list?qnaCate=" + qnaDTO.getQnaCate();
     }
     // qna 글보기
     @GetMapping("/cs/qna/view")

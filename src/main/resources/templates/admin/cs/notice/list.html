@@ -118,7 +118,11 @@
                 <tr th:each="notice, index:${pageResponseDTO.dtoList}">
                     <td><input type="checkbox" th:value="${notice.noticeNo}" name="RowCheck"/></td>
                     <td th:text="${pageResponseDTO.startNo - index.index}"></td>
-                    <td th:text="${notice.noticeCate}" style="white-space: nowrap;"></td>
+                    <td th:if="${notice.noticeCate}=='choice'" style="white-space: nowrap;">[유형선택]</td>
+                    <td th:if="${notice.noticeCate}=='service'" style="white-space: nowrap;">[고객서비스]</td>
+                    <td th:if="${notice.noticeCate}=='event'" style="white-space: nowrap;">[이벤트당첨]</td>
+                    <td th:if="${notice.noticeCate}=='safe'" style="white-space: nowrap;">[안전거래]</td>
+                    <td th:if="${notice.noticeCate}=='danger'" style="white-space: nowrap;">[위해상품]</td>
                     <td>
                         <span>
                             <a th:href="@{/admin/cs/notice/view(noticeNo=${notice.noticeNo})}">
@@ -135,7 +139,6 @@
                 </tr>
             </table>
 
-
             <input type="button" value="선택삭제" class="btn btn-outline-info" onclick="deleteValue();" style="background-color: #9e9e9e; color: white; border: none; padding: 10px 20px; cursor: pointer;"/>
             <a th:href="@{/admin/cs/notice/write}"><input type="button" value="작성하기" style=" float: right; background-color: #4291e9; color: white; border: none; padding: 10px 20px; cursor: pointer;" /></a>
 
@@ -143,17 +146,24 @@
             <div class="paging">
                 <span class="prev">
                     <!-- 이전 버튼 -->
-                    <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.start-1})}"><&nbsp;이전</a>
+                    <a th:if="${pageResponseDTO.prev && noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.start - 1})}">이전</a>
+                    <a th:if="${pageResponseDTO.prev && noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.start - 1}, noticeCate=${noticeCate})}">이전</a>
                 </span>
                     <!-- 페이지 링크 -->
                 <span class="num">
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                <a th:href="@{/admin/cs/notice/list(pg=${num})}" th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'" th:text="${num}"></a>
+                 <a th:if="${noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${num})}"
+                  th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
+                  th:text="${num}"></a>
+                <a th:if="${noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${num}, noticeCate=${noticeCate})}"
+                   th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
+                   th:text="${num}"></a>
                     </th:block>
                 </span>
                     <!-- 다음 버튼 -->
                 <span class="next">
-                    <a th:if="${pageResponseDTO.next}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.end+1})}">다음</a>
+                    <a th:if="${pageResponseDTO.next && noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.end + 1})}">다음</a>
+                    <a th:if="${pageResponseDTO.next && noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.end + 1}, noticeCate=${noticeCate})}">다음</a>
                 </span>
                 </div>
         </section>

@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/layout/adminLayout.html}">
+    layout:decorate="~{/layout/sellerLayout.html}">
 
 <!--내용 시작-->
     <section id="admin-cs-list" layout:fragment="content">
@@ -13,50 +13,42 @@
         <!-- qna 컨텐츠 시작 -->
         <section>
             <div>
-                <select name="qnaCate">
-                    <option>1차선택</option>
-                    <option value="[회원]">회원</option>
-                    <option value="[쿠폰/이벤트]">쿠폰/이벤트</option>
-                    <option value="[주문/결제]">주문/결제</option>
-                    <option value="[배송]">배송</option>
-                    <option value="[취소/반품/환불]">취소/반품/환불</option>
-                    <option value="[안전결제]">안전결제</option>
-                </select>
-                <select name="qnaType">
-                    <option>2차선택</option>
-                    <option value="[고객서비스]">고객서비스</option>
-                    <option value="[이벤트당첨]">이벤트당첨</option>
-                    <option value="[안전거래]">안전거래</option>
-                    <option value="[위해상품]">위해상품</option>
-                </select>
+                <form th:action="@{/seller/product/cs/qna}">
+                    <select name="type">
+                        <option value="prodNo">상품번호</option>
+                        <option value="prodQnaTitle">상품명</option>
+                        <option value="prodQnaStatus">답변상태</option>
+                    </select>
+                    <input type="text" name="keyword">
+                    <input type="text" name="prodSeller" value="aa11aa22" readonly>
+                    <input type="submit" value="검색">
+                </form>
             </div>
             <table class="qna">
                 <tr>
                     <th><input type="checkbox" name="all"/></th>
                     <th>번호</th>
-                    <th>1차유형</th>
-                    <th>2차유형</th>
+                    <th>상품명</th>
                     <th>제목</th>
                     <th>작성자</th>
                     <th>작성일</th>
                     <th>상태</th>
                 </tr>
 
-                <tr th:each="qna, index:${pageResponseDTO.dtoList}">
+                <tr th:each="ProdQnaDTO : ${prodQnaList.dtoList}">
                     <td><input type="checkbox" name="글번호"/></td>
-                    <td th:text="${pageResponseDTO.startNo - index.index}"></td>
-                    <td th:text="${qna.qnaCate}" style="white-space: nowrap;"></td>
-                    <td th:text="${qna.qnaType}" style="white-space: nowrap;"></td>
+                    <td th:text="${ProdQnaDTO.prodNo}"></td>
+                    <td th:text="${ProdQnaDTO.prodName}"></td>
                     <td>
                         <span>
-                            <a th:href="@{/admin/cs/qna/view(qnaNo=${qna.qnaNo})}">
-                                <span th:text="${qna.qnaTitle}"></span>
+                            <a th:href="@{/admin/cs/qna/view(qnaNo=${ProdQnaDTO.prodQnaNo})}">
+                                <span th:text="${ProdQnaDTO.prodQnaTitle}"></span>
                             </a>
                         </span>
                     </td>
-                    <td th:text="${qna.userId}"></td>
-                    <td th:if="${qna.qnaDate != null}" th:text="${#temporals.format(qna.qnaDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
-                    <td th:text="${qna.qnaStatus}"></td>
+                    <td th:text="${ProdQnaDTO.userId}"></td>
+                    <td th:if="${ProdQnaDTO.prodQnaDate != null}" th:text="${#temporals.format(ProdQnaDTO.prodQnaDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
+                    <td th:text="${ProdQnaDTO.prodQnaStatus}"></td>
                 </tr>
             </table>
 
@@ -65,20 +57,19 @@
 
 
             <div class="paging">
+                <!--
                 <span class="prev">
-                    <!-- 이전 버튼 -->
                     <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.start-1})}"><&nbsp;이전</a>
                 </span>
-                    <!-- 페이지 링크 -->
                 <span class="num">
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
                 <a th:href="@{/admin/cs/qna/list(pg=${num})}" th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'" th:text="${num}"></a>
                     </th:block>
                 </span>
-                    <!-- 다음 버튼 -->
                 <span class="next">
                     <a th:if="${pageResponseDTO.next}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.end+1})}">다음</a>
                 </span>
+                -->
                 </div>
         </section>
         <!-- 상품목록 컨텐츠 끝 -->
