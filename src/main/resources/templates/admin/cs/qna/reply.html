@@ -17,7 +17,13 @@
           <tbody>
           <tr>
             <td>유형</td>
-            <td th:text="${qna.qnaCate + ' - '  + qna.qnaType}"></td>
+            <td th:if="${qna.qnaCate == 'user'}" style="white-space: nowrap;">회원</td>
+            <td th:if="${qna.qnaCate == 'coupon'}" style="white-space: nowrap;">쿠폰/이벤트</td>
+            <td th:if="${qna.qnaCate == 'order'}" style="white-space: nowrap;">주문/결제</td>
+            <td th:if="${qna.qnaCate == 'delivery'}" style="white-space: nowrap;">배송</td>
+            <td th:if="${qna.qnaCate == 'cancel'}" style="white-space: nowrap;">취소/반품/환불</td>
+            <td th:if="${qna.qnaCate == 'travel'}" style="white-space: nowrap;">여행/숙박/항공</td>
+            <td th:if="${qna.qnaCate == 'safe'}" style="white-space: nowrap;">안전결제</td>
           </tr>
           <tr>
             <td>제목</td>

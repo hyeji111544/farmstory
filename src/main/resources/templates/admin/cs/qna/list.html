@@ -97,18 +97,114 @@
                 // URL 구성
                 let url = "/lotteon/admin/cs/qna/list?";
 
-                // faqCate 파라미터 추가
+                // qnaCate 파라미터 추가
                 if (qnaCate) {
                     url += "qnaCate=" + qnaCate;
                 }
 
-                // faqType 파라미터 추가
+                // qnaType 파라미터 추가
                 if (qnaType) {
                     url += "&qnaType=" + qnaType;
                 }
 
                 // 페이지 이동
                 location.href = url;
+            }
+            // 타입별 카테조회
+            function firstOption() {
+                const CateOption = event.target;  // 내가 함수를 호출한 현재 태그
+                const CateValue = CateOption.value;  // select태그의 value값
+                const qnaType = document.getElementsByName('qnaType')[0];
+
+                console.log(CateValue);
+
+                if (CateValue == 'coupon'){
+                    // 원래 있던 option들 삭제
+                    const qnaTypeChild = qnaType.childNodes;  // name이 qnaType인 select태그 안에있는 option태그 전부
+                    Array.from(qnaTypeChild).forEach(function (child) {
+                        child.remove();
+                    })
+                    // 새로운 옵션 삽입
+                    const TypeOption = `<option>1차선택</option>
+                                        <option value="cpregi">등록방법</option>
+                                        <option value="cplimit">유효기간</option>
+                                        <option value="cpevent">이벤트기간</option>
+                                        <option value="ejoin">이벤트참여</option>`;
+                    qnaType.insertAdjacentHTML('beforeend', TypeOption);
+                }else if (CateValue == 'user'){
+
+                    const qnaTypeChild = qnaType.childNodes;  // name이 qnaType인 select태그 안에있는 option태그 전부
+                    Array.from(qnaTypeChild).forEach(function (child) {
+                        child.remove();
+                    })
+                    // 새로운 옵션 삽입
+                    const TypeOption = `<option>1차선택</option>
+                                        <option value="regi">가입</option>
+                                        <option value="leave">탈퇴</option>
+                                        <option value="info">회원정보</option>
+                                        <option value="login">로그인</option>`;
+                    qnaType.insertAdjacentHTML('beforeend', TypeOption);
+                }else if(CateValue == 'order'){
+                    const qnaTypeChild = qnaType.childNodes;  // name이 qnaType인 select태그 안에있는 option태그 전부
+                    Array.from(qnaTypeChild).forEach(function (child) {
+                        child.remove();
+                    })
+                    // 새로운 옵션 삽입
+                    const TypeOption = `<option>1차선택</option>
+                                        <option value="list">주문내역</option>
+                                        <option value="way">결제방법</option>
+                                        <option value="payment">결제수단</option>
+                                        <option value="oway">주문방법</option>`;
+                    qnaType.insertAdjacentHTML('beforeend', TypeOption);
+                }else if (CateValue == 'delivery') {
+                    const qnaTypeChild = qnaType.childNodes;  // name이 qnaType인 select태그 안에있는 option태그 전부
+                    Array.from(qnaTypeChild).forEach(function (child) {
+                        child.remove();
+                    })
+                    // 새로운 옵션 삽입
+                    const TypeOption = `<option>1차선택</option>
+                                        <option value="deldate">배송일</option>
+                                        <option value="deldelay">배송지연</option>
+                                        <option value="delchange">배송지변경</option>
+                                        <option value="delcheck">배송현황</option>`;
+                    qnaType.insertAdjacentHTML('beforeend', TypeOption);
+                }else if (CateValue == 'cancel') {
+                    const qnaTypeChild = qnaType.childNodes;  // name이 qnaType인 select태그 안에있는 option태그 전부
+                    Array.from(qnaTypeChild).forEach(function (child) {
+                        child.remove();
+                    })
+                    // 새로운 옵션 삽입
+                    const TypeOption = `<option>1차선택</option>
+                                        <option value="return">반품신청</option>
+                                        <option value="ocancel">주문취소</option>
+                                        <option value="refund">환불신청</option>
+                                        <option value="coption">환불조건</option>`;
+                    qnaType.insertAdjacentHTML('beforeend', TypeOption);
+                }else if (CateValue == 'travel') {
+                    const qnaTypeChild = qnaType.childNodes;  // name이 qnaType인 select태그 안에있는 option태그 전부
+                    Array.from(qnaTypeChild).forEach(function (child) {
+                        child.remove();
+                    })
+                    // 새로운 옵션 삽입
+                    const TypeOption = `<option>1차선택</option>
+                                        <option value="tlist">숙박시설</option>
+                                        <option value="treco">여행지추천</option>
+                                        <option value="tway">결제방법</option>
+                                        <option value="ttime">비행시간</option>`;
+                    qnaType.insertAdjacentHTML('beforeend', TypeOption);
+                }else if(CateValue == 'safe') {
+                    const qnaTypeChild = qnaType.childNodes;  // name이 qnaType인 select태그 안에있는 option태그 전부
+                    Array.from(qnaTypeChild).forEach(function (child) {
+                        child.remove();
+                    })
+                    // 새로운 옵션 삽입
+                    const TypeOption = `<option>1차선택</option>
+                                        <option value="care">주의사항</option>
+                                        <option value="sway">결제방법</option>
+                                        <option value="sacc">입금계좌</option>
+                                        <option value="sfee">수수료</option>`;
+                    qnaType.insertAdjacentHTML('beforeend', TypeOption);
+                }
             }
         </script>
 
@@ -121,13 +217,14 @@
         <!-- qna 컨텐츠 시작 -->
         <section>
             <div>
-                <select name="qnaCate">
+                <select name="qnaCate" onchange="firstOption()">
                     <option>1차선택</option>
                     <option value="user">회원</option>
                     <option value="coupon">쿠폰/이벤트</option>
                     <option value="order">주문/결제</option>
                     <option value="delivery">배송</option>
                     <option value="cancel">취소/반품/환불</option>
+                    <option value="travel">여행/숙박/항공</option>
                     <option value="safe">안전결제</option>
                 </select>
                 <select name="qnaType" onchange="redirectToCateType()">
@@ -156,8 +253,48 @@
                         <input type="hidden" class="qna_qnaNo" th:value="${qna.qnaNo}">
                         <span th:text="${pageResponseDTO.startNo - index.index}"></span>
                     </td>
-                    <td th:text="${qna.qnaCate}" style="white-space: nowrap;"></td>
-                    <td th:text="${qna.qnaType}" style="white-space: nowrap;"></td>
+                    <td th:if="${qna.qnaCate == 'user'}" style="white-space: nowrap;">회원</td>
+                    <td th:if="${qna.qnaCate == 'coupon'}" style="white-space: nowrap;">쿠폰/이벤트</td>
+                    <td th:if="${qna.qnaCate == 'order'}" style="white-space: nowrap;">주문/결제</td>
+                    <td th:if="${qna.qnaCate == 'delivery'}" style="white-space: nowrap;">배송</td>
+                    <td th:if="${qna.qnaCate == 'cancel'}" style="white-space: nowrap;">취소/반품/환불</td>
+                    <td th:if="${qna.qnaCate == 'travel'}" style="white-space: nowrap;">여행/숙박/항공</td>
+                    <td th:if="${qna.qnaCate == 'safe'}" style="white-space: nowrap;">안전결제</td>
+
+                    <td th:if="${qna.qnaType == 'regi'}" style="white-space: nowrap;">가입</td>
+                    <td th:if="${qna.qnaType == 'leave'}" style="white-space: nowrap;">탈퇴</td>
+                    <td th:if="${qna.qnaType == 'info'}" style="white-space: nowrap;">회원정보</td>
+                    <td th:if="${qna.qnaType == 'login'}" style="white-space: nowrap;">로그인</td>
+
+                    <td th:if="${qna.qnaType == 'cpregi'}" style="white-space: nowrap;">등록방법</td>
+                    <td th:if="${qna.qnaType == 'cplimit'}" style="white-space: nowrap;">유효기간</td>
+                    <td th:if="${qna.qnaType == 'cpevent'}" style="white-space: nowrap;">이벤트기간</td>
+                    <td th:if="${qna.qnaType == 'ejoin'}" style="white-space: nowrap;">[이벤트참여]</td>
+
+                    <td th:if="${qna.qnaType == 'list'}" style="white-space: nowrap;">주문내역</td>
+                    <td th:if="${qna.qnaType == 'way'}" style="white-space: nowrap;">결제방법</td>
+                    <td th:if="${qna.qnaType == 'payment'}" style="white-space: nowrap;">결제수단</td>
+                    <td th:if="${qna.qnaType == 'oway'}" style="white-space: nowrap;">[주문방법]</td>
+
+                    <td th:if="${qna.qnaType == 'deldate'}" style="white-space: nowrap;">배송일</td>
+                    <td th:if="${qna.qnaType == 'deldelay'}" style="white-space: nowrap;">배송지연</td>
+                    <td th:if="${qna.qnaType == 'delchange'}" style="white-space: nowrap;">배송지변경</td>
+                    <td th:if="${qna.qnaType == 'delcheck'}" style="white-space: nowrap;">[배송현황]</td>
+
+                    <td th:if="${qna.qnaType == 'return'}" style="white-space: nowrap;">반품신청</td>
+                    <td th:if="${qna.qnaType == 'ocancel'}" style="white-space: nowrap;">주문취소</td>
+                    <td th:if="${qna.qnaType == 'refund'}" style="white-space: nowrap;">환불신청</td>
+                    <td th:if="${qna.qnaType == 'coption'}" style="white-space: nowrap;">[환불조건]</td>
+
+                    <td th:if="${qna.qnaType == 'tlist'}" style="white-space: nowrap;">숙박시설</td>
+                    <td th:if="${qna.qnaType == 'treco'}" style="white-space: nowrap;">여행지추천</td>
+                    <td th:if="${qna.qnaType == 'tway'}" style="white-space: nowrap;">결제방법</td>
+                    <td th:if="${qna.qnaType == 'ttime'}" style="white-space: nowrap;">[비행시간]</td>
+
+                    <td th:if="${qna.qnaType == 'care'}" style="white-space: nowrap;">주의사항</td>
+                    <td th:if="${qna.qnaType == 'sway'}" style="white-space: nowrap;">결제방법</td>
+                    <td th:if="${qna.qnaType == 'sacc'}" style="white-space: nowrap;">[입금계좌]</td>
+                    <td th:if="${qna.qnaType == 'sfee'}" style="white-space: nowrap;">[수수료]</td>
                     <td>
                         <span>
                             <a th:href="@{/admin/cs/qna/view(qnaNo=${qna.qnaNo})}">
@@ -178,17 +315,24 @@
             <div class="paging">
                 <span class="prev">
                     <!-- 이전 버튼 -->
-                    <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.start-1})}"><&nbsp;이전</a>
+                    <a th:if="${pageResponseDTO.prev && qnaCate == null && qnaType == null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.start - 1})}">이전</a>
+                    <a th:if="${pageResponseDTO.prev && qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.start - 1}, qnaCate=${qnaCate}, qnaType=${qnaType})}">이전</a>
                 </span>
                     <!-- 페이지 링크 -->
                 <span class="num">
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                <a th:href="@{/admin/cs/qna/list(pg=${num})}" th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'" th:text="${num}"></a>
+                 <a th:if="${qnaCate == null && qnaType == null}" th:href="@{/admin/cs/qna/list(pg=${num})}"
+                    th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
+                    th:text="${num}"></a>
+                <a th:if="${qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(pg=${num}, qnaCate=${qnaCate}, qnaType=${qnaType})}"
+                   th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
+                   th:text="${num}"></a>
                     </th:block>
                 </span>
                     <!-- 다음 버튼 -->
                 <span class="next">
-                    <a th:if="${pageResponseDTO.next}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.end+1})}">다음</a>
+                     <a th:if="${pageResponseDTO.next && qnaCate == null && qnaType == null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.end + 1})}">다음</a>
+                    <a th:if="${pageResponseDTO.next && qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.end + 1}, qnaCate=${qnaCate}, qnaType=${qnaType})}">다음</a>
                 </span>
                 </div>
         </section>

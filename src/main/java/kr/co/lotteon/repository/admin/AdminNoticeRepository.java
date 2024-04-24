@@ -1,9 +1,12 @@
 package kr.co.lotteon.repository.admin;
 
 import kr.co.lotteon.entity.Notice;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +19,9 @@ public interface AdminNoticeRepository extends JpaRepository<Notice, Integer> {
 
     // 공지사항 카테고리별 조회
     public Page<Notice> findByNoticeCate(String cate, Pageable pageable);
+
+    // 글 조회수 업
+    @Modifying
+    @Query("UPDATE Notice n SET n.noticeHit = n.noticeHit + 1 WHERE n.noticeNo = :noticeNo")
+    void incrementHitByNoticeNo(@Param("noticeNo") int noticeNo);
 }
