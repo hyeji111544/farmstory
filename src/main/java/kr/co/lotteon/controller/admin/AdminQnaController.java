@@ -32,6 +32,8 @@ public class AdminQnaController {
 
         PageResponseDTO pageResponseDTO = adminQnaService.qnaAdminSelect(pageRequestDTO,qnaCate,qnaType);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
+        model.addAttribute("qnaCate",qnaCate);
+        model.addAttribute("qnaType",qnaType);
 
         return "/admin/cs/qna/list";
     }

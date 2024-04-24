@@ -21,10 +21,27 @@
               </ul>
             </aside>
             <article>
-              <nav>
-                <h1>전체</h1>
-                <h2>공지사항 전체 내용입니다.</h2>
-              </nav>
+                <nav th:if="${noticeCate == null}">
+                    <h1>전체</h1>
+                    <h2>공지사항 전체 내용입니다.</h2>
+                </nav>
+                <nav th:if="${noticeCate == 'service'}">
+                    <h1>고객서비스</h1>
+                    <h2>고객서비스 전체 내용입니다.</h2>
+                </nav>
+                <nav th:if="${noticeCate == 'safe'}">
+                    <h1>안전거래</h1>
+                    <h2>안전거래 전체 내용입니다.</h2>
+                </nav>
+                <nav th:if="${noticeCate == 'danger'}">
+                    <h1>위해상품</h1>
+                    <h2>위해상품 전체 내용입니다.</h2>
+                </nav>
+                <nav th:if="${noticeCate == 'event'}">
+                    <h1>이벤트당첨</h1>
+                    <h2>이벤트당첨 전체 내용입니다.</h2>
+                </nav>
+
               <table>
                 <tr th:each="notice, index:${pageResponseDTO.dtoList}" th:if="${index.index} &lt; 5">
                   <td>
@@ -38,17 +55,24 @@
               <div class="page">
                 <span class="prev">
                     <!-- 이전 버튼 -->
-                    <a th:if="${pageResponseDTO.prev}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.start-1})}"><이전</a>
+                    <a th:if="${pageResponseDTO.prev && noticeCate == null}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.start - 1})}"> 이전</a>
+                    <a th:if="${pageResponseDTO.prev && noticeCate != null}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.start - 1}, noticeCate=${noticeCate})}"> 이전</a>
                 </span>
                 <!-- 페이지 링크 -->
                 <span class="num">
-                    <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                <a th:href="@{/cs/notice/list(pg=${num})}" th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'" th:text="${num}"></a>
+                   <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                 <a th:if="${noticeCate == null}" th:href="@{/cs/notice/list(pg=${num})}"
+                    th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
+                    th:text="${num}"></a>
+                <a th:if="${noticeCate != null}" th:href="@{/cs/notice/list(pg=${num}, noticeCate=${noticeCate})}"
+                   th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
+                   th:text="${num}"></a>
                     </th:block>
                 </span>
                 <!-- 다음 버튼 -->
                 <span class="next">
-                    <a th:if="${pageResponseDTO.next}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.end+1})}">다음></a>
+                     <a th:if="${pageResponseDTO.next && noticeCate == null}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.end + 1})}"> 다음</a>
+                    <a th:if="${pageResponseDTO.next && noticeCate != null}" th:href="@{/cs/notice/list(pg=${pageResponseDTO.end + 1}, noticeCate=${noticeCate})}"> 다음</a>
                 </span>
               </div>
 
