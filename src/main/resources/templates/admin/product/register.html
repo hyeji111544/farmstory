@@ -3,50 +3,69 @@
     layout:decorate="~{/layout/adminLayout.html}">
 <!--내용 시작-->
     <section id="admin-product-register" layout:fragment="content">
-        <script>
-            // 1차 분류 선택 시 전달되는 cate값에 따라 2차 분류 조회 요청
-            function onSelect(){
-                var selectElement = document.getElementsByName('cate01No')[0];
-                var selectedValue = selectElement.value;
+        <script  th:inline="javascript">
+            // 2차 카테고리 분류 생성
+            function changeCate02() {
+                const cate01Data = [[${cate01DTOs}]];
+                const cate02Data = [[${cate02DTOs}]];
+                const cate03Data = [[${cate03DTOs}]];
 
-                console.log(selectedValue);
-                const jsonDate = {
-                    cate01No : selectedValue
-                };
-                fetchPut(`/lotteon/admin/product/cate`, jsonDate)
-                    .then(data => {
-                        updateSecondDropdown(data);
-                    })
-                    .catch(error=>{
-                        console.error(error);
-                    });
+                const cate01Select = event.target;
+                const selectTable = cate01Select.parentNode.parentNode.parentNode;
+                const cate02Select = selectTable.querySelector('[name="cate02No"]')
+                const cate03Select = selectTable.querySelector('[name="cate03No"]')
 
-                function updateSecondDropdown(cate02Data) {
-                    var selectElement = document.getElementsByName('cate02No')[0];
-                    selectElement.innerHTML = '<option value="">2차 분류 선택</option>';
+                // 기존에 존재하는 option 삭제
+                const nowCate02Option = cate02Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate02Option).forEach(function (option) {
+                    option.remove();
+                })
 
-                    // 받은 데이터로 옵션 추가
-                    cate02Data.forEach(function(item) {
-                        var optionElement = document.createElement('option');
-                        optionElement.value = item.cate02No;
-                        optionElement.textContent = item.cate02Name;
-                        selectElement.appendChild(optionElement);
-                    });
+                // 새로운 option 생성
+                Array.from(cate02Data).forEach(function (data) {
+                    if (data.cate01No === cate01Select.value) {
+                        const cate02Option = `<option class="changeOpt" value="${data.cate02No}">${data.cate02Name}</option>`
+                        cate02Select.insertAdjacentHTML('beforeend', cate02Option);
+                    }
+                })
 
-                    selectElement.onchange = function (){
-                        var selectedCate01 = selectedValue;
-                        var selectedCate02 = selectElement.value;
-                        var cateCode = document.getElementsByName('cateCode')[0];
-                        console.log(selectedCate01);
-                        console.log(selectedCate02);
+                // cate03 비우기
+                const nowCate03Option = cate03Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate03Option).forEach(function (option) {
+                    option.remove();
+                })
+            }
+            // 3차 카테고리 분류 생성
+            function changeCate03() {
+                const cate01Data = [[${cate01DTOs}]];
+                const cate02Data = [[${cate02DTOs}]];
+                const cate03Data = [[${cate03DTOs}]];
 
-                        if (selectedCate01 && selectedCate02) {
-                            cateCode.value = selectedCate01 + selectedCate02;
-                        }else {
-                            cateCode.value = '';
-                        }
-                    };
-                }
+                const cate02Select = event.target;
+                const selectTable = cate02Select.parentNode.parentNode.parentNode;
+                const cate03Select = selectTable.querySelector('[name="cate03No"]');
+
+                // 기존에 존재하는 option 삭제
+                const nowCate03Option = cate03Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate03Option).forEach(function (option) {
+                    option.remove();
+                })
+
+                // 새로운 option 생성
+                Array.from(cate03Data).forEach(function (data) {
+                    if (data.cate02No === cate02Select.value) {
+                        const cate03Option = `<option class="changeOpt" value="${data.cate03No}">${data.cate03Name}</option>`
+                        cate03Select.insertAdjacentHTML('beforeend', cate03Option);
+                    }
+                })
+            }
+            // cateCode 생성
+            function createCateCode() {
+                const cateCode = document.getElementsByClassName('cateCode')[0];
+                const cate01Code = document.querySelector('[name="cate01No"]').value;
+                const cate02Code = document.querySelector('[name="cate02No"]').value;
+                const cate03Code = document.querySelector('[name="cate03No"]').value;
+                cateCode.value = cate01Code + cate02Code + cate03Code;
             }
 
             /**가격 입력시 포인트 자동 계산**/
@@ -151,27 +170,32 @@
                         <tr>
                             <td>1차 분류</td>
                             <td>
-                                <select name="cate01No" onchange="onSelect()">
+                                <select name="cate01No" onchange="changeCate02()">
                                     <option value="">1차 분류 선택</option>
-                                    <option value="AA">패션·의류·뷰티</option>
-                                    <option value="BB">가전·디지털</option>
-                                    <option value="CC">식품·생필품</option>
-                                    <option value="DD">홈·문구·취미</option>
+                                    <option class="changeOpt" th:each="cate01 : ${cate01DTOs}" th:value="${cate01.cate01No}" th:text="${cate01.cate01Name}">패션·의류·뷰티</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>2차 분류</td>
                             <td>
-                                <select name="cate02No">
+                                <select name="cate02No" onchange="changeCate03()">
                                     <option value="">2차 분류 선택</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3차 분류</td>
+                            <td>
+                                <select name="cate03No" onchange="createCateCode()">
+                                    <option value="">3차 분류 선택</option>
                                 </select>
                             </td>
                         </tr>
                     </table>
                 </section>
-                <p><input type="hidden" name="cateCode"></p>
-                <p><input type="hidden" name="prodSeller" value="aa11aa22"></p>
+                <p><input type="hidden" class="cateCode" name="cateCode"></p>
+                <p><input type="hidden" name="prodSeller" th:value="${#authentication.principal.user.userId}"></p>
                 <!-- 기본정보 -->
                 <section>
                     <h4>기본정보</h4>

@@ -152,6 +152,7 @@ public class AdminProductService {
     
         ProductDTO productDTO = new ProductDTO();
         List<ProdOptionDTO> optionDTOList = new ArrayList<>();
+        List<prodOptDetailDTO> prodOptDetailDTOList = new ArrayList<>();
         Productimg productimg = new Productimg();
 
         if (optProduct.isPresent()){
@@ -166,8 +167,15 @@ public class AdminProductService {
                     optionDTOList.add(optionDTO);
                 }
             }
+            // 옵션 detail 조회
+            List<ProdOptDetail> prodOptDetails = optDetailRepository.findByProdNo(optProduct.get().getProdNo());
+            if (!prodOptDetails.isEmpty()){
+                for (ProdOptDetail optionDetail : prodOptDetails) {
+                    prodOptDetailDTO optionDetailDTO = modelMapper.map(optionDetail, prodOptDetailDTO.class);
+                    prodOptDetailDTOList.add(optionDetailDTO);
+                }
+            }
         }
-        log.info("optionDTOList : " + optionDTOList);
 
         productDTO.setThumb190(productimg.getThumb190());
         productDTO.setThumb230(productimg.getThumb230());
@@ -177,6 +185,7 @@ public class AdminProductService {
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("productDTO", productDTO);
         resultMap.put("optionDTOList", optionDTOList);
+        resultMap.put("prodOptDetailDTOList", prodOptDetailDTOList);
         return resultMap;
     }
     
