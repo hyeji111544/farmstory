@@ -6,6 +6,14 @@
     <div id="my" layout:fragment="content">
         <script th:inline="javascript">
 
+            //// 팝업창들 ////
+            // 상품평 작성 팝업창
+            function orderReviewPopup() {
+                const popReview = document.getElementById('popReview');
+                popReview.style.display = "block";
+            }
+
+
             /*
                 #1. 회원이 구매한 모든 상품의 정보를 알고 있음
                 #2. 우리는 10개씩 출력하고 싶음!
@@ -59,7 +67,7 @@
                                             <td class="status">${MyOrderDTO.detailStatus}</td>
                                             <td class="confirm">
                                                 <a href="#" class="receive">수취확인</a>
-                                                <a href="#" class="review">상품평</a>
+                                                <a href="#" class="review" onclick="orderReviewPopup()">상품평</a>
                                                 <a href="#" class="refund">반품신청</a>
                                                 <a href="#" class="exchange">교환신청</a>
                                             </td>
@@ -275,11 +283,7 @@
                     </p>
 
                 </article>
-
-
-
             </section>
-
         </div>
     </div>
 <!--내용 끝-->
