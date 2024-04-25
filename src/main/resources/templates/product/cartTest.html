@@ -24,7 +24,7 @@
 
 
 
-
+/*
             // all 체크 누르면 모든 체크박스 체크
             allCheckbox.addEventListener('click', function (){
                 selectedCartCheckboxes.forEach(function (checkbox){
@@ -32,7 +32,7 @@
                 });
 
             });
-
+*/
             const cartDelete = document.getElementById('cartDelete');
 
             // 딜리트 버튼 클릭시 삭제 로직
@@ -186,9 +186,9 @@
                     var orgParsePrice = parseFloat(orgPriceText.replace(',', ''));
                     var disParsePrice = parseFloat(disPriceText.replace(',', ''));
 
-                    sumOrgPrice += orgParsePrice;
-                    discountPrice += orgParsePrice - disParsePrice;
-                    sumTotalPrice += disParsePrice + maxDeliveryFee;
+                    sumOrgPrice += orgParsePrice; // 원래가격
+                    discountPrice += orgParsePrice - disParsePrice; // 할인받은 가격
+                    sumTotalPrice = sumOrgPrice - discountPrice + maxDeliveryFee; // 최종 가격
 
                     //console.log("원금총합 :" + sumOrgPrice.toLocaleString() + "할인총합 :" + discountPrice.toLocaleString());
                 }
@@ -262,7 +262,7 @@
                 <!-- 장바구니 목록 -->
                 <div>
                     <label for="">
-                        <input type="checkbox" name="all">
+                        <input type="checkbox" name="all" onclick="testtest()">
                         <span>전체선택</span>
                     </label>
                     <a href="" id="cartDelete">선택삭제</a>

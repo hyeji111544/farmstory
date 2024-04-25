@@ -68,13 +68,40 @@ public class SellerQnaService {
             optProdQna.get().setProdQnaStatus("답변 등록");
             prodQnaRepository.save(optProdQna.get());
         }
-        Map<String, String> resultMap = new HashMap<>();
         if (saveQnaNote.getContent() != null) {
-            resultMap.put("result", "success");
-            return ResponseEntity.ok().body(resultMap);
+            return ResponseEntity.ok().body(saveQnaNote.getCQnaNo());
         }else {
-            resultMap.put("result", "fail");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(saveQnaNote.getCQnaNo());
+        }
+    }
+
+    // 판매자 관리페이지 - QNA View - 상품 문의 답글 삭제
+    public ResponseEntity<?> deleteQnaNote(String CQnaNo) {
+        Optional<ProdQnaNote> optQnaNote = prodQnaNoteRepository.findById(Integer.parseInt(CQnaNo));
+        if (optQnaNote.isPresent()) {
+            prodQnaNoteRepository.deleteById(Integer.parseInt(CQnaNo));
+        }
+
+        Optional<ProdQnaNote> resultQnaNote = prodQnaNoteRepository.findById(Integer.parseInt(CQnaNo));
+        if (resultQnaNote.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
+        }else {
+            return ResponseEntity.status(HttpStatus.OK).body(1);
+        }
+    }
+
+    // 판매자 관리페이지 - QNA View - 상품 문의 답글 수정
+    public ResponseEntity<?> modifyQnaNote(ProdQnaNoteDTO prodQnaNoteDTO){
+        log.info("prodQnaNoteDTO2 : " + prodQnaNoteDTO);
+        Optional<ProdQnaNote> optProdQnaNote = prodQnaNoteRepository.findById(prodQnaNoteDTO.getCQnaNo());
+        log.info("optProdQnaNote : " + optProdQnaNote.toString());
+        if (optProdQnaNote.isPresent()){
+            optProdQnaNote.get().setCQnaDate(prodQnaNoteDTO.getCQnaDate());
+            optProdQnaNote.get().setContent(prodQnaNoteDTO.getContent());
+            prodQnaNoteRepository.save(optProdQnaNote.get());
+            return ResponseEntity.ok().body(1);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(0);
         }
     }
 

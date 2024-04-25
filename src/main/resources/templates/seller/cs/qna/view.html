@@ -27,16 +27,15 @@
                     })
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data);
                             alert("댓글이 등록되었습니다.");
-                            createCommentTag(qnaComment);
+                            createCommentTag(qnaComment, data);
                         })
                         .catch(err => console.log(err))
                 }
             }
 
             // 등록한 답변 동적 생성 함수
-            function createCommentTag(qnaComment) {
+            function createCommentTag(qnaComment, CQnaNo) {
                 const responseQna = document.getElementsByClassName('responseQna')[0];
                 const currentDate = new Date();
                 const year = currentDate.getFullYear();
@@ -50,7 +49,8 @@
                                             <p>${year}-${month}-${day}</p>
                                         </div>
                                         <div class="resQnaComment">
-                                            <input type="text" value="${qnaComment}" readonly>
+                                            <input type="text" class="comment" value="${qnaComment}" readonly>
+                                            <input type="hidden" class="CQnaNo" value="${CQnaNo}">
                                         </div>
                                         <span onclick="modifyComment()">수정</span>
                                         <span onclick="deleteComment()">삭제</span>
@@ -62,7 +62,7 @@
             function modifyComment() {
                 const modButton = event.target;
                 const delButton = modButton.nextElementSibling;
-                const inputTag = modButton.previousElementSibling.querySelector('input');
+                const inputTag = modButton.previousElementSibling.querySelector('.comment');
 
                 inputTag.readOnly = false;
                 inputTag.style.border = "1px solid #999999";
@@ -77,19 +77,62 @@
 
             // 등록된 답변 삭제 함수
             function deleteComment() {
-                alert("g2");
+                let result = confirm("답변을 삭제하시겠습니까?");
+                if (result){
+                    const delButton = event.target;
+                    const resQnaInfo = delButton.parentNode;
+                    const CQnaNo = resQnaInfo.querySelector('.CQnaNo').value;
+
+                    fetch(`/lotteon/seller/cs/qna/deleteQnaNote/${CQnaNo}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data > 0) {
+                                resQnaInfo.remove();
+                            }else {
+                                alert("삭제에 실패했습니다.");
+                            }
+                        })
+                        .catch(err => console.log(err));
+                }
             }
 
             // 등록된 답변 수정사항 저장 함수
             function saveComment() {
-                alert("g3");
+                alert("저장");
+                const saveButton = event.target;
+                const cancelButton = saveButton.nextElementSibling;
+                const inputComment = saveButton.parentNode.querySelector('.comment');
+                const inputCQnaNo = saveButton.parentNode.querySelector('.CQnaNo');
+
+                const jsonData = {
+                    "qnaComment" : inputComment.value,
+                    "CQnaNo" : inputCQnaNo.value
+                }
+                fetch("/lotteon/seller/cs/qna/modifyQnaNote", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert("댓글이 수정되었습니다.");
+                        inputComment.readOnly = true;
+                        inputComment.style.border = "0";
+                        saveButton.onclick = modifyComment;
+                        cancelButton.onclick = deleteComment;
+                        saveButton.style.backgroundColor = "#4291e9";
+                        saveButton.innerText = "수정";
+                        cancelButton.innerText = "삭제";
+                    })
+                    .catch(err => console.log(err))
+
             }
 
             // 등록된 답변 수정 취소 함수
             function cancelComment() {
                 const cancelButton = event.target;
                 const saveButton = cancelButton.previousElementSibling;
-                const inputTag = saveButton.previousElementSibling.querySelector('input');
+                const inputTag = saveButton.previousElementSibling.querySelector('.comment');
 
                 inputTag.readOnly = true;
                 inputTag.style.border = "0";
@@ -139,7 +182,8 @@
                         <p th:text="${#temporals.format(prodQnaNote.CQnaDate, 'yyyy-MM-dd')}">00.00.00</p>
                     </div>
                     <div class="resQnaComment">
-                        <input type="text" th:value="${prodQnaNote.content}" readonly>
+                        <input type="text" class="comment" th:value="${prodQnaNote.content}" readonly>
+                        <input type="hidden" class="CQnaNo" th:value="${prodQnaNote.CQnaNo}">
                     </div>
                     <span onclick="modifyComment()">수정</span>
                     <span onclick="deleteComment()">삭제</span>
