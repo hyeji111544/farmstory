@@ -22,7 +22,7 @@ public class CartController {
     private final CartService cartService;
 
     //제품 삭제
-    @PutMapping("cart/{selectedCartList}")
+    @PutMapping("cart/delete")
     public ResponseEntity<?> deleteCart(@RequestBody Map<String, List<Integer>> map, HttpServletRequest req){
 
         List<Integer> cartProNoList = map.get("cartProdNo");

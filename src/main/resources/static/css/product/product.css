@@ -838,7 +838,7 @@
     border-top: 1px solid #d3d3d3;
 }
 
-#cartList > .productList {
+#cartList  .productList {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -850,10 +850,11 @@
   width: 100%;
   justify-content: right;
 }
-#cartList .productSelect > a {
+#cartList .productSelect > span {
   width: 30px;
   height: 30px;
     font-size: 20px;
+    cursor: pointer;
 }
 #cartList .productInfo {
   display: flex;

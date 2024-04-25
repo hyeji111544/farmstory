@@ -20,7 +20,8 @@ $(function(){
     });
 
     // 수취확인 팝업 띄우기
-    $('.latest .confirm > .receive').click(function(e){
+    $('.latest  .confirm > .receive').click(function(e){
+        alert("!!");
         e.preventDefault();
         $('#popReceive').addClass('on');
     });
@@ -37,6 +38,7 @@ $(function(){
     });
 
     // 상품평 작성 레이팅바 기능
+    /*
     $(".my-rating").starRating({
         starSize: 20,
         useFullStars: true,
@@ -49,5 +51,7 @@ $(function(){
             console.log('DOM element ', $el);
         }
     });
+
+     */
 
 });
