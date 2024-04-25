@@ -34,10 +34,11 @@ public class CsController {
 // cs-faq //
     // faq 글목록 이동
     @GetMapping("/cs/faq/list")
-    public String faqList(Model model, String faqCate){
+    public String faqList(Model model, String faqCate,String faqType){
 
         model.addAttribute("list",csService.faqList(faqCate));
         model.addAttribute("faqCate",faqCate);
+        model.addAttribute("faqType",faqType);
         return "/cs/faq/list";
     }
 

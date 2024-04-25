@@ -45,7 +45,11 @@
               <table>
                 <tr th:each="notice, index:${pageResponseDTO.dtoList}" th:if="${index.index} &lt; 5">
                   <td>
-                    <a th:href="@{/cs/notice/view(noticeNo=${notice.noticeNo})}" th:text="${notice.noticeType + ' ' + notice.noticeTitle}">
+                    <a th:href="@{/cs/notice/view(noticeNo=${notice.noticeNo})}">
+                      <span th:if="${notice.noticeType == 'guide'}" style="white-space: nowrap;"><span th:text="'[안내]'+ ' ' + ${notice.noticeTitle}"></span></span>
+                      <span th:if="${notice.noticeType == 'announce'}" style="white-space: nowrap;"><span th:text="'[발표]' + ' ' + ${notice.noticeTitle}"></span></span>
+                      <span th:if="${notice.noticeType == 'prodinfo'}" style="white-space: nowrap;"><span th:text="'[위해상품정보]'+ ' ' + ${notice.noticeTitle}"></span></span>
+                      <span th:if="${notice.noticeType == 'uservice'}" style="white-space: nowrap;"><span th:text="'[고객서비스]'+ ' ' + ${notice.noticeTitle}"></span></span>
                     </a>
                   </td>
                   <td th:if="${notice.noticeDate != null}" th:text="${#temporals.format(notice.noticeDate, 'yyyy-MM-dd')}" style="text-align: right;"></td>
