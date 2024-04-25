@@ -1,9 +1,63 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layout/productLayout.html}">
-<!--내용 시작-->
-    <!-- 주문 페이지 시작-->
-    <section class="order" layout:fragment="content">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>롯데ON::롯데 온라인 쇼핑몰</title>
+  <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.ico}" />
+  <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+  <script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
+  <script th:src="@{https://kit.fontawesome.com/20962f3e4b.js}" crossorigin="anonymous"></script>
+  <script th:src="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js}"></script>
+  <link rel="stylesheet" th:href="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css}"/>
+  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}"/>
+  <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css}"/>
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
+  <link rel="stylesheet" th:href="@{/css/product/product.css}" />
+  <!--cart 페이지는 카테고리 탭이 없어야하므로 layout처리 안함-->
+</head>
+<body>
+<div id="wrapper">
+  <header>
+    <div class="top">
+      <div>
+        <a href="#">로그인</a>
+        <a href="#">회원가입</a>
+        <a href="#">마이페이지</a>
+        <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니</a>
+      </div>
+    </div>
+    <div class="logo">
+      <div>
+        <a href="#"><img th:src="@{/images/header_logo.png}" alt="로고" /></a>
+        <form action="#">
+          <input type="text" name="search"/>
+          <button><i class="fa fa-search"></i></button>
+        </form>
+      </div>
+
+    </div>
+    <div class="menu">
+      <div>
+        <ul>
+          <li><a href="#">히트상품</a></li>
+          <li><a href="#">추천상품</a></li>
+          <li><a href="#">최신상품</a></li>
+          <li><a href="#">인기상품</a></li>
+          <li><a href="#">할인상품</a></li>
+        </ul>
+        <ul>
+          <li><a href="#">쿠폰존</a></li>
+          <li><a href="#">사용후기</a></li>
+          <li><a href="#">개인결제</a></li>
+          <li><a href="#">고객센터</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <main id="product">
+
+    <!-- 장바구니 페이지 시작 -->
+    <section class="order">
 
       <!-- 제목, 페이지 네비게이션 -->
       <nav>
@@ -21,11 +75,11 @@
               <th>상품명</th>
               <th>총수량</th>
               <th>판매가</th>
-              <th>배송비</th>
+              <th>할인가</th>
               <th>소계</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody> <!-- tbody를 반복-->
             <tr class="empty">
               <td colspan="7">장바구니에 상품이 없습니다.</td>
             </tr>
@@ -36,12 +90,13 @@
                   <div>
                     <h2><a href="#">상품명</a></h2>
                     <p>상품설명</p>
+                    <p>옵션</p>
                   </div>
                 </article>
               </td>
               <td>1</td>
               <td>27,000</td>
-              <td>무료배송</td>
+              <td>3,000</td>
               <td>27,000</td>
             </tr>
             <tr>
@@ -60,21 +115,60 @@
               <td>27,000</td>
             </tr>
             <tr>
-              <td>
-                <article>
-                  <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                  <div>
-                    <h2><a href="#">상품명</a></h2>
-                    <p>상품설명</p>
-                  </div>
-                </article>
+              <td colspan="6">
+                <span class="cost">상품 0원</span>-
+                <span class="cost">할인 0원</span>+
+                <span class="cost">배송비 0원</span>=
+                <span class="cost">총 0원</span>
               </td>
-              <td>1</td>
-              <td>27,000</td>
-              <td>무료배송</td>
-              <td>27,000</td>
             </tr>
           </tbody>
+
+          <tbody> <!-- tbody를 반복-->
+          <tr class="empty">
+            <td colspan="7">장바구니에 상품이 없습니다.</td>
+          </tr>
+          <tr>
+            <td>
+              <article>
+                <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
+                <div>
+                  <h2><a href="#">상품명</a></h2>
+                  <p>상품설명</p>
+                  <p>옵션</p>
+                </div>
+              </article>
+            </td>
+            <td>1</td>
+            <td>27,000</td>
+            <td>3,000</td>
+            <td>27,000</td>
+          </tr>
+          <tr>
+            <td>
+              <article>
+                <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
+                <div>
+                  <h2><a href="#">상품명</a></h2>
+                  <p>상품설명</p>
+                </div>
+              </article>
+            </td>
+            <td>1</td>
+            <td>27,000</td>
+            <td>무료배송</td>
+            <td>27,000</td>
+          </tr>
+          <tr>
+            <td colspan="6">
+              <span class="cost">상품 0원</span>-
+              <span class="cost">할인 0원</span>+
+              <span class="cost">배송비 0원</span>=
+              <span class="cost">총 0원</span>
+            </td>
+          </tr>
+          </tbody>
+
         </table>
 
         <!-- 최종 결제 정보 -->

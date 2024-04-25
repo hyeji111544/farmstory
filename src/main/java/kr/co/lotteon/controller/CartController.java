@@ -1,7 +1,7 @@
 package kr.co.lotteon.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import kr.co.lotteon.service.admin.CartService;
+import kr.co.lotteon.service.CartService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class CartController {
     private final CartService cartService;
 
     //제품 삭제
-    @PutMapping("cart/{selectedCartList}")
+    @PutMapping("/cart/delete")
     public ResponseEntity<?> deleteCart(@RequestBody Map<String, List<Integer>> map, HttpServletRequest req){
 
         List<Integer> cartProNoList = map.get("cartProdNo");
@@ -42,6 +42,21 @@ public class CartController {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(errorResponse);
+        }
+
+    }
+
+    //제품 갯수 수정(주문하기 눌렀을 때)
+    @PutMapping("/cart/update")
+    public ResponseEntity<?> updateCart(@RequestBody Map<String, List<Integer>> map){
+        Map<String, String> response = new HashMap<>();
+        try {
+            cartService.updateCartProdCount(map);
+            response.put("message", "success");
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e){
+            response.put("message", "error");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
 
     }

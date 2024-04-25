@@ -16,7 +16,10 @@
           <input type="hidden" name="noticeHit" th:value="${view.noticeHit}"/>
           <tr>
             <td>유형</td>
-            <td th:text="${view.noticeCate}"></td>
+            <td th:if="${view.noticeCate == 'service'}">고객서비스</td>
+            <td th:if="${view.noticeCate == 'event'}">이벤트당첨</td>
+            <td th:if="${view.noticeCate == 'safe'}">안전거래</td>
+            <td th:if="${view.noticeCate == 'danger'}">위해상품</td>
           </tr>
           <tr>
             <td>제목</td>

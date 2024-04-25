@@ -15,8 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -119,11 +118,40 @@ public class CsService {
     }
 
     // faq 리스트
-    public List<Faq> faqList(String faqCate){
+    public Map<String, List<FaqDTO>> faqList(String faqCate){
         if(faqCate == null){
-            return faqRepository.findAll();
+            return null;
         }else{
-            return faqRepository.findByFaqCate(faqCate);
+            List<Faq> faqList = faqRepository.findByFaqCate(faqCate); // type 구분 없음
+
+            Map<String, List<FaqDTO>> faqMap = new HashMap<>(); // 비어있는 Map 생성(반환객체)
+            for (Faq each : faqList){
+                // Entity -> DTO
+                FaqDTO eachDTO = modelMapper.map(each, FaqDTO.class);
+                // faqMap에 타입들을 비교 , containKey() = 비교
+                if (faqMap.containsKey(eachDTO.getFaqType())){
+                    // 같은 값이 있을때 가지고있는 값을 불러와서 새로운 값(eachDTO)를 add
+                    List<FaqDTO> existingFaq = faqMap.get(eachDTO.getFaqType());
+                    existingFaq.add(eachDTO);
+                }else {
+                    /*
+                        -같은 값이 없는 경우-
+                        새로운 리스트(newFaq)를 생성해서 eachDTO를 newFaq에 add한 후에
+                        newFaq를 eachDTO로 put
+                     */
+                    List<FaqDTO> newFaq = new ArrayList<>();
+                    newFaq.add(eachDTO);
+                    faqMap.put(eachDTO.getFaqType(), newFaq);
+                }
+            }
+            return faqMap;
+            // List<faq> test
+            // test[0] test[1]
+            // List<List<faq>> faqList => [List<faq>, List<faq>, List<faq> ...]
+            // faqList[0][0]  faqList[0][1]  faqList[1][0] faqList[1][1] ..
+            // Map<String, List<faq>> faqMap
+            // faqMap [이름, [0]]
+
         }
     }
 

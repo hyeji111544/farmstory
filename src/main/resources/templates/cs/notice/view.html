@@ -23,7 +23,10 @@
             </aside>
             <article>
               <nav>
-                <h2 class="title" th:text="${view.noticeType} + ' ' + ${view.noticeTitle}"></h2>
+                <h2 class="title" th:if="${view.noticeType == 'guide'}" th:text="'[안내]' + ' ' + ${view.noticeTitle}"></h2>
+                <h2 class="title" th:if="${view.noticeType == 'announce'}" th:text="'[발표]' + ' ' + ${view.noticeTitle}"></h2>
+                <h2 class="title" th:if="${view.noticeType == 'prodinfo'}" th:text="'[위해상품정보]' + ' ' + ${view.noticeTitle}"></h2>
+                <h2 class="title" th:if="${view.noticeType == 'uservice'}" th:text="'[고객서비스]' + ' ' + ${view.noticeTitle}"></h2>
                 <span class="date">2022.11.20</span>
               </nav>
 

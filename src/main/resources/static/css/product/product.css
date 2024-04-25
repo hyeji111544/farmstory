@@ -838,7 +838,7 @@
     border-top: 1px solid #d3d3d3;
 }
 
-#cartList > .productList {
+#cartList  .productList {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
@@ -850,10 +850,11 @@
   width: 100%;
   justify-content: right;
 }
-#cartList .productSelect > a {
+#cartList .productSelect > span {
   width: 30px;
   height: 30px;
     font-size: 20px;
+    cursor: pointer;
 }
 #cartList .productInfo {
   display: flex;
@@ -1101,13 +1102,14 @@
 }
 #product > .order > form > table {
   width: 100%;  
-  border-collapse: collapse;
+  #border-collapse: collapse;
   border-spacing: 0;
-  border-top: 2px solid #000;
+    border: 1px solid #d3d3d3;
+    border-radius: 10px;
 }
 #product > .order > form > table th {
   padding: 12px 0;    
-  background: #fff;
+  #background: #fff;
   color: #383838;
   font-size: 0.95em;
   text-align: center;
@@ -1130,7 +1132,21 @@
 
 #product > .order > form > table td {
   text-align: center;
+    border-top: 1px solid #d3d3d3;
 }
+#product > .order > form > table tr:nth-last-child(1) > td {
+    font-size: 16px;
+    font-weight: normal;
+    color: #111;
+}
+#product > .order > form > table tr .cost {
+    display: inline-block;
+    font-size: 16px;
+    color: #111;
+    line-height: 30px;
+    height: 30px;
+}
+
 #product > .order > form > table td:last-child {
   color:#ff006c;
   font-weight: bold;
@@ -1157,14 +1173,16 @@
 }
 #product > .order > form > table article img {width: 80px;}
 
+
 #product > .order > form > .final {
   float: right;
   width: 360px;
   height: 412px;
   padding: 20px;
-  margin-top: 12px;
+  margin-top: 20px;
   background: #fff;
   border: 1px solid #d3d3d3;
+border-radius: 10px;
   box-sizing: border-box;
 }
 #product > .order > form > .final > h2 {
@@ -1211,17 +1229,42 @@
 }
 
 
+
+
 #product > .order > form .product > h3 {  
   font-size: 15px;
   font-weight: bold;
   padding: 10px 0;
-
 }
 
 #product > .order > form > article {
   width: 560px;
   height: auto;
-  margin-top: 16px;
+    border: 1px solid #d3d3d3;
+    border-bottom: none;
+    border-top: none;
+    padding: 10px ;
+    box-sizing: border-box;
+}
+#product > .order > form > .delivery {
+    margin-top: 20px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-top: 1px solid #d3d3d3;
+}
+#product > .order > form > .discount {
+
+}
+#product > .order > form > .payment {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #d3d3d3;
+}
+#product > .order > form > .alert {
+    border-top: 1px solid #d3d3d3;
+    border-bottom: 1px solid #d3d3d3;
+    border-radius: 10px;
 }
 
 #product > .order > form > article > h1 {  
@@ -1686,6 +1729,7 @@
     font-size: 24px;
     font-weight: bold;
 }
+
 
 #tCartList .productList {
     display: flex;

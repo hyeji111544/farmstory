@@ -39,8 +39,8 @@
                     <li>
                         <a href="#"><i class="fas fa-box-open" aria-hidden="true"></i>상품관리</a>
                         <ol>
-                            <li><a th:href="@{/seller/product/list}">상품현황</a></li>
-                            <li><a th:href="@{/admin/product/register}">상품등록</a></li>
+                            <li><a th:href="@{/seller/product/list(prodSeller=${session.prodSeller})}">상품현황</a></li>
+                            <li><a th:href="@{/seller/product/register(prodSeller=${session.prodSeller})}">상품등록</a></li>
                             <li><a href="#">재고관리</a></li>
                         </ol>
                     </li>
@@ -56,9 +56,9 @@
                     <li>
                         <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>고객센터</a>
                         <ol>
-                            <li><a th:href="@{/admin/cs/notice/list}">공지사항</a></li>
-                            <li><a th:href="@{/admin/cs/faq/list}">자주묻는질문</a></li>
-                            <li><a th:href="@{/admin/cs/qna/list}">문의하기</a></li>
+                            <li><a th:href="@{/seller/cs/notice/list}">공지사항</a></li>
+                            <li><a th:href="@{/seller/cs/faq/list}">자주묻는질문</a></li>
+                            <li><a th:href="@{/seller/cs/qna/list(prodSeller=${session.prodSeller})}">문의하기</a></li>
                         </ol>
                     </li>
                 </ul>
