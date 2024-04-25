@@ -510,8 +510,12 @@ footer p > strong {
   background-color: #f7f7f7;
 }
 #cs > .notice > .list > article > table td {
-  padding: 16px;
+  padding: 20px;
   border-bottom: 1px solid #ccc;
+  font-size: 19px;
+}
+#cs > .notice > .list > article > table td a span{
+  font-size: 16px;
 }
 #cs > .notice > .list > article > table td:last-child {
   text-align: center;
@@ -706,10 +710,10 @@ footer p > strong {
   height: auto;
   border-bottom: 1px solid #ccc;
 }    
-
 #cs > .faq > .list > article > div > ul > li:nth-child(n+4) {
   display: none;
 }
+
 
 #cs > .faq > .list > article > div > ul a {
   display: block;
