@@ -358,7 +358,24 @@
             cartDel.textContent = cartDeliveryPrice.toLocaleString();
             cartPoi.textContent = cartPoint.toLocaleString();
             cartTotal.textContent = cartTotalPrice.toLocaleString();
+        }
 
+        function accordion() {
+            const button = event.target;
+            const listForCompany = button.parentNode;
+            const productListAll = listForCompany.querySelectorAll('.productList');
+            const company_price = listForCompany.querySelector('.company_price');
+            Array.from(productListAll).forEach(function (productList) {
+                if (productList.style.display === "none") {
+                    productList.style.display = "flex";
+                    //company_price.style.display = "flex";
+                    button.innerText = "∧";
+                }else {
+                    productList.style.display = "none";
+                    //company_price.style.display = "none";
+                    button.innerText = "∨";
+                }
+            })
         }
 
     </script>
@@ -426,8 +443,9 @@
                     </label>
                     <a href="" id="cartDelete">선택삭제</a>
                 </div>
-                <div class="listForCompany" th:each="map : ${cartProducts}">
+                <div class="listForCompany" th:each="map : ${cartProducts}" style="position: relative">
                     <p style="padding: 15px; border-top : 1px solid #d3d3d3; font-size: 18px; font-weight: bold; background-color: #f2f2f2 "  class="cartProdCompany" th:text="${map.key}">회사명</p>
+                    <p style="font-size: 30px; cursor: pointer; position: absolute; top: 4px; right: 20px" onclick="accordion()">∧</p>
 
                     <div th:each="cartProduct, index:${map.value}" class="productList">
                         <!--productList를 반복 시키면 됨!!-->
