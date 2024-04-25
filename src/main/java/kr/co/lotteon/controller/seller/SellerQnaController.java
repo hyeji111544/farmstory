@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -55,7 +56,7 @@ public class SellerQnaController {
 
     // 판매자 관리페이지 - QNA View - 상품 문의 답글 등록
     @PostMapping("/seller/cs/qna/insertQnaNote")
-    public ResponseEntity<?> insertQnaNote(HttpSession httpSession, @RequestBody Map<String, String> requestData) {
+    public ResponseEntity<?> insertQnaNote(@RequestBody Map<String, String> requestData) {
         String content = requestData.get("qnaComment");
         String prodQnaNo = requestData.get("prodQnaNo");
         String sellerNo = requestData.get("sellerNo");
@@ -66,5 +67,26 @@ public class SellerQnaController {
         prodQnaNoteDTO.setCQnaDate(LocalDateTime.now());
 
         return sellerQnaService.insertQnaNote(prodQnaNoteDTO);
+    }
+
+    // 판매자 관리페이지 - QNA View - 상품 문의 답글 삭제
+    @GetMapping("/seller/cs/qna/deleteQnaNote/{CQnaNo}")
+    public ResponseEntity<?> deleteQnaNote(@PathVariable String CQnaNo){
+        return sellerQnaService.deleteQnaNote(CQnaNo);
+    }
+
+    // 판매자 관리페이지 - QNA View - 상품 문의 답글 수정
+    @PostMapping("/seller/cs/qna/modifyQnaNote")
+    public ResponseEntity<?> modifyQnaNote(@RequestBody Map<String, String> requestData) {
+
+        String content = requestData.get("qnaComment");
+        String CQnaNo = requestData.get("CQnaNo");
+        ProdQnaNoteDTO prodQnaNoteDTO = new ProdQnaNoteDTO();
+        prodQnaNoteDTO.setContent(content);
+        prodQnaNoteDTO.setCQnaNo(Integer.parseInt(CQnaNo));
+        prodQnaNoteDTO.setCQnaDate(LocalDateTime.now());
+        log.info("prodQnaNoteDTO : " + prodQnaNoteDTO);
+
+        return sellerQnaService.modifyQnaNote(prodQnaNoteDTO);
     }
 }
