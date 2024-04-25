@@ -113,6 +113,48 @@
                 }
             }
 
+            const orderBtn = document.getElementById('btnOrder');
+
+            orderBtn.onclick = function (e){
+                e.preventDefault();
+                var selectedCart = document.getElementsByName('selectedCart');
+                var selectedCartList = [];
+                var selectedCountList = [];
+
+                selectedCart.forEach(function (checkbox) {
+                    if (checkbox.checked){
+                        var inputField = checkbox.parentNode.querySelector('input[type="hidden"]');
+                        var cartProdNo = inputField.value;
+                        selectedCartList.push(cartProdNo);
+                        var inputCount = checkbox.parentNode.querySelector('.prodCount');
+                        var countValue = inputCount.value;
+                        selectedCountList.push(countValue);
+                    }
+                });
+
+                console.log(selectedCartList);
+                console.log(selectedCountList);
+
+                const jsonDate = {
+                    cartProdNo : selectedCartList,
+                    count : selectedCountList
+                };
+
+                fetchPut(`/lotteon/cart/update`, jsonDate)
+                    .then(data => {
+                        console.log(data); // 서버로부터 받은 데이터 출력 또는 처리
+
+
+
+                    })
+                    .catch(error => {
+                        console.error(error); // 오류 처리
+                    });
+
+
+
+            }
+
         }
 
 
@@ -166,11 +208,11 @@
             var disPriceElement = productInfo.querySelector('.dis_price');
             var discount = productInfo.querySelector('.dis_prod').value;
             //var inputOrgElement = orgPriceElement.querySelector('input');
-            console.log(inputOrgPrice);
-            console.log("discount:"+discount);
+            //console.log(inputOrgPrice);
+            //console.log("discount:"+discount);
 
             var orgPriceValue = inputOrgPrice.value;
-            console.log("org :" + orgPriceValue);
+            //console.log("org :" + orgPriceValue);
 
             var currentValue = parseInt(numInput.value) + change;
             // 최소값은 1, 최대값은 99로 제한
@@ -181,12 +223,12 @@
             }
 
             numInput.value = currentValue; // 변경된 값 적용
-            console.log("갯수"+currentValue);
+            //console.log("갯수"+currentValue);
 
             var orgTotalPrice = orgPriceValue * currentValue;
             var disTotalPrice = orgPriceValue *(100 - discount) * currentValue * 0.01;
-            console.log("원금"+orgTotalPrice);
-            console.log("할인"+disTotalPrice);
+            //console.log("원금"+orgTotalPrice);
+            //console.log("할인"+disTotalPrice);
             if (!isNaN(orgTotalPrice)) {
                 // 금액 콤마 표시를 위해 포멧팅
                 var fOrgTotalPrive = new Intl.NumberFormat('ko-KR').format(orgTotalPrice)+'원';
@@ -210,7 +252,7 @@
         // 체크 된 상품 금액 계산
         function calculateTotalPrice(aa){
 
-            console.log("calculateTotalPrice...1 : " + this);
+            //console.log("calculateTotalPrice...1 : " + this);
             // 회사별로 가격 출력
             let sumOrgPrice = 0;
             let discountPrice = 0;
@@ -223,7 +265,7 @@
             console.log("1" + listForCompany);
 
             if (aa === undefined) {
-                console.log("2" + listForCompany);
+                //console.log("2" + listForCompany);
                 listForCompany = event.target.parentNode.parentNode.parentNode;
             }
             //console.log("3" + listForCompany);
@@ -309,7 +351,7 @@
 
         function cartPrice(){
             const allSelectedPrice = document.querySelectorAll('.company_price');
-            console.log(allSelectedPrice);
+            //console.log(allSelectedPrice);
 
             // 전체합계
             let cartOrgPrice = 0;
@@ -336,7 +378,7 @@
                 const deliveryPriceValue = parseFloat(deliveryPriceText.replace(/[^\d.-]/g, '')); // 숫자로 변환
                 const totalPriceValue = parseFloat(totalPriceText.replace(/[^\d.-]/g, '')); // 숫자로 변환
 
-                console.log(orgPriceValue + "/" + disPriceValue + "/" + deliveryPriceValue + "/" + totalPriceValue);
+                //console.log(orgPriceValue + "/" + disPriceValue + "/" + deliveryPriceValue + "/" + totalPriceValue);
 
                 cartOrgPrice += orgPriceValue;
                 cartDisPrice += disPriceValue;
@@ -344,7 +386,7 @@
                 cartTotalPrice += totalPriceValue;
                 cartPoint = Math.floor(cartTotalPrice * 0.01);
 
-                console.log(cartOrgPrice + "/" + cartDisPrice + "/" + cartDeliveryPrice + "/" + cartTotalPrice);
+                //console.log(cartOrgPrice + "/" + cartDisPrice + "/" + cartDeliveryPrice + "/" + cartTotalPrice);
             });
 
             const cartOrg = document.getElementById('prodOrgPrice');
@@ -520,7 +562,7 @@
                         <td id="prodTotalPrice">0</td>
                     </tr>
                 </table>
-                <input type="submit" name="" value="주문하기">
+                <input type="submit" id="btnOrder" value="주문하기">
             </div>
 
         </section>
