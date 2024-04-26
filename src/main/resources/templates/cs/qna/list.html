@@ -63,9 +63,10 @@
               <a th:href="@{/cs/qna/view(qnaNo=${qna.qnaNo})}" th:if="${qna.qnaCate == 'travel'}">[여행/숙박/항공]  [[${qna.qnaTitle}]]</a>
               <a th:href="@{/cs/qna/view(qnaNo=${qna.qnaNo})}" th:if="${qna.qnaCate == 'safe'}">[안전결제]  [[${qna.qnaTitle}]]</a>
             </td>
-            <td th:text="${qna.qnaStatus}"></td>
-            <td th:text="${qna.userId}"></td>
-            <td th:if="${qna.qnaDate != null}" th:text="${#temporals.format(qna.qnaDate, 'yyyy-MM-dd')}" style="text-align: right;"></td>
+              <td th:if="${qna.qnaStatus == '검토중'}" th:text="${qna.qnaStatus}"></td>
+              <td th:if="${qna.qnaStatus == '답변완료'}" th:text="${qna.qnaStatus}" style="color: #4291e9;"></td>
+              <td th:text="${#strings.substring(qna.userId, 0, 3)} + '****'"></td>
+              <td th:if="${qna.qnaDate != null}" th:text="${#temporals.format(qna.qnaDate, 'yyyy-MM-dd')}" style="text-align: right;"></td>
           </tr>
         </table>
 
