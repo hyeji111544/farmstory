@@ -28,15 +28,14 @@ public class OrderController {
                            @RequestParam("user") String userId, Model model){
         log.info("user" + userId);
         log.info("cartProdNo" + cartProdNos);
+        Map<String, List<CartInfoDTO>> orderProducts = new HashMap<>();
         for (Integer cartProdNo : cartProdNos) {
             log.info("cartProdNo" + cartProdNo);
             Map<String, List<CartInfoDTO>> cartInfos = orderService.findCartProdNo(cartProdNo);
-            log.info("orderProducts" + cartInfos);
         }
+        log.info("orderProducts" + orderProducts);
 
-
-        return "/product/order";
     }
 
-
+        return "/product/order";
 }

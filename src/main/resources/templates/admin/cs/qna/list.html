@@ -302,9 +302,10 @@
                             </a>
                         </span>
                     </td>
-                    <td th:text="${qna.userId}"></td>
+                    <td th:text="${#strings.substring(qna.userId, 0, 3)} + '****'"></td>
                     <td th:if="${qna.qnaDate != null}" th:text="${#temporals.format(qna.qnaDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
-                    <td th:text="${qna.qnaStatus}"></td>
+                    <td th:if="${qna.qnaStatus == '검토중'}" th:text="${qna.qnaStatus}"></td>
+                    <td th:if="${qna.qnaStatus == '답변완료'}" th:text="${qna.qnaStatus}" style="color: #4291e9;"></td>
                 </tr>
             </table>
 

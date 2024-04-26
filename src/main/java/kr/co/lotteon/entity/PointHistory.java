@@ -3,6 +3,7 @@ package kr.co.lotteon.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -22,6 +23,7 @@ public class PointHistory {
     private int changePoint;
 
     @CreationTimestamp
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime changeDate;
     private String changeCode;
     private String changeType;
