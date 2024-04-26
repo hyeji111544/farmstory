@@ -419,7 +419,7 @@
 
                 <div class="button">
                     <th:block th:if="${#authentication.principal != 'anonymousUser'}">
-                        <input type="text"  name="user" id="userForDirect" th:value="${#authentication.principal.user.userId}">
+                        <input type="hidden"  name="user" id="userForDirect" th:value="${#authentication.principal.user.userId}">
                     </th:block>
                     <input type="button" onclick="btnOrder()" class="order" value="구매하기"/>
                     <input type="button" onclick="btnCart()" class="cart" value="장바구니"/>

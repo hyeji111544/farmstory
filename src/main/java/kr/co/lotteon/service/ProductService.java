@@ -144,6 +144,7 @@ public class ProductService {
     };
 
     // 장바구니 조회
+    /*
     public List<CartInfoDTO> findCartProdNo(int cartNo) {
 
         List<CartProduct> carts = cartProductRepository.findByCartNo(cartNo);
@@ -219,5 +220,7 @@ public class ProductService {
 
 
     }
+
+     */
 
 }
