@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Slf4j
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom {
@@ -22,4 +24,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                     .where(qUser.userId.eq(userId))
                     .fetchOne();
     };
+    // 아이디 찾기
+    public Optional<User> findUserIdByUserNameAndUserEmail(String userName, String userEmail) {
+        User user = jpaQueryFactory
+                .selectFrom(qUser)
+                .where(qUser.userName.eq(userName)
+                        .and(qUser.userEmail.eq(userEmail)))
+                .fetchOne();
+
+        return Optional.ofNullable(user);
+    }
 }

@@ -185,6 +185,10 @@ public class MemberService {
         User savedUser = userRepository.save(user);
         return savedUser;
     }
+    // UserId 찾기(if optional = null -> return Optional.empty();)
+    public Optional<User> findUserIdByUserNameAndUserEmail(String userName, String userEmail) {
+        return userRepository.findUserIdByUserNameAndUserEmail(userName, userEmail);
+    }
 
     //Seller 회원 등록
     public int registerSeller(UserDTO userDTO){
