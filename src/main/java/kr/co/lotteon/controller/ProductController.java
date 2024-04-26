@@ -1,16 +1,17 @@
 package kr.co.lotteon.controller;
 
-import groovy.util.logging.Slf4j;
 import jakarta.servlet.http.HttpServletRequest;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Cart;
 import kr.co.lotteon.entity.CartProduct;
 import kr.co.lotteon.entity.ProdOption;
 import kr.co.lotteon.entity.Wish;
+import kr.co.lotteon.service.CartService;
 import kr.co.lotteon.service.ProdCateService;
 import kr.co.lotteon.service.ProductService;
 import kr.co.lotteon.service.TestService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -31,10 +32,10 @@ import java.util.Map;
 @Controller
 public class ProductController {
 
-    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
     private final ProductService productService;
     private final ProdCateService prodCateService;
     private final TestService testService;
+    private final CartService cartService;
 
     // 상품 목록 이동
     @GetMapping("/product/list")
@@ -159,7 +160,7 @@ public class ProductController {
     public String prodCart(@RequestParam("userId") String userId, Model model){
         int cartNo = productService.findCartNoByUserId(userId);
         if (cartNo != 0){
-            List<CartInfoDTO> cartProducts = productService.findCartProdNo(cartNo);
+            Map<String, List<CartInfoDTO>> cartProducts = cartService.findCartProdNo(cartNo);
             model.addAttribute("cartProducts", cartProducts);
         }
 
@@ -167,6 +168,7 @@ public class ProductController {
     }
 
     // 장바구니 이동
+    /*
     @GetMapping("/product/cartTest")
     public String prodCartTest(@RequestParam("userId") String userId, Model model){
         int cartNo = productService.findCartNoByUserId(userId);
@@ -177,6 +179,8 @@ public class ProductController {
 
         return "/product/cartTest";
     }
+
+     */
 
     // 상품 주문 이동
     @GetMapping("/product/order")
