@@ -5,12 +5,10 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.GraphInfoDTO;
+import kr.co.lotteon.dto.PageRequestDTO;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.SellerInfoDTO;
-import kr.co.lotteon.entity.OrderDetail;
-import kr.co.lotteon.entity.QOrderDetail;
-import kr.co.lotteon.entity.QProduct;
-import kr.co.lotteon.entity.QProductimg;
+import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.custom.SellerRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +32,7 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
     private final QOrderDetail qOrderDetail = QOrderDetail.orderDetail;
     private final QProduct qProduct = QProduct.product;
     private final QProductimg qProductimg = QProductimg.productimg;
+    private final QOrders qOrders = QOrders.orders;
 
     // 판매자 관리페이지 - 홈 출력 정보 조회
     @Override
@@ -256,9 +255,39 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
         long total = selectProducts.getTotal();
 
         return new PageImpl<>(productsResults, pageable, total);
-
     }
 
+    // 판매자 관리페이지 - 주문관리 - 주문현황 (최근 한달 주문 건수 for 그래프)
+    public List<OrderDetail> selectProdSalesCount(String prodSeller) {
+        LocalDate oneMonthsAgo = LocalDate.now().minusMonths(1);
+        return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .where(qOrderDetail.prodSeller.eq(prodSeller))
+                    .where(qOrderDetail.detailDate.between(oneMonthsAgo, LocalDate.now()))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
 
+    }
+    
+    // 판매자 관리페이지 - 주문관리 - 주문현황 (주문 상품 정보 출력)
+    public Page<Tuple> selectProdSalesInfo(String prodSeller, PageRequestDTO pageRequestDTO, Pageable pageable) {
+
+        QueryResults<Tuple> selectOrders = jpaQueryFactory
+                .select(qOrderDetail, qProduct.prodName, qOrders)
+                .from(qOrderDetail)
+                .join(qProduct)
+                .on(qOrderDetail.prodNo.eq(qProduct.prodNo))
+                .join(qOrders)
+                .on(qOrderDetail.orderNo.eq(qOrders.orderNo))
+                .where(qOrderDetail.prodSeller.eq(prodSeller))
+                .orderBy(qOrderDetail.detailDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Tuple> orderResults = selectOrders.getResults();
+        long total = selectOrders.getTotal();
+        return new PageImpl<>(orderResults, pageable, total);
+    }
 
 }

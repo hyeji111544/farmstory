@@ -1,0 +1,128 @@
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layout/sellerLayout.html}">
+<!--내용 시작-->
+    <section id="admin-product-list" layout:fragment="content">
+
+        <script>
+            window.onload = function () {
+                // 그래프
+                new Chart(document.getElementById("line-chart"), {
+                    type: 'line',
+                    data: {
+                        labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+                        datasets: [{
+                            data: [86,114,106,106,107,111,133,221,783,2000],
+                            label: "주문건수",
+                            borderColor: "#3e95cd",
+                            fill: false
+                        }
+                        ]
+                    },
+                    options: {
+                        responsive: false,
+                        title: {
+                            display: true,
+                            text: '최근 한달 주문 건수'
+                        }
+                    }
+                });
+            }
+        </script>
+
+        <nav>
+            <h3>매출현황</h3>
+            <p>
+                HOME > 주문관리 > <strong>매출현황</strong>
+            </p>
+        </nav>
+        <!-- 상품목록 컨텐츠 시작 -->
+        <section>
+
+            <div class="orderListInfo">
+                <div class="orderListChart">
+                    <canvas id="line-chart" width="1000" height="250"></canvas>
+                </div>
+                <div>
+                    주문현황 / 최신주문, 일주일주문, 전체주문
+                    배송현황 / 입금대기, 배송준비, 배송중, 배송완료
+                    CS현황 / 취소요청,교환요청,환불요청
+                </div>
+            </div>
+
+            <div class="orderListFlex">
+                <div class="salesInfo twoDiv">
+                    <h3>매출 요약</h3>
+                    <div class="salesRow">
+                        <div>기간</div>
+                        <div>금액</div>
+                        <div>취소</div>
+                        <div>환불</div>
+                    </div>
+                    <div class="salesRow">
+                        <div>전체</div>
+                        <div>9999</div>
+                        <div>9999</div>
+                        <div>9999</div>
+                    </div>
+                    <div class="salesRow">
+                        <div>일년</div>
+                        <div>777</div>
+                        <div>777</div>
+                        <div>777</div>
+                    </div>
+                    <div class="salesRow">
+                        <div>한달</div>
+                        <div>555</div>
+                        <div>555</div>
+                        <div>555</div>
+                    </div>
+                    <div class="salesRow">
+                        <div>일주일</div>
+                        <div>111</div>
+                        <div>111</div>
+                        <div>111</div>
+                    </div>
+                </div>
+
+                <div class="salesInfoWeek twoDiv">
+                    <h3>일일 매출</h3>
+                    <div class="salesWeekRow">
+                        <div>
+                            <span>≪</span>
+                            <span>2024.05.22</span>
+                            <span>≫</span>
+                        </div>
+                    </div>
+                    <div class="salesWeekRow">
+                        <div>금액</div>
+                        <div>9999</div>
+                        <div>건수</div>
+                        <div>9999</div>
+                    </div>
+                    <div class="salesWeekRow">
+                        <div>취소</div>
+                        <div>9999</div>
+                        <div>건수</div>
+                        <div>9999</div>
+                    </div>
+                    <div class="salesWeekRow">
+                        <div>교환</div>
+                        <div>9999</div>
+                        <div>건수</div>
+                        <div>9999</div>
+                    </div>
+                    <div class="salesWeekRow">
+                        <div>환불</div>
+                        <div>9999</div>
+                        <div>건수</div>
+                        <div>9999</div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- 상품목록 컨텐츠 끝 -->
+    </section>
+<!--내용 끝-->
+</html>

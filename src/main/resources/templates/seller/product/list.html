@@ -18,9 +18,9 @@
                         <option value="prodNo">상품코드</option>
                         <option value="prodCompany">제조사</option>
                     </select>
-                    <input type="text" name="keyword">
-                    <input type="text" name="prodSeller" value="aa11aa22" readonly>
-                    <input type="submit" value="검색">
+                    <input class="searchInput" type="text" name="keyword">
+                    <input type="hidden" name="prodSeller" th:value="${session.prodSeller}" readonly>
+                    <input class="searchBtn" type="submit" value="검색">
                 </form>
             </div>
             <table>

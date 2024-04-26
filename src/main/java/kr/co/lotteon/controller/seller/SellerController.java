@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.AuthProvider;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -102,9 +103,30 @@ public class SellerController {
 
     // 판매자 주문 관리 //
     @GetMapping("/seller/order/orderList")
-    public String SellerOrderList(){
+    public String SellerOrderList(String prodSeller, Model model, PageRequestDTO pageRequestDTO){
+        // 최근 한달치 주문 건수
+        LinkedHashMap<String, Integer> orderByDate = sellerService.selectProdSalesCount(prodSeller);
+        // 판매자의 판매 목록 최신순
+        PageResponseDTO selectOrder = sellerService.selectProdSalesInfo(prodSeller, pageRequestDTO);
+        log.info("selectOrder : " + selectOrder);
 
+        model.addAttribute("orderByDate", orderByDate);
+        model.addAttribute("selectOrder", selectOrder);
         return "/seller/order/orderList";
+    }
+
+    // 판매자 매출 현황 //
+    @GetMapping("/seller/order/sales")
+    public String SellerSales(){
+
+        return "/seller/order/sales";
+    }
+
+    // 판매자 배송 관리 //
+    @GetMapping("/seller/order/delivery")
+    public String SellerDelivery(){
+
+        return "/seller/order/delivery";
     }
 
 }
