@@ -61,11 +61,11 @@
                             <th>유효기간</th>
                         </tr>
                         <tr id="point" th:each="point : ${pageResponseDTO.dtoList}">
-                            <td class="date">[[${point.changeDate}]]</td>
+                            <td class="date" th:text="${#strings.substring(point.changeDate, 0, 10)}"></td>
                             <td class="type">[[${point.changeType}]]</td>
                             <td class="point">[[${point.changePoint}]]</td>
                             <td class="desc">[[${point.changeCode}]]</td>
-                            <td class="expire">2024-12-12</td>
+                            <td class="expire">2024-12-12 수정해야함</td>
                         </tr>
 
                     </table>
@@ -79,9 +79,6 @@
                     </p>
 
                 </article>
-
-
-
             </section>
 
         </div>
