@@ -100,4 +100,11 @@ public class SellerController {
         return "/seller/product/option";
     }
 
+    // 판매자 주문 관리 //
+    @GetMapping("/seller/order/orderList")
+    public String SellerOrderList(){
+
+        return "/seller/order/orderList";
+    }
+
 }

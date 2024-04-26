@@ -47,7 +47,7 @@
                 <a th:href="@{/cs/qna/view(qnaNo=${qnas.qnaNo})}" class="title" th:if="${qnas.qnaCate == 'travel'}">[여행/숙박/항공]  [[${qnas.qnaTitle}]]</a>
                 <a th:href="@{/cs/qna/view(qnaNo=${qnas.qnaNo})}" class="title" th:if="${qnas.qnaCate == 'safe'}">[안전결제]  [[${qnas.qnaTitle}]]</a>
                 <p>
-                  <span class="uid" th:text="${qnas.userId}"></span>
+                  <span class="uid" th:text="${#strings.substring(qnas.userId, 0, 3)} + '****'"></span>
                   <span class="date" th:text="${#temporals.format(qnas.qnaDate, 'yyyy-MM-dd')}"></span>
                 </p>
               </li>
