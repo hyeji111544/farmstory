@@ -1,9 +1,8 @@
 package kr.co.lotteon.controller.seller;
 
 import jakarta.servlet.http.HttpSession;
-import kr.co.lotteon.dto.ProductPageRequestDTO;
-import kr.co.lotteon.dto.ProductPageResponseDTO;
-import kr.co.lotteon.dto.SellerInfoDTO;
+import kr.co.lotteon.dto.*;
+import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.seller.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +10,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.AuthProvider;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +23,8 @@ import java.security.AuthProvider;
 public class SellerController {
 
     private final SellerService sellerService;
+    private final AdminProductService adminproductService;
+
 
     /*
         판매자 관리페이지 - 홈 이동
@@ -57,6 +62,49 @@ public class SellerController {
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
         return "/seller/product/list";
+    }
+
+
+    // 판매자 상품 등록 이동
+    @GetMapping("/seller/product/register")
+    public String productRegister(){
+
+        return "/seller/product/register";
+    }
+
+    // 판매자 상품 등록
+    @PostMapping("/seller/product/register")
+    public String registerProduct(ProductDTO productDTO, ProductimgDTO productimgDTO){
+        log.info(productDTO.toString());
+        log.info(productimgDTO.toString());
+        adminproductService.registerProduct(productDTO, productimgDTO);
+
+        return "redirect:/seller/product/register";
+    }
+
+    // 판매자 상품 옵션 등록 페이지 이동
+    @GetMapping("/seller/product/option")
+    public String registerProductOption(Model model, @RequestParam("prodNo") int prodNo){
+        Map<String, Object> resultMap = adminproductService.selectProductOption(prodNo);
+        ProductDTO productDTO = (ProductDTO) resultMap.get("productDTO");
+        List<ProdOptionDTO> optionDTOList = (List<ProdOptionDTO>) resultMap.get("optionDTOList");
+        List<prodOptDetailDTO> prodOptDetailDTOList = (List<prodOptDetailDTO>) resultMap.get("prodOptDetailDTOList");
+
+        log.info("productDTO : " + productDTO);
+        log.info("optionDTOList : " + optionDTOList);
+
+        model.addAttribute("productDTO", productDTO);
+        model.addAttribute("optionDTOList", optionDTOList);
+        model.addAttribute("optionDetail", prodOptDetailDTOList);
+
+        return "/seller/product/option";
+    }
+
+    // 판매자 주문 관리 //
+    @GetMapping("/seller/order/orderList")
+    public String SellerOrderList(){
+
+        return "/seller/order/orderList";
     }
 
 }

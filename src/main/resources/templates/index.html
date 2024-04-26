@@ -83,7 +83,7 @@
               <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
               <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
 
-              <a th:href="@{product/cart(UserId=${#authentication.principal.user.userId})}">
+              <a th:href="@{product/cart(userId=${#authentication.principal.user.userId})}">
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
               </a>
               <a th:href="@{/member/logout}">로그아웃</a>

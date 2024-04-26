@@ -160,10 +160,17 @@ public class MemberController {
     }
 
 
-    // 구매 회원가입 이동
-    @GetMapping("/member/register2")
-    public String register2(){
+    // 아이디 찾기 이동
+    @GetMapping("/member/findId")
+    public String findId(){
 
-        return "/member/register2";
+        return "/member/findId";
+    }
+
+    // 비밀번호 찾기 이동
+    @GetMapping("/member/findPw")
+    public String findPw(){
+
+        return "/member/findPw";
     }
 }

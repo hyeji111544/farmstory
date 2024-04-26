@@ -1,0 +1,131 @@
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{/layout/sellerLayout.html}">
+<!--내용 시작-->
+    <section id="admin-product-list" layout:fragment="content">
+
+        <script>
+            function createDetailInfo() {
+                const click = event.target;
+                const orderInfo = click.parentNode;
+                const orderListBody = orderInfo.parentNode;
+                const detailInfo = orderListBody.querySelector('.detailInfo');
+                console.log(detailInfo)
+                if (detailInfo != null) {
+                    orderInfo.style.backgroundColor = "#fafafa";
+                    detailInfo.remove();
+                    click.innerText = "자세히"
+                }else {
+                    orderInfo.style.backgroundColor = "#ececec";
+                    createDetailInfoTag(orderListBody);
+                    click.innerText = "접기"
+                }
+            }
+
+            function createDetailInfoTag(orderListBody) {
+                const newTag = `<div class="detailInfo">
+                                    <div class="detailInfoRow">
+                                        <div>구매자</div>
+                                        <div>홍길동</div>
+                                        <div>연락처</div>
+                                        <div>010-0000-0000</div>
+                                    </div>
+                                    <div class="detailInfoRow">
+                                        <div>결제금액</div>
+                                        <div>50,000</div>
+                                        <div>사용포인트</div>
+                                        <div>5,000</div>
+                                    </div>
+                                    <div class="detailInfoRow">
+                                        <div>결제수단</div>
+                                        <div>신용카드</div>
+                                        <div>주문상태</div>
+                                        <div>결제완료</div>
+                                    </div>
+                                    <div class="detailInfoAddr">
+                                        <div>배송주소</div>
+                                        <div>부산시 부산진구 새싹로 30 경동파크타워</div>
+                                    </div>
+                                </div>`
+                orderListBody.insertAdjacentHTML('beforeend', newTag);
+            }
+        </script>
+
+        <nav>
+            <h3>주문현황</h3>
+            <p>
+                HOME > 주문관리 > <strong>주문현황</strong>
+            </p>
+        </nav>
+        <!-- 상품목록 컨텐츠 시작 -->
+        <section>
+            <div>
+                <form th:action="@{/seller/product/list}">
+                    <select name="type">
+                        <option value="prodName">상품명</option>
+                        <option value="prodNo">상품코드</option>
+                        <option value="prodCompany">제조사</option>
+                    </select>
+                    <input type="text" name="keyword">
+                    <input type="text" name="prodSeller" value="aa11aa22" readonly>
+                    <input type="submit" value="검색">
+                </form>
+            </div>
+
+            <div class="orderListTable">
+                <div class="orderListHead">
+                    <div>구분</div>
+                    <div>주문 번호</div>
+                    <div>상품 이름</div>
+                    <div>수량</div>
+                    <div>주문 상태</div>
+                    <div>구매 날짜</div>
+                    <div></div>
+                </div>
+                <div class="orderListBody">
+                    <div class="orderInfo">
+                        <div>1</div>
+                        <div>12345</div>
+                        <div>바나나</div>
+                        <div>2</div>
+                        <div>배송 준비중</div>
+                        <div>2024.02.02</div>
+                        <div onclick="createDetailInfo()">자세히</div>
+                    </div>
+                </div>
+                <div class="orderListBody">
+                    <div class="orderInfo">
+                        <div>1</div>
+                        <div>12345</div>
+                        <div>바나나</div>
+                        <div>2</div>
+                        <div>배송 준비중</div>
+                        <div>2024.02.02</div>
+                        <div>자세히</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <input type="button" value="선택삭제" />
+
+
+            <div class="paging">
+                <div class="paging">
+                </div>
+            </div>
+
+        </section>
+
+
+        <p class="ico info">
+            <strong>Tip!</strong>
+            전자상거래 등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성 등을 양식에 따라 입력할 수 있습니다.
+        </p>
+
+
+
+        <!-- 상품목록 컨텐츠 끝 -->
+    </section>
+<!--내용 끝-->
+</html>

@@ -145,7 +145,13 @@ main > section > article {
 }
 
 main > section > article section {
+    display: flex;
+    flex-direction: column;
     margin: 50px 0;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fafafa;
 }
 main > section > article section > p {
     background: #eaeaea;
@@ -403,7 +409,7 @@ button[type=submit] {
 .existOptionTable {
     display: flex;
     flex-direction: column;
-    width: 1080px;
+    width: 1065px;
     padding: 0 10px;
     box-sizing: border-box;
     height: auto;
@@ -443,7 +449,7 @@ button[type=submit] {
     display: flex;
     flex-direction: column;
     margin-top: 20px;
-    width: 1080px;
+    width: 1065px;
     padding: 0 10px;
     box-sizing: border-box;
     height: auto;
@@ -486,7 +492,7 @@ button[type=submit] {
 .makeOption {
     display: flex;
     flex-direction: column;
-    width: 1080px;
+    width: 1065px;
     padding: 0 10px;
     box-sizing: border-box;
     height: auto;
@@ -580,7 +586,7 @@ button[type=submit] {
 .registerOption {
     display: flex;
     flex-direction: column;
-    width: 1080px;
+    width: 1065px;
     padding: 0 10px;
     box-sizing: border-box;
     height: auto;

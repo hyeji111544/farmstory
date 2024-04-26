@@ -1,90 +1,124 @@
 <html xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{/layout/adminLayout.html}">
+    layout:decorate="~{/layout/sellerLayout.html}">
 <!--내용 시작-->
     <section id="admin-product-register" layout:fragment="content">
-        <script>
+        <script th:inline="javascript">
+            window.onload = function (){
+                changeOptNoToName()
+            }
+
+            // 카테고리 번호를 한글로 변경하는 함수
+            function changeOptNoToName() {
+                const opt1No = document.getElementsByClassName('opt1No');
+                const opt2No = document.getElementsByClassName('opt2No');
+                const opt3No = document.getElementsByClassName('opt3No');
+                changeArray(opt1No);
+                changeArray(opt2No);
+                changeArray(opt3No);
+            }
+            function changeArray(optionNo) {
+                const optionList = [[${optionDTOList}]];
+
+                for (let i = 0; i < optionNo.length; i++) {
+                    const eachNo = optionNo[i];
+
+                    for (let j = 0; j < optionList.length; j++) {
+                        const eachOption = optionList[j];
+
+                        if (parseInt(eachNo.value) === parseInt(eachOption.optNo)) {
+                            eachNo.value = eachOption.optValue;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 카테고리 수정 버튼 함수
+            function modifyCateCode() {
+                const button = event.target;
+                const trAll = button.parentNode.querySelectorAll('.cateCodeTr');
+                Array.from(trAll).forEach(function (tr) {
+                    if (tr.style.display === "none") {
+                        tr.style.display = "table-row";
+                        button.innerText = "저장";
+                    }else {
+                        // 여기서 변경된 카테고리값 디비에 저장하는 함수 호출 예정
+                        tr.style.display = "none";
+                        button.innerText = "수정";
+                    }
+                })
+            }
+
+            // 2차 카테고리 분류 생성
+            function changeCate02() {
+                const cate01Data = [[${cate01DTOs}]];
+                const cate02Data = [[${cate02DTOs}]];
+                const cate03Data = [[${cate03DTOs}]];
+
+                const cate01Select = event.target;
+                const selectTable = cate01Select.parentNode.parentNode.parentNode;
+                const cate02Select = selectTable.querySelector('[name="cate02No"]')
+                const cate03Select = selectTable.querySelector('[name="cate03No"]')
+
+                // 기존에 존재하는 option 삭제
+                const nowCate02Option = cate02Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate02Option).forEach(function (option) {
+                    option.remove();
+                })
+
+                // 새로운 option 생성
+                Array.from(cate02Data).forEach(function (data) {
+                    if (data.cate01No === cate01Select.value) {
+                        const cate02Option = `<option class="changeOpt" value="${data.cate02No}">${data.cate02Name}</option>`
+                        cate02Select.insertAdjacentHTML('beforeend', cate02Option);
+                    }
+                })
+
+                // cate03 비우기
+                const nowCate03Option = cate03Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate03Option).forEach(function (option) {
+                    option.remove();
+                })
+            }
+            // 3차 카테고리 분류 생성
+            function changeCate03() {
+                const cate01Data = [[${cate01DTOs}]];
+                const cate02Data = [[${cate02DTOs}]];
+                const cate03Data = [[${cate03DTOs}]];
+
+                const cate02Select = event.target;
+                const selectTable = cate02Select.parentNode.parentNode.parentNode;
+                const cate03Select = selectTable.querySelector('[name="cate03No"]');
+
+                // 기존에 존재하는 option 삭제
+                const nowCate03Option = cate03Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate03Option).forEach(function (option) {
+                    option.remove();
+                })
+
+                // 새로운 option 생성
+                Array.from(cate03Data).forEach(function (data) {
+                    if (data.cate02No === cate02Select.value) {
+                        const cate03Option = `<option class="changeOpt" value="${data.cate03No}">${data.cate03Name}</option>`
+                        cate03Select.insertAdjacentHTML('beforeend', cate03Option);
+                    }
+                })
+            }
+            // cateCode 생성
+            function createCateCode() {
+                const cateCode = document.getElementsByClassName('cateCode')[0];
+                const cate01Code = document.querySelector('[name="cate01No"]').value;
+                const cate02Code = document.querySelector('[name="cate02No"]').value;
+                const cate03Code = document.querySelector('[name="cate03No"]').value;
+                cateCode.value = cate01Code + cate02Code + cate03Code;
+            }
 
             // 이미지 애니메이션
             function imageScale() {
 
                 const bigImage = ``;
             }
-
-
-/*
-            // 옵션 디테일 추가
-            window.onload = function () {
-                addEventListener('click', function (e){
-                    if (e.target.className === "btnOptDetailAdd"){
-                        const optDetailTr = e.target.parentElement.parentElement;
-                        const optDetailBox = optDetailTr.querySelector('.optDetailBox');
-                        const optDetail = optDetailTr.querySelectorAll('.optDetail');
-                        if (optDetail.length >= 4) {
-                            alert("더 이상 옵션값을 추가하실수 없습니다.")
-                        }else{
-                            const optDetailTuple = `<div class="optDetail">
-                                                <input type="text" class="optValue" placeholder="옵션값"/>
-                                                <input type="text" class="optPrice" placeholder="옵션가격"/>
-                                                <input type="text" class="optStock" placeholder="옵션재고"/>
-                                                <span class="btnOptDetailDelete">삭제</span>
-                                            </div>`;
-                            optDetailBox.insertAdjacentHTML('beforeend', optDetailTuple);
-                        }
-                    }else if (e.target.className === "btnOptDetailDelete") {
-                        const optDetailDiv = e.target.parentElement;
-                        optDetailDiv.remove();
-                    }else if (e.target.className === "btnOptTupleDelete") {
-                        const optTupleTr = e.target.parentElement.parentElement;
-                        optTupleTr.remove();
-                    }
-
-                })
-
-                const btnNewOaaptAdd = document.getElementById('btnNewOptAdd');
-                btnNewOptAdd.onclick = function (){
-                    const optAddTuple = document.getElementsByClassName('optAddTuple');
-                    const prodNo = document.getElementsByName('prodNo')[0].value;
-
-                    const allOpts = [];
-                    Array.from(optAddTuple).forEach(function (eachOpt) {
-                        const optDetailBox = eachOpt.querySelector('.optDetailBox');
-                        const optName = eachOpt.querySelector('.optName');
-                        const optValue = Array.from(optDetailBox.querySelectorAll('.optValue'));
-                        const optPrice = Array.from(optDetailBox.querySelectorAll('.optPrice'));
-                        const optStock = Array.from(optDetailBox.querySelectorAll('.optStock'));
-                        const opt = [];
-
-                        for (let j = 0; j < optValue.length; j++) {
-                            const optDetail = [];
-                            optDetail.push(prodNo);
-                            optDetail.push(optName.value);
-                            optDetail.push(optValue[j].value);
-                            optDetail.push(optPrice[j].value);
-                            optDetail.push(optStock[j].value);
-                            opt.push(optDetail);
-                        }
-                        allOpts.push(opt);
-                    })
-
-                    const jsonData = {
-                        "allOpts" : allOpts
-                    }
-                    fetch("/lotteon/admin/product/option", {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(jsonData)
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                        })
-                        .catch(err => console.log(err));
-
-                }
-            }
-
- */
 
             // 옵션 이름 추가
             function addOptionName() {
@@ -430,14 +464,41 @@
                 <!-- 상품분류 -->
                 <section>
                     <h4>상품분류</h4>
+                    <p>
+                        기본분류는 반드시 선택하셔야 합니다. 하나의 상품에 1개의 분류를 지정 합니다.
+                    </p>
                     <table>
                         <tr>
+                            <td>상품 분류</td>
+                            <td class="cateCode" th:text="${productDTO.cateCode}"></td>
+                        </tr>
+                        <tr class="cateCodeTr" style="display: none">
                             <td>1차 분류</td>
-                            <td></td>
+                            <td>
+                                <select name="cate01No" onchange="changeCate02()">
+                                    <option value="">1차 분류 선택</option>
+                                    <option class="changeOpt" th:each="cate01 : ${cate01DTOs}" th:value="${cate01.cate01No}" th:text="${cate01.cate01Name}">패션·의류·뷰티</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="cateCodeTr" style="display: none">
                             <td>2차 분류</td>
-                            <td></td>
+                            <td>
+                                <select name="cate02No" onchange="changeCate03()">
+                                    <option value="">2차 분류 선택</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="cateCodeTr" style="display: none">
+                            <td>3차 분류</td>
+                            <td>
+                                <select name="cate03No" onchange="createCateCode()">
+                                    <option value="">3차 분류 선택</option>
+                                </select>
+                            </td>
                         </tr>
                     </table>
+                    <span class="modifyBtn" onclick="modifyCateCode()">수정</span>
                 </section>
                 <!-- 기본정보 -->
                 <section>
@@ -530,19 +591,18 @@
                             <div>구분</div>
                             <div>옵션 이름</div>
                             <div>옵션 값</div>
-                            <div>옵션 관리</div>
+                            <div>재고</div>
                         </div>
-                        <div class="existOptionContent">
+                        <div class="existOptionContent" th:each="optionDTO : ${optionDTOList}">
                             <div>
-                                구분
-                                <input type="hidden" value="prodOtpNo" readonly/>
-                                <input type="hidden" value="prodNo" readonly/>
+                                <input type="text" th:value="${optionDTO.optNo}" readonly style="width: 60px; border: 0"/>
+                                <input type="hidden" th:value="${optionDTO.prodNo}" readonly/>
                             </div>
                             <div>
-                                <input type="text" value="prodOptName" readonly/>
+                                <input type="text" th:value="${optionDTO.optName}" readonly/>
                             </div>
                             <div>
-                                <input type="text" value="prodOptValue" readonly/>
+                                <input type="text" th:value="${optionDTO.optValue}" readonly/>
                             </div>
                             <div>옵션 관리</div>
                         </div>
@@ -558,25 +618,25 @@
                             <div>옵션 재고</div>
                             <div>옵션 관리</div>
                         </div>
-                        <div class="existOptDetailContent">
+                        <div class="existOptDetailContent" th:each="detail : ${optionDetail}">
                             <div>
-                                <input type="text" value="optDetailNo" readonly/>
-                                <input type="hidden" value="prodNo" readonly/>
+                                <input type="text" th:value="${detail.optDetailNo}" readonly/>
+                                <input type="hidden" th:value="${detail.prodNo}" readonly/>
                             </div>
                             <div>
-                                <input type="text" value="optNo1" readonly/>
+                                <input class="opt1No" type="text" th:value="${detail.optNo1}" readonly/>
                             </div>
                             <div>
-                                <input type="text" value="optNo2" readonly/>
+                                <input class="opt2No" type="text" th:value="${detail.optNo2}" readonly/>
                             </div>
                             <div>
-                                <input type="text" value="optNo3" readonly/>
+                                <input class="opt3No" type="text" th:value="${detail.optNo3}" readonly/>
                             </div>
                             <div>
-                                <input type="text" value="optPrice" readonly/>
+                                <input type="text" th:value="${detail.optPrice}" readonly/>
                             </div>
                             <div>
-                                <input type="text" value="optStock" readonly/>
+                                <input type="text" th:value="${detail.optStock}" readonly/>
                             </div>
                             <div>옵션 관리</div>
                         </div>
