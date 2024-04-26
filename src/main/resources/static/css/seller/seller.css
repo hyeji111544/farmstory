@@ -9,7 +9,38 @@
     box-sizing: border-box;
     margin: 10px 0;
 }
-/* 통계정보 */
+/* 공통 */
+.searchInput, .searchBtn {
+    outline: none;
+    vertical-align: top;
+    padding: 7px;
+}
+.searchBtn {
+    width: 100px;
+    cursor: pointer;
+}
+
+.pagingBox {
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+}
+.pagingList > a {
+    display: inline-block;
+    min-width: 20px;
+    height: 20px;
+    padding: 4px;
+    text-align: center;
+    line-height: 20px;
+    background-color: #fafafa;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+}
+.pagingList > a:hover {
+    background-color: #dadada;
+}
+
+    /* 통계정보 */
 .shopAverage {
     display: flex;
     justify-content: space-between;
@@ -355,6 +386,24 @@
 
 
 /* seller/order/orderList */
+.orderListInfo {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fafafa;
+}
+.orderListChart {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: content-box;
+}
+
+
+
+
 .orderListTable {
     display: flex;
     flex-direction: column;
@@ -362,6 +411,41 @@
     border-radius: 10px;
     padding: 10px;
     background-color: #fafafa;
+}
+.filterBox {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 10px;
+    box-sizing: content-box;
+}
+.filterBox > span {
+    display: inline-block;
+    width: 102px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 4px 10px;
+    box-sizing: border-box;
+}
+.filterBox > span:hover {
+    color: #8200af;
+}
+.filterList {
+    display: none;
+    position: absolute;
+    width: 100px;
+    border: 1px solid #bebebe;
+    background-color: #fafafa;
+    box-sizing: content-box;
+}
+.filterList > li {
+    padding: 4px 10px;
+    cursor: pointer;
+}
+.filterList > li:hover {
+    background-color: #bebebe;
+}
+.filterList > li > a {
+    font-size: 14px;
 }
 .orderListHead {
     display: flex;
@@ -405,7 +489,6 @@
     background-color: #ececec!important;
 }
 
-
 .detailInfo {
     display: flex;
     flex-direction: column;
@@ -442,3 +525,63 @@
 .detailInfo > .detailInfoAddr > div {font-size: 14px; text-align: center; padding: 10px 0}
 .detailInfo > .detailInfoAddr > div:nth-child(1) {width: 180px; font-weight: bold;}
 .detailInfo > .detailInfoAddr > div:nth-child(2) {width: 600px;}
+
+
+/* seller/product/sales */
+.orderListFlex {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.orderListFlex h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+.twoDiv {
+    display: flex;
+    width: 530px;
+    padding: 20px;
+    box-sizing: border-box;
+    flex-direction: column;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.salesRow {
+    display: flex;
+    border-bottom: 1px solid #c4c4c4;;
+}
+.salesRow:nth-child(2) > div {font-weight: bold}
+.salesInfo > .salesRow > div {font-size: 14px; text-align: center; padding: 10px 0}
+.salesInfo > .salesRow > div:nth-child(1) {width: 80px; font-weight: bold;}
+.salesInfo > .salesRow > div:nth-child(2) {width: 150px;}
+.salesInfo > .salesRow > div:nth-child(3) {width: 150px;}
+.salesInfo > .salesRow > div:nth-child(4) {width: 150px;}
+.salesRow > div::after {content: '원';}
+.salesRow:nth-child(2) > div::after {content: none;}
+.salesInfo > .salesRow > div:nth-child(1)::after {content: none;}
+
+.salesWeekRow {
+    display: flex;
+    border-bottom: 1px solid #c4c4c4;;
+}
+.salesInfoWeek > .salesWeekRow > div > span:nth-child(2) {font-weight: bold; font-size: 14px; text-align: center; padding: 10px 0}
+.salesInfoWeek > .salesWeekRow > div {font-size: 14px; text-align: center; padding: 10px 0}
+.salesInfoWeek > .salesWeekRow > div:nth-child(1) {width: 90px; font-weight: bold;}
+.salesInfoWeek > .salesWeekRow > div:nth-child(2) {width: 175px;}
+.salesInfoWeek > .salesWeekRow > div:nth-child(3) {width: 90px;}
+.salesInfoWeek > .salesWeekRow > div:nth-child(4) {width: 175px;}
+.salesInfoWeek > .salesWeekRow:nth-child(2) > div {width:100%; text-align: center}
+
+
+
+
+
+
+
+
+
+

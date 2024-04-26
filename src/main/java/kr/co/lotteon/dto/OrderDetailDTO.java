@@ -4,13 +4,13 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class orderDetailDTO {
+public class OrderDetailDTO {
 
     private int detailNo;
     private int orderNo;
@@ -22,4 +22,13 @@ public class orderDetailDTO {
     private String detailStatus;
     private String prodSeller;
     private LocalDate detailDate;
+
+    // 주문현황 페이지 처리를 위한 추가 필드
+    private String userId;
+    private String orderReceiver;
+    private String orderHp;
+    private String orderPay;
+    private String orderMemo;
+    private String orderAddr;
+    private String prodName;
 }

@@ -4,53 +4,68 @@
 <!--내용 시작-->
     <section id="admin-product-list" layout:fragment="content">
 
-        <script th:inline="javascript">
-            window.onload = function () {
-                const orderByDate = [[${orderByDate}]];
-                const dateArray = [];
-                const countArray = [];
-
-                const keys = Object.keys(orderByDate);
-                for (let i = keys.length - 1; i >= 0; i--) {
-                    const key = keys[i];
-                    const value = orderByDate[key];
-                    dateArray.push(key);
-                    countArray.push(value);
-                }
-
+        <script>
+            window.onload = function (){
                 // 그래프
-                new Chart(document.getElementById("line-chart"), {
-                    type: 'line',
+                new Chart(document.getElementById("pie-chart1"), {
+                    type: 'pie',
                     data: {
-                        labels: dateArray,
+                        labels: ["최신주문", "일주일주문", "전체주문 "],
                         datasets: [{
-                            data: countArray,
-                            label: "주문건수",
-                            borderColor: "#3e95cd",
-                            fill: false,
-                            pointStyle: 'triangle'
-                        }
-                        ]
+                            label: "Population (millions)",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
+                            data: [2478,5267,734]
+                        }]
                     },
                     options: {
                         responsive: false,
                         title: {
                             display: true,
-                            text: '최근 한달 주문 건수',
-                            fontSize: 20,
-                            color: '#111',
-                        },
-                        legend: {
-                            display: false // 라벨 숨기기
+                            text: '주문현황'
+                        }
+                    }
+                });
+                new Chart(document.getElementById("pie-chart2"), {
+                    type: 'pie',
+                    data: {
+                        labels: ["입금대기", "배송준비", "배송중", "배송완료"],
+                        datasets: [{
+                            label: "Population (millions)",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9"],
+                            data: [2478,5267,734,784]
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        title: {
+                            display: true,
+                            text: '배송현황 '
+                        }
+                    }
+                });
+                new Chart(document.getElementById("pie-chart3"), {
+                    type: 'pie',
+                    data: {
+                        labels: ["취소요청", "교환요청", "환불요청"],
+                        datasets: [{
+                            label: "Population (millions)",
+                            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
+                            data: [2478,5267,734]
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        title: {
+                            display: true,
+                            text: 'CS현황'
                         }
                     }
                 });
             }
 
-            // 주문 상세정보 drop 버튼
+            // 필터 드롭박스
             function createDetailInfo() {
                 const click = event.target;
-                const index = click.className;
                 const orderInfo = click.parentNode;
                 const orderListBody = orderInfo.parentNode;
                 const detailInfo = orderListBody.querySelector('.detailInfo');
@@ -61,40 +76,34 @@
                     click.innerText = "자세히"
                 }else {
                     orderInfo.style.backgroundColor = "#ececec";
-                    createDetailInfoTag(orderListBody, index);
+                    createDetailInfoTag(orderListBody);
                     click.innerText = "접기"
                 }
             }
 
-            function createDetailInfoTag(orderListBody, index) {
-                const dtoList = [[${selectOrder.dtoList}]]
-                const orders = dtoList[index];
+            function createDetailInfoTag(orderListBody) {
                 const newTag = `<div class="detailInfo">
                                     <div class="detailInfoRow">
                                         <div>구매자</div>
-                                        <div>${orders.userId}</div>
-                                        <div>결제금액</div>
-                                        <div>${orders.detailPrice}</div>
+                                        <div>홍길동</div>
+                                        <div>연락처</div>
+                                        <div>010-0000-0000</div>
                                     </div>
                                     <div class="detailInfoRow">
-                                        <div>받는사람</div>
-                                        <div>${orders.orderReceiver}</div>
-                                        <div>연락처</div>
-                                        <div>${orders.orderHp}</div>
+                                        <div>결제금액</div>
+                                        <div>50,000</div>
+                                        <div>사용포인트</div>
+                                        <div>5,000</div>
                                     </div>
                                     <div class="detailInfoRow">
                                         <div>결제수단</div>
-                                        <div>${orders.orderPay}</div>
+                                        <div>신용카드</div>
                                         <div>주문상태</div>
-                                        <div>${orders.detailStatus}</div>
+                                        <div>결제완료</div>
                                     </div>
                                     <div class="detailInfoAddr">
                                         <div>배송주소</div>
-                                        <div>${orders.orderAddr}</div>
-                                    </div>
-                                    <div class="detailInfoAddr">
-                                        <div>배송메모</div>
-                                        <div>${orders.orderMemo}</div>
+                                        <div>부산시 부산진구 새싹로 30 경동파크타워</div>
                                     </div>
                                 </div>`
                 orderListBody.insertAdjacentHTML('beforeend', newTag);
@@ -112,17 +121,24 @@
         </script>
 
         <nav>
-            <h3>주문현황</h3>
+            <h3>배송관리</h3>
             <p>
-                HOME > 주문관리 > <strong>주문현황</strong>
+                HOME > 주문관리 > <strong>배송관리</strong>
             </p>
         </nav>
         <!-- 상품목록 컨텐츠 시작 -->
         <section>
 
             <div class="orderListInfo">
-                <div id="data" class="orderListChart">
-                    <canvas id="line-chart" width="1000" height="250"></canvas>
+                <div class="orderListChart">
+                    <canvas id="pie-chart1" width="250" height="250"></canvas>
+                    <canvas id="pie-chart2" width="250" height="250"></canvas>
+                    <canvas id="pie-chart3" width="250" height="250"></canvas>
+                </div>
+                <div>
+                    주문현황 / 최신주문, 일주일주문, 전체주문
+                    배송현황 / 입금대기, 배송준비, 배송중, 배송완료
+                    CS현황 / 취소요청,교환요청,환불요청
                 </div>
             </div>
 
@@ -148,17 +164,29 @@
                     <div>구매 날짜</div>
                     <div></div>
                 </div>
-                <div class="orderListBody" th:each="orders,index : ${selectOrder.dtoList}">
+                <div class="orderListBody">
                     <div class="orderInfo">
                         <div>1</div>
-                        <div th:text="${orders.detailNo}"></div>
-                        <div th:text="${orders.prodName}"></div>
-                        <div th:text="${orders.count}"></div>
-                        <div th:text="${orders.detailStatus}"></div>
-                        <div th:text="${orders.detailDate}"></div>
-                        <div onclick="createDetailInfo()" th:class="${index.index}">자세히</div>
+                        <div>12345</div>
+                        <div>바나나</div>
+                        <div>2</div>
+                        <div>배송 준비중</div>
+                        <div>2024.02.02</div>
+                        <div onclick="createDetailInfo()">자세히</div>
                     </div>
                 </div>
+                <div class="orderListBody">
+                    <div class="orderInfo">
+                        <div>1</div>
+                        <div>12345</div>
+                        <div>바나나</div>
+                        <div>2</div>
+                        <div>배송 준비중</div>
+                        <div>2024.02.02</div>
+                        <div>자세히</div>
+                    </div>
+                </div>
+
             </div>
 
 

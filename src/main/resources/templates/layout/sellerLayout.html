@@ -7,6 +7,7 @@
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
     <script th:src="@{https://kit.fontawesome.com/20962f3e4b.js}" crossorigin="anonymous"></script>
     <script th:src="@{/js/admin/gnb.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js}"></script>
     <link rel="stylesheet" th:href="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css}"/>
     <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
@@ -46,7 +47,7 @@
                     <li>
                         <a href="#"><i class="fa fa-credit-card" aria-hidden="true"></i>주문관리</a>
                         <ol>
-                            <li><a href="#">주문현황</a></li>
+                            <li><a th:href="@{/seller/order/orderList}">주문현황</a></li>
                             <li><a href="#">매출현황</a></li>
                             <li><a href="#">결제관리</a></li>
                             <li><a href="#">배송관리</a></li>

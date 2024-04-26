@@ -34,8 +34,6 @@ public class OrderController {
             Map<String, List<CartInfoDTO>> cartInfos = orderService.findCartProdNo(cartProdNo);
         }
         log.info("orderProducts" + orderProducts);
-
-    }
-
         return "/product/order";
+    }
 }
