@@ -27,62 +27,6 @@
 
     const btnMores = document.querySelectorAll('.more > a');
 
-/*
-    btnMores.forEach((btn)=>{
-      btn.addEventListener('click', function (e){
-        e.preventDefault();
-        const btnLess = document.querySelector('.less');
-        const parent = e.target.closest('ul');
-        const contents = parent.querySelectorAll('li');
-        console.log('!!! :'  + btnLess);
-        for(let i=1; i<10; i++){
-          if(contents[i]){
-            contents[i].style.display = 'block';
-          }else{
-            break;
-          }
-        }
-        e.target.style.display = 'none';
-        btnLess.style.display = 'block'; // 간략히 버튼 표시
-
-      });
-    });
-
-    btnLess.forEach((btn)=>{
-      btn.addEventListener('click',function (e){
-        e.preventDefault();
-
-        const parent = e.target.closest('ul');
-        const contents = parent.querySelectorAll('li');
-
-        // 마지막 3개의 항목을 제외한 모든 항목을 숨김
-        for (let i = 0; i < 7; i++) {
-          contents[i].style.display = 'none';
-        }
-        btn.style.display = 'none';
-        if (btnMores) {
-          btnMores.style.display = 'block'; // 더보기 버튼 표시
-        }
-      });
-    });
-*/
-    // const btnLess = document.querySelectorAll('.less > a');
-    //
-    // btnLess.forEach((btn)=>{
-    //   btn.addEventListener('click', function (e){
-    //     e.preventDefault();
-    //
-    //     const parent = e.target.closest('ul');
-    //
-    //     const children = parent.querySelectorAll('li');
-    //
-    //     for(const child of children){
-    //       child.style.display = 'none';
-    //     }
-    //     e.target.style.display = 'block';
-    //   });
-    // });
-
     const moreContentsAll = document.getElementsByClassName('moreContents');
     Array.from(moreContentsAll).forEach(function (moreContents) {
       moreContents.addEventListener('click', function (e){
@@ -191,7 +135,7 @@
                     <a th:href="@{/cs/faq/view(faqNo=${value.faqNo}, faqCate=${value.faqCate})}"><span>Q.</span>[[${value.faqTitle}]]</a>
                   </li>
                   <li class="moreContents" style="display: block">
-                    <a href="#">더보기</a>
+                    <a href="#" style="text-align: center;">더보기</a>
                   </li>
                 </ul>
               </div>
