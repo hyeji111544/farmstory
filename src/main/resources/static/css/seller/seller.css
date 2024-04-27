@@ -512,9 +512,9 @@
 }
 .detailInfo > .detailInfoRow > div {font-size: 14px; text-align: center; padding: 10px 0}
 .detailInfo > .detailInfoRow > div:nth-child(1) {width: 180px; font-weight: bold;}
-.detailInfo > .detailInfoRow > div:nth-child(2) {width: 240px;}
+.detailInfo > .detailInfoRow > div:nth-child(2) {width: 210px;}
 .detailInfo > .detailInfoRow > div:nth-child(3) {width: 180px; font-weight: bold;}
-.detailInfo > .detailInfoRow > div:nth-child(4) {width: 240px;}
+.detailInfo > .detailInfoRow > div:nth-child(4) {width: 210px;}
 
 .detailInfoAddr {
     display: flex;
@@ -568,15 +568,28 @@
     display: flex;
     border-bottom: 1px solid #c4c4c4;;
 }
-.salesInfoWeek > .salesWeekRow > div > span:nth-child(2) {font-weight: bold; font-size: 14px; text-align: center; padding: 10px 0}
-.salesInfoWeek > .salesWeekRow > div {font-size: 14px; text-align: center; padding: 10px 0}
-.salesInfoWeek > .salesWeekRow > div:nth-child(1) {width: 90px; font-weight: bold;}
-.salesInfoWeek > .salesWeekRow > div:nth-child(2) {width: 175px;}
-.salesInfoWeek > .salesWeekRow > div:nth-child(3) {width: 90px;}
-.salesInfoWeek > .salesWeekRow > div:nth-child(4) {width: 175px;}
-.salesInfoWeek > .salesWeekRow:nth-child(2) > div {width:100%; text-align: center}
+.movingBox .salesWeekRow > div > span:nth-child(2) {font-weight: bold; font-size: 14px; text-align: center; padding: 10px 0}
+.movingBox .salesWeekRow > div {font-size: 14px; text-align: center; padding: 10px 0}
+.movingBox .salesWeekRow > div:nth-child(1) {width: 90px; font-weight: bold;}
+.movingBox .salesWeekRow > div:nth-child(2) {width: 175px;}
+.movingBox .salesWeekRow > div:nth-child(3) {width: 90px;}
+.movingBox .salesWeekRow > div:nth-child(4) {width: 175px;}
+.movingBox .salesWeekRow:nth-child(1) > div {width:100%; text-align: center}
 
+.salesInfoWeek {
+    overflow: hidden;
+}
 
+.movingBox {
+    position: relative;
+    width: 4064px;
+    display: flex;
+    box-sizing: border-box;
+}
+.movingEach {
+    width: 488px;
+    margin-right: 20px;
+}
 
 
 

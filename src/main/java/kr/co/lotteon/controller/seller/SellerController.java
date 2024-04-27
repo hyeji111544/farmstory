@@ -104,8 +104,10 @@ public class SellerController {
     // 판매자 주문 관리 //
     @GetMapping("/seller/order/orderList")
     public String SellerOrderList(String prodSeller, Model model, PageRequestDTO pageRequestDTO){
+
         // 최근 한달치 주문 건수
         LinkedHashMap<String, Integer> orderByDate = sellerService.selectProdSalesCount(prodSeller);
+
         // 판매자의 판매 목록 최신순
         PageResponseDTO selectOrder = sellerService.selectProdSalesInfo(prodSeller, pageRequestDTO);
         log.info("selectOrder : " + selectOrder);
@@ -117,8 +119,18 @@ public class SellerController {
 
     // 판매자 매출 현황 //
     @GetMapping("/seller/order/sales")
-    public String SellerSales(){
+    public String SellerSales(String prodSeller, Model model){
 
+        // 최근 한달 일자별 주문 금액 합산
+        LinkedHashMap<String, Integer> orderByDate = sellerService.selectSalesForMonth(prodSeller);
+        // 판매자의 기간별 매출, 취소, 환불 금액 합산
+        Map<String, Map<String, Integer>> resultMap = sellerService.selectSalesAverages(prodSeller);
+        // 최근 일주일 일자별 주문 상세 (매출, 취소, 교환, 환불 금액 / 건수)
+        LinkedHashMap<String, OrderPriceCountDTO> orderForWeek = sellerService.selectSalesForWeek(prodSeller);
+
+        model.addAttribute("orderByDate", orderByDate);
+        model.addAttribute("resultMap", resultMap);
+        model.addAttribute("orderForWeek", orderForWeek);
         return "/seller/order/sales";
     }
 

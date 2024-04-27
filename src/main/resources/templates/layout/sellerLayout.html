@@ -21,7 +21,7 @@
                 <p>
                     <span>(주)신난다 님 반갑습니다.</span>
                     <a th:href="@{/}">HOME |</a>
-                    <a href="#">로그아웃 |</a>
+                    <a th:href="@{/member/logout}">로그아웃 |</a>
                     <a th:href="@{/cs/index}">고객센터</a>
                 </p>
             </div>
@@ -47,10 +47,10 @@
                     <li>
                         <a href="#"><i class="fa fa-credit-card" aria-hidden="true"></i>주문관리</a>
                         <ol>
-                            <li><a th:href="@{/seller/order/orderList}">주문현황</a></li>
-                            <li><a href="#">매출현황</a></li>
+                            <li><a th:href="@{/seller/order/orderList(prodSeller=${session.prodSeller})}">주문현황</a></li>
+                            <li><a th:href="@{/seller/order/sales(prodSeller=${session.prodSeller})}">매출현황</a></li>
                             <li><a href="#">결제관리</a></li>
-                            <li><a href="#">배송관리</a></li>
+                            <li><a th:href="@{/seller/order/delivery(prodSeller=${session.prodSeller})}">배송관리</a></li>
                         </ol>
                     </li>
                     <li>
