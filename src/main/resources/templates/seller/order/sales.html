@@ -4,18 +4,31 @@
 <!--내용 시작-->
     <section id="admin-product-list" layout:fragment="content">
 
-        <script>
+        <script th:inline="javascript">
             window.onload = function () {
                 // 그래프
+                const orderByDate = [[${orderByDate}]];
+                const dateArray = [];
+                const priceArray = [];
+
+                const keys = Object.keys(orderByDate);
+                for (let i = keys.length - 1; i >= 0; i--) {
+                    const key = keys[i];
+                    const value = orderByDate[key];
+                    dateArray.push(key);
+                    priceArray.push(value);
+                }
+
                 new Chart(document.getElementById("line-chart"), {
                     type: 'line',
                     data: {
-                        labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+                        labels: dateArray,
                         datasets: [{
-                            data: [86,114,106,106,107,111,133,221,783,2000],
-                            label: "주문건수",
+                            data: priceArray,
+                            label: "주문금액",
                             borderColor: "#3e95cd",
-                            fill: false
+                            fill: false,
+                            pointStyle: 'triangle'
                         }
                         ]
                     },
@@ -23,11 +36,44 @@
                         responsive: false,
                         title: {
                             display: true,
-                            text: '최근 한달 주문 건수'
+                            text: '최근 한달 주문 금액',
+                            fontSize: 20,
+                            color: '#111',
+                        },
+                        legend: {
+                            display: false // 라벨 숨기기
                         }
                     }
                 });
             }
+
+            //
+            let currentIndex = 0;
+            function movePrev() {
+                const movingBox = document.getElementsByClassName('movingBox')[0];
+                if (currentIndex === 0) {
+                    movingBox.style.transform = 'translateX(-3556px)';
+                    currentIndex = 7;
+                }else if (currentIndex > 0) {
+                    movingBox.style.transition = 'transform  0.5s ease';
+                    movingBox.style.transform += 'translateX(508px)';
+                    currentIndex += -1;
+                }
+                console.log(currentIndex)
+            }
+            function moveNext() {
+                const movingBox = document.getElementsByClassName('movingBox')[0];
+                if (currentIndex === 7) {
+                    movingBox.style.transform = 'translateX(0px)';
+                    currentIndex = 0;
+                }else if (currentIndex < 7) {
+                    movingBox.style.transition = 'transform  0.5s ease';
+                    movingBox.style.transform += 'translateX(-508px)';
+                    currentIndex += 1;
+                }
+                console.log(currentIndex)
+            }
+
         </script>
 
         <nav>
@@ -43,11 +89,6 @@
                 <div class="orderListChart">
                     <canvas id="line-chart" width="1000" height="250"></canvas>
                 </div>
-                <div>
-                    주문현황 / 최신주문, 일주일주문, 전체주문
-                    배송현황 / 입금대기, 배송준비, 배송중, 배송완료
-                    CS현황 / 취소요청,교환요청,환불요청
-                </div>
             </div>
 
             <div class="orderListFlex">
@@ -55,68 +96,72 @@
                     <h3>매출 요약</h3>
                     <div class="salesRow">
                         <div>기간</div>
-                        <div>금액</div>
+                        <div>매출</div>
                         <div>취소</div>
                         <div>환불</div>
                     </div>
                     <div class="salesRow">
                         <div>전체</div>
-                        <div>9999</div>
-                        <div>9999</div>
-                        <div>9999</div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('total').get('sales'), 3, 'COMMA')}"></div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('total').get('cancel'), 3, 'COMMA')}"></div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('total').get('refund'), 3, 'COMMA')}"></div>
                     </div>
                     <div class="salesRow">
                         <div>일년</div>
-                        <div>777</div>
-                        <div>777</div>
-                        <div>777</div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('year').get('sales'), 3, 'COMMA')}"></div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('year').get('cancel'), 3, 'COMMA')}"></div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('year').get('refund'), 3, 'COMMA')}"></div>
                     </div>
                     <div class="salesRow">
                         <div>한달</div>
-                        <div>555</div>
-                        <div>555</div>
-                        <div>555</div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('month').get('sales'), 3, 'COMMA')}"></div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('month').get('cancel'), 3, 'COMMA')}"></div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('month').get('refund'), 3, 'COMMA')}"></div>
                     </div>
                     <div class="salesRow">
                         <div>일주일</div>
-                        <div>111</div>
-                        <div>111</div>
-                        <div>111</div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('week').get('sales'), 3, 'COMMA')}"></div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('week').get('cancel'), 3, 'COMMA')}"></div>
+                        <div th:text="${#numbers.formatInteger(resultMap.get('week').get('refund'), 3, 'COMMA')}"></div>
                     </div>
                 </div>
 
                 <div class="salesInfoWeek twoDiv">
                     <h3>일일 매출</h3>
-                    <div class="salesWeekRow">
-                        <div>
-                            <span>≪</span>
-                            <span>2024.05.22</span>
-                            <span>≫</span>
+                    <div class="movingBox">
+                        <div class="movingEach" th:each="week : ${orderForWeek}">
+                            <div class="salesWeekRow">
+                                <div>
+                                    <span onclick="movePrev()" style="cursor: pointer">≪</span>
+                                    <span th:text="${week.key}">2024-05-22</span>
+                                    <span onclick="moveNext()" style="cursor: pointer">≫</span>
+                                </div>
+                            </div>
+                            <div class="salesWeekRow">
+                                <div>매출</div>
+                                <div th:text="${week.value.getSalesPrice()}"></div>
+                                <div>건수</div>
+                                <div th:text="${week.value.getSalesCount()}"></div>
+                            </div>
+                            <div class="salesWeekRow">
+                                <div>취소</div>
+                                <div th:text="${week.value.getCancelPrice()}"></div>
+                                <div>건수</div>
+                                <div th:text="${week.value.getCancelCount()}"></div>
+                            </div>
+                            <div class="salesWeekRow">
+                                <div>교환</div>
+                                <div th:text="${week.value.getExchangePrice()}"></div>
+                                <div>건수</div>
+                                <div th:text="${week.value.getExchangeCount()}"></div>
+                            </div>
+                            <div class="salesWeekRow">
+                                <div>환불</div>
+                                <div th:text="${week.value.getRefundPrice()}"></div>
+                                <div>건수</div>
+                                <div th:text="${week.value.getRefundCount()}"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="salesWeekRow">
-                        <div>금액</div>
-                        <div>9999</div>
-                        <div>건수</div>
-                        <div>9999</div>
-                    </div>
-                    <div class="salesWeekRow">
-                        <div>취소</div>
-                        <div>9999</div>
-                        <div>건수</div>
-                        <div>9999</div>
-                    </div>
-                    <div class="salesWeekRow">
-                        <div>교환</div>
-                        <div>9999</div>
-                        <div>건수</div>
-                        <div>9999</div>
-                    </div>
-                    <div class="salesWeekRow">
-                        <div>환불</div>
-                        <div>9999</div>
-                        <div>건수</div>
-                        <div>9999</div>
                     </div>
                 </div>
             </div>

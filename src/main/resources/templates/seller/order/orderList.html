@@ -69,12 +69,19 @@
             function createDetailInfoTag(orderListBody, index) {
                 const dtoList = [[${selectOrder.dtoList}]]
                 const orders = dtoList[index];
+
+                let memo = orders.orderMemo;
+                if (orders.orderMemo === null) {
+                    memo = "배송메모가 없습니다.";
+                }
+                const price = new Intl.NumberFormat('ko-KR').format(orders.detailPrice)+'원';
+                const userId = (orders.userId).substring(0,6) + "****";
                 const newTag = `<div class="detailInfo">
                                     <div class="detailInfoRow">
                                         <div>구매자</div>
-                                        <div>${orders.userId}</div>
+                                        <div>${userId}</div>
                                         <div>결제금액</div>
-                                        <div>${orders.detailPrice}</div>
+                                        <div>${price}</div>
                                     </div>
                                     <div class="detailInfoRow">
                                         <div>받는사람</div>
@@ -94,7 +101,7 @@
                                     </div>
                                     <div class="detailInfoAddr">
                                         <div>배송메모</div>
-                                        <div>${orders.orderMemo}</div>
+                                        <div>${memo}</div>
                                     </div>
                                 </div>`
                 orderListBody.insertAdjacentHTML('beforeend', newTag);
@@ -130,13 +137,14 @@
                 <div class="filterBox">
                     <span onclick="filterDrop()">정렬 ∨</span>
                     <ul class="filterList">
-                        <li><a href="#">입금대기</a></li>
-                        <li><a href="#">배송준비</a></li>
-                        <li><a href="#">배송중</a></li>
-                        <li><a href="#">배송완료</a></li>
-                        <li><a href="#">취소요청</a></li>
-                        <li><a href="#">교환요청</a></li>
-                        <li><a href="#">환불요청</a></li>
+                        <li><a th:href="@{/seller/order/orderList(prodSeller=${session.prodSeller})}">전체</a></li>
+                        <li><a th:href="@{/seller/order/orderList(keyword='waiting', prodSeller=${session.prodSeller})}">입금대기</a></li>
+                        <li><a th:href="@{/seller/order/orderList(keyword='ready', prodSeller=${session.prodSeller})}">배송준비</a></li>
+                        <li><a th:href="@{/seller/order/orderList(keyword='doing', prodSeller=${session.prodSeller})}">배송중</a></li>
+                        <li><a th:href="@{/seller/order/orderList(keyword='finish', prodSeller=${session.prodSeller})}">배송완료</a></li>
+                        <li><a th:href="@{/seller/order/orderList(keyword='cancel', prodSeller=${session.prodSeller})}">취소요청</a></li>
+                        <li><a th:href="@{/seller/order/orderList(keyword='exchange', prodSeller=${session.prodSeller})}">교환요청</a></li>
+                        <li><a th:href="@{/seller/order/orderList(keyword='refund', prodSeller=${session.prodSeller})}">환불요청</a></li>
                     </ul>
                 </div>
                 <div class="orderListHead">
@@ -154,7 +162,15 @@
                         <div th:text="${orders.detailNo}"></div>
                         <div th:text="${orders.prodName}"></div>
                         <div th:text="${orders.count}"></div>
-                        <div th:text="${orders.detailStatus}"></div>
+
+                        <div th:if="${orders.detailStatus == '입금대기'}" th:text="${orders.detailStatus}" style="color: #5E1675"></div>
+                        <div th:if="${orders.detailStatus == '배송준비'}" th:text="${orders.detailStatus}" style="color: #2C4E80"></div>
+                        <div th:if="${orders.detailStatus == '배송중'}" th:text="${orders.detailStatus}" style="color: #0079FF"></div>
+                        <div th:if="${orders.detailStatus == '배송완료'}" th:text="${orders.detailStatus}" style="color: #36AE7C"></div>
+                        <div th:if="${orders.detailStatus == '취소요청'}" th:text="${orders.detailStatus}" style="color: #FFA900"></div>
+                        <div th:if="${orders.detailStatus == '교환요청'}" th:text="${orders.detailStatus}" style="color: #F94A29"></div>
+                        <div th:if="${orders.detailStatus == '환불요청'}" th:text="${orders.detailStatus}" style="color: #D61355"></div>
+
                         <div th:text="${orders.detailDate}"></div>
                         <div onclick="createDetailInfo()" th:class="${index.index}">자세히</div>
                     </div>
