@@ -59,7 +59,6 @@
                     movingBox.style.transform += 'translateX(508px)';
                     currentIndex += -1;
                 }
-                console.log(currentIndex)
             }
             function moveNext() {
                 const movingBox = document.getElementsByClassName('movingBox')[0];
@@ -71,7 +70,6 @@
                     movingBox.style.transform += 'translateX(-508px)';
                     currentIndex += 1;
                 }
-                console.log(currentIndex)
             }
 
         </script>
@@ -139,27 +137,35 @@
                             </div>
                             <div class="salesWeekRow">
                                 <div>매출</div>
-                                <div th:text="${week.value.getSalesPrice()}"></div>
+                                <div class="afterPrice" th:if="${week.value.getSalesPrice() == 0}" th:text=" 0"></div>
+                                <div class="afterPrice" th:if="${week.value.getSalesPrice() != 0}"
+                                     th:text="${#numbers.formatInteger(week.value.getSalesPrice(), 3, 'COMMA')}"></div>
                                 <div>건수</div>
-                                <div th:text="${week.value.getSalesCount()}"></div>
+                                <div class="afterCount" th:text="${week.value.getSalesCount()}"></div>
                             </div>
                             <div class="salesWeekRow">
                                 <div>취소</div>
-                                <div th:text="${week.value.getCancelPrice()}"></div>
+                                <div class="afterPrice" th:if="${week.value.getCancelPrice() == 0}" th:text=" 0"></div>
+                                <div class="afterPrice" th:if="${week.value.getCancelPrice() != 0}"
+                                     th:text="${#numbers.formatInteger(week.value.getCancelPrice(), 3, 'COMMA')}"></div>
                                 <div>건수</div>
-                                <div th:text="${week.value.getCancelCount()}"></div>
+                                <div class="afterCount" th:text="${week.value.getCancelCount()}"></div>
                             </div>
                             <div class="salesWeekRow">
                                 <div>교환</div>
-                                <div th:text="${week.value.getExchangePrice()}"></div>
+                                <div class="afterPrice" th:if="${week.value.getExchangePrice() == 0}" th:text=" 0"></div>
+                                <div class="afterPrice" th:if="${week.value.getExchangePrice() != 0}"
+                                     th:text="${#numbers.formatInteger(week.value.getExchangePrice(), 3, 'COMMA')}"></div>
                                 <div>건수</div>
-                                <div th:text="${week.value.getExchangeCount()}"></div>
+                                <div class="afterCount" th:text="${week.value.getExchangeCount()}"></div>
                             </div>
                             <div class="salesWeekRow">
                                 <div>환불</div>
-                                <div th:text="${week.value.getRefundPrice()}"></div>
+                                <div class="afterPrice" th:if="${week.value.getRefundPrice() == 0}" th:text=" 0"></div>
+                                <div class="afterPrice" th:if="${week.value.getRefundPrice() != 0}"
+                                     th:text="${#numbers.formatInteger(week.value.getRefundPrice(), 3, 'COMMA')}"></div>
                                 <div>건수</div>
-                                <div th:text="${week.value.getRefundCount()}"></div>
+                                <div class="afterCount" th:text="${week.value.getRefundCount()}"></div>
                             </div>
                         </div>
                     </div>

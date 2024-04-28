@@ -7,6 +7,7 @@ import kr.co.lotteon.entity.OrderDetail;
 import kr.co.lotteon.entity.Orders;
 import kr.co.lotteon.entity.Product;
 import kr.co.lotteon.entity.Seller;
+import kr.co.lotteon.repository.OrderdetailRepository;
 import kr.co.lotteon.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
 public class SellerService {
 
     private final SellerRepository sellerRepository;
+    private final OrderdetailRepository orderdetailRepository;
     private final ModelMapper modelMapper;
 
     // 판매자 관리페이지 - 홈
@@ -272,5 +274,22 @@ public class SellerService {
         log.info("orderByDate : " + orderByDate.toString());
         return orderByDate;
     }
+
+    // 판매 상품 주문 상태 변경
+    public int updateStatus(int detailNo, String detailStatus) {
+        Optional<OrderDetail> optDetail = orderdetailRepository.findById(detailNo);
+        if (optDetail.isPresent()) {
+            optDetail.get().setDetailStatus(detailStatus);
+            OrderDetail result = orderdetailRepository.save(optDetail.get());
+            if (result.getDetailStatus().equals(detailStatus)) {
+                return 1;
+            }else {
+                return 0;
+            }
+        }else {
+            return 0;
+        }
+    }
+
 
 }
