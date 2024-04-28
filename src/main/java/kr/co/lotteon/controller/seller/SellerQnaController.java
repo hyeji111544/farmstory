@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +24,7 @@ public class SellerQnaController {
 
     private final SellerQnaService sellerQnaService;
 
+////// 고객 센터 (seller/cs) //////
     // 판매자 관리페이지 - QNA List
     @GetMapping("/seller/cs/qna/list")
     public String sellerQnaList(String prodSeller, Model model, PageRequestDTO pageRequestDTO){
@@ -88,5 +86,24 @@ public class SellerQnaController {
         log.info("prodQnaNoteDTO : " + prodQnaNoteDTO);
 
         return sellerQnaService.modifyQnaNote(prodQnaNoteDTO);
+    }
+
+    // 판매자 관리페이지 - NOTICE List
+    @GetMapping("/seller/cs/notice/list")
+    public String sellerNoticeList(Model model, PageRequestDTO pageRequestDTO,
+                                   @RequestParam(value = "noticeCate", required = false) String noticeCate){
+        PageResponseDTO noticeList = sellerQnaService.selectSellerNoticeList(pageRequestDTO, noticeCate);
+
+        model.addAttribute("noticeCate",noticeCate);
+        model.addAttribute("noticeList", noticeList);
+        return "/seller/cs/notice/list";
+    }
+
+    // 판매자 관리페이지 - NOTICE view
+    @GetMapping("/seller/cs/notice/view")
+    public String sellerNoticeView(Model model, int noticeNo){
+
+        model.addAttribute("view",sellerQnaService.selectSellerNoticeView(noticeNo));
+        return "/seller/cs/notice/view";
     }
 }

@@ -6,11 +6,14 @@ import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.seller.SellerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.AuthProvider;
@@ -39,10 +42,22 @@ public class SellerController {
         String UserId = authentication.getName();
         SellerInfoDTO sellerInfoDTO = sellerService.selectSellerInfo(session, UserId);
 
+
+        String prodSeller = (String) session.getAttribute("prodSeller");
+        // 최근 한달치 주문 건수
+        LinkedHashMap<String, Integer> monthCount = sellerService.selectProdSalesCount(prodSeller);
+        // 최근 한달 일자별 주문 금액 합산
+        LinkedHashMap<String, Integer> monthPrice = sellerService.selectSalesForMonth(prodSeller);
+
+        model.addAttribute("monthCount", monthCount);
+        model.addAttribute("monthPrice", monthPrice);
+
+
+
         model.addAttribute("sellerInfoDTO", sellerInfoDTO);
         return "/seller/index";
     }
-
+////// 상품 관리 (seller/product) //////
     // 판매자 관리페이지 - 상품목록 - 상품관리
     @GetMapping("/seller/product/list")
     public String sellerProdList(String prodSeller, Model model, ProductPageRequestDTO productPageRequestDTO){
@@ -64,7 +79,6 @@ public class SellerController {
 
         return "/seller/product/list";
     }
-
 
     // 판매자 상품 등록 이동
     @GetMapping("/seller/product/register")
@@ -101,6 +115,7 @@ public class SellerController {
         return "/seller/product/option";
     }
 
+////// 주문 관리 (seller/order) //////
     // 판매자 주문 관리 //
     @GetMapping("/seller/order/orderList")
     public String SellerOrderList(String prodSeller, Model model, PageRequestDTO pageRequestDTO){
@@ -136,9 +151,26 @@ public class SellerController {
 
     // 판매자 배송 관리 //
     @GetMapping("/seller/order/delivery")
-    public String SellerDelivery(){
+    public String SellerDelivery(String prodSeller, Model model, PageRequestDTO pageRequestDTO){
+        // 판매자의 판매 목록 최신순
+        PageResponseDTO selectOrder = sellerService.selectProdSalesInfo(prodSeller, pageRequestDTO);
+        log.info("selectOrder : " + selectOrder);
 
+        model.addAttribute("selectOrder", selectOrder);
         return "/seller/order/delivery";
     }
 
+    // 판매 상품 주문 상태 변경 //
+    @PostMapping("/seller/product/updateStatus")
+    public ResponseEntity<?> updateStatus(@RequestBody Map<String, String> requestData) {
+        int detailNo = Integer.parseInt(requestData.get("detailNo"));
+        String detailStatus = requestData.get("detailStatus");
+
+        int result = sellerService.updateStatus(detailNo, detailStatus);
+        if (result > 0) {
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+    }
 }
