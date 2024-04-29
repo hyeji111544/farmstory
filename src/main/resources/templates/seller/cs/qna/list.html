@@ -11,17 +11,17 @@
             </p>
         </nav>
         <!-- qna 컨텐츠 시작 -->
-        <section>
+        <section class="sectionBox">
             <div>
-                <form th:action="@{/seller/cs/qna/list}">
-                    <select name="type">
+                <form th:action="@{/seller/cs/qna/list}" style="display:flex;">
+                    <select name="type" style="width: 100px;">
                         <option value="prodNo">상품번호</option>
                         <option value="prodQnaTitle">상품명</option>
                         <option value="prodQnaStatus">답변상태</option>
                     </select>
-                    <input type="text" name="keyword">
-                    <input type="text" name="prodSeller" value="aa11aa22" readonly>
-                    <input type="submit" value="검색">
+                    <input type="text" name="keyword" style="height: 33px;">
+                    <input type="hidden" name="prodSeller" th:value="${session.prodSeller}" readonly>
+                    <input type="submit" value="검색" style="height: 33px; width: 60px; background-color: #F0F0F0">
                 </form>
             </div>
             <table class="qna">
@@ -38,7 +38,7 @@
                 <tr th:each="ProdQnaDTO : ${prodQnaList.dtoList}">
                     <td><input type="checkbox" name="글번호"/></td>
                     <td th:text="${ProdQnaDTO.prodNo}"></td>
-                    <td>
+                    <td style="text-align: left">
                         <span>
                             <a th:href="@{/seller/cs/qna/view(qnaNo=${ProdQnaDTO.prodQnaNo})}">
                                 <span th:text="${ProdQnaDTO.prodQnaTitle}"></span>
@@ -53,24 +53,25 @@
             </table>
 
 
-            <input type="button" value="선택삭제" style="background-color: #9e9e9e; color: white; border: none; padding: 10px 20px; cursor: pointer;"/>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px">
+                <a class="btn btn-outline-info" onclick="deleteValue(event);" style="background-color: #D04848">선택삭제</a>
+            </div>
 
 
-            <div class="paging">
-                <!--
-                <span class="prev">
-                    <a th:if="${pageResponseDTO.prev}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.start-1})}"><&nbsp;이전</a>
-                </span>
-                <span class="num">
-                    <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                <a th:href="@{/admin/cs/qna/list(pg=${num})}" th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'" th:text="${num}"></a>
+            <div class="pagingBox">
+                <div class="pagingList">
+                    <a th:if="${prodQnaList.prev && noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.start - 1})}">이전</a>
+                    <a th:if="${prodQnaList.prev && noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.start - 1}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}">이전</a>
+
+                    <th:block th:each="num:${#numbers.sequence(prodQnaList.start, prodQnaList.end)}">
+                        <a class="pageNum" th:if="${noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${num})}" th:class="${num == prodQnaList.pg} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${num}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
-                </span>
-                <span class="next">
-                    <a th:if="${pageResponseDTO.next}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.end+1})}">다음</a>
-                </span>
-                -->
+
+                    <a th:if="${prodQnaList.next && noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.end + 1})}">다음</a>
+                    <a th:if="${prodQnaList.next && noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.end + 1}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}">다음</a>
                 </div>
+            </div>
         </section>
         <!-- 상품목록 컨텐츠 끝 -->
     </section>

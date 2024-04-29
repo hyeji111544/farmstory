@@ -215,7 +215,7 @@
             </p>
         </nav>
         <!-- 상품목록 컨텐츠 시작 -->
-        <section>
+        <section class="sectionBox">
             <div>
                 <select name="faqCate" onchange="firstOption()">
                     <option>1차선택</option>
@@ -235,13 +235,13 @@
                     <option value="login">로그인</option>
                 </select>
             </div>
-            <table class="faq">
+            <table class="">
                 <tr>
                     <th><input type="checkbox" class="totalCheckBox" name="all"/></th>
                     <th>번호</th>
-                    <th>1차유형</th>
-                    <th>2차유형</th>
-                    <th>제목</th>
+                    <th style="width: 70px">1차유형</th>
+                    <th style="width: 70px">2차유형</th>
+                    <th style="width: 400px">제목</th>
                     <th>조회</th>
                     <th>날짜</th>
                     <th>관리</th>
@@ -261,7 +261,7 @@
                     <td th:if="${faq.faqCate == 'travel'}" style="white-space: nowrap;">[여행/숙박/항공]</td>
                     <td th:if="${faq.faqCate == 'safe'}" style="white-space: nowrap;">[안전결제]</td>
 
-                    <td th:if="${faq.faqType == 'regi'}" style="white-space: nowrap;">[가입</td>
+                    <td th:if="${faq.faqType == 'regi'}" style="white-space: nowrap;">[가입]</td>
                     <td th:if="${faq.faqType == 'leave'}" style="white-space: nowrap;">[탈퇴]</td>
                     <td th:if="${faq.faqType == 'info'}" style="white-space: nowrap;">[회원정보]</td>
                     <td th:if="${faq.faqType == 'login'}" style="white-space: nowrap;">[로그인]</td>
@@ -296,7 +296,7 @@
                     <td th:if="${faq.faqType == 'sacc'}" style="white-space: nowrap;">[입금계좌]</td>
                     <td th:if="${faq.faqType == 'sfee'}" style="white-space: nowrap;">[수수료]</td>
 
-                    <td>
+                    <td style="text-align: left;">
                         <span>
                             <a th:href="@{/admin/cs/faq/view(faqNo=${faq.faqNo})}">
                                 <span th:text="${faq.faqTitle}"></span>
@@ -312,34 +312,26 @@
                 </tr>
             </table>
 
+            <div style="display: flex; justify-content: space-between; margin-top: 10px">
+                <a class="btn" id="faqDeleteBtn" style="background-color: #D04848">선택삭제</a>
+                <a class="btn" th:href="@{/admin/cs/faq/write}" style="background-color: #6895D2">작성하기</a>
+            </div>
 
-            <input type="button" class="faqDeleteBtn" id="faqDeleteBtn" value="선택삭제" style="background-color: #9e9e9e; color: white; border: none; padding: 10px 20px; cursor: pointer;"/>
-            <a th:href="@{/admin/cs/faq/write}"><input type="button" value="작성하기" style=" float: right; background-color: #4291e9; color: white; border: none; padding: 10px 20px; cursor: pointer;" /></a>
-
-
-            <div class="paging">
-                <span class="prev">
-                    <!-- 이전 버튼 -->
+            <div class="pagingBox">
+                <div class="pagingList">
                     <a th:if="${pageResponseDTO.prev && faqCate == null && faqType == null}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.start - 1})}">이전</a>
                     <a th:if="${pageResponseDTO.prev && faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.start - 1}, faqCate=${faqCate}, faqType=${faqType})}">이전</a>
-                </span>
-                    <!-- 페이지 링크 -->
-                <span class="num">
-                   <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                 <a th:if="${faqCate == null && faqType == null}" th:href="@{/admin/cs/faq/list(pg=${num})}"
-                        th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
-                        th:text="${num}"></a>
-                <a th:if="${faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(pg=${num}, faqCate=${faqCate}, faqType=${faqType})}"
-                       th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
-                       th:text="${num}"></a>
+
+                    <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                        <a class="pageNum" th:if="${faqCate == null && faqType == null}" th:href="@{/admin/cs/faq/list(pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(pg=${num}, faqCate=${faqCate}, faqType=${faqType})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
-                </span>
-                    <!-- 다음 버튼 -->
-                <span class="next">
+
                     <a th:if="${pageResponseDTO.next && faqCate == null && faqType == null}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.end + 1})}">다음</a>
                     <a th:if="${pageResponseDTO.next && faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.end + 1}, faqCate=${faqCate}, faqType=${faqType})}">다음</a>
-                </span>
                 </div>
+            </div>
+
         </section>
         <!-- 상품목록 컨텐츠 끝 -->
     </section>

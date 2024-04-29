@@ -36,6 +36,4 @@ public class OrderController {
         log.info("orderProducts" + orderProducts);
         return "/product/order";
     }
-
-
 }

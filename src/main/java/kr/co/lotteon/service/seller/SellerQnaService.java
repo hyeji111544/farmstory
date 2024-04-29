@@ -2,10 +2,13 @@ package kr.co.lotteon.service.seller;
 
 import com.querydsl.core.Tuple;
 import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.Notice;
 import kr.co.lotteon.entity.ProdQna;
 import kr.co.lotteon.entity.ProdQnaNote;
+import kr.co.lotteon.repository.NoticeRepository;
 import kr.co.lotteon.repository.ProdQnaNoteRepository;
 import kr.co.lotteon.repository.ProdQnaRepository;
+import kr.co.lotteon.repository.admin.AdminNoticeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -14,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +31,8 @@ public class SellerQnaService {
 
     private final ProdQnaRepository prodQnaRepository;
     private final ProdQnaNoteRepository prodQnaNoteRepository;
+    private final NoticeRepository noticeRepository;
+    private final AdminNoticeRepository adminNoticeRepository;
     private final ModelMapper modelMapper;
 
 
@@ -105,4 +111,42 @@ public class SellerQnaService {
         }
     }
 
+    // 판매자 관리페이지 - NOTICE List - 목록조회
+    public PageResponseDTO selectSellerNoticeList(PageRequestDTO pageRequestDTO, String noticeCate) {
+        Pageable pageable = pageRequestDTO.getPageable("noticeNo");
+
+        Page<Notice> pageNotice = null;
+        if (noticeCate == null){
+            pageNotice = noticeRepository.findAll(pageable);
+        }else {
+            pageNotice = adminNoticeRepository.findByNoticeCate(noticeCate, pageable);
+        }
+
+        List<NoticeDTO> dtoList = pageNotice.getContent().stream()
+                .map(notice -> modelMapper.map(notice, NoticeDTO.class))
+                .toList();
+
+        int total = (int) pageNotice.getTotalElements();
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(dtoList)
+                .total(total)
+                .build();
+    }
+
+    // 판매자 관리페이지 - NOTICE view
+    @Transactional
+    public NoticeDTO selectSellerNoticeView(int noticeNo){
+
+        // .orElse(null); optional 객체가 비어있을경우 대비
+        Notice notice = noticeRepository.findById(noticeNo).orElse(null);
+        log.info("특정 글 불러오기 modify {}",notice);
+        if(notice !=null){
+            // DTO로 변환후에 반환
+            adminNoticeRepository.incrementHitByNoticeNo(noticeNo);
+            log.info("noticeNo1 {}", noticeNo);
+            return modelMapper.map(notice, NoticeDTO.class);
+        }
+        return null; // 해당 번호의 글이 없는 경우 null반환
+    }
 }

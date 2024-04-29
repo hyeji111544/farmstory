@@ -371,9 +371,8 @@ button[type=submit] {
     margin-top: 6px;
     margin-bottom: 16px;
     border: 1px solid #e5e5e5;
-    border-top: 2px solid #8798a3;
     padding: 16px;
-    box-sizing: border-box;            
+    box-sizing: border-box;
 }
 
 #admin-index > div > div > article > p {            
@@ -844,7 +843,6 @@ button[type=submit] {
 }
 
 #admin-cs-list > section > table  {
-    border-top: 2px solid #8798a3;
 }
 #admin-cs-list > section > table  tr > th{
     padding: 10px 0;

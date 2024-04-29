@@ -10,7 +10,7 @@
             </p>
         </nav>
         <!-- 상품목록 컨텐츠 시작 -->
-        <section>
+        <section class="sectionBox">
             <div>
                 <form th:action="@{/seller/product/list}">
                     <select name="type">
@@ -18,9 +18,9 @@
                         <option value="prodNo">상품코드</option>
                         <option value="prodCompany">제조사</option>
                     </select>
-                    <input type="text" name="keyword">
-                    <input type="text" name="prodSeller" value="aa11aa22" readonly>
-                    <input type="submit" value="검색">
+                    <input class="searchInput" type="text" name="keyword">
+                    <input type="hidden" name="prodSeller" th:value="${session.prodSeller}" readonly>
+                    <input class="searchBtn" type="submit" value="검색">
                 </form>
             </div>
             <table>
@@ -40,37 +40,34 @@
 
                 <tr id="product" th:each="product : ${pageResponseDTO.dtoList}">
                     <td><input type="checkbox" name="상품코드"/></td>
-                    <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb"></td>
+                    <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb" style="width: 70px; height: 70px"></td>
                     <td>[[${product.prodNo}]]</td>
-                    <td>[[${product.prodName}]]</td>
-                    <td>[[${product.prodPrice}]]</td>
-                    <td>[[${product.prodDiscount}]]</td>
-                    <td>[[${product.prodPoint}]]</td>
-                    <td>[[${product.prodStock}]]</td>
-                    <td>[[${product.prodCompany}]]</td>
-                    <td>126(조회?)</td>
+                    <td style="width: 300px">[[${product.prodName}]]</td>
+                    <td style="width: 70px">[[${product.prodPrice}]]</td>
+                    <td style="width: 50px">[[${product.prodDiscount}]]</td>
+                    <td style="width: 60px">[[${product.prodPoint}]]</td>
+                    <td style="width: 50px">[[${product.prodStock}]]</td>
+                    <td style="width: 80px">[[${product.prodCompany}]]</td>
+                    <td>[[${product.prodHit}]]</td>
                     <td>
-                        <a href="#">[삭제]</a>
                         <a th:href="@{/seller/product/option(prodNo=${product.prodNo})}">[수정]</a>
                     </td>
                 </tr>
             </table>
 
 
-            <input type="button" value="선택삭제" />
+            <a class="btn" style="margin-top: 10px">선택삭제</a>
 
 
-            <div class="paging">
-                <div class="paging">
-                <span class="prev" th:if="${pageResponseDTO.prev}" >
-                  <a th:href="@{/admin/product/list(pg=${pageResponseDTO.start - 1})}"><&nbsp;이전</a>
-                </span>
-                    <span class="num" th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                  <a th:if="${num != 0}" th:href="@{/admin/product/list(pg=${num})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
-                </span>
-                    <span class="next" th:if="${pageResponseDTO.next}">
-                     <a th:href="@{/admin/product/list(pg=${pageResponseDTO.end + 1})}">다음&nbsp;></a>
-                </span>
+            <div class="pagingBox">
+                <div class="pagingList">
+                    <a th:if="${pageResponseDTO.prev}" th:href="@{/seller/product/list(pg=${pageResponseDTO.start - 1})}">이전</a>
+
+                    <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                        <a class="pageNum" th:if="${num != 0}" th:href="@{/seller/product/list(pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+                    </th:block>
+
+                     <a th:if="${pageResponseDTO.next}" th:href="@{/seller/product/list(pg=${pageResponseDTO.end + 1})}">다음</a>
                 </div>
             </div>
 

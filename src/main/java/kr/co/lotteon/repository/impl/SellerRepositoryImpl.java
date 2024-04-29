@@ -5,12 +5,10 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.GraphInfoDTO;
+import kr.co.lotteon.dto.PageRequestDTO;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.dto.SellerInfoDTO;
-import kr.co.lotteon.entity.OrderDetail;
-import kr.co.lotteon.entity.QOrderDetail;
-import kr.co.lotteon.entity.QProduct;
-import kr.co.lotteon.entity.QProductimg;
+import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.custom.SellerRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +32,7 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
     private final QOrderDetail qOrderDetail = QOrderDetail.orderDetail;
     private final QProduct qProduct = QProduct.product;
     private final QProductimg qProductimg = QProductimg.productimg;
+    private final QOrders qOrders = QOrders.orders;
 
     // 판매자 관리페이지 - 홈 출력 정보 조회
     @Override
@@ -218,7 +217,6 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
         log.info("total : " + total);
 
         return new PageImpl<>(productsResults, pageable, total);
-
     }
 
     // 판매자 관리페이지 - 상품목록 - 상품관리 (검색 상품 목록)
@@ -254,11 +252,104 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
 
         List<Tuple> productsResults = selectProducts.getResults();
         long total = selectProducts.getTotal();
-
         return new PageImpl<>(productsResults, pageable, total);
-
     }
 
+    // 판매자 관리페이지 - 주문관리 - 주문현황 (최근 한달 주문 건수 for 그래프)
+    // 판매자 관리페이지 - 주문관리 - 매출현황 (최근 한달 주문 금액 for 그래프)
+    public List<OrderDetail> selectSalesForMonth(String prodSeller) {
+        LocalDate oneMonthsAgo = LocalDate.now().minusMonths(1);
+        return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .where(qOrderDetail.prodSeller.eq(prodSeller))
+                    .where(qOrderDetail.detailDate.between(oneMonthsAgo, LocalDate.now()))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
+    }
+    
+    // 판매자 관리페이지 - 주문관리 - 주문현황 (주문 상품 정보 출력)
+    public Page<Tuple> selectProdSalesInfo(String prodSeller, PageRequestDTO pageRequestDTO, Pageable pageable) {
 
+        QueryResults<Tuple> selectOrders = null;
+        BooleanExpression expression = null;
 
+        if (pageRequestDTO.getKeyword() != null) {
+            log.info("keyword : " + pageRequestDTO.getKeyword());
+            if (pageRequestDTO.getKeyword().equals("waiting")){
+                expression = qOrderDetail.detailStatus.contains("입금대기");
+            }else if (pageRequestDTO.getKeyword().equals("ready")){
+                expression = qOrderDetail.detailStatus.contains("배송준비");
+            }else if (pageRequestDTO.getKeyword().equals("doing")){
+                expression = qOrderDetail.detailStatus.contains("배송중");
+            }else if (pageRequestDTO.getKeyword().equals("finish")){
+                expression = qOrderDetail.detailStatus.contains("배송완료");
+            }else if (pageRequestDTO.getKeyword().equals("cancel")){
+                expression = qOrderDetail.detailStatus.contains("취소요청");
+            }else if (pageRequestDTO.getKeyword().equals("exchange")){
+                expression = qOrderDetail.detailStatus.contains("교환요청");
+            }else if (pageRequestDTO.getKeyword().equals("refund")){
+                expression = qOrderDetail.detailStatus.contains("환불요청");
+            }
+            selectOrders = jpaQueryFactory
+                    .select(qOrderDetail, qProduct.prodName, qOrders)
+                    .from(qOrderDetail)
+                    .join(qProduct)
+                    .on(qOrderDetail.prodNo.eq(qProduct.prodNo))
+                    .join(qOrders)
+                    .on(qOrderDetail.orderNo.eq(qOrders.orderNo))
+                    .where(qOrderDetail.prodSeller.eq(prodSeller))
+                    .where(expression)
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }else {
+            selectOrders = jpaQueryFactory
+                    .select(qOrderDetail, qProduct.prodName, qOrders)
+                    .from(qOrderDetail)
+                    .join(qProduct)
+                    .on(qOrderDetail.prodNo.eq(qProduct.prodNo))
+                    .join(qOrders)
+                    .on(qOrderDetail.orderNo.eq(qOrders.orderNo))
+                    .where(qOrderDetail.prodSeller.eq(prodSeller))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }
+        List<Tuple> orderResults = selectOrders.getResults();
+        long total = selectOrders.getTotal();
+        return new PageImpl<>(orderResults, pageable, total);
+    }
+
+    // 판매자 관리페이지 - 주문관리 - 매출현황 (전체 기간 매출 요약)
+    public List<OrderDetail> selectSalesForTotal(String prodSeller) {
+        return jpaQueryFactory
+                .selectFrom(qOrderDetail)
+                .where(qOrderDetail.prodSeller.eq(prodSeller))
+                .orderBy(qOrderDetail.detailDate.desc())
+                .fetch();
+    }
+
+    // 판매자 관리페이지 - 주문관리 - 매출현황 (최근 일년 매출 요약)
+    public List<OrderDetail> selectSalesForYear(String prodSeller) {
+        LocalDate oneYearAgo = LocalDate.now().minusYears(1);
+        return jpaQueryFactory
+                .selectFrom(qOrderDetail)
+                .where(qOrderDetail.prodSeller.eq(prodSeller))
+                .where(qOrderDetail.detailDate.between(oneYearAgo, LocalDate.now()))
+                .orderBy(qOrderDetail.detailDate.desc())
+                .fetch();
+    }
+
+    // 판매자 관리페이지 - 주문관리 - 매출현황 (최근 일주일 매출 요약)
+    public List<OrderDetail> selectSalesForWeek(String prodSeller) {
+        LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+        return jpaQueryFactory
+                .selectFrom(qOrderDetail)
+                .where(qOrderDetail.prodSeller.eq(prodSeller))
+                .where(qOrderDetail.detailDate.between(oneWeekAgo, LocalDate.now()))
+                .orderBy(qOrderDetail.detailDate.desc())
+                .fetch();
+    }
 }
