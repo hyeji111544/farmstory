@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test~1.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test~1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lotteon.test.iml" filepath="$PROJECT_DIR$/.idea/modules/lotteon.test.iml" />
     </modules>
   </component>
 </project>
