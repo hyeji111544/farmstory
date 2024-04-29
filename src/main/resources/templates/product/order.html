@@ -12,6 +12,65 @@
   <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css}"/>
   <link rel="stylesheet" th:href="@{/css/common.css}" />
   <link rel="stylesheet" th:href="@{/css/product/product.css}" />
+
+  <script>
+    window.onload = function (){
+      const companyPrice= document.querySelector('.companyPrice');
+      const orderProducts = document.querySelectorAll('.orderProducts');
+
+
+
+      Array.from(orderProducts).forEach(function (eachOrder){
+        const companyPrice = eachOrder.querySelector('.companyPrice');
+        const eachCost = companyPrice.querySelectorAll('span');
+        const orgValue = eachOrder.querySelectorAll('.org_price_value');
+        const disValue = eachOrder.querySelectorAll('.dis_price');
+        const totalPrice = eachOrder.querySelectorAll('.total_price');
+        const delFee = eachOrder.querySelectorAll('.delivery_fee');
+        const counts = eachOrder.querySelectorAll('.prodCount');
+
+        //토탈. 3가지.
+        let totalCost = 0;
+        let totalDis = 0;
+        let maxDeliveryFee = 0;
+        let deliveryFeeList = [];
+
+        for (let i=0; i < orgValue.length; i++) {
+          const count = counts[i]
+          const fee = delFee[i]
+          const cost = orgValue[i]
+          const bb = disValue[i]
+          const cc = totalPrice[i]
+          totalCost += parseFloat(cost.innerText.replace(',', ''))*count.innerHTML;
+          totalDis +=  parseFloat(bb.innerText.replace(',',''))*count.innerHTML;
+
+          if (fee.value){
+            deliveryFeeList.push(fee.value);
+          }
+          console.log(totalCost, cost, bb, cc, fee);
+          console.log('count:' + count.innerHTML);
+          // 여기서 포멧팅 + 거기에.. 더하기
+        }
+
+        maxDeliveryFee = Math.max(...deliveryFeeList);
+
+        console.log("for문 밖 : " + totalCost);
+        let totalDisValue = totalCost - totalDis;
+        let allCost = totalCost - totalDisValue + maxDeliveryFee;
+        eachCost[0].textContent = '상품' + totalCost.toLocaleString() + '원 ';
+        eachCost[1].textContent = '할인' + totalDisValue.toLocaleString() + '원';
+        eachCost[2].textContent = '배송비' + maxDeliveryFee.toLocaleString() + '원';
+        eachCost[3].textContent = '총' + allCost.toLocaleString() + '원';
+
+        console.log("총"+eachCost[3].innerHTML);
+
+      });
+
+
+
+
+    }
+  </script>
   <!--cart 페이지는 카테고리 탭이 없어야하므로 layout처리 안함-->
 </head>
 <body>
@@ -79,94 +138,59 @@
               <th>소계</th>
             </tr>
           </thead>
-          <tbody> <!-- tbody를 반복-->
+          <tbody th:each="map : ${orderProducts}" class="orderProducts"> <!-- tbody를 반복-->
             <tr class="empty">
               <td colspan="7">장바구니에 상품이 없습니다.</td>
             </tr>
-            <tr>
+            <tr th:each="orderProduct, index:${map.value}">
               <td>
                 <article>
-                  <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
+                  <a href="#"><img th:src="@{/uploads/__${orderProduct.thumb190}__}" alt=""></a>
                   <div>
-                    <h2><a href="#">상품명</a></h2>
-                    <p>상품설명</p>
-                    <p>옵션</p>
+                    <h2><a href="#">[[${orderProduct.prodName}]]</a></h2>
+                    <p>[[${orderProduct.prodInfo}]]</p>
+                    <p id="prodOpt" th:if="${orderProduct.optValue1 != null}">
+                      <span th:text="'옵션: ' + ${orderProduct.optValue1}"></span>
+                      <span th:if="${orderProduct.optValue2 != null}">
+                                        <span th:text="' ) ' + ${orderProduct.optValue2}"></span>
+                                        <span th:if="${orderProduct.optValue3 != null}">
+                                        <span th:text="' / ' + ${orderProduct.optValue3}"></span>
+                                    </span>
+                                </span>
+                    </p>
                   </div>
                 </article>
               </td>
-              <td>1</td>
-              <td>27,000</td>
-              <td>3,000</td>
-              <td>27,000</td>
-            </tr>
-            <tr>
+              <td class="prodCount">[[${orderProduct.count}]]</td>
               <td>
-                <article>
-                  <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                  <div>
-                    <h2><a href="#">상품명</a></h2>
-                    <p>상품설명</p>
-                  </div>
-                </article>
+                <p class="org_price" th:if="${orderProduct.optValue1}!= null">
+                  <span class="org_price_value"  th:text="${#numbers.formatInteger(orderProduct.optPrice, 3, 'COMMA')+'원'}"></span>
+                  <input class="price" type="hidden" th:value="${orderProduct.optPrice}">
+                </p>
+                <p class="org_price" th:if="${orderProduct.optValue1}== null">
+                  <span class="org_price_value" th:text="${#numbers.formatInteger(orderProduct.prodPrice, 3, 'COMMA')+'원'}"></span>
+                </p>
               </td>
-              <td>1</td>
-              <td>27,000</td>
-              <td>무료배송</td>
-              <td>27,000</td>
+              <td>
+                <p class="dis_price" th:if="${orderProduct.optValue1} == null" th:text="${#numbers.formatInteger((orderProduct.prodPrice * (100 - orderProduct.prodDiscount)* 0.01), 3, 'COMMA')+'원'}"></p>
+                <p class="dis_price" th:if="${orderProduct.optValue1} != null" th:text="${#numbers.formatInteger((orderProduct.optPrice * (100 - orderProduct.prodDiscount) * 0.01), 3, 'COMMA')+'원'}"></p>
+                <input class="dis_prod" type="hidden" th:value="${orderProduct.prodDiscount}">
+                <input class="delivery_fee" type="hidden" th:value="${orderProduct.prodDeliveryFee}">
+              </td>
+              <td>
+                <p class="total_price" th:if="${orderProduct.optValue1} == null" th:text="${#numbers.formatInteger((orderProduct.prodPrice * (100 - orderProduct.prodDiscount) * orderProduct.count * 0.01), 3, 'COMMA')+'원'}"></p>
+                <p class="total_price" th:if="${orderProduct.optValue1} != null" th:text="${#numbers.formatInteger((orderProduct.optPrice * (100 - orderProduct.prodDiscount) * orderProduct.count * 0.01), 3, 'COMMA')+'원'}"></p>
+              </td>
             </tr>
+
             <tr>
-              <td colspan="6">
-                <span class="cost">상품 0원</span>-
+              <td colspan="6" class="companyPrice">
+                <span class="cost" >상품 0원</span>-
                 <span class="cost">할인 0원</span>+
                 <span class="cost">배송비 0원</span>=
                 <span class="cost">총 0원</span>
               </td>
             </tr>
-          </tbody>
-
-          <tbody> <!-- tbody를 반복-->
-          <tr class="empty">
-            <td colspan="7">장바구니에 상품이 없습니다.</td>
-          </tr>
-          <tr>
-            <td>
-              <article>
-                <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                <div>
-                  <h2><a href="#">상품명</a></h2>
-                  <p>상품설명</p>
-                  <p>옵션</p>
-                </div>
-              </article>
-            </td>
-            <td>1</td>
-            <td>27,000</td>
-            <td>3,000</td>
-            <td>27,000</td>
-          </tr>
-          <tr>
-            <td>
-              <article>
-                <a href="#"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                <div>
-                  <h2><a href="#">상품명</a></h2>
-                  <p>상품설명</p>
-                </div>
-              </article>
-            </td>
-            <td>1</td>
-            <td>27,000</td>
-            <td>무료배송</td>
-            <td>27,000</td>
-          </tr>
-          <tr>
-            <td colspan="6">
-              <span class="cost">상품 0원</span>-
-              <span class="cost">할인 0원</span>+
-              <span class="cost">배송비 0원</span>=
-              <span class="cost">총 0원</span>
-            </td>
-          </tr>
           </tbody>
 
         </table>
