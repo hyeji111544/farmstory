@@ -1287,7 +1287,13 @@ footer p > strong {
     font-family: '돋움';
     border: none;
 }
-
+/* 마이페이지 before, after */
+.myOrderInfo > p:nth-child(3):before {
+    content: '수량 : ';
+}
+.myOrderInfo > p:nth-child(4):after {
+    content: '원';
+}
 
 /* 마이페이지 팝업 */
 .popup {                
@@ -1608,7 +1614,7 @@ footer p > strong {
 .myOrderRow > div:nth-child(2) > p {
     padding: 2px 0;
 }
-.myOrderRow > div:nth-child(2) > p:nth-child(1) {font-size: 14px}
+.myOrderRow > div:nth-child(2) > p:nth-child(1) {font-size: 14px; font-weight:bold; color:forestgreen;}
 .myOrderRow > div:nth-child(2) > p:nth-child(2) {font-size: 14px}
 .myOrderRow > div:nth-child(2) > p:nth-child(3) {font-size: 14px}
 .myOrderRow > div:nth-child(2) > p:nth-child(4) {font-size: 16px; font-weight: bold}

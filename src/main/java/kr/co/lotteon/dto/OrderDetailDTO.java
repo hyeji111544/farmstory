@@ -31,4 +31,8 @@ public class OrderDetailDTO {
     private String orderMemo;
     private String orderAddr;
     private String prodName;
+
+    private String prodCompany;
+    private String thumb190;
+
 }
