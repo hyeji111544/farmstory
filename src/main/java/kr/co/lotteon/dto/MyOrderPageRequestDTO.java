@@ -21,6 +21,10 @@ public class MyOrderPageRequestDTO {
 
     @Builder.Default
     private int size = 10;
+    private String cate;
+
+    private String type;
+    private String keyword;
 
     public Pageable getPageable(String sort){
         return PageRequest.of(this.pg - 1, this.size, Sort.by(sort).descending());

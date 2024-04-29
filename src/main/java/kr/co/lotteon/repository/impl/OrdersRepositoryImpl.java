@@ -2,17 +2,16 @@ package kr.co.lotteon.repository.impl;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.lotteon.dto.MyOrderDTO;
-import kr.co.lotteon.dto.MyOrderPageRequestDTO;
-import kr.co.lotteon.dto.MyOrderPageResponseDTO;
+import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.custom.OrdersRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 @Slf4j
 @RequiredArgsConstructor
 public class OrdersRepositoryImpl implements OrdersRepositoryCustom {
@@ -22,87 +21,77 @@ public class OrdersRepositoryImpl implements OrdersRepositoryCustom {
     private final QOrders qOrders = QOrders.orders;
     private final QOrderDetail qOrderDetail = QOrderDetail.orderDetail;
     private final QProductimg qProductimg = QProductimg.productimg;
+    private final ModelMapper modelMapper;
 
-    // My/Order 페이지 상품 목록 조회
-    public MyOrderPageResponseDTO selectMyOrders(String UserId, Pageable pageable, MyOrderPageRequestDTO myOrderPageRequestDTO) {
-        // Orders 테이블에서 orderDate구하고, OrderNO 조회
 
+    // My/Order 페이지 상품 목록조회(날짜순)
+    public MyOrderPageResponseDTO selectMyOrdersByDate(String UserId,Pageable pageable,MyOrderPageRequestDTO myOrderPageRequestDTO){
         log.info("IMPL 시작");
-        
-        // SELECT * FROM `orders` WHERE `userId` = ? ORDER BY `orderDate` DESC;
-        List<Orders> selectOrders = jpaQueryFactory
-                                    .selectFrom(qOrders)
-                                    .where(qOrders.userId.eq(UserId))
-                                    .orderBy(qOrders.orderDate.desc())
-                                    .fetch();
+        //1. orders테이블에서 10개 조회
+        // SELECT orderNo FROM orders WHERE userId = '?' ORDER BY orderDate DESC LIMIT 10
+        List<Integer> selectOrderNo = jpaQueryFactory
+                .select(qOrders.orderNo)
+                .from(qOrders)
+                .where(qOrders.userId.eq(UserId))
+                .orderBy(qOrders.orderDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        log.info("orderNo 조회" + selectOrderNo);
 
-        log.info("selectOrders : " + selectOrders);
 
-        // return을 위한 List<MyOrderDTO> 생성
-        List<MyOrderDTO> myOrderDTOList = new ArrayList<>();
+        // List<Integer> selectOrderNo = resultsOrder.getResults();
 
-        log.info("새로만든 myOrderDTOList : " + myOrderDTOList);
+        //2. 그 10개의 orderNo를 for문으로 orderdetail에서 조회 -> 각 orderNo 마다 List<orderDetail>
+        //SELECT * FROM orderdetail AS a JOIN product AS b ON a.prodNo = b.prodNo WHERE a.orderNO = '?'
 
-        // OrderNO 가지고 OrderDetail 테이블에서 주문 상품 목록 조회, prodNo 구하기
-        // SELECT * FROM `orderDetail` WHERE `orderNo` = ?
-        for (Orders order : selectOrders) {
-            List<OrderDetail> selectOrderDetail = jpaQueryFactory
-                                                    .selectFrom(qOrderDetail)
-                                                    .where(qOrderDetail.orderNo.eq(order.getOrderNo()))
-                                                    .fetch();
+        LinkedHashMap<Integer, List<OrderDetailDTO>> orderDetailDTOMap = new LinkedHashMap<>();
 
-            for (OrderDetail orderDetail : selectOrderDetail){
-                // 상품 정보 임시 저장을 위한 orderDTO
-                MyOrderDTO orderDTO = new MyOrderDTO();
+        for(Integer orderNo : selectOrderNo){
+            List<Tuple> orderDetails  = jpaQueryFactory
+                    .select(qOrderDetail, qProduct.prodCompany, qProduct.prodName, qProductimg.thumb190)
+                    .from(qOrderDetail)
+                    .join(qProduct)
+                    .on(qOrderDetail.prodNo.eq(qProduct.prodNo))
+                    .join(qProductimg)
+                    .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                    .where(qOrderDetail.orderNo.eq(orderNo))
+                    .fetch();
 
-                log.info("새로만든 orderDTO : " + orderDTO);
+            log.info("OrderDetail 조회" +orderDetails);
 
-                orderDTO.setOrderDate(order.getOrderDate());
-                orderDTO.setCount(orderDetail.getCount());
-                orderDTO.setDetailPrice(orderDetail.getDetailPrice());
-                orderDTO.setDetailStatus(orderDetail.getDetailStatus());
-                orderDTO.setOrderNo(orderDetail.getOrderNo());
-                log.info("orderDTO 1 : " + orderDTO);
+            // List<Tuple> => List<OrderDetailDTO>
+            List<OrderDetailDTO> dtoList = orderDetails.stream()
+                    .map(tuple -> {
+                        OrderDetail orderDetail = tuple.get(0, OrderDetail.class);
+                        //구조체로 가져온게 아니라 단일값을 가져온거라 String형으로 선언
+                        String company = tuple.get(1, String.class); // String으로 형변환을 하겠다
+                        String prodName = tuple.get(2, String.class);
+                        String thumb190 = tuple.get(3, String.class);
 
-                // prodNo 가지고 Product에서 상품 정보 조회 / prodNo 가지고 ProductImg에서 상품 이미지 조회
-                // SELECT `prodName`, `prodCompany`, `thumb190` FROM `Product` AS a JOIN `ProductImg` AS b ON a.prodNo = b.prodNo WHERE a.prodNo = ?
-                 Tuple selectProduct = jpaQueryFactory
-                                        .select(qProduct.prodName, qProduct.prodCompany, qProductimg.thumb190)
-                                        .from(qProduct)
-                                        .join(qProductimg)
-                                        .on(qProduct.prodNo.eq(qProductimg.prodNo))
-                                        .where(qProduct.prodNo.eq(orderDetail.getProdNo()))
-                                        .fetchOne();
+                        //OrderDetailDTO 로 변환
+                        OrderDetailDTO orderDetailDTO = modelMapper.map(orderDetail, OrderDetailDTO.class);
+                        orderDetailDTO.setProdCompany(company);
+                        orderDetailDTO.setProdName(prodName);
+                        orderDetailDTO.setThumb190(thumb190);
 
-                if (selectProduct != null) {
-                    String prodName = selectProduct.get(0, String.class);
-                    String prodCompany = selectProduct.get(1, String.class);
-                    String thumb190 = selectProduct.get(2, String.class);
+                        return orderDetailDTO;
+                    }
+                ).toList();
 
-                    orderDTO.setProdName(prodName);
-                    orderDTO.setProdCompany(prodCompany);
-                    orderDTO.setThumb190(thumb190);
-
-                    log.info("orderDTO 2 : " + orderDTO);
-
-                    myOrderDTOList.add(orderDTO);
-
-                    log.info("if문 마지막 myOrderDTOList : " + myOrderDTOList);
-                }
-            }
+            log.info("dtoList" +dtoList);
+            orderDetailDTOMap.put(orderNo,dtoList);
         }
-        log.info("코드 끝났을때 myOrderDTOList : " + myOrderDTOList);
-        log.info("IMPL 끝");
+        log.info("orderDetailDTOMap" +orderDetailDTOMap);
 
-        int total = myOrderDTOList.size();
+        int total = selectOrderNo.size();
         log.info("total : " + total);
 
         return MyOrderPageResponseDTO.builder()
                 .pageRequestDTO(myOrderPageRequestDTO)
-                .myOrderDTOList(myOrderDTOList)
+                .myOrderDTOList(orderDetailDTOMap)
                 .total(total)
                 .build();
-
-
     }
+
 }
