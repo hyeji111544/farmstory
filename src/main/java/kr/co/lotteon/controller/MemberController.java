@@ -164,6 +164,49 @@ public class MemberController {
     public String findId(){
         return "/member/findId";
     }
+    // 아이디 찾기
+    @PostMapping("/member/findId")
+    public ResponseEntity<?> findId(@RequestBody Map<String, String> requestData, HttpSession session) {
+        // 인증코드를 세션에 저장
+        String sessionCode = (String) session.getAttribute("code");
+
+        String userName = requestData.get("userName");
+        String userEmail = requestData.get("userEmail");
+        String code = requestData.get("code");
+
+        if (sessionCode != null && sessionCode.equals(code)) {
+            // 인증코드가 일치 할 경우, 아이디 찾기 로직 실행
+            Optional<User> userId = memberService.findUserIdByUserNameAndUserEmail(userName, userEmail);
+
+
+            if (userId.isPresent()) {
+                // 아이디를 찾은경우
+                Map<String, String> response = new HashMap<>();
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            } else {
+                // 아이디를 찾지 못한 경우
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아이디를 찾을 수 없습니다.");
+            }
+        }
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("인증번호가 일치하지 않습니다.");
+    }
+//    // 서버에서 발급한 인증 코드
+//    String code = (String) session.getAttribute("code");
+//    // 회원가입하는 사용자가 입력한 코드
+//    String checkCode = inputCode;
+//
+//    Map<String, Integer> data = new HashMap<>();
+//        if(code.equals(checkCode)){
+//        //json 형식으로 변환
+//        data.put("result", 0);
+//        return ResponseEntity.ok().body(data);
+//    }else {
+//        //json 형식으로 변환
+//        data.put("result", 1);
+//        return ResponseEntity.ok().body(data);
+//    }
+//
+//}
 
     // userId 찾기 email 중복체크/발송
     @GetMapping("/member/findIdEmailCheck/{value}")
@@ -212,7 +255,7 @@ public class MemberController {
 
     // 비밀번호 찾기 이동
     @GetMapping("/member/findPw")
-    public String findPw(){
+    public String findPwPage(){
 
         return "/member/findPw";
     }

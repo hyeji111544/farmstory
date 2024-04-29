@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepositoryCustom {
-    
+
     // 마이페이지 출력을 위해 user_id로 유저 정보 조회
     public User selectUserInfo(String userId);
 
