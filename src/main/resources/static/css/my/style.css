@@ -1589,6 +1589,11 @@ footer p > strong {
     font-size: 14px;
     padding-left: 10px;
 }
+.myOrderTitle > p > img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
 .myOrderRow {
     width: 808px;
     height: 120px;
