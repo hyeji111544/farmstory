@@ -115,7 +115,6 @@ public class OrderService {
             System.out.println("상품 리스트: " + entry.getValue());
             System.out.println();
         }
-
         return companyMap;
     }
 
