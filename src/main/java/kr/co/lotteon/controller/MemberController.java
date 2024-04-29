@@ -161,12 +161,7 @@ public class MemberController {
 
     // 아이디 찾기 이동
     @GetMapping("/member/findId")
-<<<<<<< HEAD
-    public String findIdPage(){
-
-=======
     public String findId(){
->>>>>>> 6fd9a52db59616ecebf985f89af5226c86248930
         return "/member/findId";
     }
     // 아이디 찾기

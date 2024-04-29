@@ -21,15 +21,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private QUser qUser = QUser.user;
 
     // 마이페이지 출력을 위해 user_id로 유저 정보 조회
-<<<<<<< HEAD
-    public User selectUserInfo(String userId){
-         return jpaQueryFactory
-                    .selectFrom(qUser)
-                    .where(qUser.userId.eq(userId))
-                    .fetchOne();
-    };
-    // 아이디 찾기
-=======
     public User selectUserInfo(String userId) {
         return jpaQueryFactory
                 .selectFrom(qUser)
@@ -38,7 +29,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     }
 
     // UserId 찾기
->>>>>>> 6fd9a52db59616ecebf985f89af5226c86248930
     public Optional<User> findUserIdByUserNameAndUserEmail(String userName, String userEmail) {
         User user = jpaQueryFactory
                 .selectFrom(qUser)
@@ -48,8 +38,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
         return Optional.ofNullable(user);
     }
-<<<<<<< HEAD
-=======
 
     // UserPw update
     @Transactional
@@ -68,5 +56,4 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
             return -1;
         }
     }
->>>>>>> 6fd9a52db59616ecebf985f89af5226c86248930
 }
