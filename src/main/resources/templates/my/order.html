@@ -11,12 +11,41 @@
             function orderReviewPopup() {
                 const popReview = document.getElementById('popReview');
                 popReview.style.display = "block";
-                alert("g2");
             }
 
-            function pushListHide() {
+            // 팝업 //
+            function popupClose(e) {
+                e.preventDefault();
                 const button = event.target;
+                const popup = button.closest('.popup');
+                popup.style.display = "none";
+            }
 
+
+            // 주문 번호별 상품 리스트 아코디언
+            /*
+                # 시나리오
+                .myOrderList 안에 10개의 .orderByCompany이 반복
+                버튼 클릭시 .myOrderTitle는 남기고 .myOrderRow들은 숨김
+             */
+            function accordionBtn() {
+                const button = event.target; // 클릭한 버튼
+                const btnParent = button.parentNode; // 버튼의 부모
+                const myOrderTitle = btnParent.parentNode; // 부모의 부모
+                const orderByCompany = myOrderTitle.parentNode; // 부모의 부모의 부모
+                const myOrderRowAll = orderByCompany.querySelectorAll('.myOrderRow') // myOrderRow들
+
+                // myOrderRow들을 하나씩 순회
+                Array.from(myOrderRowAll).forEach(function (myOrderRow) {
+                    // 현재 myOrderRow의 display 상태를 체크해서 접기 or 펼치기
+                    if (myOrderRow.style.display === "none") {
+                        myOrderRow.style.display = "flex"; // 펼치기
+                        button.src = "/lotteon/images/icon-arrow-top.png";
+                    }else {
+                        myOrderRow.style.display = "none"; // 접기
+                        button.src = "/lotteon/images/icon-arrow-bottom.png";
+                    }
+                })
             }
 
 
@@ -24,7 +53,6 @@
 
 
         </script>
-        <script th:src="@{/js/my/popup.js}"></script>
         <nav>
             <div>
                 <a href="./home.html"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
@@ -63,18 +91,15 @@
                         <a href="#">3개월</a>
                         <a href="#">6개월</a>
                         <a href="#">12개월</a>
-
                     </div>
 
                     <div class="myOrderList">
-                        <div class="orderByCompany" th:each="linkedMap : ${MyOrderDTOList.myOrderDTOList}">
+                        <div class="orderByCompany latest" th:each="linkedMap : ${MyOrderDTOList.myOrderDTOList}">
                             <div class="myOrderTitle">
                                 <p>24.04.17</p>
                                 <p>주문번호<span th:text="${linkedMap.key}"></span></p>
                                 <p>
-                                    <span onclick="orderReviewPopup()">
-                                        ∇
-                                    </span>
+                                    <img th:src="@{/images/icon-arrow-top.png}" onclick="accordionBtn()"/>
                                 </p>
                             </div>
                             <div class="myOrderRow" th:each="orderList : ${linkedMap.value}">
@@ -86,9 +111,9 @@
                                     <p th:text="${#numbers.formatInteger(orderList.detailPrice,3,'COMMA')}"></p>
                                 </div>
                                 <div>주문 상태</div>
-                                <div>
+                                <div class="confirm">
                                     <span>수취확인</span>
-                                    <span>상품평쓰기</span>
+                                    <span class="review">상품평쓰기</span>
                                     <span>반품신청</span>
                                     <span>교환신청</span>
                                 </div>
