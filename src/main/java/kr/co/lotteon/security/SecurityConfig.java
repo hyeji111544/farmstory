@@ -15,6 +15,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class SecurityConfig {
 
+    private final SecurityUserService securityUserService;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -26,6 +28,13 @@ public class SecurityConfig {
                                         .usernameParameter("userId")               // login시 사용할 name 파라미터
                                         .passwordParameter("userPw")
                                     );
+
+        // 자동로그인 설정
+        // rememberMe 쿠키 확인
+        httpSecurity.rememberMe(config -> config.userDetailsService(securityUserService)
+                .rememberMeParameter("rememberMe")
+                .key("uniqueAndSecret")
+                .tokenValiditySeconds(86400));// 자동 로그인 유효 기간 (초)) 24시간
 
         // 로그아웃 설정
         httpSecurity.logout(logout -> logout
