@@ -84,6 +84,8 @@ public class MyController {
     @GetMapping("/my/order")
     public String myOrder(String userId, Model model, MyOrderPageRequestDTO myOrderPageRequestDTO){
         log.info(userId);
+        log.info(myOrderPageRequestDTO.toString());
+
         MyOrderPageResponseDTO MyOrderDTOList = myService.selectOrders(userId, myOrderPageRequestDTO);
         model.addAttribute("MyOrderDTOList", MyOrderDTOList);
 

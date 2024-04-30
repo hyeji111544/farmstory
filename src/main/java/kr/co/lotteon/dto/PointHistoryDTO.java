@@ -2,6 +2,7 @@ package kr.co.lotteon.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,6 +19,10 @@ public class PointHistoryDTO {
     private LocalDateTime changeDate;
     private String changeCode;
     private String changeType;
+
+    private String cate;
+    private LocalDate startDate;
+    private LocalDate finalDate;
 
 }
 

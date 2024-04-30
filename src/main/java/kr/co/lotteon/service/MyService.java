@@ -153,6 +153,7 @@ public class MyService {
                 })
                 .toList();
         int total = (int) pagePointHistory.getTotalElements();
+        log.info("total : " + total);
 
         return PageResponseDTO.builder()
                 .pageRequestDTO(pageRequestDTO)

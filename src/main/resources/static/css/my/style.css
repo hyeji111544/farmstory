@@ -1537,7 +1537,7 @@ footer p > strong {
 }
 .myOrderSearch > a {
     display: inline-block;
-    width: 70px;
+    width: 50px;
     height: 30px;
     margin: 0 5px;
     text-align: center;
@@ -1579,9 +1579,9 @@ footer p > strong {
 .myOrderTitle > p {
     display: flex;
 }
-.myOrderTitle > p:nth-child(1) {width: 100px; font-size: 20px; font-weight: bold}
+.myOrderTitle > p:nth-child(1) {width: 150px; font-size: 20px; font-weight: bold}
 .myOrderTitle > p:nth-child(2) {width: 150px; font-size: 14px}
-.myOrderTitle > p:nth-child(3) {width: 500px; font-size: 14px}
+.myOrderTitle > p:nth-child(3) {width: 450px; font-size: 14px}
 .myOrderTitle > p:nth-last-child(1) {
     justify-content: end;
 }
