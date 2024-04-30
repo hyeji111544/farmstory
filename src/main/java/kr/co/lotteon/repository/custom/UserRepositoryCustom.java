@@ -1,5 +1,6 @@
 package kr.co.lotteon.repository.custom;
 
+import com.querydsl.core.Tuple;
 import kr.co.lotteon.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,7 @@ public interface UserRepositoryCustom {
 
     // userPw 수정
     public long updateUserPwByUserIdAndUserEmail(String userId,String userPw, String userEmail);
+
+    // order 결제위한 유저 정보 찾기
+    public Tuple selectUserInfoWithPoint(String userId);
 }
