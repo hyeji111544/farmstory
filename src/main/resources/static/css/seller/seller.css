@@ -1281,7 +1281,6 @@ header > div > .logo {
 .optionTable tr > td:nth-child(1), td:nth-child(3) {
     width: 200px;
     background: #f6f6f6;
-
 }
 .bigImageBox {
     display: none;
@@ -1297,3 +1296,24 @@ header > div > .logo {
     padding: 20px;
     border-radius: 10px;
 }
+
+.modifyTable {
+
+}
+.modifyTable tr {background-color: transparent!important;}
+.modifyTable tr > td:nth-child(1) {background-color: #f6f6f6; font-weight: bold}
+.modifyTable tr > td:nth-child(3) {background-color: #f6f6f6; font-weight: bold}
+.modifyTable tr:nth-child(1) > td:nth-child(1) {width: 150px;}
+.modifyTable tr:nth-child(1) > td:nth-child(2) {width: 390px;}
+.modifyTable tr:nth-child(1) > td:nth-child(3) {width: 150px;}
+.modifyTable tr:nth-child(1) > td:nth-child(4) {width: 390px;}
+
+.modifyTable tr > td {background-color: transparent}
+
+.modifyTable tr > td > input {
+    width: 90%;
+    outline-style: none;
+    border: 0;
+    background-color: transparent;
+}
+
