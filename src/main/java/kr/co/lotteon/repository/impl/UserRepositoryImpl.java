@@ -27,6 +27,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .where(qUser.userId.eq(userId))
                 .fetchOne();
     }
+    //public String
 
     // UserId 찾기
     public Optional<User> findUserIdByUserNameAndUserEmail(String userName, String userEmail) {
