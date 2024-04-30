@@ -8,6 +8,8 @@ import kr.co.lotteon.repository.custom.OrdersRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.*;
@@ -38,9 +40,6 @@ public class OrdersRepositoryImpl implements OrdersRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
         log.info("orderNo 조회" + selectOrderNo);
-
-
-        // List<Integer> selectOrderNo = resultsOrder.getResults();
 
         //2. 그 10개의 orderNo를 for문으로 orderdetail에서 조회 -> 각 orderNo 마다 List<orderDetail>
         //SELECT * FROM orderdetail AS a JOIN product AS b ON a.prodNo = b.prodNo WHERE a.orderNO = '?'
@@ -84,13 +83,17 @@ public class OrdersRepositoryImpl implements OrdersRepositoryCustom {
         }
         log.info("orderDetailDTOMap" +orderDetailDTOMap);
 
-        int total = selectOrderNo.size();
-        log.info("total : " + total);
+        // 페이징 처리
+        long total = jpaQueryFactory.select(qOrders.count()).from(qOrders).where(qOrders.userId.eq(UserId))
+                .orderBy(qOrders.orderDate.desc()).fetchOne();
+
+        Page<Integer> pageImpl = new PageImpl<>(selectOrderNo, pageable, total);
+        int total2 = (int) pageImpl.getTotalElements();
 
         return MyOrderPageResponseDTO.builder()
                 .pageRequestDTO(myOrderPageRequestDTO)
                 .myOrderDTOList(orderDetailDTOMap)
-                .total(total)
+                .total(total2)
                 .build();
     }
 

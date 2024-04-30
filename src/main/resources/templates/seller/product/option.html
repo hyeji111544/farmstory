@@ -504,49 +504,65 @@
                 <section>
                     <h4>기본정보</h4>
                     <input type="hidden" name="prodNo" th:value="${productDTO.prodNo}">
-                    <table class="optionTable">
+                    <table class="modifyTable">
                         <tr>
                             <td>상품명</td>
-                            <td>[[${productDTO.prodName}]]</td>
+                            <td>
+                                <input type="text" name="prodName" th:value="${productDTO.prodName}" readonly>
+                            </td>
                             <td>기본설명</td>
-                            <td>[[${productDTO.prodInfo}]]</td>
+                            <td>
+                                <input type="text" name="prodInfo" th:value="${productDTO.prodInfo}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>제조사</td>
-                            <td>[[${productDTO.prodCompany}]]</td>
+                            <td>
+                                <input type="text" name="prodCompany" th:value="${productDTO.prodCompany}" readonly>
+                            </td>
                             <td>판매가격</td>
-                            <td>[[${productDTO.prodPrice}]]</td>
+                            <td>
+                                <input type="text" name="prodPrice" th:value="${productDTO.prodPrice}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>할인율</td>
-                            <td>[[${productDTO.prodDiscount}]]</td>
+                            <td>
+                                <input type="text" name="prodDiscount" th:value="${productDTO.prodDiscount}" readonly>
+                            </td>
                             <td>포인트</td>
-                            <td>[[${productDTO.prodPoint}]]</td>
+                            <td>
+                                <input type="text" name="prodPoint" th:value="${productDTO.prodPoint}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>재고수량</td>
-                            <td>[[${productDTO.prodStock}]]</td>
+                            <td>
+                                <input type="text" name="prodStock" th:value="${productDTO.prodStock}" readonly>
+                            </td>
                             <td>배송비</td>
-                            <td>[[${productDTO.prodDeliveryFee}]]</td>
+                            <td>
+                                <input type="text" name="prodDeliveryFee" th:value="${productDTO.prodDeliveryFee}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>상품 썸네일</td>
                             <td colspan="3">
                                 <div style="display: flex; justify-content: space-between">
-                                    <label style="width: 250px;">
+                                    <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb190}__}" class="thumb190" style="width: 250px;">
                                         <span>크기 190 x 190</span>
                                     </label>
-                                    <label style="width: 250px;">
+                                    <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb230}__}" class="thumb230" style="width: 250px;">
                                         <span>크기 230 x 230</span>
                                     </label>
-                                    <label style="width: 250px;">
+                                    <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb456}__}" class="thumb456" style="width: 250px;">
                                         <span>크기 456 x 456</span>
                                     </label>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; margin-top: 20px">
+                                <div style="display: none; justify-content: space-between; margin-top: 20px">
                                     <label style="width: 250px;">
                                         <span style="font-size: 14px;">상품 이미지 변경</span>
                                         <input type="file" name="multThumb190"/>
@@ -565,11 +581,17 @@
                         <tr>
                             <td>상세 상품정보</td>
                             <td colspan="3">
-                                <span>크기 가로 940px 높이 제약없음, 크기 최대 1MB, 상세페이지 상품정보에 출력될 이미지 입니다.</span>
-                                <input type="file" name="multThumb940"/>
+                                <label style="display: inline-block; width: 250px; height: 80px; border: 3px solid #e6e6e6; ">
+                                    <b>클릭해서 이미지 보기</b>
+                                </label>
+                                <div style="display: none; width:650px; height: 80px;">
+                                    <span>크기 가로 940px 높이 제약없음, 크기 최대 1MB, 상세페이지 상품정보에 출력될 이미지 입니다.</span>
+                                    <input type="file" name="multThumb940"/>
+                                </div>
                             </td>
                         </tr>
                     </table>
+                    <span class="modifyBtn">수정</span>
                 </section>
 
                 <!---->
