@@ -41,9 +41,9 @@
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='3month')}">3개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='6month')}">6개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='year')}">12개월</a>
-                        <form th:action="@{/my/point}" method="get">
+                        <form th:action="@{/my/point}" method="get" class="searchCustomDate">
                             <input type="date" name="startDate">
-                            <p>~</p>
+                            <p style="display: inline-block; width: 10px;">~</p>
                             <input type="date" name="finalDate">
                             <input type="hidden" name="cate" value="custom">
                             <input type="hidden" name="userId" th:value="${#authentication.principal.user.userId}">

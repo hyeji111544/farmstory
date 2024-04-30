@@ -100,14 +100,76 @@
                             <button id="btnZip" style="display: none; margin-top: 5px">주소검색</button>
                         </td>
                     </tr>
+                </table>
+            </article>
+
+            <!-- 판매자 회원이 로그인한 경우에만 출력 -->
+            <article>
+                <h3>판매자 정보 설정</h3>
+
+                <table border="0">
                     <tr>
-                        <td>회원탈퇴</td>
+                        <td>판매자 식별번호</td>
+                        <td id="sellerNo">abcd123456789</td>
+                    </tr>
+                    <tr>
+                        <td>회사명</td>
                         <td>
-                            <button id="btnWithdraw">탈퇴하기</button>
+                            <input type="text" name="company" value="(주)그린컴퓨터아카데미" readonly style="width: 200px;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>담당자 이름</td>
+                        <td>
+                            <input type="text" name="sellerName" value="김유신" readonly>
+                            <button class="change" id="btnChangeSellerName">수정하기</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>담당자 연락처</td>
+                        <td>
+                            <p class="hp">
+                                <input type="text" name="hp1" style="text-align: center" readonly maxlength="3"/>-
+                                <input type="text" name="hp2" style="text-align: center" readonly maxlength="4"/>-
+                                <input type="text" name="hp3" style="text-align: center" readonly maxlength="4"/>
+                                <button class="change" id="btnChangeSellerHp">수정하기</button>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>팩스번호</td>
+                        <td>
+                            <p class="hp">
+                                <input type="text" name="hp1" style="text-align: center" readonly maxlength="3"/>-
+                                <input type="text" name="hp2" style="text-align: center" readonly maxlength="4"/>-
+                                <input type="text" name="hp3" style="text-align: center" readonly maxlength="4"/>
+                                <button class="change" id="btnChangeSellerFax">수정하기</button>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>사업자등록번호</td>
+                        <td>
+                            <input type="text" name="businessNum" value="123-45-67897" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>사업자등록번호</td>
+                        <td>
+                            <input type="text" name="licenseNum" value="서면-12346" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>판매자 등급</td>
+                        <td>
+                            <input type="text" name="sellerGrade" value="Starter" readonly>
                         </td>
                     </tr>
                 </table>
             </article>
+
+            <button id="btnWithdraw">탈퇴하기</button>
+
         </section>
 
     </div>
