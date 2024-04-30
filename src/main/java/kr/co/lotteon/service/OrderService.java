@@ -31,20 +31,18 @@ public class OrderService {
     public Map<String, List<CartInfoDTO>> findCartProdNo(int cartProdNo) {
 
         Optional<CartProduct> carts = cartProductRepository.findById(cartProdNo);
-        log.info("findCartProdNo....1: " + carts.toString());
 
         int optNo = carts.get().getOptNo();
-        log.info("findCartProdNo....2: " + optNo);
         int prodNo = carts.get().getProdNo();
-        log.info("findCartProdNo....3: " + prodNo);
+        //log.info("findCartProdNo....3: " + prodNo);
 
         ProdOptDetail optProdOptDetail = prodOptDetailRepository.selectOptDetailWihtName(optNo);
-        log.info("findCartProdNo....4: " + optProdOptDetail);
+        //log.info("findCartProdNo....4: " + optProdOptDetail);
 
         Product product = null;
         try {
             Tuple productTuple = productRepository.selectProductById(prodNo);
-            log.info("findCartProdNo....5: " + productTuple);
+            //log.info("findCartProdNo....5: " + productTuple);
 
             if (productTuple != null) {
                 product = productTuple.get(0, Product.class);
@@ -52,7 +50,7 @@ public class OrderService {
                 if (productImg != null) {
                     product.setThumb190(productImg.getThumb190());
                 }
-                log.info("findCartProdNo....6: " + product);
+                //log.info("findCartProdNo....6: " + product);
 
             }else {
             }
@@ -84,6 +82,7 @@ public class OrderService {
             cartInfoDTO.setCartProdNo(carts.get().getCartProdNo());
 
             cartInfoDTOs.add(cartInfoDTO);
+            log.info("product...:" + cartInfoDTOs);
 
         }catch (Exception e){
             log.info(e.getMessage());
@@ -116,7 +115,6 @@ public class OrderService {
             System.out.println("상품 리스트: " + entry.getValue());
             System.out.println();
         }
-
         return companyMap;
     }
 

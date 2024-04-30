@@ -162,7 +162,9 @@ public class ProductController {
         if (cartNo != 0){
             Map<String, List<CartInfoDTO>> cartProducts = cartService.findCartProdNo(cartNo);
             model.addAttribute("cartProducts", cartProducts);
+            log.info(cartProducts.toString());
         }
+
 
         return "/product/cart";
     }

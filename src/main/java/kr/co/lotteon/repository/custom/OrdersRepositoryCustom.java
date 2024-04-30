@@ -10,5 +10,5 @@ import java.util.List;
 
 @Repository
 public interface OrdersRepositoryCustom {
-    public MyOrderPageResponseDTO selectMyOrders(String UserId, Pageable pageable, MyOrderPageRequestDTO myOrderPageRequestDTO);
+    public MyOrderPageResponseDTO selectMyOrdersByDate(String userId,Pageable pageable,MyOrderPageRequestDTO myOrderPageRequestDTO);
 }

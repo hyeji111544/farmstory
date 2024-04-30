@@ -26,16 +26,25 @@ public class OrderController {
     @PostMapping("/product/order")
     public String maketBuy(@RequestParam("cartProdNo") List<Integer> cartProdNos,
                            @RequestParam("user") String userId, Model model){
-        log.info("user" + userId);
-        log.info("cartProdNo" + cartProdNos);
+        
         Map<String, List<CartInfoDTO>> orderProducts = new HashMap<>();
         for (Integer cartProdNo : cartProdNos) {
-            log.info("cartProdNo" + cartProdNo);
             Map<String, List<CartInfoDTO>> cartInfos = orderService.findCartProdNo(cartProdNo);
+            //orderProducts.putAll(cartInfos);
+            for (Map.Entry<String, List<CartInfoDTO>> entry : cartInfos.entrySet()) {
+                String company = entry.getKey();
+                List<CartInfoDTO> cartInfoList = entry.getValue();
+                if (orderProducts.containsKey(company)) {
+                    // 이미 해당 회사가 있는 경우에만 추가
+                    orderProducts.get(company).addAll(cartInfoList);
+                } else {
+                    // 해당 회사가 없는 경우 새로운 항목 추가
+                    orderProducts.put(company, cartInfoList);
+                }
+            }
         }
+        model.addAttribute("orderProducts", orderProducts);
         log.info("orderProducts" + orderProducts);
         return "/product/order";
     }
-
-
 }

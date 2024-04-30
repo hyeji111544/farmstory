@@ -14,10 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -171,6 +174,51 @@ public class MemberService {
 
         } catch(Exception e){
             log.error("sendEmailCode : " + e.getMessage());
+        }
+    }
+    // UserId 찾기
+    public Optional<User> findUserIdByUserNameAndUserEmail(String userName, String userEmail, HttpSession session) {
+        return userRepository.findUserIdByUserNameAndUserEmail(userName, userEmail);
+    }
+    // 아이디찾기 이메일 확인/발송
+    public int findIdCheckEmail(HttpSession session, String value) {
+        int result = 0;
+
+        //이메일 중복검사
+        Optional<User> optUser = userRepository.findByUserEmail(value);
+        //Optional이 비어있는지 체크
+        if (optUser.isPresent()) {
+            //사용 가능
+            // 인증코드 발송
+            sendEmailConde(session, value);
+            return result;
+        } else {
+            // 사용 불가능
+            result = 1;
+            return result;
+        }
+    }
+    // UserPw 수정
+    public long updatePw(String userId,String userPw, String userEmail, HttpSession session) {
+        String encodedPassword = passwordEncoder.encode(userPw);
+        return userRepository.updateUserPwByUserIdAndUserEmail(userId, encodedPassword, userEmail);
+    }
+    // 비밀번호재설정 이메일 확인/발송
+    public int updatePwCheckEmail(HttpSession session, String value) {
+        int result = 0;
+
+        //이메일 중복검사
+        Optional<User> optUser = userRepository.findByUserEmail(value);
+        //Optional이 비어있는지 체크
+        if (optUser.isPresent()) {
+            //사용 가능
+            // 인증코드 발송
+            sendEmailConde(session, value);
+            return result;
+        } else {
+            // 사용 불가능
+            result = 1;
+            return result;
         }
     }
 

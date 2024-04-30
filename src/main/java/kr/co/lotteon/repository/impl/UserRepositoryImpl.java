@@ -7,6 +7,9 @@ import kr.co.lotteon.repository.custom.UserRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import java.util.Optional;
 
@@ -18,13 +21,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private QUser qUser = QUser.user;
 
     // 마이페이지 출력을 위해 user_id로 유저 정보 조회
-    public User selectUserInfo(String userId){
-         return jpaQueryFactory
-                    .selectFrom(qUser)
-                    .where(qUser.userId.eq(userId))
-                    .fetchOne();
-    };
-    // 아이디 찾기
+    public User selectUserInfo(String userId) {
+        return jpaQueryFactory
+                .selectFrom(qUser)
+                .where(qUser.userId.eq(userId))
+                .fetchOne();
+    }
+
+    // UserId 찾기
     public Optional<User> findUserIdByUserNameAndUserEmail(String userName, String userEmail) {
         User user = jpaQueryFactory
                 .selectFrom(qUser)
@@ -33,5 +37,23 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 .fetchOne();
 
         return Optional.ofNullable(user);
+    }
+
+    // UserPw update
+    @Transactional
+    public long updateUserPwByUserIdAndUserEmail(String userId, String userPw, String userEmail) {
+        try {
+            long result = jpaQueryFactory
+                    .update(qUser)
+                    .set(qUser.userPw, userPw)
+                    .where(qUser.userId.eq(userId)
+                            .and(qUser.userEmail.eq(userEmail)))
+                    .execute();
+            log.info("impl : " + result);
+            return result;
+        } catch (Exception e) {
+            log.error("Error msg :" + e.getMessage());
+            return -1;
+        }
     }
 }

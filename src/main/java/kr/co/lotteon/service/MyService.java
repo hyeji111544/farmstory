@@ -103,7 +103,7 @@ public class MyService {
         Pageable pageable = myOrderPageRequestDTO.getPageable("no");
 
         // userId로 Orders 조회
-        return ordersRepository.selectMyOrders(UserId, pageable, myOrderPageRequestDTO);
+        return ordersRepository.selectMyOrdersByDate(UserId, pageable, myOrderPageRequestDTO);
     }
 
 

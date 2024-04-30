@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Builder
-public class ordersDTO {
+public class OrdersDTO {
 
     private int orderNo;
     private String userId;
@@ -23,5 +23,4 @@ public class ordersDTO {
     private String orderMemo;
     private String orderStatus;
     private LocalDateTime orderDate;
-
 }
