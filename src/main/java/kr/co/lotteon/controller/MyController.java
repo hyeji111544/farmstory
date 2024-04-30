@@ -7,6 +7,7 @@ import kr.co.lotteon.service.MyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class MyController {
 
     private final MyService myService;
     private final UserPointRepository userPointRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
@@ -77,7 +79,22 @@ public class MyController {
         String userPw = requestData.get("userPw");
         log.info("userId : " + userId);
         log.info("userPw : " + userPw);
-        return myService.myInfoUpdatePw(userId, userPw);
+        String encodedPassword = passwordEncoder.encode(userPw);
+        return myService.myInfoUpdatePw(userId, encodedPassword);
+    }
+    // 마이페이지 - 주소 수정
+    @PostMapping("/my/updateAddr")
+    public ResponseEntity<?> myInfoUpdateAddr(@RequestBody UserDTO userDTO){
+        log.info("here...! :" + userDTO);
+        return myService.myInfoUpdateAddr(userDTO);
+    }
+    // 마이페이지 - 회원 탈퇴
+    @PostMapping("/my/updateRole")
+    public ResponseEntity<?> myInfoUpdateRole(@RequestBody Map<String, String> requestData){
+
+        String userId = requestData.get("userId");
+        String userRole = requestData.get("userRole");
+        return myService.myInfoUpdateRole(userId,userRole);
     }
 
     //마이페이지-주문내역 이동

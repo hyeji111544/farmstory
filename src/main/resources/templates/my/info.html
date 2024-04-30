@@ -5,6 +5,7 @@
 <div id="my" layout:fragment="content">
     <!---->
     <script th:src="@{/js/my/myScript.js}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <!---->
     <nav>
         <div>
@@ -40,12 +41,15 @@
                     <tr>
                         <td>사용자 ID</td>
                         <td id="userId" th:text="${userDTO.userId}"></td>
+                        <td id="userRole" hidden th:text="${userDTO.userRole}"></td>
                     </tr>
                     <tr>
                         <td>비밀번호</td>
                         <td>
                             <input type="text" name="userPw" id="changePw" style="display: none">
                             <button class="change" id="btnChangePass">비밀번호 수정</button>
+                            <span id="resultPw" class="resultText"></span>
+                            <p class="resultPw"></p>
                         </td>
                     </tr>
                     <tr>
@@ -61,8 +65,14 @@
                         <td>
                             <input type="text" name="email1" th:value="${#strings.setSplit(userDTO.userEmail,'@')[0]}" style="text-align: center" readonly>@
                             <input type="text" name="email2" th:value="${#strings.setSplit(userDTO.userEmail,'@')[1]}" style="text-align: center" readonly>
-
                             <button class="change" id="btnChangeEmail">수정하기</button>
+
+                            <div id="emailCodeSection" style="display: none;">
+                                <input type="text" id="inputEmailCode" name="inputEmailCode" placeholder="인증코드 입력" required style="display: inline-block"/>
+                                <span id="resultEmail" class="resultText"></span>
+                                <button id="checkEmailCode">인증코드확인</button>
+                                <span id="resultEmailCode" class="resultText"></span>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -80,13 +90,14 @@
                     <tr>
                         <td>주소</td>
                         <td>
-                            <input type="text" name="zip" th:value="${userDTO.userZip}" style="border: 0" readonly/>
-                            <button id="btnFindZip">주소검색</button>
+                            <input type="text" name="userZip" id="userZip" th:value="${userDTO.userZip}" style="border: 0" readonly/>
                             <p class="address">
-                                <input type="text" name="addr1" th:value="${userDTO.userAddr1}" style="border: 0" readonly/>
-                                <input type="text" name="addr2" th:value="${userDTO.userAddr2}" style="border: 0" readonly/>
+                                <input type="text" name="userAddr1" id="userAddr1" th:value="${userDTO.userAddr1}" style="border: 0" readonly/>
+                                <input type="text" name="userAddr2" id="userAddr2" th:value="${userDTO.userAddr2}" style="border: 0" readonly/>
                             </p>
-                            <button id="btnChangeZip">수정하기</button>
+                            <button id="changeAddr" style="margin-top: 5px">수정하기</button>
+                            <button id="doneChangeAddr" style="margin-top: 5px; display: none;">수정완료</button>
+                            <button id="btnZip" style="display: none; margin-top: 5px">주소검색</button>
                         </td>
                     </tr>
                     <tr>
@@ -96,7 +107,6 @@
                         </td>
                     </tr>
                 </table>
-                <button id="btnInfoChange">수정하기</button>
             </article>
         </section>
 

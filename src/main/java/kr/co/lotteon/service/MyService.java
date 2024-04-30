@@ -5,11 +5,13 @@ import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.NotFound;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -27,6 +29,7 @@ public class MyService {
     private final CouponsRepository couponsRepository;
     private final ModelMapper modelMapper;
     private final UserPointRepository userPointRepository;
+
 
     /*
         마이페이지 출력을 위한 service
@@ -94,6 +97,54 @@ public class MyService {
         }else {
             result.put("status", "notfound");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("notfound");
+        }
+    }
+
+    //마이페이지 주소 수정
+    public ResponseEntity<?> myInfoUpdateAddr(UserDTO userDTO) {
+        log.info("myInfoUpdateAddr :" + userDTO);
+
+        Optional<User> findId = userRepository.findById(userDTO.getUserId());
+
+        if (findId.isPresent()) {
+
+            User user = findId.get();
+
+            user.setUserZip(userDTO.getUserZip());
+            user.setUserAddr1(userDTO.getUserAddr1());
+            user.setUserAddr2(userDTO.getUserAddr2());
+            User savedUser = userRepository.save(user);
+
+            Map<String, User> result = new HashMap<>();
+            result.put("data", savedUser);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(result);
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body("not found");
+        }
+    }
+
+    // 마이페이지 - 회원 탈퇴
+    public ResponseEntity<?> myInfoUpdateRole(String userId, String userRole){
+        Optional<User> optUser = userRepository.findById(userId);
+        Map<String, String> result = new HashMap<>();
+        if(optUser.isPresent()){
+            optUser.get().setUserRole("DELETE");
+            User savedUser = userRepository.save(optUser.get());
+            if(savedUser.getUserRole().equals("DELETE")){
+                result.put("status", "ok");
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }else{
+                result.put("status","fail");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("result");
+            }
+        }else{
+            result.put("status", "not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found");
         }
     }
 
