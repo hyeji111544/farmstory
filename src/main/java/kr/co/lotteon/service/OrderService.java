@@ -4,15 +4,15 @@ import com.querydsl.core.Tuple;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import kr.co.lotteon.dto.CartInfoDTO;
-import kr.co.lotteon.entity.CartProduct;
-import kr.co.lotteon.entity.ProdOptDetail;
-import kr.co.lotteon.entity.Product;
-import kr.co.lotteon.entity.Productimg;
+import kr.co.lotteon.dto.UserDTO;
+import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.CartProductRepository;
 import kr.co.lotteon.repository.ProdOptDetailRepository;
 import kr.co.lotteon.repository.ProductRepository;
+import kr.co.lotteon.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,9 @@ import java.util.*;
 public class OrderService {
     private final CartProductRepository cartProductRepository;
     private final ProdOptDetailRepository prodOptDetailRepository;
+    private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final ModelMapper modelMapper;
 
     // 장바구니 조회
     public Map<String, List<CartInfoDTO>> findCartProdNo(int cartProdNo) {
@@ -118,4 +120,19 @@ public class OrderService {
         return companyMap;
     }
 
+    public UserDTO selectUser(String userId) {
+        Tuple userTuple = userRepository.selectUserInfoWithPoint(userId);
+
+        User user = userTuple.get(0, User.class);
+        if (user != null) {
+            UserPoint userPoint = userTuple.get(1, UserPoint.class);
+            if (userPoint != null) {
+                user.setPointNo(userPoint.getPointNo());
+                user.setPointBalance(userPoint.getPointBalance());
+            }
+        }
+
+        log.info("here...!!! : " + userTuple);
+        return  modelMapper.map(user, UserDTO.class);
+    }
 }

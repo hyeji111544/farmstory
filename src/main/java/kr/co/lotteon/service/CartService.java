@@ -4,6 +4,7 @@ import com.querydsl.core.Tuple;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import kr.co.lotteon.dto.CartInfoDTO;
+import kr.co.lotteon.dto.UserDTO;
 import kr.co.lotteon.entity.CartProduct;
 import kr.co.lotteon.entity.ProdOptDetail;
 import kr.co.lotteon.entity.Product;
@@ -184,4 +185,6 @@ public class CartService {
             }
         }
     }
+
+
 }

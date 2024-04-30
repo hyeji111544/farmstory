@@ -1,6 +1,8 @@
 package kr.co.lotteon.controller;
 
 import kr.co.lotteon.dto.CartInfoDTO;
+import kr.co.lotteon.dto.OrdersDTO;
+import kr.co.lotteon.dto.UserDTO;
 import kr.co.lotteon.service.CartService;
 import kr.co.lotteon.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
@@ -26,6 +29,9 @@ public class OrderController {
     @PostMapping("/product/order")
     public String maketBuy(@RequestParam("cartProdNo") List<Integer> cartProdNos,
                            @RequestParam("user") String userId, Model model){
+
+        UserDTO userDTO = orderService.selectUser(userId);
+        model.addAttribute("user", userDTO);
         
         Map<String, List<CartInfoDTO>> orderProducts = new HashMap<>();
         for (Integer cartProdNo : cartProdNos) {
@@ -46,5 +52,11 @@ public class OrderController {
         model.addAttribute("orderProducts", orderProducts);
         log.info("orderProducts" + orderProducts);
         return "/product/order";
+    }
+
+    @PostMapping("/product/checkout")
+    public void checkoutOrder(@RequestBody OrdersDTO ordersDTO){
+        log.info("ordersDTO" + ordersDTO);
+
     }
 }

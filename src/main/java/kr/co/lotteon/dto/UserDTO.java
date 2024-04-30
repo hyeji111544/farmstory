@@ -1,5 +1,6 @@
 package kr.co.lotteon.dto;
 
+import jakarta.persistence.Transient;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -46,5 +47,8 @@ public class UserDTO {
     private String licenseNum;
     private String sellerGrade;
     private String fax;
+
+    private int pointNo;
+    private int pointBalance;
 
 }
