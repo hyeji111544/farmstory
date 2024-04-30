@@ -39,4 +39,9 @@ public class User {
     private String userProvider;
     private LocalDateTime userUpdate;
     private String userProfile;
+
+    @Transient
+    private int pointNo;
+    @Transient
+    private int pointBalance;
  }

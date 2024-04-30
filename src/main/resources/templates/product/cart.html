@@ -462,11 +462,17 @@
 <div id="wrapper">
     <header>
         <div class="top">
-            <div>
-                <a href="#">로그인</a>
-                <a href="#">회원가입</a>
-                <a href="#">마이페이지</a>
-                <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니</a>
+            <div th:if="${!#authorization.expression('isAuthenticated()')}">
+                <a th:href="@{/member/login}">로그인</a>
+                <a th:href="@{/member/join}">회원가입</a>
+            </div>
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+                <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+                <a th:href="@{/product/cart(userId=${#authentication.principal.user.userId})}">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
+                </a>
+                <a th:href="@{/member/logout}">로그아웃</a>
             </div>
         </div>
         <div class="logo">
@@ -482,11 +488,11 @@
         <div class="menu">
             <div>
                 <ul>
-                    <li><a href="#">히트상품</a></li>
-                    <li><a href="#">추천상품</a></li>
-                    <li><a href="#">최신상품</a></li>
-                    <li><a href="#">인기상품</a></li>
-                    <li><a href="#">할인상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodHit'}">히트상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodScore'}">추천상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodRdate'}">최신상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodSold'}">인기상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodDiscount'}">할인상품</a></li>
                 </ul>
                 <ul>
                     <li><a href="#">쿠폰존</a></li>

@@ -187,6 +187,7 @@ function postcode() {
             document.getElementById('userZip').value = data.zonecode;
             document.getElementById("userAddr1").value = addr;
             // 커서를 상세주소 필드로 이동한다.
+            document.getElementById("userAddr2").value = '';
             document.getElementById("userAddr2").focus();
 
         }

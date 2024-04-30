@@ -12,13 +12,27 @@
   <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css}"/>
   <link rel="stylesheet" th:href="@{/css/common.css}" />
   <link rel="stylesheet" th:href="@{/css/product/product.css}" />
-
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+  <script th:src="@{/js/util.js}"></script>
   <script>
     window.onload = function (){
       const companyPrice= document.querySelector('.companyPrice');
       const orderProducts = document.querySelectorAll('.orderProducts');
 
+      const totalItems = document.getElementById('prodCount');
+      const totalAmount = document.getElementById('prodCost');
+      const totalDisAmount = document.getElementById('prodDis');
+      const totalFee = document.getElementById('prodFee');
+      const pointDis = document.getElementById('prodPoint');
+      const orderCost = document.getElementById('prodAll');
 
+
+      // 최종 결제 정보
+      let itemsValue = 0;
+      let amountValue = 0;
+      let disAmountValue = 0;
+      let feeValue = 0;
+      let costValue = 0;
 
       Array.from(orderProducts).forEach(function (eachOrder){
         const companyPrice = eachOrder.querySelector('.companyPrice');
@@ -29,7 +43,7 @@
         const delFee = eachOrder.querySelectorAll('.delivery_fee');
         const counts = eachOrder.querySelectorAll('.prodCount');
 
-        //토탈. 3가지.
+        //회사 별 금액
         let totalCost = 0;
         let totalDis = 0;
         let maxDeliveryFee = 0;
@@ -52,9 +66,12 @@
           // 여기서 포멧팅 + 거기에.. 더하기
         }
 
-        maxDeliveryFee = Math.max(...deliveryFeeList);
+        if (totalCost < 50000){
+          maxDeliveryFee = Math.max(...deliveryFeeList);
+        }else {
+          maxDeliveryFee = 0;
+        }
 
-        console.log("for문 밖 : " + totalCost);
         let totalDisValue = totalCost - totalDis;
         let allCost = totalCost - totalDisValue + maxDeliveryFee;
         eachCost[0].textContent = '상품' + totalCost.toLocaleString() + '원 ';
@@ -62,14 +79,104 @@
         eachCost[2].textContent = '배송비' + maxDeliveryFee.toLocaleString() + '원';
         eachCost[3].textContent = '총' + allCost.toLocaleString() + '원';
 
-        console.log("총"+eachCost[3].innerHTML);
-
+        itemsValue += 1;
+        amountValue += totalCost;
+        disAmountValue += totalDisValue;
+        feeValue += maxDeliveryFee;
+        costValue += allCost;
       });
+      totalItems. textContent = itemsValue.toLocaleString() + '건';
+      totalAmount.textContent = amountValue.toLocaleString();
+      totalDisAmount.textContent = '-' +disAmountValue.toLocaleString();
+      totalFee.textContent = feeValue.toLocaleString();
+      orderCost.textContent = costValue.toLocaleString();
 
 
+      const btnPoint = document.getElementById('btnPoint');
+      const inputPoint = document.getElementById('inputPoint');
+      const userPoint = parseInt(document.getElementById('userPoint').innerHTML);
+
+      inputPoint.disabled = userPoint < 5000;
+      btnPoint.disabled = userPoint < 5000;
+
+      btnPoint.onclick=function (e){
+        e.preventDefault();
+
+        console.log("point1 :" + userPoint);
+        console.log("point2 :"+ inputPoint.value);
+
+        if (userPoint < parseInt(inputPoint.value)){
+          alert('보유한 포인트를 초과할 수 없습니다.');
+          inputPoint.value = 0;
+        }
+        let allTotalCost = costValue - parseInt(inputPoint.value);
+        pointDis.textContent = '-' +parseInt(inputPoint.value).toLocaleString();
+        orderCost.textContent = allTotalCost.toLocaleString();
+
+      }
+
+      // 주문 버튼 클릭
+      const order = document.getElementById('btnOrder');
+
+      order.onclick = function (e){
+
+        e.preventDefault();
+
+        // 필수 입력란을 가져옵니다.
+        const userOrder = document.getElementById('userOrder').value.trim();
+        const hp = document.getElementById('userHp').value.trim();
+        const zip = document.getElementById('userZip').value.trim();
+        const addr1 = document.getElementById('userAddr1').value.trim();
+        const addr2 = document.getElementById('userAddr2').value.trim();
+
+        // 필수 입력란이 비어있는지 확인합니다.
+        if (!userOrder || !hp || !zip || !addr1 || !addr2) {
+          alert('주문자 정보를 모두 입력해주세요.');
+          return;
+        }
+
+        // 결제 방법이 선택되었는지 확인합니다.
+        const paymentRadios = document.querySelectorAll('input[name="orderPay"]');
+        let paymentChecked = false;
+        for (const radio of paymentRadios) {
+          if (radio.checked) {
+            paymentChecked = true;
+            break;
+          }
+        }
+
+        if (!paymentChecked) {
+          alert('결제 방법을 선택해주세요.');
+          return;
+        }
+
+        var result = confirm("상품을 결제하시겠습니까?");
+        const form = document.getElementById('buyForm');
+        if (result){
+          form.submit();
+        }
+
+
+      }
+
+
+      // 우편번호
+      const inputZip = document.getElementById('btnZip');
+      inputZip.onclick = function () {
+        postcode();
+      }
 
 
     }
+
+    function removeValue(event){
+      var clickedElement = event.target;
+      if (clickedElement.classList.contains('deliveryInfo')) {
+        clickedElement.value = '';
+      }
+    }
+
+
   </script>
   <!--cart 페이지는 카테고리 탭이 없어야하므로 layout처리 안함-->
 </head>
@@ -77,16 +184,22 @@
 <div id="wrapper">
   <header>
     <div class="top">
-      <div>
-        <a href="#">로그인</a>
-        <a href="#">회원가입</a>
-        <a href="#">마이페이지</a>
-        <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니</a>
+      <div th:if="${!#authorization.expression('isAuthenticated()')}">
+        <a th:href="@{/member/login}">로그인</a>
+        <a th:href="@{/member/join}">회원가입</a>
+      </div>
+      <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+        <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+        <a th:href="@{/product/cart(userId=${#authentication.principal.user.userId})}">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
+        </a>
+        <a th:href="@{/member/logout}">로그아웃</a>
       </div>
     </div>
     <div class="logo">
       <div>
-        <a href="#"><img th:src="@{/images/header_logo.png}" alt="로고" /></a>
+        <a th:href="@{/}"><img th:src="@{/images/header_logo.png}" alt="로고" /></a>
         <form action="#">
           <input type="text" name="search"/>
           <button><i class="fa fa-search"></i></button>
@@ -97,11 +210,11 @@
     <div class="menu">
       <div>
         <ul>
-          <li><a href="#">히트상품</a></li>
-          <li><a href="#">추천상품</a></li>
-          <li><a href="#">최신상품</a></li>
-          <li><a href="#">인기상품</a></li>
-          <li><a href="#">할인상품</a></li>
+          <li><a th:href="@{'/product/list?cateCode='+'&sort=prodHit'}">히트상품</a></li>
+          <li><a th:href="@{'/product/list?cateCode='+'&sort=prodScore'}">추천상품</a></li>
+          <li><a th:href="@{'/product/list?cateCode='+'&sort=prodRdate'}">최신상품</a></li>
+          <li><a th:href="@{'/product/list?cateCode='+'&sort=prodSold'}">인기상품</a></li>
+          <li><a th:href="@{'/product/list?cateCode='+'&sort=prodDiscount'}">할인상품</a></li>
         </ul>
         <ul>
           <li><a href="#">쿠폰존</a></li>
@@ -126,7 +239,7 @@
         </p>
       </nav>
 
-      <form action="#">
+      <form id="buyForm" th:action="@{/product/checkout}" method="post">
         <!-- 주문 상품 목록 -->
         <table>
           <thead>
@@ -142,11 +255,12 @@
             <tr class="empty">
               <td colspan="7">장바구니에 상품이 없습니다.</td>
             </tr>
-            <tr th:each="orderProduct, index:${map.value}">
+            <tr class="orderItems" th:each="orderProduct, index:${map.value}">
               <td>
                 <article>
                   <a href="#"><img th:src="@{/uploads/__${orderProduct.thumb190}__}" alt=""></a>
                   <div>
+                    <input type="text" id="prodNo" th:value="${orderProduct.cartProdNo}">
                     <h2><a href="#">[[${orderProduct.prodName}]]</a></h2>
                     <p>[[${orderProduct.prodInfo}]]</p>
                     <p id="prodOpt" th:if="${orderProduct.optValue1 != null}">
@@ -201,30 +315,30 @@
           <table border="0">
             <tr>
               <td>총</td>
-              <td>2 건</td>
+              <td id="prodCount">2 건</td>
             </tr>
             <tr>
               <td>상품금액</td>
-              <td>27,000</td>
+              <td id="prodCost">0</td>
             </tr>
             <tr>
               <td>할인금액</td>
-              <td>-1,000</td>
+              <td id="prodDis">0</td>
             </tr>
             <tr>
               <td>배송비</td>
-              <td>0</td>
+              <td id="prodFee">0</td>
             </tr>
             <tr>
               <td>포인트 할인</td>
-              <td>-1000</td>
+              <td id="prodPoint">0</td>
             </tr>
             <tr>
               <td>전체주문금액</td>
-              <td>25,000</td>
+              <td id="prodAll">0</td>
             </tr>
           </table>
-          <input type="button" name="" value="결제하기">
+          <input type="button" id="btnOrder" value="결제하기">
         </div>
 
         <!-- 배송정보 -->
@@ -233,32 +347,32 @@
           <table>
             <tr>
               <td>주문자</td>
-              <td><input type="text" name="orderer" /></td>
+              <td><input type="text" class="deliveryInfo" name="orderReceiver" id="userOrder" onfocus="removeValue(event)" th:value="${user.userName}"/> </td>
             </tr>
             <tr>
               <td>휴대폰</td>
               <td>
-                <input type="text" name="hp" />
+                <input type="text" class="deliveryInfo" name="orderHp" id="userHp" onfocus="removeValue(event)" th:value="${user.userHp}"/>
                 <span>- 포함 입력</span>
               </td>
             </tr>
             <tr>
               <td>우편번호</td>
               <td>
-                <input type="text" name="zip"/>
-                <input type="button" value="검색"/>
+                <input type="text" name="orderAddr" id="userZip" th:value="${user.userZip}"/>
+                <input type="button" id="btnZip" value="검색"/>
               </td>
             </tr>
             <tr>
               <td>기본주소</td>
               <td>
-                <input type="text" name="addr1"/>
+                <input type="text" name="orderAddr" id="userAddr1" th:value="${user.userAddr1}"/>
               </td>
             </tr>
             <tr>
               <td>상세주소</td>
               <td>
-                <input type="text" name="addr2"/>
+                <input type="text" name="orderAddr" id="userAddr2" th:value="${user.userAddr2}"/>
               </td>
             </tr>
           </table>
@@ -269,10 +383,10 @@
           <h1>할인정보</h1>
 
           <div>
-            <p>현재 포인트 : <span>7200</span>점</p>
+            <p>현재 포인트 : <span id="userPoint">[[${user.pointBalance}]]</span>점</p>
             <label>
-                <input type="text" name="point" />점
-                <input type="button" value="적용"/>
+                <input type="text" name="userUsedPoint" id="inputPoint" oninput="validateNumber(this)"/>점
+                <input type="button" value="적용" id="btnPoint"/>
             </label>
             <span>포인트 5,000점 이상이면 현금처럼 사용 가능합니다.</span>
           </div>
@@ -284,23 +398,23 @@
             <div>
                 <span>신용카드</span>
                 <p>
-                    <label><input type="radio" name="payment" value="type1"/>신용카드 결제</label>
-                    <label><input type="radio" name="payment" value="type2"/>체크카드 결제</label>
+                    <label><input type="radio" name="orderPay" value="type1"/>신용카드 결제</label>
+                    <label><input type="radio" name="orderPay" value="type2"/>체크카드 결제</label>
                 </p>
             </div>
             <div>
                 <span>계좌이체</span>
                 <p>
-                    <label><input type="radio" name="payment" value="type3"/>실시간 계좌이체</label>
-                    <label><input type="radio" name="payment" value="type4"/>무통장 입금</label>
+                    <label><input type="radio" name="orderPay" value="type3"/>실시간 계좌이체</label>
+                    <label><input type="radio" name="orderPay" value="type4"/>무통장 입금</label>
                 </p>
             </div>
             <div>
                 <span>기타</span>
                 <p>
-                    <label><input type="radio" name="payment" value="type3"/>휴대폰결제</label>
+                    <label><input type="radio" name="orderPay" value="type3"/>휴대폰결제</label>
                     <label>
-                        <input type="radio" name="payment" value="type4"/>카카오페이
+                        <input type="radio" name="orderPay" value="type4"/>카카오페이
                         <img src="../images/ico_kakaopay.gif" alt="카카오페이"/>
                     </label>
                 </p>

@@ -1,7 +1,9 @@
 package kr.co.lotteon.repository.impl;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.entity.QUser;
+import kr.co.lotteon.entity.QUserPoint;
 import kr.co.lotteon.entity.User;
 import kr.co.lotteon.repository.custom.UserRepositoryCustom;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
     private QUser qUser = QUser.user;
+    private QUserPoint qUserPoint = QUserPoint.userPoint;
 
     // 마이페이지 출력을 위해 user_id로 유저 정보 조회
     public User selectUserInfo(String userId) {
@@ -56,5 +59,15 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
             log.error("Error msg :" + e.getMessage());
             return -1;
         }
+    }
+
+    public Tuple selectUserInfoWithPoint(String userId){
+        return jpaQueryFactory
+                .select(qUser, qUserPoint)
+                .from(qUser)
+                .join(qUserPoint)
+                .on(qUser.userId.eq(qUserPoint.userId))
+                .where(qUser.userId.eq(userId))
+                .fetchOne();
     }
 }
