@@ -84,19 +84,27 @@
 
                     <div class="myOrderSearch">
                         <p>기간별 조회</p>
-                        <a href="#">전체</a>
-                        <a href="#">일주일</a>
-                        <a href="#">15일</a>
-                        <a href="#">1개월</a>
-                        <a href="#">3개월</a>
-                        <a href="#">6개월</a>
-                        <a href="#">12개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='week')}">일주일</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='halfmonth')}">15일</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='month')}">1개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='3month')}">3개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='6month')}">6개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='year')}">12개월</a>
+                        <form th:action="@{/my/order}" method="get">
+                            <input type="date" name="startDate">
+                            <p>~</p>
+                            <input type="date" name="finalDate">
+                            <input type="hidden" name="cate" value="custom">
+                            <input type="hidden" name="userId" th:value="${#authentication.principal.user.userId}">
+                            <input type="submit" value="검색">
+                        </form>
                     </div>
 
                     <div class="myOrderList">
                         <div class="orderByCompany latest" th:each="linkedMap : ${MyOrderDTOList.myOrderDTOList}">
                             <div class="myOrderTitle">
-                                <p>24.04.17</p>
+                                <p th:text="${linkedMap.value.get(0).detailDate}"></p>
                                 <p>주문번호<span th:text="${linkedMap.key}"></span></p>
                                 <p>
                                     <img th:src="@{/images/icon-arrow-top.png}" onclick="accordionBtn()"/>
@@ -119,31 +127,21 @@
                                 </div>
                             </div>
                         </div>
+                        
+
                     </div>
 
-                    <p>[[${MyOrderDTOList.cate}]]</p>
-                    <p>[[${MyOrderDTOList.type}]]</p>
-                    <p>[[${MyOrderDTOList.keyword}]]</p>
-                    <p>[[${MyOrderDTOList.pg}]]</p>
-                    <p>[[${MyOrderDTOList.size}]]</p>
-                    <p>[[${MyOrderDTOList.total}]]</p>
-                    <p>[[${MyOrderDTOList.startNo}]]</p>
-                    <p>[[${MyOrderDTOList.start}]]</p>
-                    <p>[[${MyOrderDTOList.end}]]</p>
-                    <p>[[${MyOrderDTOList.prev}]]</p>
-                    <p>[[${MyOrderDTOList.next}]]</p>
-
                     <p class="page">
-                        <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1})}">이전</a>
-                        <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword})}">이전</a>
+                        <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
+                        <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}">이전</a>
 
                         <th:block th:each="num:${#numbers.sequence(MyOrderDTOList.start, MyOrderDTOList.end)}">
-                            <a class="pageNum" th:if="${MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${num})}" th:class="${num == MyOrderDTOList} ? 'on' : ''">[[${num}]]</a>
-                            <a class="pageNum" th:if="${MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${num}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                            <a class="pageNum" th:if="${MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == MyOrderDTOList} ? 'on' : ''">[[${num}]]</a>
+                            <a class="pageNum" th:if="${MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${num}, type=${MyOrderDTOList.type}, cate=${MyOrderDTOList.cate}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
                         </th:block>
 
-                        <a th:if="${MyOrderDTOList.next && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.end + 1})}">다음</a>
-                        <a th:if="${MyOrderDTOList.next && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.end + 1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword})}">다음</a>
+                        <a th:if="${MyOrderDTOList.next && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>
+                        <a th:if="${MyOrderDTOList.next && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.end + 1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}">다음</a>
                     </p>
 
                 </article>
