@@ -2,6 +2,7 @@ package kr.co.lotteon.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 
@@ -26,5 +27,9 @@ public class OrderDetail {
     private int detailPoint;
     private String detailStatus;
     private String prodSeller;
+    @CreationTimestamp
     private LocalDate detailDate;
+
+    @Transient
+    private int cartProdNo;
 }
