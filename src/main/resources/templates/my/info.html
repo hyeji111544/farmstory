@@ -66,6 +66,7 @@
                             <input type="text" name="email1" th:value="${#strings.setSplit(userDTO.userEmail,'@')[0]}" style="text-align: center" readonly>@
                             <input type="text" name="email2" th:value="${#strings.setSplit(userDTO.userEmail,'@')[1]}" style="text-align: center" readonly>
                             <button class="change" id="btnChangeEmail">수정하기</button>
+                            <span id="emailError" class="resultText"></span>
 
                             <div id="emailCodeSection" style="display: none;">
                                 <input type="text" id="inputEmailCode" name="inputEmailCode" placeholder="인증코드 입력" required style="display: inline-block"/>
@@ -83,6 +84,7 @@
                                 <input type="text" name="hp2" th:value="${#strings.substring(userDTO.userHp,4,8)}" style="text-align: center" readonly maxlength="4"/>-
                                 <input type="text" name="hp3" th:value="${#strings.substring(userDTO.userHp,9,13)}" style="text-align: center" readonly maxlength="4"/>
                                 <button class="change" id="btnChangeHp">수정하기</button>
+                                <span id="hpError" class="resultText"></span>
                             </p>
                         </td>
                     </tr>
@@ -107,21 +109,23 @@
             <article>
                 <h3>판매자 정보 설정</h3>
 
-                <table border="0">
+                <table border="0" th:each="seller : ${sellerDTO}">
+                    <tbody>
                     <tr>
                         <td>판매자 식별번호</td>
-                        <td id="sellerNo">abcd123456789</td>
+                        <td id="sellerNo" th:text="${seller.sellerNo}"></td>
                     </tr>
                     <tr>
                         <td>회사명</td>
                         <td>
-                            <input type="text" name="company" value="(주)그린컴퓨터아카데미" readonly style="width: 200px;">
+                            <input type="text" name="company" th:value="${seller.company}" readonly style="width: 200px;">
                         </td>
                     </tr>
                     <tr>
                         <td>담당자 이름</td>
                         <td>
-                            <input type="text" name="sellerName" value="김유신" readonly>
+                            <input type="text" name="sellerName" id="sellerName" th:value="${seller.sellerName}" readonly>
+                            <span id="resultSellerName" class="resultText"></span>
                             <button class="change" id="btnChangeSellerName">수정하기</button>
                         </td>
                     </tr>
@@ -129,10 +133,12 @@
                         <td>담당자 연락처</td>
                         <td>
                             <p class="hp">
-                                <input type="text" name="hp1" style="text-align: center" readonly maxlength="3"/>-
-                                <input type="text" name="hp2" style="text-align: center" readonly maxlength="4"/>-
-                                <input type="text" name="hp3" style="text-align: center" readonly maxlength="4"/>
+                                <input type="text" name="sellerHp1" th:value="${#strings.substring(seller.sellerHp,0,3)}" style="text-align: center" readonly maxlength="3"/>-
+                                <input type="text" name="sellerHp2" th:value="${#strings.substring(seller.sellerHp,4,8)}" style="text-align: center" readonly maxlength="4"/>-
+                                <input type="text" name="sellerHp3" th:value="${#strings.substring(seller.sellerHp,9,13)}" style="text-align: center" readonly maxlength="4"/>
                                 <button class="change" id="btnChangeSellerHp">수정하기</button>
+                                <span id="sellerHpError" class="resultText"></span>
+
                             </p>
                         </td>
                     </tr>
@@ -140,31 +146,33 @@
                         <td>팩스번호</td>
                         <td>
                             <p class="hp">
-                                <input type="text" name="hp1" style="text-align: center" readonly maxlength="3"/>-
-                                <input type="text" name="hp2" style="text-align: center" readonly maxlength="4"/>-
-                                <input type="text" name="hp3" style="text-align: center" readonly maxlength="4"/>
+                                <input type="text" name="sellerFax1" th:value="${#strings.substring(seller.fax,0,3)}" style="text-align: center" readonly maxlength="3"/>-
+                                <input type="text" name="sellerFax2" th:value="${#strings.substring(seller.fax,4,8)}" style="text-align: center" readonly maxlength="4"/>-
+                                <input type="text" name="sellerFax3" th:value="${#strings.substring(seller.fax,9,13)}" style="text-align: center" readonly maxlength="4"/>
                                 <button class="change" id="btnChangeSellerFax">수정하기</button>
+                                <span id="sellerFaxError" class="resultText"></span>
                             </p>
                         </td>
                     </tr>
                     <tr>
                         <td>사업자등록번호</td>
                         <td>
-                            <input type="text" name="businessNum" value="123-45-67897" readonly>
+                            <input type="text" name="businessNum" th:value="${seller.businessNum}" readonly>
                         </td>
                     </tr>
                     <tr>
-                        <td>사업자등록번호</td>
+                        <td>라이센스번호</td>
                         <td>
-                            <input type="text" name="licenseNum" value="서면-12346" readonly>
+                            <input type="text" name="licenseNum" th:value="${seller.licenseNum}" readonly>
                         </td>
                     </tr>
                     <tr>
                         <td>판매자 등급</td>
                         <td>
-                            <input type="text" name="sellerGrade" value="Starter" readonly>
+                            <input type="text" name="sellerGrade" th:value="${seller.sellerGrade}" readonly>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
             </article>
 

@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -33,6 +34,8 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
     private final QProduct qProduct = QProduct.product;
     private final QProductimg qProductimg = QProductimg.productimg;
     private final QOrders qOrders = QOrders.orders;
+
+    private final QSeller qSeller = QSeller.seller;
 
     // 판매자 관리페이지 - 홈 출력 정보 조회
     @Override
@@ -352,4 +355,50 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
                 .orderBy(qOrderDetail.detailDate.desc())
                 .fetch();
     }
+
+    @Transactional
+    public long updateSellerNameByUserId(String userId, String sellerName) {
+        try{
+            long result = jpaQueryFactory
+                    .update(qSeller)
+                    .set(qSeller.sellerName, sellerName)
+                    .where(qSeller.userId.eq(userId))
+                    .execute();
+            //성공시 1로 반환
+            return result;
+        }catch(Exception e){
+            log.error("error msg :" + e.getMessage());
+            return -1;
+        }
+    }
+
+    @Transactional
+    public long updateSellerHpByUserId(String userId, String sellerHp) {
+        try{
+            long result = jpaQueryFactory
+                    .update(qSeller)
+                    .set(qSeller.sellerHp, sellerHp)
+                    .where(qSeller.userId.eq(userId))
+                    .execute();
+            return result;
+        }catch(Exception e){
+            log.error("error msg: " + e.getMessage());
+            return -1;
+        }
+    }
+/*
+    @Transactional
+    public long updateSellerFaxByUserId(String userId, String fax) {
+        try{
+            long result = jpaQueryFactory
+                    .update(qSeller)
+                    .set(qSeller.fax, fax)
+                    .where(qSeller.userId.eq(userId))
+                    .execute();
+            return result;
+        }catch(Exception e){
+            log.error("error msg: " + e.getMessage());
+            return -1;
+        }
+    }*/
 }
