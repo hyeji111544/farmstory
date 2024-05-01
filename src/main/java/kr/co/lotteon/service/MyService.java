@@ -1,5 +1,6 @@
 package kr.co.lotteon.service;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
@@ -33,7 +34,13 @@ public class MyService {
     /*
         마이페이지 출력을 위한 service
          - user_id로 user테이블 조회 후 userDTO 반환
-     */
+
+    public int myServiceCheck(HttpSession session, String type, String value){
+        int result = 0;
+
+        if(type.equals("userEmail"))
+    }*/
+
     public Map<String, Object> selectUserInfo(String userId){
         // 유저테이블에서 아이디로 정보 검색
         Optional<User> optUser = userRepository.findById(userId);
@@ -123,14 +130,14 @@ public class MyService {
             User saveUser = userRepository.save(optUser.get());
             if (saveUser.getUserHp().equals(userHp)){
                 result.put("status", "ok");
-                return ResponseEntity.status(HttpStatus.OK).body("ok");
+                return ResponseEntity.status(HttpStatus.OK).body(result);
             }else{
                 result.put("status", "fail");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("fail");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
             }
         }else {
             result.put("status", "notfound");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("notfound");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
     }
 
