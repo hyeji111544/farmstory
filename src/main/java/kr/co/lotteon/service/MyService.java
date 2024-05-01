@@ -5,13 +5,11 @@ import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.NotFound;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -211,6 +209,36 @@ public class MyService {
                 .dtoList(dtoList)
                 .total(total)
                 .build();
+    }
+
+    //myHome 포인트내역
+    public List<PointHistoryDTO> myHomeselectPoints (String userId){
+
+        List<PointHistory> myPointHistory = userPointRepository.myHomeSelectPoints(userId);
+        List<PointHistoryDTO> myPointHistoryDTO = myPointHistory.stream()
+                .map(pointHistory -> {
+                    PointHistoryDTO pointHistoryDTO = new PointHistoryDTO();
+                    pointHistoryDTO.setPointNo(pointHistory.getPointHisNo());
+                    pointHistoryDTO.setPointNo(pointHistory.getPointNo());
+                    pointHistoryDTO.setChangePoint(pointHistory.getChangePoint());
+                    pointHistoryDTO.setChangeDate(pointHistory.getChangeDate());
+                    pointHistoryDTO.setChangeCode(pointHistory.getChangeCode());
+                    pointHistoryDTO.setChangeType(pointHistory.getChangeType());
+
+                    return pointHistoryDTO;
+                })
+                .toList();
+
+        log.info("myHomeselectPoints : " + myPointHistoryDTO);
+
+        return myPointHistoryDTO;
+    }
+
+    //myHome 주문내역
+    public  LinkedHashMap<Integer, List<OrderDetailDTO>> myHomeSelectOrder (String UserId){
+
+        return ordersRepository.selectMyOrdersHome(UserId);
+
     }
 
 }
