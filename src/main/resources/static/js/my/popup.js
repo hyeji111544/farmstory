@@ -38,9 +38,9 @@ $(function(){
     });
 
     // 팝업 닫기
-    $('.btnCancel').click(function(){
-        $(this).closest('.popup').removeClass('on');
-    });
+    //$('.btnCancel').click(function(){
+    //    $(this).closest('.popup').removeClass('on');
+    //});
 
     // 상품평 작성 레이팅바 기능
     $(".my-rating").starRating({

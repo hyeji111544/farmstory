@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -142,6 +141,56 @@ public class OrdersRepositoryImpl implements OrdersRepositoryCustom {
                 .myOrderDTOList(orderDetailDTOMap)
                 .total(total2)
                 .build();
+    }
+
+    @Override
+    public LinkedHashMap<Integer, List<OrderDetailDTO>> selectMyOrdersHome(String UserId) {
+        
+        //OrderNo 조회하기
+       List<Integer> selectMyOrderNo = jpaQueryFactory
+                                        .select(qOrders.orderNo)
+                                        .from(qOrders)
+                                        .where(qOrders.userId.eq(UserId))
+                                        .orderBy(qOrders.orderDate.desc())
+                                        .limit(2)
+                                        .fetch();
+       log.info("orderNo 조회하기 : " +selectMyOrderNo);
+
+       LinkedHashMap<Integer, List<OrderDetailDTO>> myOrderDetailDTOMap = new LinkedHashMap<>();
+       for(Integer orderNo : selectMyOrderNo){
+
+           List<Tuple> detailList = jpaQueryFactory
+                                       .select(qOrderDetail, qProduct.prodCompany, qProduct.prodName, qProductimg.thumb190)
+                                       .from(qOrderDetail)
+                                       .join(qProduct)
+                                       .on(qOrderDetail.prodNo.eq(qProduct.prodNo))
+                                       .join(qProductimg)
+                                       .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                                       .where(qOrderDetail.orderNo.eq(orderNo))
+                                       .fetch();
+           log.info("detailList : " +detailList);
+
+           //List<Tuple> => List<OrderDetailDTO>
+           List<OrderDetailDTO> dtoList = detailList.stream()
+                   .map(tuple -> {
+                       OrderDetail orderDetail = tuple.get(0, OrderDetail.class);
+                       String company = tuple.get(1, String.class); // String으로 형변환을 하겠다
+                       String prodName = tuple.get(2, String.class);
+                       String thumb190 = tuple.get(3, String.class);
+
+                       //OrderDetailDTO 로 변환
+                       OrderDetailDTO orderDetailDTO = modelMapper.map(orderDetail, OrderDetailDTO.class);
+                       orderDetailDTO.setProdCompany(company);
+                       orderDetailDTO.setProdName(prodName);
+                       orderDetailDTO.setThumb190(thumb190);
+
+                       return orderDetailDTO;
+                     }
+                   ).toList();
+           myOrderDetailDTOMap.put(orderNo,dtoList);
+       }
+
+        return myOrderDetailDTOMap;
     }
 
 }

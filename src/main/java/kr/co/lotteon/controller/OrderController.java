@@ -1,12 +1,12 @@
 package kr.co.lotteon.controller;
 
-import kr.co.lotteon.dto.CartInfoDTO;
-import kr.co.lotteon.dto.OrdersDTO;
-import kr.co.lotteon.dto.UserDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import kr.co.lotteon.dto.*;
 import kr.co.lotteon.service.CartService;
 import kr.co.lotteon.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,9 +54,11 @@ public class OrderController {
         return "/product/order";
     }
 
-    @PostMapping("/product/checkout")
-    public void checkoutOrder(@RequestBody OrdersDTO ordersDTO){
-        log.info("ordersDTO" + ordersDTO);
+    @PostMapping("/product/order/checkout")
+    public ResponseEntity<?> checkoutOrder(@RequestBody OrderInfoDTO orderInfoDTO){
+        List<Map<String, String>> orderList = orderService.insertOrders(orderInfoDTO);
+        log.info("orderList" + orderList);
 
+        return ResponseEntity.ok().body(orderList);
     }
 }

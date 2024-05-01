@@ -22,12 +22,14 @@ public class CartInfoDTO {
     private int prodPrice;
     private String thumb190;
     private String prodCompany;
+    private String prodSeller;
     private int prodDeliveryFee;
 
     // ProdOptDetail
     private String optValue1;
     private String optValue2;
     private String optValue3;
+    private int optDetailNo;
     private int optStock;
     private int optPrice;
 

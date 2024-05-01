@@ -40,4 +40,13 @@ public interface SellerRepositoryCustom {
 
     // 판매자 관리페이지 - 주문관리 - 매출현황 (최근 일주일 매출 요약)
     public List<OrderDetail> selectSalesForWeek(String prodSeller);
+
+    // 마이페이지 판매자 이름 수정
+    public long updateSellerNameByUserId(String userId, String sellerName);
+
+    // 마이페이지 판매자 연락처 수정
+    public long updateSellerHpByUserId(String userId, String sellerHp);
+/*
+    // 마이페이지 판매자 팩스번호 수정
+    public long updateSellerFaxByUserId(String userId, String fax);*/
 }

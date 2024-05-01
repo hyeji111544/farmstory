@@ -1,17 +1,16 @@
 package kr.co.lotteon.service;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.NotFound;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -29,16 +28,98 @@ public class MyService {
     private final CouponsRepository couponsRepository;
     private final ModelMapper modelMapper;
     private final UserPointRepository userPointRepository;
+    private final SellerRepository sellerRepository;
 
 
     /*
         마이페이지 출력을 위한 service
          - user_id로 user테이블 조회 후 userDTO 반환
-     */
-    public UserDTO selectUserInfo(String userId){
-        User user = userRepository.selectUserInfo(userId);
-        return modelMapper.map(user, UserDTO.class);
+
+    public int myServiceCheck(HttpSession session, String type, String value){
+        int result = 0;
+
+        if(type.equals("userEmail"))
+    }*/
+
+    public Map<String, Object> selectUserInfo(String userId){
+        // 유저테이블에서 아이디로 정보 검색
+        Optional<User> optUser = userRepository.findById(userId);
+        SellerDTO sellerDTO = new SellerDTO();
+        UserDTO userDTO = new UserDTO();
+        if(optUser.isPresent()){
+            if(optUser.get().getUserRole().equals("SELLER")){
+                // 사용자가 seller인 경우
+                Optional<Seller> optSeller = sellerRepository.findByUserId(userId);
+                sellerDTO = modelMapper.map(optSeller.get(), SellerDTO.class);
+            }
+            userDTO = modelMapper.map(optUser.get(), UserDTO.class);
+        }
+        // 그냥 user인 경우
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("user", userDTO);
+        result.put("seller", sellerDTO);
+
+        return result;
     };
+    public UserDTO selectSellerInfo(String sellerId) {
+        Optional<User> seller = userRepository.findById(sellerId);
+        log.info("seller :" + seller);
+        if (seller.isPresent()) {
+            return modelMapper.map(seller.get(),UserDTO.class);
+        }
+        return null;
+    }
+    // 마이페이지 - 판매자 이름 수정
+    public ResponseEntity<?> myInfoUpdateSellerName(String userId, String sellerName){
+        long result = sellerRepository.updateSellerNameByUserId(userId,sellerName);
+        log.info("userId :" + userId);
+        log.info("sellerName :" + sellerName);
+
+        if(result > 0){
+            //업데이트가 됐을경우
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }else{
+            // 업데이트 실패
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("문제가 발생했습니다.");
+        }
+    }
+    // 마이페이지 - 판매자 연락처 수정
+    public ResponseEntity<?> myInfoUpdateSellerHp(String userId, String sellerHp){
+        long result = sellerRepository.updateSellerHpByUserId(userId,sellerHp);
+        log.info("userId :" + userId);
+        log.info("sellerName :" + sellerHp);
+
+        if(result > 0){
+            //업데이트가 됐을경우
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }else{
+            // 업데이트 실패
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("문제가 발생했습니다.");
+        }
+    }
+    // 마이페이지 - 판매자 팩스번호 수정
+    public ResponseEntity<?> myInfoUpdateFax(String userId, String fax){
+        Optional<Seller> optUser = sellerRepository.findByUserId(userId);
+        log.info("userId :" + userId);
+        log.info("fax :" + fax);
+        Map<String,String> result = new HashMap<>();
+        if(optUser.isPresent()){
+            optUser.get().setFax(fax);
+            Seller saveSeller = sellerRepository.save(optUser.get());
+            log.info("saveSeller :" + saveSeller);
+            if(saveSeller.getFax().equals(fax)){
+                result.put("status", "ok");
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            }else{
+                result.put("status", "fail");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            }
+        }else{
+            result.put("status","notfound");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
+    }
 
     // 마이페이지 - 연락처 수정
     public ResponseEntity<?> myInfoUpdateHp(String userId, String userHp){
@@ -49,14 +130,14 @@ public class MyService {
             User saveUser = userRepository.save(optUser.get());
             if (saveUser.getUserHp().equals(userHp)){
                 result.put("status", "ok");
-                return ResponseEntity.status(HttpStatus.OK).body("ok");
+                return ResponseEntity.status(HttpStatus.OK).body(result);
             }else{
                 result.put("status", "fail");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("fail");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
             }
         }else {
             result.put("status", "notfound");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("notfound");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
     }
 
@@ -211,6 +292,36 @@ public class MyService {
                 .dtoList(dtoList)
                 .total(total)
                 .build();
+    }
+
+    //myHome 포인트내역
+    public List<PointHistoryDTO> myHomeselectPoints (String userId){
+
+        List<PointHistory> myPointHistory = userPointRepository.myHomeSelectPoints(userId);
+        List<PointHistoryDTO> myPointHistoryDTO = myPointHistory.stream()
+                .map(pointHistory -> {
+                    PointHistoryDTO pointHistoryDTO = new PointHistoryDTO();
+                    pointHistoryDTO.setPointNo(pointHistory.getPointHisNo());
+                    pointHistoryDTO.setPointNo(pointHistory.getPointNo());
+                    pointHistoryDTO.setChangePoint(pointHistory.getChangePoint());
+                    pointHistoryDTO.setChangeDate(pointHistory.getChangeDate());
+                    pointHistoryDTO.setChangeCode(pointHistory.getChangeCode());
+                    pointHistoryDTO.setChangeType(pointHistory.getChangeType());
+
+                    return pointHistoryDTO;
+                })
+                .toList();
+
+        log.info("myHomeselectPoints : " + myPointHistoryDTO);
+
+        return myPointHistoryDTO;
+    }
+
+    //myHome 주문내역
+    public  LinkedHashMap<Integer, List<OrderDetailDTO>> myHomeSelectOrder (String UserId){
+
+        return ordersRepository.selectMyOrdersHome(UserId);
+
     }
 
 }

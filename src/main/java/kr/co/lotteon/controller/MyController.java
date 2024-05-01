@@ -2,7 +2,9 @@ package kr.co.lotteon.controller;
 
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
+import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.repository.UserPointRepository;
+import kr.co.lotteon.repository.pointHistoryRepository;
 import kr.co.lotteon.service.MyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +30,34 @@ public class MyController {
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(){
+    public String myHome(Model model, String UserId){
+
+    log.info("My home" +UserId);
+
+        // 회원 정보
+
+
+
+        // 최근주문내역
+        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(UserId);
+        model.addAttribute("myOrder", myOrder);
+
+
+        // 포인트적립내역
+        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(UserId);
+        model.addAttribute("myPoint", myPoint);
+
+        log.info("myPoint : " + myPoint);
+        // 상품평
+
+
+        // 문의내역
+
+
+
+
         return "/my/home";
+
     }
 
     //마이페이지-쿠폰 이동
@@ -43,10 +72,44 @@ public class MyController {
     //마이페이지-정보 이동
     @GetMapping("/my/info")
     public String myInfo(Model model, String userId){
-        UserDTO userDTO = myService.selectUserInfo(userId);
-        model.addAttribute("userDTO", userDTO);
+        Map<String, Object> result = myService.selectUserInfo(userId);
+        UserDTO userDTO = (UserDTO) result.get("user");
+        SellerDTO sellerDTO = (SellerDTO) result.get("seller");
+
         log.info("userDTO : " + userDTO);
+        log.info("sellerDTO : " + sellerDTO);
+
+        model.addAttribute("userDTO", userDTO);
+        model.addAttribute("sellerDTO", sellerDTO);
         return "/my/info";
+    }
+
+    // 마이페이지 - 판매자 이름 수정
+    @PostMapping("/my/updateSellerName")
+    public ResponseEntity<?> myInfoUpdateSellerName(@RequestBody Map<String, String> requestData){
+        String userId = requestData.get("userId");
+        String sellerName = requestData.get("sellerName");
+        log.info("userId : " + userId);
+        log.info("sellerName : " + sellerName);
+        return myService.myInfoUpdateSellerName(userId, sellerName);
+    }
+    // 마이페이지 - 판매자 연락처 수정
+    @PostMapping("/my/updateSellerHp")
+    public ResponseEntity<?> myInfoUpdateSellerHp(@RequestBody Map<String, String> requestData){
+        String userId = requestData.get("userId");
+        String sellerHp = requestData.get("sellerHp");
+        log.info("userId : " + userId);
+        log.info("sellerHp : " + sellerHp);
+        return myService.myInfoUpdateSellerHp(userId, sellerHp);
+    }
+    // 마이페이지 - 판매자 팩스번호 수정
+    @PostMapping("/my/updateFax")
+    public ResponseEntity<?> myInfoUpdateFax(@RequestBody Map<String, String> requestData){
+        String userId = requestData.get("userId");
+        String fax = requestData.get("fax");
+        log.info("userId : " + userId);
+        log.info("fax : " + fax);
+        return myService.myInfoUpdateFax(userId,fax);
     }
 
     // 마이페이지 - 연락처 수정

@@ -41,9 +41,9 @@
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='3month')}">3개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='6month')}">6개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='year')}">12개월</a>
-                        <form th:action="@{/my/point}" method="get">
+                        <form th:action="@{/my/point}" method="get" class="searchCustomDate">
                             <input type="date" name="startDate">
-                            <p>~</p>
+                            <p style="display: inline-block; width: 10px;">~</p>
                             <input type="date" name="finalDate">
                             <input type="hidden" name="cate" value="custom">
                             <input type="hidden" name="userId" th:value="${#authentication.principal.user.userId}">
@@ -52,20 +52,18 @@
                     </div>
 
 
-                    <table border="0">
+                    <table class="PointList" border="0">
                         <tr>
                             <th>날짜</th>
                             <th>구분</th>
                             <th>적립금액</th>
                             <th>비고</th>
-                            <th>유효기간</th>
                         </tr>
-                        <tr id="point" th:each="point : ${pageResponseDTO.dtoList}">
-                            <td class="date" th:text="${#strings.substring(point.changeDate, 0, 10)}"></td>
+                        <tr class="PointListContent" id="point" th:each="point : ${pageResponseDTO.dtoList}">
+                            <td class="date" th:text="${#strings.substring(point.changeDate, 0, 10)}" ></td>
                             <td class="type">[[${point.changeType}]]</td>
                             <td class="point">[[${point.changePoint}]]</td>
                             <td class="desc">[[${point.changeCode}]]</td>
-                            <td class="expire">2024-12-12 수정해야함</td>
                         </tr>
 
                     </table>
