@@ -52,20 +52,18 @@
                     </div>
 
 
-                    <table border="0">
+                    <table class="PointList" border="0">
                         <tr>
                             <th>날짜</th>
                             <th>구분</th>
                             <th>적립금액</th>
                             <th>비고</th>
-                            <th>유효기간</th>
                         </tr>
-                        <tr id="point" th:each="point : ${pageResponseDTO.dtoList}">
-                            <td class="date" th:text="${#strings.substring(point.changeDate, 0, 10)}"></td>
+                        <tr class="PointListContent" id="point" th:each="point : ${pageResponseDTO.dtoList}">
+                            <td class="date" th:text="${#strings.substring(point.changeDate, 0, 10)}" ></td>
                             <td class="type">[[${point.changeType}]]</td>
                             <td class="point">[[${point.changePoint}]]</td>
                             <td class="desc">[[${point.changeCode}]]</td>
-                            <td class="expire">2024-12-12 수정해야함</td>
                         </tr>
 
                     </table>

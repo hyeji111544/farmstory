@@ -1,10 +1,8 @@
 package kr.co.lotteon.repository.impl;
 
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.lotteon.dto.MyOrderPageResponseDTO;
 import kr.co.lotteon.dto.PageRequestDTO;
 import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.entity.QPointHistory;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -126,5 +123,26 @@ public class UserPointRepositoryImpl implements UserPointRepositoryCustom {
 
             return new PageImpl<>(pointHistoryResult, pageable, total);
         }
+    }
+
+    @Override
+    public List<PointHistory> myHomeSelectPoints(String userId) {
+
+        //Point조회
+    QueryResults<PointHistory> myPointHistory = jpaQueryFactory
+                                                .select(qPointHistory)
+                                                .from(qUserPoint)
+                                                .join(qPointHistory)
+                                                .on(qUserPoint.pointNo.eq(qPointHistory.pointNo))
+                                                .where(qUserPoint.userId.eq(userId))
+                                                .orderBy(qPointHistory.changeDate.desc())
+                                                .limit(5)
+                                                .fetchResults();
+
+    List<PointHistory> myPointHistoryResult = myPointHistory.getResults();
+
+    log.info("myPointHistoryResult" +myPointHistoryResult);
+    return myPointHistoryResult;
+
     }
 }

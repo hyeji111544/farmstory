@@ -1,0 +1,104 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/company/company.css}">
+    <title>롯데ON::1조 롯데 온라인 쇼핑몰</title>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <div class="loginBox">
+                <div>
+                    <!--로그인 안 했을때-->
+                    <th:block th:if="${!#authorization.expression('isAuthenticated()')}">
+                        <a th:href="@{/member/login}">로그인</a>
+                        <a th:href="@{/member/join}">회원가입</a>
+                    </th:block>
+                    <!--로그인 했을때-->
+                    <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                        <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+                        <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+
+                        <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
+                        <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
+
+                        <a th:href="@{product/cart(userId=${#authentication.principal.user.userId})}">
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
+                        </a>
+                        <a th:href="@{/member/logout}">로그아웃</a>
+                    </th:block>
+                </div>
+            </div>
+
+            <div class="headContent">
+                <div class="logoBox">
+                    <a href="#"><img th:src="@{/images/header_logo.png}" alt="로고" style="width: 185px;"/></a>
+                </div>
+
+                <div>
+                    <a href="#">HOME</a>
+                    <a href="#">기업문화</a>
+                    <a class="tabOn" href="#">소식과 이야기</a>
+                    <a href="#">채용</a>
+                    <a href="#">미디어</a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+
+            <script>
+                // 페이지가 스크롤될 때마다 호출되는 함수
+                window.addEventListener('scroll', function() {
+                    var storyNav = document.querySelector('.storyNav');
+                    var scrollPosition = window.scrollY; // 현재 스크롤 위치
+
+                    if (scrollPosition > 300) { // 원하는 위치인 300px 이상으로 스크롤될 때
+                        storyNav.style.position = 'fixed'; // 요소를 고정
+                        storyNav.style.top = '0'; // 화면 상단에 고정
+                    } else {
+                        storyNav.style.position = 'relative'; // 스크롤 위치가 원하는 위치 미만이면 기본 위치로 복원
+                    }
+                });
+            </script>
+
+            <div class="contentHead" style="margin: 20px 0 0 0">롯데ON을 더 알고 싶다면!</div>
+
+            <div class="contentSub">우리의 다양한 이야기를 소개합니다</div>
+
+            <div class="storyNav">
+                <a href="#">전체보기</a>
+                <a href="#">기업문화</a>
+                <a href="#">인터뷰</a>
+                <a href="#">채용</a>
+                <a href="#">롯데ON</a>
+                <a href="#">보도자료</a>
+                <a href="#">ESG</a>
+            </div>
+
+            <div class="noticeForCard">
+                <div>
+                    <img th:src="@{/images/맹구.jpg}" alt="사진">
+                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
+                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
+                </div>
+                <div>
+                    <img th:src="@{/images/맹구.jpg}" alt="사진">
+                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
+                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
+                </div>
+                <div>
+                    <img th:src="@{/images/맹구.jpg}" alt="사진">
+                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
+                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
+                </div>
+            </div>
+
+        </main>
+
+
+        <footer></footer>
+    </div>
+</body>
+</html>
