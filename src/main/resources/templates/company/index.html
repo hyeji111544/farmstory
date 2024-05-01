@@ -1,57 +1,40 @@
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" th:href="@{/css/company/company.css}">
-    <title>롯데ON::1조 롯데 온라인 쇼핑몰</title>
-</head>
-<body>
-    <div class="wrap">
-        <header>
-            <div class="loginBox">
-                <div>
-                    <!--로그인 안 했을때-->
-                    <th:block th:if="${!#authorization.expression('isAuthenticated()')}">
-                        <a th:href="@{/member/login}">로그인</a>
-                        <a th:href="@{/member/join}">회원가입</a>
-                    </th:block>
-                    <!--로그인 했을때-->
-                    <th:block th:if="${#authorization.expression('isAuthenticated()')}">
-                        <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
-                        <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/companyLayout.html}">
+<!--내용 시작-->
+<div layout:fragment="content">
+    <script>
+        window.onload = function () {
+            const blogMainText = document.getElementsByClassName('blogMainText')[0];
+            blogMainText.classList.add('show');
+        };
+    </script>g
+    <div class="headContent" >
+        <div class="logoBox">
+            <a href="#"><img th:src="@{/images/header_logo.png}" alt="로고" style="width: 185px;"/></a>
+        </div>
 
-                        <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
-                        <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
+        <div>
+            <a class="tabOn" th:href="@{/company/index}">HOME</a>
+            <a th:href="@{/company/culture}">기업문화</a>
+            <a th:href="@{/company/story}">소식과 이야기</a>
+            <a th:href="@{/company/recruit}">채용</a>
+            <a th:href="@{/company/media}">미디어</a>
+        </div>
+    </div>
+    </header>
+        <div class="companyLogo">
+            <div class="blogMainImage">
 
-                        <a th:href="@{product/cart(userId=${#authentication.principal.user.userId})}">
-                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
-                        </a>
-                        <a th:href="@{/member/logout}">로그아웃</a>
-                    </th:block>
-                </div>
             </div>
-
-            <div class="headContent">
-                <div class="logoBox">
-                    <a href="#"><img th:src="@{/images/header_logo.png}" alt="로고" style="width: 185px;"/></a>
-                </div>
-
-                <div>
-                    <a class="tabOn" href="#">HOME</a>
-                    <a href="#">기업문화</a>
-                    <a href="#">소식과 이야기</a>
-                    <a href="#">채용</a>
-                    <a href="#">미디어</a>
-                </div>
-            </div>
-        </header>
+        </div>
 
         <main>
-            <div class="companyLogo">
-                <img th:src="@{/images/company/bg_company_introduce.jpg}" alt="회사로고">
-            </div>
+            <p class="blogMainText">
+                취향을, 브랜드를, 혜택을 발견하는 즐거움 <br> 지금 롯데온에서 만나요
+            </p>
 
-            <div class="companyIntro">
+            <div class="companyIntro" style="margin-top: 20px">
                 쇼핑 좀 해본 사람들이 만든 플랫폼,<br>
                 롯데ON은 풍부한 오프라인 쇼핑 인프라, 온라인 쇼핑 노하우,<br>
                 IT기술로 세상에 없던 새로운 쇼핑 경험을 제공하고<br>
@@ -61,27 +44,27 @@
             <div class="contentHead">쇼핑을 새롭게, 세상을 이롭게 만들어나가요.</div>
 
             <div class="sloganBox">
-                <span>이전</span>
-                <span>다음</span>
+                <span></span>
+                <span></span>
                 <div>
-                    <img th:src="@{/images/company/introduce_img1.png}">
+                    <img th:src="@{/images/company/sample1.jpg}">
                     <p>
                         고객이 원하고 만족하는<br>서비스를 만들어요
                     </p>
-                    <p>롯데ON은 단순히 상품만을 판매하는
-                        플랫폼이 아니라,<br>상품에 대한 경험을
-                        함께 제공할 수 있는 플랫폼을 목표로 하고
-                        있어요.<br>해외직구, 뷰티, 그로서리…</p>
+                    <p>롯데ON은 단순히 상품만을 판매하는 플랫폼이 아니라,<br>
+                        상품에 대한 경험을 함께 제공할 수 있는 플랫폼을 목표로 하고 있어요.<br>
+                        해외직구, 뷰티, 그로서리, 선물하기 등 다양한 영역에서<br>
+                        새로운 서비스를 만들어가고 있어요.</p>
                 </div>
                 <div>
-                    <img th:src="@{/images/company/introduce_img2.png}">
+                    <img th:src="@{/images/company/sample2.jpg}">
                     <p>
                         고객이 원하고 만족하는<br>서비스를 만들어요
                     </p>
-                    <p>롯데ON은 단순히 상품만을 판매하는<br>
-                        플랫폼이 아니라,<br>상품에 대한 경험을<br>
-                        함께 제공할 수 있는 플랫폼을 목표로 하고<br>
-                        있어요.<br>해외직구, 뷰티, 그로서리…</p>
+                    <p>롯데ON은 단순히 상품만을 판매하는 플랫폼이 아니라,<br>
+                        상품에 대한 경험을 함께 제공할 수 있는 플랫폼을 목표로 하고 있어요.<br>
+                        해외직구, 뷰티, 그로서리, 선물하기 등 다양한 영역에서<br>
+                        새로운 서비스를 만들어가고 있어요.</p>
                 </div>
             </div>
 
@@ -93,28 +76,28 @@
                         <p>2024.03</p>
                         <a href="#">월간 롯데 3월호에서 만나는 ....</a>
                     </div>
-                    <span class="blogBtn">버튼</span>
+                    <span class="blogBtn">&#5125;</span>
                 </div>
                 <div>
                     <div class="blogTitle">
                         <p>2024.03</p>
                         <a href="#">월간 롯데 3월호에서 만나는 ....</a>
                     </div>
-                    <span class="blogBtn">버튼</span>
+                    <span class="blogBtn">&#5125;</span>
                 </div>
                 <div>
                     <div class="blogTitle">
                         <p>2024.03</p>
                         <a href="#">월간 롯데 3월호에서 만나는 ....</a>
                     </div>
-                    <span class="blogBtn">버튼</span>
+                    <span class="blogBtn">&#5125;</span>
                 </div>
                 <div>
                     <div class="blogTitle">
                         <p>2024.03</p>
                         <a href="#">월간 롯데 3월호에서 만나는 ....</a>
                     </div>
-                    <span class="blogBtn">버튼</span>
+                    <span class="blogBtn">&#5125;</span>
                 </div>
             </div>
 
@@ -151,11 +134,6 @@
                     </a>
                 </div>
             </div>
-
         </main>
-
-
-        <footer></footer>
     </div>
-</body>
 </html>

@@ -23,4 +23,22 @@ public class CompanyController {
 
         return "/company/story";
     }
+
+    @GetMapping("/company/culture")
+    public String companyCulture(){
+
+        return "/company/culture";
+    }
+
+    @GetMapping("/company/recruit")
+    public String companyRecruit(){
+
+        return "/company/recruit";
+    }
+
+    @GetMapping("/company/media")
+    public String companyMedia(){
+
+        return "/company/media";
+    }
 }

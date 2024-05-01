@@ -1,0 +1,59 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/company/company.css}">
+    <title>롯데ON::1조 회사 소개</title>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <div class="loginBox">
+            <div>
+                <!--로그인 안 했을때-->
+                <th:block th:if="${!#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/member/login}">로그인</a>
+                    <a th:href="@{/member/join}">회원가입</a>
+                </th:block>
+                <!--로그인 했을때-->
+                <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+                    <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+
+                    <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
+                    <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
+
+                    <a th:href="@{product/cart(userId=${#authentication.principal.user.userId})}">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
+                    </a>
+                    <a th:href="@{/member/logout}">로그아웃</a>
+                </th:block>
+            </div>
+        </div>
+    <div layout:fragment="content">
+    <!--내용 시작-->
+
+    <!--내용 끝-->
+    </div>
+    <footer>
+        <div class="headContent">
+            <div class="logoBox">
+                <a href="#"><img th:src="@{/images/header_logo.png}" alt="로고" style="width: 130px;"/></a>
+            </div>
+
+            <div style="margin-right: 450px">
+                <a th:href="@{/company/index}">HOME</a>
+                <a th:href="@{/company/culture}">기업문화</a>
+                <a th:href="@{/company/story}">소식과 이야기</a>
+                <a th:href="@{/company/recruit}">채용</a>
+                <a th:href="@{/company/media}">미디어</a>
+                <span style="padding-left: 40px">
+                        © 2022 All rights Reserved
+                    </span>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>
