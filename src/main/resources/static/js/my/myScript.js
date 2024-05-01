@@ -6,8 +6,164 @@ window.onload = function (){
     const hp1 = document.getElementsByName('hp1')[0];
     const hp2 = document.getElementsByName('hp2')[0];
     const hp3 = document.getElementsByName('hp3')[0];
+    const sellerHp1 = document.getElementsByName('sellerHp1')[0];
+    const sellerHp2 = document.getElementsByName('sellerHp2')[0];
+    const sellerHp3 = document.getElementsByName('sellerHp3')[0];
+    const sellerFax1 = document.getElementsByName('sellerFax1')[0];
+    const sellerFax2 = document.getElementsByName('sellerFax2')[0];
+    const sellerFax3 = document.getElementsByName('sellerFax3')[0];
+    const hpError = document.getElementById('hpError');
+    const FaxError = document.getElementById('sellerFaxError');
+    const resultSellerName = document.getElementById('resultSellerName');
+    const btnChangeSellerName = document.getElementById('btnChangeSellerName');
+    const sellerNameCheck= document.getElementById('sellerName');
+    const resultSellerHp= document.getElementById('resultSellerHp');
+    const btnChangeSellerHp= document.getElementById('btnChangeSellerHp');
+    const sellerHpError= document.getElementById('sellerHpError');
+    const userId = document.getElementById('userId').innerText;
+    const btnChangeSellerFax = document.getElementById('btnChangeSellerFax');
 
+    let isHpOk    = false;
+    let isNameOk  = false;
+    const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
+    const reName  = /^[가-힣]{2,10}$/
+
+    // 판매자 이름 유효성 검사
+    sellerNameCheck.addEventListener('blur', function (){
+
+        const value = sellerNameCheck.value;
+        // 정규 표현식
+        if (!value.match(reName)) {
+            resultSellerName.innerText = "유효하지 않은 이름형식입니다.";
+            resultSellerName.style.color = "red";
+            sellerNameCheck.style.border = "1px solid red";
+            isNameOk = false;
+            return; // 여기서 끝!
+        } else {
+            resultSellerName.innerText = "";
+            sellerNameCheck.style.border = "1px solid green";
+            isNameOk = true;
+            return;
+        }
+    });
+    // 판매자 이름 수정
+    btnChangeSellerName.onclick = function (e) {
+
+        if(btnChangeSellerName.className === 'change'){
+            sellerNameCheck.value = "";
+            sellerNameCheck.style.border = "1px solid #999";
+            sellerNameCheck.style.border = "1px solid #999";
+            sellerNameCheck.readOnly = false;
+            sellerNameCheck.readOnly = false;
+            btnChangeSellerName.classList.remove('change');
+            btnChangeSellerName.classList.add('save');
+        }
+        else if(btnChangeSellerName.className === 'save'){
+
+            const userIdValue= document.getElementById('userId').innerText;
+            const sellerNameValue= document.getElementById('sellerName').value;
+            e.preventDefault();
+            console.log(userIdValue);
+
+            fetch(`/lotteon/my/updateSellerName`,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "userId": userIdValue,
+                    "sellerName": sellerNameValue
+                })
+            })
+                .then(response => response.json())
+                .then(data =>{
+                    console.log(data);
+                    if(data === 1){
+                        alert(`판매자 이름이 수정되었습니다.`);
+                        sellerNameCheck.readOnly = true;
+                        sellerNameCheck.style.border = "0";
+                        sellerNameCheck.classList.add('change');
+                        sellerNameCheck.classList.remove('save');
+                    }else{
+                        alert(`오류가 발생했습니다.`);
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+    }
+    // 판매자 연락처 수정 및 유효성 검사
+    btnChangeSellerHp.onclick = function() {
+
+        const totalSellerHp = sellerHp1.value + "-" + sellerHp2.value + "-" + sellerHp3.value;
+        const value = totalSellerHp;
+
+        if (!value.match(reHp)) {
+            sellerHpError.innerText = "유효하지 않은 전화번호입니다.";
+            sellerHpError.style.color = "red";
+            isHpOk = false;
+            return; // 여기서 끝!
+        }
+        // input태그 활성화
+        if (btnChangeSellerHp.className === 'change') {
+            sellerHp1.value = "";
+            sellerHp2.value = "";
+            sellerHp3.value = "";
+            sellerHp1.style.border = "1px solid #999";
+            sellerHp2.style.border = "1px solid #999";
+            sellerHp3.style.border = "1px solid #999";
+            sellerHp1.readOnly = false;
+            sellerHp2.readOnly = false;
+            sellerHp3.readOnly = false;
+            btnChangeSellerHp.classList.remove('change');
+            btnChangeSellerHp.classList.add('save');
+        }else if(btnChangeSellerHp.className === 'save'){
+            let savedSellerHp1 = sellerHp1.value;
+            let savedSellerHp2 = sellerHp2.value;
+            let savedSellerHp3 = sellerHp3.value;
+            let sellerHp = savedSellerHp1 + "-" + savedSellerHp2 + "-" + savedSellerHp3;
+
+            const jsonData = {
+                "userId" : userId,
+                "sellerHp" : sellerHp
+            };
+            fetch("/lotteon/my/updateSellerHp", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        sellerHp1.readOnly = true;
+                        sellerHp2.readOnly = true;
+                        sellerHp3.readOnly = true;
+                        sellerHp1.style.border = "0";
+                        sellerHp2.style.border = "0";
+                        sellerHp3.style.border = "0";
+                        btnChangeSellerHp.classList.add('change');
+                        btnChangeSellerHp.classList.remove('save');
+                        alert("수정완료");
+                    }else{
+                        alert("수정실패");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                })
+                .catch(err => console.log(err));
+        }
+    }
+    // 회원 연락처 수정
     btnChangeHp.onclick = function (event) {
+
+        const totalHp = hp1.value + "-" + hp2.value + "-" + hp3.value;
+        const value = totalHp;
+
+        if (!value.match(reHp)) {
+            hpError.innerText = "유효하지 않은 전화번호입니다.";
+            hpError.style.color = "red";
+            isHpOk = false;
+            return; // 여기서 끝!
+        }
         // input태그 활성화
         if (btnChangeHp.className === 'change') {
             hp1.value = "";
@@ -28,11 +184,11 @@ window.onload = function (){
             let saveHp2 = hp2.value;
             let saveHp3 = hp3.value;
             let userHp = saveHp1 + "-" + saveHp2 + "-" + saveHp3;
-            const userId = document.getElementById('userId').innerText;
+
             const jsonData = {
                 "userId" : userId,
                 "userHp" : userHp
-            }
+            };
             fetch("/lotteon/my/updateHp", {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -53,11 +209,72 @@ window.onload = function (){
                 })
                 .then(data => {
                 })
-                .catch(err => console.log(err))
+                .catch(err => console.log(err));
+        }
+    }
+    // 회원 팩스번호 수정
+    btnChangeSellerFax.onclick = function (event) {
+
+        const totalFax = sellerFax1.value + "-" + sellerFax2.value + "-" + sellerFax3.value;
+        const value = totalFax;
+
+        if (!value.match(reHp)) {
+            FaxError.innerText = "유효하지 않은 팩스번호입니다.";
+            FaxError.style.color = "red";
+            isHpOk = false;
+            return; // 여기서 끝!
+        }
+        // input태그 활성화
+        if (btnChangeSellerFax.className === 'change') {
+            sellerFax1.value = "";
+            sellerFax2.value = "";
+            sellerFax3.value = "";
+            sellerFax1.style.border = "1px solid #999";
+            sellerFax2.style.border = "1px solid #999";
+            sellerFax3.style.border = "1px solid #999";
+            sellerFax1.readOnly = false;
+            sellerFax2.readOnly = false;
+            sellerFax3.readOnly = false;
+            btnChangeSellerFax.classList.remove('change');
+            btnChangeSellerFax.classList.add('save');
+        } else if (btnChangeSellerFax.className === 'save') {
+            // 수정 연락처 저장
+            let saveFax1 = sellerFax1.value;
+            let saveFax2 = sellerFax2.value;
+            let saveFax3 = sellerFax3.value;
+            let fax = saveFax1 + "-" + saveFax2 + "-" + saveFax3;
+
+            const jsonData = {
+                "userId" : userId,
+                "fax" : fax
+            };
+            fetch("/lotteon/my/updateFax", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        sellerFax1.readOnly = true;
+                        sellerFax2.readOnly = true;
+                        sellerFax3.readOnly = true;
+                        sellerFax1.style.border = "0";
+                        sellerFax2.style.border = "0";
+                        sellerFax3.style.border = "0";
+                        btnChangeSellerFax.classList.add('change');
+                        btnChangeSellerFax.classList.remove('save');
+                    }else{
+                        alert("실패했습니다.")
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                })
+                .catch(err => console.log(err));
         }
     }
 
-    // 이메일 수정 //
+        // 이메일 수정 //
     const btnChangeEmail = document.getElementById('btnChangeEmail');
     const inputEmailCode = document.getElementById('inputEmailCode');
     const checkCodeLabel = document.getElementById('checkCodeLabel');
@@ -67,9 +284,22 @@ window.onload = function (){
     const resultEmail = document.getElementById('resultEmail');
     const email1 = document.getElementsByName('email1')[0];
     const email2 = document.getElementsByName('email2')[0];
+    const emailError = document.getElementById('emailError');
+    // 이메일 유효성 검사
+    let isEmailOk = false;
+    const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
     btnChangeEmail.onclick = function () {
 
+        const emailTotal = email1.value + "@" + email2.value;
+        const value = emailTotal;
+        // 정규표현석
+        if(!value.match(reEmail)){
+            emailError.innerText = "유효하지 않은 이메일 형식입니다.";
+            emailError.style.color = "red";
+            isEmailOk = false;
+            return; // 여기서 끝!
+        }
         // input태그 활성화
         if (btnChangeEmail.className === 'change') {
 

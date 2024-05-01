@@ -72,10 +72,44 @@ public class MyController {
     //마이페이지-정보 이동
     @GetMapping("/my/info")
     public String myInfo(Model model, String userId){
-        UserDTO userDTO = myService.selectUserInfo(userId);
-        model.addAttribute("userDTO", userDTO);
+        Map<String, Object> result = myService.selectUserInfo(userId);
+        UserDTO userDTO = (UserDTO) result.get("user");
+        SellerDTO sellerDTO = (SellerDTO) result.get("seller");
+
         log.info("userDTO : " + userDTO);
+        log.info("sellerDTO : " + sellerDTO);
+
+        model.addAttribute("userDTO", userDTO);
+        model.addAttribute("sellerDTO", sellerDTO);
         return "/my/info";
+    }
+
+    // 마이페이지 - 판매자 이름 수정
+    @PostMapping("/my/updateSellerName")
+    public ResponseEntity<?> myInfoUpdateSellerName(@RequestBody Map<String, String> requestData){
+        String userId = requestData.get("userId");
+        String sellerName = requestData.get("sellerName");
+        log.info("userId : " + userId);
+        log.info("sellerName : " + sellerName);
+        return myService.myInfoUpdateSellerName(userId, sellerName);
+    }
+    // 마이페이지 - 판매자 연락처 수정
+    @PostMapping("/my/updateSellerHp")
+    public ResponseEntity<?> myInfoUpdateSellerHp(@RequestBody Map<String, String> requestData){
+        String userId = requestData.get("userId");
+        String sellerHp = requestData.get("sellerHp");
+        log.info("userId : " + userId);
+        log.info("sellerHp : " + sellerHp);
+        return myService.myInfoUpdateSellerHp(userId, sellerHp);
+    }
+    // 마이페이지 - 판매자 팩스번호 수정
+    @PostMapping("/my/updateFax")
+    public ResponseEntity<?> myInfoUpdateFax(@RequestBody Map<String, String> requestData){
+        String userId = requestData.get("userId");
+        String fax = requestData.get("fax");
+        log.info("userId : " + userId);
+        log.info("fax : " + fax);
+        return myService.myInfoUpdateFax(userId,fax);
     }
 
     // 마이페이지 - 연락처 수정
