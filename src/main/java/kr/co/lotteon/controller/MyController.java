@@ -2,7 +2,9 @@ package kr.co.lotteon.controller;
 
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
+import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.repository.UserPointRepository;
+import kr.co.lotteon.repository.pointHistoryRepository;
 import kr.co.lotteon.service.MyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Pageable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +30,34 @@ public class MyController {
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(){
+    public String myHome(Model model, String UserId){
+
+    log.info("My home" +UserId);
+
+        // 회원 정보
+
+
+
+        // 최근주문내역
+        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(UserId);
+        model.addAttribute("myOrder", myOrder);
+
+
+        // 포인트적립내역
+        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(UserId);
+        model.addAttribute("myPoint", myPoint);
+
+        log.info("myPoint : " + myPoint);
+        // 상품평
+
+
+        // 문의내역
+
+
+
+
         return "/my/home";
+
     }
 
     //마이페이지-쿠폰 이동

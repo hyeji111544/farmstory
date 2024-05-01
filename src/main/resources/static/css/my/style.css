@@ -1534,6 +1534,23 @@ footer p > strong {
     cursor: pointer;
 }
 
+/* my/point 커스텀 */
+.PointListContent > td:nth-child(1){
+    text-align: center;
+}
+
+.PointListContent > td:nth-child(2){
+    text-align: center;
+}
+
+.PointListContent > td:nth-child(3){
+    text-align: right;
+}
+
+.PointListContent > td:nth-child(4){
+    text-align: right;
+}
+
 /* my/order 커스텀 */
 .myOrderSearch {
     display: flex;
