@@ -90,6 +90,7 @@
       totalDisAmount.textContent = '-' +disAmountValue.toLocaleString();
       totalFee.textContent = feeValue.toLocaleString();
       orderCost.textContent = costValue.toLocaleString();
+      orderCost.value = costValue;
 
 
       const btnPoint = document.getElementById('btnPoint');
@@ -150,10 +151,82 @@
           return;
         }
 
+
+        const items = [];
+        const orderItems = document.querySelectorAll('.orderItems');
         var result = confirm("상품을 결제하시겠습니까?");
-        const form = document.getElementById('buyForm');
         if (result){
-          form.submit();
+
+          orderItems.forEach(orderItem => {
+            const cartProdNo = orderItem.querySelector('#cartProdNo').value;
+            const prodNo = orderItem.querySelector('#prodNo').value;
+            const prodSeller = orderItem.querySelector('#prodSeller').value;
+            const optNo = orderItem.querySelector('#optNo').value;
+            const prodName = orderItem.querySelector('h2 a[name="prodName"]').innerText;
+            const count = orderItem.querySelector('.prodCount').innerText;
+            const detailPriceText = orderItem.querySelector('.total_price').innerText;
+            const detailPrice = parseInt(detailPriceText.replace(/[^0-9]/g, ''), 10);
+
+            items.push({
+              cartProdNo: cartProdNo,
+              prodNo: prodNo,
+              prodSeller: prodSeller,
+              optNo: optNo,
+              prodName: prodName,
+              count: count,
+              detailPrice: detailPrice
+            });
+
+          });
+
+          // 최종결제 정보
+          const prodAll = document.getElementById('prodAll').innerText;
+          const prodAllWithoutComma = prodAll.replace(/,/g, '');
+          console.log(prodAll);
+
+          // 배송정보
+          const orderReceiver = document.getElementById('userOrder').value;
+          const userId = document.getElementById('userId').value;
+          const orderHp = document.getElementById('userHp').value;
+          const userZip = document.getElementById('userZip').value;
+          const userAddr1 = document.getElementById('userAddr1').value;
+          const userAddr2 = document.getElementById('userAddr2').value;
+          const orderMemo = document.getElementById('orderMemo').value;
+
+          // 할인정보
+          const userUsedPoint = document.getElementById('inputPoint').value;
+
+          // 결제방법
+          const orderPay = document.querySelector('input[name="orderPay"]:checked').value;
+
+          const paymentData = {
+            orderDetails : items,
+            orders: {
+              userId: userId,
+              orderReceiver: orderReceiver,
+              orderHp: orderHp,
+              orderAddr: userZip+', '+userAddr1+', '+userAddr2,
+              orderPay: orderPay,
+              orderPrice: prodAllWithoutComma,
+              userUsedPoint: userUsedPoint,
+              orderMemo: orderMemo
+            }
+          };
+          console.log(paymentData);
+
+          fetchPost(`/lotteon/product/order/checkout`, paymentData)
+          .then(data => {
+            console.log(data);
+            //alert("주문이 완료되었습니다.");
+            //window.location.href = "/lotteon/product/complete";
+          })
+          .catch(error => {
+            console.error('주문 처리 중 에러 발생:', error); // 오류가 발생한 경우 콘솔에 에러를 출력합니다.
+            alert("주문 처리 중 오류가 발생했습니다. 다시 시도해주세요."); // 사용자에게 오류 메시지를 알림 창으로 표시합니다.
+          });
+
+
+
         }
 
 
@@ -239,7 +312,7 @@
         </p>
       </nav>
 
-      <form id="buyForm" th:action="@{/product/checkout}" method="post">
+      <form id="buyForm" action="#">
         <!-- 주문 상품 목록 -->
         <table>
           <thead>
@@ -258,10 +331,14 @@
             <tr class="orderItems" th:each="orderProduct, index:${map.value}">
               <td>
                 <article>
-                  <a href="#"><img th:src="@{/uploads/__${orderProduct.thumb190}__}" alt=""></a>
+                  <a href="#"><img name="thumb190" th:src="@{/uploads/__${orderProduct.thumb190}__}" alt=""></a>
                   <div>
-                    <input type="text" id="prodNo" th:value="${orderProduct.cartProdNo}">
-                    <h2><a href="#">[[${orderProduct.prodName}]]</a></h2>
+                    <input type="hidden" id="cartProdNo" th:value="${orderProduct.cartProdNo}">
+                    <input type="hidden" id="prodNo" th:value="${orderProduct.prodNo}">
+                    <input type="hidden" id="prodSeller" th:value="${orderProduct.prodSeller}">
+                    <input type="hidden" id="optNo" th:value="${orderProduct.optDetailNo}">
+                    <input type="hidden" id="prodCompany" th:value="${orderProduct.prodCompany}">
+                    <h2><a href="#" name="prodName" th:text="${orderProduct.prodName}"></a></h2>
                     <p>[[${orderProduct.prodInfo}]]</p>
                     <p id="prodOpt" th:if="${orderProduct.optValue1 != null}">
                       <span th:text="'옵션: ' + ${orderProduct.optValue1}"></span>
@@ -275,7 +352,7 @@
                   </div>
                 </article>
               </td>
-              <td class="prodCount">[[${orderProduct.count}]]</td>
+              <td class="prodCount" name="count">[[${orderProduct.count}]]</td>
               <td>
                 <p class="org_price" th:if="${orderProduct.optValue1}!= null">
                   <span class="org_price_value"  th:text="${#numbers.formatInteger(orderProduct.optPrice, 3, 'COMMA')+'원'}"></span>
@@ -292,8 +369,8 @@
                 <input class="delivery_fee" type="hidden" th:value="${orderProduct.prodDeliveryFee}">
               </td>
               <td>
-                <p class="total_price" th:if="${orderProduct.optValue1} == null" th:text="${#numbers.formatInteger((orderProduct.prodPrice * (100 - orderProduct.prodDiscount) * orderProduct.count * 0.01), 3, 'COMMA')+'원'}"></p>
-                <p class="total_price" th:if="${orderProduct.optValue1} != null" th:text="${#numbers.formatInteger((orderProduct.optPrice * (100 - orderProduct.prodDiscount) * orderProduct.count * 0.01), 3, 'COMMA')+'원'}"></p>
+                <p class="total_price" name="detailPrice" th:if="${orderProduct.optValue1} == null" th:text="${#numbers.formatInteger((orderProduct.prodPrice * (100 - orderProduct.prodDiscount) * orderProduct.count * 0.01), 3, 'COMMA')+'원'}"></p>
+                <p class="total_price" name="detailPrice" th:if="${orderProduct.optValue1} != null" th:text="${#numbers.formatInteger((orderProduct.optPrice * (100 - orderProduct.prodDiscount) * orderProduct.count * 0.01), 3, 'COMMA')+'원'}"></p>
               </td>
             </tr>
 
@@ -335,7 +412,7 @@
             </tr>
             <tr>
               <td>전체주문금액</td>
-              <td id="prodAll">0</td>
+              <td id="prodAll" name="orderPrice">0</td>
             </tr>
           </table>
           <input type="button" id="btnOrder" value="결제하기">
@@ -348,6 +425,7 @@
             <tr>
               <td>주문자</td>
               <td><input type="text" class="deliveryInfo" name="orderReceiver" id="userOrder" onfocus="removeValue(event)" th:value="${user.userName}"/> </td>
+              <td><input type="hidden" class="deliveryInfo" name="userId" id="userId" onfocus="removeValue(event)" th:value="${user.userId}"/> </td>
             </tr>
             <tr>
               <td>휴대폰</td>
@@ -373,6 +451,12 @@
               <td>상세주소</td>
               <td>
                 <input type="text" name="orderAddr" id="userAddr2" th:value="${user.userAddr2}"/>
+              </td>
+            </tr>
+            <tr>
+              <td>배송 메세지</td>
+              <td>
+                <input type="text" name="orderMemo" id="orderMemo"/>
               </td>
             </tr>
           </table>
@@ -412,9 +496,9 @@
             <div>
                 <span>기타</span>
                 <p>
-                    <label><input type="radio" name="orderPay" value="type3"/>휴대폰결제</label>
+                    <label><input type="radio" name="orderPay" value="type5"/>휴대폰결제</label>
                     <label>
-                        <input type="radio" name="orderPay" value="type4"/>카카오페이
+                        <input type="radio" name="orderPay" value="type6"/>카카오페이
                         <img src="../images/ico_kakaopay.gif" alt="카카오페이"/>
                     </label>
                 </p>
