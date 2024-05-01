@@ -10,4 +10,7 @@ import java.util.List;
 
 @Repository
 public interface UserPointRepository extends JpaRepository<UserPoint, Integer> , UserPointRepositoryCustom {
+
+    UserPoint findByUserId(String userId);
+
 }
