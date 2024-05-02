@@ -1698,3 +1698,19 @@ footer p > strong {
     line-height: 23px;
     cursor: pointer;
 }
+
+/* 별 */
+.ratingTd {
+    font-size: 24px;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 30px;
+    color: #999999;
+}
+
+.star:hover,
+.star.clicked {
+    color: #fff400;
+}

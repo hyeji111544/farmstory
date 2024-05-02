@@ -617,5 +617,3 @@ window.onload = function (){
         }
     }
 }
-
-
