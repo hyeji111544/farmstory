@@ -32,7 +32,7 @@
                     // 삭제
                     let result = false;
                     if(faq_faqNo.length != 0){
-                        result = confirm("선택하신 상품을 장바구니에서 삭제하시겠습니까?");
+                        result = confirm("선택하신 게시글을 삭제하시겠습니까?");
                     }else{
                         alert("선택된 글이 없습니다.");
                     }
@@ -53,10 +53,8 @@
                             })
                             .then(data => {
                                 if(data.data === '삭제 성공'){
-                                    for(let i=0; i<faq_faqNo.length; i++){
-
-                                        location.replace("/lotteon/admin/cs/faq/list");
-                                    }
+                                    faq_faqNo.forEach(function ())
+                                        //location.replace("/lotteon/admin/cs/faq/list");
                                 }
                             })
                             .catch(err => console.log(err))

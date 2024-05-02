@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>롯데ON::1조 관리자 페이지</title>
@@ -10,18 +11,31 @@
     <link rel="stylesheet" th:href="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css}"/>
     <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/seller/seller.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/adminBanner.css}">
 </head>
 <body>
     <div id="admin-wrapper">
         <header>
             <div>
-                <a th:href="@{/admin/index}" class="logo"><img th:src="@{/images/admin/admin_logo.png}" alt="admin_logo"/></a>
-                <p>
-                    <span>홍길동님 반갑습니다.</span>
-                    <a th:href="@{/}">HOME |</a>
-                    <a href="#">로그아웃 |</a>
-                    <a th:href="@{/cs/index}">고객센터</a>
-                </p>
+                <!--로그인 안 했을때-->
+                <th:block th:if="${!#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/member/login}">로그인</a>
+                    <a th:href="@{/member/join}">회원가입</a>
+                </th:block>
+                <!--로그인 했을때-->
+                <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                    <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+                    <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+
+                    <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
+                    <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
+
+                    <a th:href="@{product/cart(userId=${#authentication.principal.user.userId})}">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
+                    </a>
+                    <a th:href="@{/member/logout}">로그아웃</a>
+
+                </th:block>
             </div>
         </header>
         <main>
@@ -38,7 +52,7 @@
                     <li>
                         <a href="#"><i class="fas fa-store" aria-hidden="true"></i>상점관리</a>
                         <ol>
-                            <li><a href="#">판매자현황</a></li>
+                            <li><a th:href="">판매자현황</a></li>
                             <li><a href="#">재고관리</a></li>
                         </ol>
                     </li>
