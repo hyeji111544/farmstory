@@ -141,8 +141,18 @@ public class MemberService {
                 //사용 가능
                 return  result;
             }
+        }else if(type.equals("fax")){
+            Optional<Seller> optSeller = sellerRepository.findByFax(value);
+            //Optional 비어있는지 체크
+            if (optSeller.isPresent()) {
+                //사용 불가능
+                result = 1;
+                return result;
+            }else {
+                //사용 가능
+                return  result;
+            }
         }
-
         return result;
     }
 

@@ -290,6 +290,4 @@ public class SellerService {
             return 0;
         }
     }
-
-
 }

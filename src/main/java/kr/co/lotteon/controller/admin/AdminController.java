@@ -1,6 +1,7 @@
 package kr.co.lotteon.controller.admin;
 
 import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.Banner;
 import kr.co.lotteon.entity.ProdOptDetail;
 import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.admin.AdminService;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,7 +37,20 @@ public class AdminController {
 // admin - config //
     // 관리자 설정 배너 이동
     @GetMapping("/admin/config/banner")
-    public String configBanner(){
+    public String configBanner(Model model){
+
+        // 카테고리별로 model참조 5번
+        List<BannerDTO> main1 = adminService.bannerList("main1");
+        List<BannerDTO> main2 = adminService.bannerList("main2");
+        List<BannerDTO> product1 = adminService.bannerList("product1");
+        List<BannerDTO> member1 = adminService.bannerList("member1");
+        List<BannerDTO> my1 = adminService.bannerList("my1");
+
+        model.addAttribute("main1", main1);
+        model.addAttribute("main2", main2);
+        model.addAttribute("product1", product1);
+        model.addAttribute("member1", member1);
+        model.addAttribute("my1", my1);
 
         return "/admin/config/banner";
     }
@@ -192,6 +207,39 @@ public class AdminController {
         return adminproductService.registerProdOption(optionDTO1, optionDTO2, optionDTO3, optDetailDTOS);
     }
 
+    // 배너 등록
+    @PostMapping("/admin/banner/register")
+    public String bannerRegister(BannerDTO bannerDTO, MultipartFile file) {
 
+        log.info("bannerDTO1 : " + bannerDTO);
+        log.info("bannerImg : " + file);
 
+        // 이미지 파일
+        String bannerPath = adminService.bannerUpload(bannerDTO.getBanImgCate(), file);
+        bannerDTO.setBanImgName(bannerPath);
+        // 나머지 글자 정보들
+        log.info("bannerDTO2 : " + bannerDTO);
+
+        if (bannerPath != null) {
+            Banner saveBanner = adminService.bannerInsert(bannerDTO);
+            if(saveBanner.getBanNo() > 0){
+                //저장 성공
+                return "redirect:/admin/config/banner";
+            }else {
+                // 저장실패
+                return "redirect:/admin/config/banner?fail=100";
+            }
+        }else {
+            // 저장실패
+            return "redirect:/admin/config/banner?fail=100";
+        }
+    }
+    // 배너 삭제
+    @PostMapping("/admin/banner/delete")
+    public ResponseEntity<?> deleteBanner(@RequestBody Map<String, int[]> requestData){
+        log.info("requestData :" + requestData);
+        int[] banNos = requestData.get("banNo");
+        log.info("banNos {}", banNos);
+        return adminService.deleteBanner(banNos);
+    }
 }
