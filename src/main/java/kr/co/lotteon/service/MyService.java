@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -321,6 +322,14 @@ public class MyService {
     public  LinkedHashMap<Integer, List<OrderDetailDTO>> myHomeSelectOrder (String UserId){
 
         return ordersRepository.selectMyOrdersHome(UserId);
+
+    }
+
+    // my-review 작성
+    public void writeReview(PdReviewDTO pdReviewDTO, MultipartFile revImage){
+        // 1. 이미지 저장
+        
+        // 2. 리뷰정보 DB 저장
 
     }
 

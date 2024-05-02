@@ -19,39 +19,26 @@
                 const productNo = popReview.querySelector('.productNo');
 
                 productName.innerText = prodName.innerText;
-                productNo.innerText = prodNo;
-
+                productNo.value = prodNo;
             }
 
-            function reviewSubmit(e) {
-                alert("ㅎ2");
-                const productName = document.getElementById("productName");
-                const productNo = document.getElementById("productNo");
-                const revContent = document.getElementById("revContent");
-                const revThumb = document.getElementById("revThumb");
-/*
-                const jsonData = {
-                    "": ,
-                    "": ,
-                    "": ,
-                    "": ,
+            // 리뷰 제출 버튼
+            function btnReviewSubmit() {
+                const reviewForm = document.getElementsByClassName('reviewForm')[0]; // 상품평쓰기 창
+                const popReview = document.getElementById('popReview'); // 상품평쓰기 창
+                const revScore = popReview.querySelector('.revScore').value;
+                const revContent = popReview.querySelector('#revContent').value;
+                const revThumb = popReview.querySelector('#revThumb').value;
+                console.log(revScore)
+                console.log(revContent)
+                console.log(revThumb)
+                if (revScore != "" && revContent != "" && revThumb != "") {
+                    reviewForm.submit();
+                }else{
+
+                    alert("항목을 빠짐없이 입력해주세요.");
                 }
-
-
-                fetch("주소",{
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(jsonData)
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data)
-                    })
-                    .catch(err => console.log(err))
-*/
-
             }
-
 
            window.onload = function () {
                /* 별 */
@@ -71,6 +58,7 @@
                    star.addEventListener('click', function() {
                        const value = this.getAttribute('data-value');
                        document.querySelector('.ratingValue').setAttribute('data-rated', value);
+                       document.querySelector('.revScore').value = value;
                        highlightStars(value);
                        // 여기에 값 설정을 위한 코드 추가
                    });

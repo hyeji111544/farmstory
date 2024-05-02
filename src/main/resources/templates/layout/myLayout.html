@@ -230,7 +230,7 @@
                     <button class="btnClose">X</button>
                 </nav>
                 <section>
-                    <form action="#">
+                    <form action="#" >
                         <table border="0">
                             <tr>
                                 <th>문의종류</th>
@@ -306,16 +306,19 @@
                     <button class="btnClose">X</button>
                 </nav>
                 <section>
-                    <form action="#">
+                    <form th:action="@{/my/writeReview}" method="post" enctype="multipart/form-data" class="reviewForm">
                         <table border="0">
                             <tr>
                                 <th>상품명</th>
-                                <td id="productName" class="productName">상품명 출력</td>
-                                <td id="productNo" class="productNo">상품 번호</td>
+                                <td id="productName" class="productName"></td>
+                                <td id="productNo">
+                                    <input class="productNo" type="text" name="prodNo">
+                                </td>
                             </tr>
                             <tr>
                                 <th>만족도</th>
                                 <td class="ratingTd">
+                                    <input type="text" class="revScore" name="revScore">
                                     <div class="ratingValue">
                                         <span class="star" data-value="1">&#9733;</span>
                                         <span class="star" data-value="2">&#9733;</span>
@@ -334,7 +337,7 @@
                             <tr>
                                 <th>이미지</th>
                                 <td class="reviewImg">
-                                    <input id="revThumb" name="revThumb" type="file" placeholder="이미지등록">
+                                    <input id="revThumb" name="revImage" type="file" placeholder="이미지등록">
                                 </td>
                             </tr>
                         </table>
@@ -343,7 +346,7 @@
                         </p>
 
                         <div>
-                            <span id="reviewSubmit" class="btnPositive" onclick="reviewSubmit()">작성완료</span>
+                            <span id="reviewSubmit" class="btnPositive" onclick="btnReviewSubmit()">작성완료</span>
                             <span class="btnNegative btnClose">취소</span>
                         </div>
                     </form>
