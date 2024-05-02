@@ -498,8 +498,8 @@
                     <li><a href="#">쿠폰존</a></li>
                     <li><a href="#">사용후기</a></li>
                     <li><a href="#">개인결제</a></li>
-                    <li><a href="#">고객센터</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a th:href="@{/cs/index}">고객센터</a></li>
+                    <li><a th:href="@{/cs/faq/list(faqCate='user')}">FAQ</a></li>
                 </ul>
             </div>
         </div>
@@ -633,10 +633,10 @@
     </main>
     <footer>
         <ul>
-            <li><a href="#">회사소개</a></li>
-            <li><a href="#">서비스이용약관</a></li>
-            <li><a href="#">개인정보처리방침</a></li>
-            <li><a href="#">전자금융거래약관</a></li>
+            <li><a th:href="@{/company/index}">회사소개</a></li>
+            <li><a th:href="@{/policy/buyer}">서비스이용약관</a></li>
+            <li><a th:href="@{/policy/privacy}">개인정보처리방침</a></li>
+            <li><a th:href="@{/policy/finance}">전자금융거래약관</a></li>
         </ul>
         <div>
             <p><img src="../images/footer_logo.png" alt="로고" /></p>
