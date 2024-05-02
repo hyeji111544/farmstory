@@ -61,10 +61,10 @@
                                     <p th:text="${orderList.count}"></p>
                                     <p th:text="${#numbers.formatInteger(orderList.detailPrice,3,'COMMA')}"></p>
                                 </div>
-                                <div>주문 상태</div>
+                                <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
                                     <span>수취확인</span>
-                                    <span class="review">상품평쓰기</span>
+                                    <span class="review" th:text="${orderList.prodNo}">상품평쓰기</span>
                                     <span>반품신청</span>
                                     <span>교환신청</span>
                                 </div>
