@@ -190,10 +190,5 @@ public class ProductController {
         return "/product/order";
     }
 
-    // 상품 주문 완료 이동
-    @GetMapping("/product/complete")
-    public String prodComplete(){
-        return "/product/complete";
-    }
 
 }

@@ -114,51 +114,49 @@
             const orderBtn = document.getElementById('btnOrder');
 
             orderBtn.onclick = function (e){
-
+                e.preventDefault();
                 if (document.getElementById('prodCount').innerText === "0"){
                     alert('주문상품을 선택해주세요.');
-                }
+                }else {
 
-                e.preventDefault();
-                var selectedCart = document.getElementsByName('selectedCart');
-                const userId = document.getElementById('userForDirect').value;
-                var selectedCartList = [];
-                var selectedCountList = [];
+                    var selectedCart = document.getElementsByName('selectedCart');
+                    const userId = document.getElementById('userForDirect').value;
+                    var selectedCartList = [];
+                    var selectedCountList = [];
 
-                selectedCart.forEach(function (checkbox) {
-                    if (checkbox.checked){
-                        var inputField = checkbox.parentNode.querySelector('input[type="hidden"]');
-                        var cartProdNo = inputField.value;
-                        selectedCartList.push(cartProdNo);
-                        var inputCount = checkbox.parentNode.querySelector('.prodCount');
-                        var countValue = inputCount.value;
-                        selectedCountList.push(countValue);
-                    }
-                });
-
-                console.log(selectedCartList);
-                console.log(selectedCountList);
-
-                const jsonDate = {
-                    cartProdNo : selectedCartList,
-                    count : selectedCountList
-                };
-
-                fetchPut(`/lotteon/cart/update`, jsonDate)
-                    .then(data => {
-                        console.log(data); // 서버로부터 받은 데이터 출력 또는 처리
-
-                        var selectedProdInput = document.getElementById('selectedProd');
-                        selectedProdInput.value = selectedCartList.join(',');
-                        const form = document.getElementById('buyForm');
-                        form.submit();
-
-                    })
-                    .catch(error => {
-                        console.error(error); // 오류 처리
+                    selectedCart.forEach(function (checkbox) {
+                        if (checkbox.checked){
+                            var inputField = checkbox.parentNode.querySelector('input[type="hidden"]');
+                            var cartProdNo = inputField.value;
+                            selectedCartList.push(cartProdNo);
+                            var inputCount = checkbox.parentNode.querySelector('.prodCount');
+                            var countValue = inputCount.value;
+                            selectedCountList.push(countValue);
+                        }
                     });
 
+                    console.log(selectedCartList);
+                    console.log(selectedCountList);
 
+                    const jsonDate = {
+                        cartProdNo : selectedCartList,
+                        count : selectedCountList
+                    };
+
+                    fetchPut(`/lotteon/cart/update`, jsonDate)
+                        .then(data => {
+                            console.log(data); // 서버로부터 받은 데이터 출력 또는 처리
+
+                            var selectedProdInput = document.getElementById('selectedProd');
+                            selectedProdInput.value = selectedCartList.join(',');
+                            const form = document.getElementById('buyForm');
+                            form.submit();
+
+                        })
+                        .catch(error => {
+                            console.error(error); // 오류 처리
+                        });
+                }
 
             }
 
@@ -349,7 +347,7 @@
 
                     sumOrgPrice += orgParsePrice;
                     discountPrice += orgParsePrice - disParsePrice;
-                    sumTotalPrice = sumOrgPrice - discountPrice + maxDeliveryFee; // 최종 가격
+                    sumTotalPrice = sumOrgPrice - discountPrice; // 최종 가격
                     if (sumTotalPrice >= 50000) {
                         maxDeliveryFee = 0;
                         sumTotalPrice = sumOrgPrice - discountPrice + maxDeliveryFee; // 조정된 최종 가격 다시 계산
@@ -623,8 +621,8 @@
                 </table>
                 <form id="buyForm" th:action="@{/product/order}" method="POST">
                     <input type="submit" id="btnOrder" value="주문하기">
-                    <input type="text"  name="user" id="userForDirect" th:value="${#authentication.principal.user.userId}">
-                    <input type="text" name="cartProdNo" id="selectedProd">
+                    <input type="hidden"  name="user" id="userForDirect" th:value="${#authentication.principal.user.userId}">
+                    <input type="hidden" name="cartProdNo" id="selectedProd">
                 </form>
             </div>
 

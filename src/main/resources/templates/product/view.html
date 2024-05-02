@@ -120,7 +120,7 @@
                                             </div>
                                             <div class="optionPrice">
                                                 <span>${matchingDTOs.optPrice}원</span>
-                                                <input type="text" name="optDetailNo" value="${matchingDTOs.optDetailNo}"/>
+                                                <input type="hidden" name="optDetailNo" value="${matchingDTOs.optDetailNo}"/>
                                                 <span onclick="delSelectedOption()">x</span>
                                             </div>
                                         </div>`;
@@ -237,49 +237,55 @@
 
             // 찜하기(wish) 버튼 눌렀을 때 호출되는 함수
             function btnWish(){
-                const userId = document.getElementById('userForDirect').value;
-                const prodNoValue = document.getElementById('prodNo');
-                const prodNo = prodNoValue.innerText;
-                console.log(userId);
-                console.log(prodNo);
-                // 카운터 문서객체 생성
-                const prodCounts = document.querySelectorAll('input.numInput[name="num"]');
-                // 옵션 문서객체 생성
-                const optDetailsNo = document.querySelectorAll('input[name="optDetailNo"]');
-                // 옵션과 갯수 리스트 저장할 배열 선언
-                const jsonDataArray = [];
 
-                // optDetailNo 갯수만큼 반복하며 jsonData 를 저장함
-                optDetailsNo.forEach((optDetailsNo, index) => {
-                   const optNoValue = optDetailsNo.value;
-                   const prodCountValue = prodCounts[index].value;
+                const userIdElement = document.getElementById('userForDirect');
+                if (!userIdElement) {
+                    alert("로그인 후 이용 가능합니다.");
+                    window.location.href = "/lotteon/member/login";
+                }else {
+                    const userId = userIdElement.value;
+                    const prodNoValue = document.getElementById('prodNo');
+                    const prodNo = prodNoValue.innerText;
+                    console.log(userId);
+                    console.log(prodNo);
+                    // 카운터 문서객체 생성
+                    const prodCounts = document.querySelectorAll('input.numInput[name="num"]');
+                    // 옵션 문서객체 생성
+                    const optDetailsNo = document.querySelectorAll('input[name="optDetailNo"]');
+                    // 옵션과 갯수 리스트 저장할 배열 선언
+                    const jsonDataArray = [];
 
-                   console.log("prodOpt : " + optNoValue);
-                   console.log("count : " + prodCountValue);
+                    // optDetailNo 갯수만큼 반복하며 jsonData 를 저장함
+                    optDetailsNo.forEach((optDetailsNo, index) => {
+                        const optNoValue = optDetailsNo.value;
+                        const prodCountValue = prodCounts[index].value;
 
-                   const jsonData = {
-                       "userId" : userId,
-                       "prodNo" : prodNo,
-                       "optNo" : optNoValue,
-                       "wishCount" : prodCountValue
-                   };
-                   jsonDataArray.push(jsonData);
-                });
-                console.log(jsonDataArray);
+                        console.log("prodOpt : " + optNoValue);
+                        console.log("count : " + prodCountValue);
 
-                const data = fetchPost(`/lotteon/product/view/insertWish`, jsonDataArray)
-                    .then(response => {
-                        console.log(response);
-
-                        if (confirm("찜하기로 이동하시겠습니까?")){
-                            window.location.href = "위시페이지 주소가...?";
-                        }
-                    })
-                    .catch(error => {
-                        console.error("추가에 실패했습니다.",error);
-                        alert("추가에 실패했습니다.");
+                        const jsonData = {
+                            "userId" : userId,
+                            "prodNo" : prodNo,
+                            "optNo" : optNoValue,
+                            "wishCount" : prodCountValue
+                        };
+                        jsonDataArray.push(jsonData);
                     });
+                    console.log(jsonDataArray);
 
+                    const data = fetchPost(`/lotteon/product/view/insertWish`, jsonDataArray)
+                        .then(response => {
+                            console.log(response);
+
+                            if (confirm("찜하기로 이동하시겠습니까?")){
+                                window.location.href = "위시페이지 주소가...?";
+                            }
+                        })
+                        .catch(error => {
+                            console.error("추가에 실패했습니다.",error);
+                            alert("추가에 실패했습니다.");
+                        });
+                }
             }
 
             // 주문(order) 버튼 눌렀을 때 호출되는 함수
@@ -289,45 +295,52 @@
 
             // 장바구니(cart) 버튼 눌렀을 때 호출되는 함수
             function btnCart(){
-                const userId = document.getElementById('userForDirect').value;
-                const prodNoValue = document.getElementById('prodNo');
-                const prodNo = prodNoValue.innerText;
-                console.log(userId);
-                console.log(prodNo);
-                // 카운터 문서객체 생성
-                const prodCounts = document.querySelectorAll('input.numInput[name="num"]');
-                // 옵션 문서객체 생성
-                const optDetailsNo = document.querySelectorAll('input[name="optDetailNo"]');
-                // 옵션과 갯수 리스트 저장할 배열 선언
-                const jsonDataArray = [];
+                const userIdElement = document.getElementById('userForDirect');
+                if (!userIdElement) {
+                    alert("로그인 후 이용 가능합니다.");
+                    window.location.href = "/lotteon/member/login";
+                }else {
+                    const userId = userIdElement.value;
+                    const prodNoValue = document.getElementById('prodNo');
+                    const prodNo = prodNoValue.innerText;
+                    console.log(userId);
+                    console.log(prodNo);
+                    // 카운터 문서객체 생성
+                    const prodCounts = document.querySelectorAll('input.numInput[name="num"]');
+                    // 옵션 문서객체 생성
+                    const optDetailsNo = document.querySelectorAll('input[name="optDetailNo"]');
+                    // 옵션과 갯수 리스트 저장할 배열 선언
+                    const jsonDataArray = [];
 
-                // optDetailNo 갯수만큼 반복하며 jsonData 를 저장함
-                optDetailsNo.forEach((optDetailsNo, index) => {
-                    const optNoValue = optDetailsNo.value;
-                    const prodCountValue = prodCounts[index].value;
+                    // optDetailNo 갯수만큼 반복하며 jsonData 를 저장함
+                    optDetailsNo.forEach((optDetailsNo, index) => {
+                        const optNoValue = optDetailsNo.value;
+                        const prodCountValue = prodCounts[index].value;
 
-                    const jsonData = {
-                        "userId" : userId,
-                        "prodNo" : prodNo,
-                        "optNo" : optNoValue,
-                        "count" : prodCountValue
-                    };
-                    jsonDataArray.push(jsonData);
-                });
-                console.log(jsonDataArray);
-
-                const data = fetchPost(`/lotteon/product/view/insertCart?userId=${userId}`, jsonDataArray)
-                    .then(response => {
-                        console.log(response);
-
-                        if (confirm("장바구니로 이동하시겠습니까?")){
-                            window.location.href = "/lotteon/product/cart?userId=" + userId;
-                        }
-                    })
-                    .catch(error => {
-                        console.error("장바구니 추가에 실패했습니다.",error);
-                        alert("장바구니 추가에 실패했습니다.");
+                        const jsonData = {
+                            "userId" : userId,
+                            "prodNo" : prodNo,
+                            "optNo" : optNoValue,
+                            "count" : prodCountValue
+                        };
+                        jsonDataArray.push(jsonData);
                     });
+                    console.log(jsonDataArray);
+
+                    const data = fetchPost(`/lotteon/product/view/insertCart?userId=${userId}`, jsonDataArray)
+                        .then(response => {
+                            console.log(response);
+
+                            if (confirm("장바구니로 이동하시겠습니까?")){
+                                window.location.href = "/lotteon/product/cart?userId=" + userId;
+                            }
+                        })
+                        .catch(error => {
+                            console.error("장바구니 추가에 실패했습니다.",error);
+                            alert("장바구니 추가에 실패했습니다.");
+                        });
+                }
+
             }
 
         </script>
@@ -407,7 +420,7 @@
                             <span>
                                 <span th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" style="font-size: 20px"></span>원
                             </span>
-                            <input type="text" name="optDetailNo" value=""/>
+                            <input type="hidden" name="optDetailNo" value=""/>
                         </div>
                     </div>
                 </div>

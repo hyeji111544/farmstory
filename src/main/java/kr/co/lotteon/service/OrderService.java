@@ -3,6 +3,7 @@ package kr.co.lotteon.service;
 import com.querydsl.core.Tuple;
 import kr.co.lotteon.dto.CartInfoDTO;
 import kr.co.lotteon.dto.OrderInfoDTO;
+import kr.co.lotteon.dto.OrdersDTO;
 import kr.co.lotteon.dto.UserDTO;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
@@ -120,6 +121,7 @@ public class OrderService {
         return companyMap;
     }
 
+
     public UserDTO selectUser(String userId) {
         Tuple userTuple = userRepository.selectUserInfoWithPoint(userId);
 
@@ -136,7 +138,8 @@ public class OrderService {
         return  modelMapper.map(user, UserDTO.class);
     }
 
-    public List<Map<String, String>> insertOrders(OrderInfoDTO orderInfoDTO){
+    // 결제버튼 눌렀을 시 처리과정
+    public int insertOrders(OrderInfoDTO orderInfoDTO){
         Map<String, String> orders = orderInfoDTO.getOrders();
         String orderPay = orders.get("orderPay");
         if ("type4".equals(orderPay)){
@@ -168,6 +171,7 @@ public class OrderService {
             saveOrderDetail(orderNo, orderDetail);
 
             int cartProdNo = Integer.parseInt(orderDetail.get("cartProdNo"));
+            // cart 테이블에서 삭제
             cartProductRepository.deleteById(cartProdNo);
 
             int prodNo = Integer.parseInt(orderDetail.get("prodNo"));
@@ -183,13 +187,13 @@ public class OrderService {
             }
 
         }
-
-        selectUserPoint(userId, userUsedPoint);
-
-        return orderDetails;
+        if (userUsedPoint != 0){
+            selectUserPoint(userId, userUsedPoint);
+        }
+        return orderNo;
 
     }
-
+    
     // orders 테이블에 저장
     public Orders saveOrders(Map<String, String> orderData) {
         Orders orders = new Orders();
@@ -208,6 +212,7 @@ public class OrderService {
         return ordersRepository.save(orders);
     }
 
+    //orderDetail 테이블에 저장
     public void saveOrderDetail(int orderNo, Map<String, String> orderDetail) {
 
         int prodNo = Integer.parseInt(orderDetail.get("prodNo"));
@@ -241,11 +246,13 @@ public class OrderService {
             userPoint.setPointNo(userPoint.getPointNo());
             userPoint.setPointBalance(userPoint.getPointBalance()-userUsedPoint);
             userPointRepository.save(userPoint);
-
-            savePointHistory(userPoint.getPointNo(), userUsedPoint);
+            if (userUsedPoint != 0){
+                savePointHistory(userPoint.getPointNo(), userUsedPoint);
+            }
         }
     }
 
+    // 포인트 히스토리 저장
     private void savePointHistory(int pointNo, int changePoint) {
         // 포인트 내역 엔터티 생성
         PointHistory pointHistory = new PointHistory();
@@ -303,5 +310,84 @@ public class OrderService {
                 productRepository.save(product);
             }
         }
+    }
+
+    public Orders orderComplete(int orderNo) {
+        Optional<Orders> optOrders = ordersRepository.findById(orderNo);
+        Orders orders = new Orders();
+        if (optOrders.isPresent()) {
+            orders = optOrders.get();
+        }
+        String userId = orders.getUserId();
+
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            String userName = user.getUserName();
+            String userHp = user.getUserHp();
+
+            orders.setUserName(userName);
+            orders.setUserHp(userHp);
+        }
+
+        return orders;
+
+    }
+
+    public List<CartInfoDTO> orderDetailComplete(int orderNo) {
+        List<OrderDetail> orderDetailList = orderdetailRepository.findByOrderNo(orderNo);
+        List<CartInfoDTO> cartInfoDTOs = new ArrayList<>();
+        for (OrderDetail orderDetail : orderDetailList) {
+
+            int optNo = orderDetail.getOptNo();
+            int prodNo = orderDetail.getProdNo();
+
+            ProdOptDetail optProdOptDetail = prodOptDetailRepository.selectOptDetailWihtName(optNo);
+
+            Product product = null;
+            try {
+                Tuple productTuple = productRepository.selectProductById(prodNo);
+
+                if (productTuple != null) {
+                    product = productTuple.get(0, Product.class);
+                    Productimg productImg = productTuple.get(1, Productimg.class);
+                    if (productImg != null) {
+                        product.setThumb190(productImg.getThumb190());
+                    }
+
+                }else {
+                }
+            }catch (Exception e){
+                log.info(e.getMessage());
+            }
+            try {
+                CartInfoDTO cartInfoDTO = new CartInfoDTO();
+                cartInfoDTO.setProdNo(product.getProdNo());
+                cartInfoDTO.setProdName(product.getProdName());
+                cartInfoDTO.setProdInfo(product.getProdInfo());
+                cartInfoDTO.setProdDiscount(product.getProdDiscount());
+                cartInfoDTO.setProdPrice(product.getProdPrice());
+                cartInfoDTO.setProdDeliveryFee(product.getProdDeliveryFee()); // 배송비 추가
+                if (product.getThumb190() != null) {
+                    cartInfoDTO.setThumb190(product.getThumb190());
+                }
+                if (optProdOptDetail != null) {
+                    cartInfoDTO.setOptValue1(optProdOptDetail.getOptValue1());
+                    cartInfoDTO.setOptValue2(optProdOptDetail.getOptValue2());
+                    cartInfoDTO.setOptValue3(optProdOptDetail.getOptValue3());
+                    cartInfoDTO.setOptPrice(optProdOptDetail.getOptPrice());
+                }
+                cartInfoDTO.setCount(orderDetail.getCount());
+
+                cartInfoDTOs.add(cartInfoDTO);
+
+            }catch (Exception e){
+                log.info(e.getMessage());
+            }
+
+        }
+
+        return cartInfoDTOs;
+
     }
 }
