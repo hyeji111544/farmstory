@@ -3,10 +3,90 @@
     layout:decorate="~{/layout/myLayout.html}">
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
-        <!--/my/home 에서만 사용하는 js와 css-->
-        <script th:src="@{/js/my/jquery.star-rating-svg.min.js}"></script>
-        <script th:src="@{/js/my/popup.js}"></script>
-        <link rel="stylesheet" th:href="@{/css/my/star-rating-svg.css}">
+        <script>
+            function moveProdData() {
+                // 상품평 쓰기 박스로 이름과 번호 전달하기
+                const button = event.target; // 클릭한 버튼
+                const confirm = button.parentNode; // 버튼의 부모
+                const myOrderRow = confirm.parentNode // 버튼의 부모의 부모
+                const myOrderInfo = myOrderRow.querySelector('.myOrderInfo') // 할아버지의 둘째
+                const prodName = myOrderInfo.querySelector('.InfoProdName') // 상품 이름
+                const prodNo = button.id; // 상품 번호
+
+                const popReview = document.getElementById('popReview'); // 상품평쓰기 창
+
+                const productName = popReview.querySelector('.productName');
+                const productNo = popReview.querySelector('.productNo');
+
+                productName.innerText = prodName.innerText;
+                productNo.innerText = prodNo;
+
+            }
+
+            function reviewSubmit(e) {
+                alert("ㅎ2");
+                const productName = document.getElementById("productName");
+                const productNo = document.getElementById("productNo");
+                const revContent = document.getElementById("revContent");
+                const revThumb = document.getElementById("revThumb");
+/*
+                const jsonData = {
+                    "": ,
+                    "": ,
+                    "": ,
+                    "": ,
+                }
+
+
+                fetch("주소",{
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                    })
+                    .catch(err => console.log(err))
+*/
+
+            }
+
+
+           window.onload = function () {
+               /* 별 */
+               const stars = document.querySelectorAll('.star');
+
+               stars.forEach(star => {
+                   star.addEventListener('mouseover', function() {
+                       const value = this.getAttribute('data-value');
+                       highlightStars(value);
+                   });
+
+                   star.addEventListener('mouseleave', function() {
+                       const ratedValue = document.querySelector('.ratingValue').getAttribute('data-rated');
+                       highlightStars(ratedValue);
+                   });
+
+                   star.addEventListener('click', function() {
+                       const value = this.getAttribute('data-value');
+                       document.querySelector('.ratingValue').setAttribute('data-rated', value);
+                       highlightStars(value);
+                       // 여기에 값 설정을 위한 코드 추가
+                   });
+               });
+
+               function highlightStars(value) {
+                   stars.forEach(star => {
+                       if (star.getAttribute('data-value') <= value) {
+                           star.classList.add('clicked');
+                       } else {
+                           star.classList.remove('clicked');
+                       }
+                   });
+               }
+           }
+        </script>
         <!--여기까지-->
         <nav>
             <div>
@@ -18,10 +98,10 @@
                 </div>
 
                 <ol>
-                    <li><a href="#">주문·배송<span class="delivery">1</span></a></li>
-                    <li><a href="#">할인쿠폰<span class="coupon">1</span></a></li>
-                    <li><a href="#">포인트<span class="point">1,000</span></a></li>
-                    <li><a href="#">문의내역<span class="qna">1</span></a></li>
+                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
+                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
+                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point">1,000</span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
                 </ol>
             </div>
         </nav>
@@ -57,14 +137,14 @@
                                 <div><img th:src="@{/uploads/__${orderList.thumb190}__}"></div>
                                 <div class="myOrderInfo">
                                     <p th:text="${orderList.prodCompany}"></p>
-                                    <p th:text="${orderList.prodName}"></p>
+                                    <p class="InfoProdName" th:text="${orderList.prodName}"></p>
                                     <p th:text="${orderList.count}"></p>
                                     <p th:text="${#numbers.formatInteger(orderList.detailPrice,3,'COMMA')}"></p>
                                 </div>
-                                <div>주문 상태</div>
+                                <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
                                     <span>수취확인</span>
-                                    <span class="review">상품평쓰기</span>
+                                    <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}">상품평쓰기</span>
                                     <span>반품신청</span>
                                     <span>교환신청</span>
                                 </div>

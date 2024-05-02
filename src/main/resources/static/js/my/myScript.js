@@ -659,5 +659,3 @@ window.onload = function (){
         }
     }
 }
-
-

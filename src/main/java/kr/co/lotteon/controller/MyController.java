@@ -193,6 +193,14 @@ public class MyController {
         return "/my/qna";
     }
 
+    //마이페이지-리뷰 작성
+    public String reviewWrite(String UserId){
+
+        //myService.reviewWriter(UserId);
+
+        return null;
+    }
+
     //마이페이지-리뷰 이동
     @GetMapping("/my/review")
     public String myReview(){
