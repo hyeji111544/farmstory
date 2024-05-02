@@ -32,5 +32,10 @@ public class Orders {
     @CreationTimestamp
     private LocalDateTime orderDate;
 
+    @Transient
+    private String userName;
+    @Transient
+    private String userHp;
+
 
 }
