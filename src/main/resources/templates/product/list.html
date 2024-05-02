@@ -64,13 +64,13 @@
       <!-- 상품목록 페이지번호 -->
       <div class="paging">
        <span class="prev" th:if="${productPageResponseDTO.prev}" >
-                  <a th:href="@{/admin/product/list(pg=${productPageResponseDTO.start - 1})}"><&nbsp;이전</a>
+                  <a th:href="@{/product/list(pg=${productPageResponseDTO.start - 1})}"><&nbsp;이전</a>
                 </span>
         <span class="num" th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
-                  <a th:if="${num != 0}" th:href="@{/admin/product/list(pg=${num})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                  <a th:if="${num != 0}" th:href="@{/product/list(pg=${num})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
                 </span>
         <span class="next" th:if="${productPageResponseDTO.next}">
-                     <a th:href="@{/admin/product/list(pg=${productPageResponseDTO.end + 1})}">다음&nbsp;></a>
+                     <a th:href="@{/product/list(pg=${productPageResponseDTO.end + 1})}">다음&nbsp;></a>
         </span>
       </div>
 

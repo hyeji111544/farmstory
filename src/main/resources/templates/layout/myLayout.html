@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>롯데ON::1조 대한민국 1등 온라인 쇼핑몰</title>
@@ -8,19 +9,36 @@
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
     <script th:src="@{https://kit.fontawesome.com/20962f3e4b.js}" crossorigin="anonymous"></script>
+    <!--/my/home 에서만 사용하는 js와 css-->
+    <script th:src="@{/js/my/jquery.star-rating-svg.min.js}"></script>
     <script th:src="@{/js/my/popup.js}"></script>
     <script th:src="@{/js/util.js}"></script>
     <link rel="stylesheet" th:href="@{/css/my/style.css}">
+    <link rel="stylesheet" th:href="@{/css/my/star-rating-svg.css}">
 </head>
 <body>
     <div id="wrapper">
         <header>
             <div class="top">
                 <div>
-                    <a th:href="@{/member/login}">로그인</a>
-                    <a th:href="@{/member/join}">회원가입</a>
-                    <a th:href="@{/my/home}">마이페이지</a>
-                    <a th:href="@{product/cart}"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니</a>
+                    <!--로그인 안 했을때-->
+                    <th:block th:if="${!#authorization.expression('isAuthenticated()')}">
+                        <a th:href="@{/member/login}">로그인</a>
+                        <a th:href="@{/member/join}">회원가입</a>
+                    </th:block>
+                    <!--로그인 했을때-->
+                    <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                        <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+                        <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+
+                        <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
+                        <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
+
+                        <a th:href="@{product/cart(userId=${#authentication.principal.user.userId})}">
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
+                        </a>
+                        <a th:href="@{/member/logout}">로그아웃</a>
+                    </th:block>
                 </div>
             </div>
             <div class="logo">
@@ -40,10 +58,10 @@
         </div>
         <footer>
             <ul>
-                <li><a href="#">회사소개</a></li>
-                <li><a href="#">서비스이용약관</a></li>
-                <li><a href="#">개인정보처리방침</a></li>
-                <li><a href="#">전자금융거래약관</a></li>
+                <li><a th:href="@{/company/index}">회사소개</a></li>
+                <li><a th:href="@{/policy/buyer}">서비스이용약관</a></li>
+                <li><a th:href="@{/policy/privacy}">개인정보처리방침</a></li>
+                <li><a th:href="@{/policy/finance}">전자금융거래약관</a></li>
                 <li><a href="#">[[${appInfo.version}]]</a></li>
             </ul>
             <div>
@@ -212,7 +230,7 @@
                     <button class="btnClose">X</button>
                 </nav>
                 <section>
-                    <form action="#">
+                    <form action="#" >
                         <table border="0">
                             <tr>
                                 <th>문의종류</th>
@@ -288,22 +306,38 @@
                     <button class="btnClose">X</button>
                 </nav>
                 <section>
-                    <form action="#">
+                    <form th:action="@{/my/writeReview}" method="post" enctype="multipart/form-data" class="reviewForm">
                         <table border="0">
                             <tr>
                                 <th>상품명</th>
-                                <td class="productName">상품명 출력</td>
+                                <td id="productName" class="productName"></td>
+                                <td id="productNo">
+                                    <input class="productNo" type="text" name="prodNo">
+                                </td>
                             </tr>
                             <tr>
                                 <th>만족도</th>
-                                <td class="rating">
-                                    <div class="my-rating"></div>
+                                <td class="ratingTd">
+                                    <input type="text" class="revScore" name="revScore">
+                                    <div class="ratingValue">
+                                        <span class="star" data-value="1">&#9733;</span>
+                                        <span class="star" data-value="2">&#9733;</span>
+                                        <span class="star" data-value="3">&#9733;</span>
+                                        <span class="star" data-value="4">&#9733;</span>
+                                        <span class="star" data-value="5">&#9733;</span>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th>내용</th>
                                 <td class="review">
-                                    <textarea name="review" placeholder="내용입력"></textarea>
+                                    <textarea id="revContent" name="revContent" placeholder="내용입력"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이미지</th>
+                                <td class="reviewImg">
+                                    <input id="revThumb" name="revImage" type="file" placeholder="이미지등록">
                                 </td>
                             </tr>
                         </table>
@@ -312,7 +346,7 @@
                         </p>
 
                         <div>
-                            <input type="submit" class="btnPositive" value="작성완료"/>
+                            <span id="reviewSubmit" class="btnPositive" onclick="btnReviewSubmit()">작성완료</span>
                             <span class="btnNegative btnClose">취소</span>
                         </div>
                     </form>

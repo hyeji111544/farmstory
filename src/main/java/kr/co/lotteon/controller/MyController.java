@@ -1,5 +1,6 @@
 package kr.co.lotteon.controller;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
 import kr.co.lotteon.entity.PointHistory;
@@ -9,12 +10,16 @@ import kr.co.lotteon.service.MyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.print.Pageable;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -191,6 +196,19 @@ public class MyController {
     @GetMapping("/my/qna")
     public String myQna(){
         return "/my/qna";
+    }
+
+    //마이페이지-리뷰 작성
+    @PostMapping("/my/writeReview")
+    public String writeReview(Authentication authentication, PdReviewDTO pdReviewDTO, MultipartFile revImage){
+        pdReviewDTO.setUserId(authentication.getName());
+
+        log.info("pdReviewDTO : " + pdReviewDTO);
+        log.info("revImage : " + revImage);
+
+        myService.writeReview(pdReviewDTO, revImage);
+
+        return null;
     }
 
     //마이페이지-리뷰 이동

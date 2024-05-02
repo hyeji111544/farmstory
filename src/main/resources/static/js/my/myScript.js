@@ -98,6 +98,7 @@ window.onload = function (){
 
         const totalSellerHp = sellerHp1.value + "-" + sellerHp2.value + "-" + sellerHp3.value;
         const value = totalSellerHp;
+        const type = "sellerHp"
 
         if (!value.match(reHp)) {
             sellerHpError.innerText = "유효하지 않은 전화번호입니다.";
@@ -118,38 +119,58 @@ window.onload = function (){
             sellerHp3.readOnly = false;
             btnChangeSellerHp.classList.remove('change');
             btnChangeSellerHp.classList.add('save');
-        }else if(btnChangeSellerHp.className === 'save'){
+        } else if (btnChangeSellerHp.className === 'save') {
             let savedSellerHp1 = sellerHp1.value;
             let savedSellerHp2 = sellerHp2.value;
             let savedSellerHp3 = sellerHp3.value;
             let sellerHp = savedSellerHp1 + "-" + savedSellerHp2 + "-" + savedSellerHp3;
 
             const jsonData = {
-                "userId" : userId,
-                "sellerHp" : sellerHp
+                "userId": userId,
+                "sellerHp": sellerHp
             };
-            fetch("/lotteon/my/updateSellerHp", {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(jsonData)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        sellerHp1.readOnly = true;
-                        sellerHp2.readOnly = true;
-                        sellerHp3.readOnly = true;
-                        sellerHp1.style.border = "0";
-                        sellerHp2.style.border = "0";
-                        sellerHp3.style.border = "0";
-                        btnChangeSellerHp.classList.add('change');
-                        btnChangeSellerHp.classList.remove('save');
-                        alert("수정완료");
-                    }else{
-                        alert("수정실패");
-                    }
-                    return response.json();
-                })
+            // 2. 중복 체크 (DB)
+            fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+                .then(response => response.json())
                 .then(data => {
+                    console.log(data);
+
+                    if (data.result > 0) {
+                        // 중복일 경우
+                        sellerHpError.innerText = "중복된 전화번호입니다.";
+                        sellerHpError.style.color = "red";
+                        isHpOk = false;
+                    } else {
+                        // 중복이 아닐경우
+                        sellerHpError.innerText = "사용가능한 전화입니다.";
+                        sellerHpError.style.color = "green";
+                        isHpOk = true;
+
+                        fetch("/lotteon/my/updateSellerHp", {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify(jsonData)
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    sellerHp1.readOnly = true;
+                                    sellerHp2.readOnly = true;
+                                    sellerHp3.readOnly = true;
+                                    sellerHp1.style.border = "0";
+                                    sellerHp2.style.border = "0";
+                                    sellerHp3.style.border = "0";
+                                    btnChangeSellerHp.classList.add('change');
+                                    btnChangeSellerHp.classList.remove('save');
+                                    alert("수정완료");
+                                } else {
+                                    alert("수정실패");
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                            })
+                            .catch(err => console.log(err));
+                    }
                 })
                 .catch(err => console.log(err));
         }
@@ -245,6 +266,7 @@ window.onload = function (){
 
         const totalFax = sellerFax1.value + "-" + sellerFax2.value + "-" + sellerFax3.value;
         const value = totalFax;
+        const type = "fax";
 
         if (!value.match(reFax)) {
             FaxError.innerText = "유효하지 않은 팩스번호입니다.";
@@ -273,30 +295,50 @@ window.onload = function (){
             let fax = saveFax1 + "-" + saveFax2 + "-" + saveFax3;
 
             const jsonData = {
-                "userId" : userId,
-                "fax" : fax
+                "userId": userId,
+                "fax": fax
             };
-            fetch("/lotteon/my/updateFax", {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(jsonData)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        sellerFax1.readOnly = true;
-                        sellerFax2.readOnly = true;
-                        sellerFax3.readOnly = true;
-                        sellerFax1.style.border = "0";
-                        sellerFax2.style.border = "0";
-                        sellerFax3.style.border = "0";
-                        btnChangeSellerFax.classList.add('change');
-                        btnChangeSellerFax.classList.remove('save');
-                    }else{
-                        alert("실패했습니다.")
-                    }
-                    return response.json();
-                })
+            // 2. 중복 체크 (DB)
+            fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+                .then(response => response.json())
                 .then(data => {
+                    console.log(data);
+
+                    if (data.result > 0) {
+                        // 중복일 경우
+                        FaxError.innerText = "중복된 전화번호입니다.";
+                        FaxError.style.color = "red";
+                        isHpOk = false;
+                    } else {
+                        // 중복이 아닐경우
+                        FaxError.innerText = "사용가능한 전화입니다.";
+                        FaxError.style.color = "green";
+                        isHpOk = true;
+
+                        fetch("/lotteon/my/updateFax", {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify(jsonData)
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    sellerFax1.readOnly = true;
+                                    sellerFax2.readOnly = true;
+                                    sellerFax3.readOnly = true;
+                                    sellerFax1.style.border = "0";
+                                    sellerFax2.style.border = "0";
+                                    sellerFax3.style.border = "0";
+                                    btnChangeSellerFax.classList.add('change');
+                                    btnChangeSellerFax.classList.remove('save');
+                                } else {
+                                    alert("실패했습니다.")
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                            })
+                            .catch(err => console.log(err));
+                    }
                 })
                 .catch(err => console.log(err));
         }
@@ -617,5 +659,3 @@ window.onload = function (){
         }
     }
 }
-
-

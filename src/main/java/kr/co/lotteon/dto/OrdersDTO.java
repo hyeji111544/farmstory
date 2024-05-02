@@ -23,4 +23,8 @@ public class OrdersDTO {
     private String orderMemo;
     private String orderStatus;
     private LocalDateTime orderDate;
+
+    // 주문완료 페이지 출력위해 추가
+    private String userName;
+    private String userHp;
 }
