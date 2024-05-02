@@ -16,6 +16,40 @@
                 storyNav.style.position = 'relative'; // 스크롤 위치가 원하는 위치 미만이면 기본 위치로 복원
             }
         });
+
+        window.onload = function () {
+            let currentURL = window.location.href;
+            let splitURL = currentURL.split('?')[1];
+            let storyCate = ""
+            if (splitURL != null){
+                storyCate = splitURL.split('=')[1];
+            }
+            const storyNav = document.getElementsByClassName('storyNav')[0];
+            const aTag = storyNav.querySelectorAll('a');
+            switch (storyCate) {
+                case "":
+                    aTag[0].classList.add('navOn');
+                    break;
+                case 'culture':
+                    aTag[1].classList.add('navOn');
+                    break;
+                case 'interview':
+                    aTag[2].classList.add('navOn');
+                    break;
+                case 'recruit':
+                    aTag[3].classList.add('navOn');
+                    break;
+                case 'lotteon':
+                    aTag[4].classList.add('navOn');
+                    break;
+                case 'report':
+                    aTag[5].classList.add('navOn');
+                    break;
+                case 'ESG':
+                    aTag[6].classList.add('navOn');
+                    break;
+            }
+        }
     </script>
     <div class="headContent" >
         <div class="logoBox">
@@ -37,45 +71,20 @@
             <div class="contentSub">우리의 다양한 이야기를 소개합니다</div>
 
             <div class="storyNav">
-                <a class="navOn" href="#">전체보기</a>
-                <a href="#">기업문화</a>
-                <a href="#">인터뷰</a>
-                <a href="#">채용</a>
-                <a href="#">롯데ON</a>
-                <a href="#">보도자료</a>
-                <a href="#">ESG</a>
+                <a th:href="@{/company/story}">전체보기</a>
+                <a th:href="@{/company/story(storyCate=culture)}">기업문화</a>
+                <a th:href="@{/company/story(storyCate=interview)}">인터뷰</a>
+                <a th:href="@{/company/story(storyCate=recruit)}">채용</a>
+                <a th:href="@{/company/story(storyCate=lotteon)}">롯데ON</a>
+                <a th:href="@{/company/story(storyCate=report)}">보도자료</a>
+                <a th:href="@{/company/story(storyCate=ESG)}">ESG</a>
             </div>
 
             <div class="noticeForCard">
-                <a href="#">
-                    <img th:src="@{/images/맹구.jpg}" alt="사진">
-                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
-                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
-                </a>
-                <a href="#">
-                    <img th:src="@{/images/맹구.jpg}" alt="사진">
-                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
-                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
-                </a>
-                <a href="#">
-                    <img th:src="@{/images/맹구.jpg}" alt="사진">
-                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
-                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
-                </a>
-                <a href="#">
-                    <img th:src="@{/images/맹구.jpg}" alt="사진">
-                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
-                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
-                </a>
-                <a href="#">
-                    <img th:src="@{/images/맹구.jpg}" alt="사진">
-                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
-                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
-                </a>
-                <a href="#">
-                    <img th:src="@{/images/맹구.jpg}" alt="사진">
-                    <p>봄 스타일링 완성시킬 데님 브랜드</p>
-                    <span>롯데온에서 선보이는 인기 브랜드는?</span>
+                <a href="#" th:each="story : ${companyStoryList}">
+                    <img th:src="@{/uploads/__${story.storyImg}__}" alt="사진">
+                    <p th:text="${story.storyName}"></p>
+                    <span th:text="${story.storyContent}"></span>
                 </a>
             </div>
         </main>
