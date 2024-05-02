@@ -114,6 +114,5 @@ public class AdminFaqService {
             log.info(response.toString());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-
     }
 }

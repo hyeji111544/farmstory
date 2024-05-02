@@ -18,4 +18,5 @@ public interface SellerRepository extends JpaRepository<Seller, String>, SellerR
     public Optional<Seller> findByBusinessNum(String businessNum);
     public Optional<Seller> findBySellerHp(String sellerHp);
 
+    public Optional<Seller> findByFax(String fax);
 }
