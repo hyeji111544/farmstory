@@ -238,7 +238,7 @@ public class AdminController {
     @PostMapping("/admin/banner/delete")
     public ResponseEntity<?> deleteBanner(@RequestBody Map<String, int[]> requestData){
         log.info("requestData :" + requestData);
-        int[] banNos = requestData.get("banNo");
+        int[] banNos = requestData.get("banNos");
         log.info("banNos {}", banNos);
         return adminService.deleteBanner(banNos);
     }

@@ -334,8 +334,8 @@
     margin-right: 2px;
 }
 
-#product > .view > .info > .summary .cardfree > i { background-position: -126px 0; }
-#product > .view > .info > .summary .cardadd  > i { background-position: -51px -21px; }
+#product > .view > .info > .summary .cardFree > i { background-position: -126px 0; }
+#product > .view > .info > .summary .cardAdd  > i { background-position: -51px -21px; }
 #product > .view > .info > .summary .origin { font-size: 16px;}
 #product > .view > .info > .summary .banner { width: 100%;}
 

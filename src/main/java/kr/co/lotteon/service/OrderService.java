@@ -121,6 +121,91 @@ public class OrderService {
         return companyMap;
     }
 
+    public Map<String, List<CartInfoDTO>> orderDirect(List<CartInfoDTO> cartInfoDTOS){
+
+        Map<String, List<CartInfoDTO>> companyMap = new HashMap<>();
+        List<CartInfoDTO> list = new ArrayList<>();
+
+        for (CartInfoDTO cartInfo: cartInfoDTOS){
+
+            int optNo = cartInfo.getOptDetailNo();
+            int prodNo = cartInfo.getProdNo();
+
+            ProdOptDetail optProdOptDetail = prodOptDetailRepository.selectOptDetailWihtName(optNo);
+            log.info("findCartProdNo....4: " + optProdOptDetail);
+            Product product = null;
+
+            try {
+                Tuple productTuple = productRepository.selectProductById(prodNo);
+                log.info("findCartProdNo....5: " + productTuple);
+
+                if (productTuple != null) {
+                    product = productTuple.get(0, Product.class);
+                    Productimg productImg = productTuple.get(1, Productimg.class);
+                    if (productImg != null) {
+                        product.setThumb190(productImg.getThumb190());
+                    }
+                    log.info("findCartProdNo....6: " + product);
+
+                }
+                try {
+                    CartInfoDTO cartInfoDTO = new CartInfoDTO();
+                    cartInfoDTO.setProdNo(product.getProdNo());
+                    cartInfoDTO.setProdName(product.getProdName());
+                    cartInfoDTO.setProdInfo(product.getProdInfo());
+                    cartInfoDTO.setProdDiscount(product.getProdDiscount());
+                    cartInfoDTO.setProdPrice(product.getProdPrice());
+                    cartInfoDTO.setProdCompany(product.getProdCompany()); // 회사명 추가
+                    cartInfoDTO.setProdSeller(product.getProdSeller()); // 회사명 추가
+                    cartInfoDTO.setProdDeliveryFee(product.getProdDeliveryFee()); // 배송비 추가
+                    if (product.getThumb190() != null) {
+                        cartInfoDTO.setThumb190(product.getThumb190());
+                    }
+                    if (optProdOptDetail != null) {
+                        cartInfoDTO.setOptValue1(optProdOptDetail.getOptValue1());
+                        cartInfoDTO.setOptValue2(optProdOptDetail.getOptValue2());
+                        cartInfoDTO.setOptValue3(optProdOptDetail.getOptValue3());
+                        cartInfoDTO.setOptStock(optProdOptDetail.getOptStock());
+                        cartInfoDTO.setOptDetailNo(optProdOptDetail.getOptDetailNo());
+                        cartInfoDTO.setOptPrice(optProdOptDetail.getOptPrice());
+                    }
+                    cartInfoDTO.setCount(cartInfo.getCount());
+                    list.add(cartInfoDTO);
+                    log.info("findCart....7:" + list);
+                } catch (Exception e) {
+                    log.info(e.getMessage());
+                }
+
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+
+
+        for (CartInfoDTO info : list) {
+            // 회사명이 이미 Map에 있는지 확인
+            // contailnsKey = Map 에 지정된 key가 있는지 확인하는데 사용
+            if (companyMap.containsKey(info.getProdCompany())) {
+
+                // 이미 있는 경우, 해당 회사명의 List를 가져와서 DTO를 추가
+                List<CartInfoDTO> existingCompany = companyMap.get(info.getProdCompany());
+                existingCompany.add(info);
+
+            } else {
+
+                // 없는 경우, 새로운 List를 생성하고 DTO를 추가한 후 Map에 추가
+                List<CartInfoDTO> newList = new ArrayList<>();
+                newList.add(info);
+                companyMap.put(info.getProdCompany(), newList);
+            }
+        }
+
+
+        return  companyMap;
+    }
+
 
     public UserDTO selectUser(String userId) {
         Tuple userTuple = userRepository.selectUserInfoWithPoint(userId);
@@ -143,9 +228,9 @@ public class OrderService {
         Map<String, String> orders = orderInfoDTO.getOrders();
         String orderPay = orders.get("orderPay");
         if ("type4".equals(orderPay)){
-            orders.put("orderStatus", "waiting");
+            orders.put("orderStatus", "입금대기");
         }else {
-            orders.put("orderStatus", "ready");
+            orders.put("orderStatus", "결제완료");
         }
 
         Orders ordered = saveOrders(orders);
@@ -162,9 +247,9 @@ public class OrderService {
             int detailPrice = Integer.parseInt(orderDetail.get("detailPrice"));
             int detailPoint = (int) Math.round(userUsedPoint * ((double) detailPrice / orderPrice));
             if ("type4".equals(orderPay)){
-                orderDetail.put("detailStatus", "waiting");
+                orderDetail.put("detailStatus", "입금대기");
             }else {
-                orderDetail.put("detailStatus", "ready");
+                orderDetail.put("detailStatus", "상품준비");
             }
 
             orderDetail.put("detailPoint", String.valueOf(detailPoint));
