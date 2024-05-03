@@ -77,6 +77,7 @@ public class ProductService {
                 .toList();
 
         int total = (int) pageProd.getTotalElements();
+
         return ProductPageResponseDTO.builder()
                 .productPageRequestDTO(pageRequestDTO)
                 .dtoList(products)

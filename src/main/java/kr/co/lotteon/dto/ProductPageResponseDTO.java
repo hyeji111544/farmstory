@@ -13,6 +13,7 @@ public class ProductPageResponseDTO {
 
     private String type;
     private String keyword;
+    private String cateCode;
 
     private List<ProductDTO> dtoList;
     private int pg;
@@ -27,6 +28,7 @@ public class ProductPageResponseDTO {
 
         this.type    = productPageRequestDTO.getType();
         this.keyword    = productPageRequestDTO.getKeyword();
+        this.cateCode    = productPageRequestDTO.getCateCode();
         this.pg = productPageRequestDTO.getPg();
         this.size = productPageRequestDTO.getSize();
         this.total = total;
