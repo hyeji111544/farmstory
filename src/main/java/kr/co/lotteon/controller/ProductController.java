@@ -42,8 +42,12 @@ public class ProductController {
     public String prodList(@RequestParam("cateCode") String cateCode, ProductPageRequestDTO productPageRequestDTO, Model model){
         ProductPageResponseDTO pageResponseDTO;
         productPageRequestDTO.setCateCode(cateCode);
+
         pageResponseDTO = productService.selectProductsByCate(productPageRequestDTO);
+        //pageResponseDTO.setCateCode(productPageRequestDTO.getCateCode());
         String setSortType = productPageRequestDTO.getSort();
+        String setCateCode = productPageRequestDTO.getCateCode();
+        pageResponseDTO.setCateCode(setCateCode);
         model.addAttribute("setSortType", setSortType);
         model.addAttribute(pageResponseDTO);
         String cate01 = "";

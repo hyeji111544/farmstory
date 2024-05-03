@@ -663,6 +663,7 @@ header {
   font-size: 0;
   border: none;
 }
+
 #member > .findId > form > span {
   clear: left;
   display: block;

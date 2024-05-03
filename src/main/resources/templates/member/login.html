@@ -16,6 +16,7 @@
 
                 const savedId = document.getElementById("checkedId");
                 if(savedId && inputId && inputId.value !== ""){
+
                     savedId.checked = true; // ID 저장하기를 체크 상태로 유지
                 }
                 if(savedId && inputId){
@@ -62,7 +63,8 @@
                         cookieValue = cookieData.substring(start, end);
                 }
                 return decodeURIComponent(cookieValue);
-                // 추출된 쿠키 값을 디코딩해서 반환. 디코딩은 URL 인코딩된 문자열을 해독하여 원래의 문자열로 되돌리는 작업
+                // 추출된 쿠키 값을 디코딩해서
+                // 반환. 디코딩은 URL 인코딩된 문자열을 해독하여 원래의 문자열로 되돌리는 작업
             }
         </script>
         <div class="login">
