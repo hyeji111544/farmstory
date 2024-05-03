@@ -291,6 +291,47 @@
             // 주문(order) 버튼 눌렀을 때 호출되는 함수
             function btnOrder(){
                 console.log('order');
+                const userIdElement = document.getElementById('userForDirect');
+                if (!userIdElement) {
+                    alert("로그인 후 이용 가능합니다.");
+                    window.location.href = "/lotteon/member/login";
+                }else {
+                    const userId = userIdElement.value;
+                    const prodNoValue = document.getElementById('prodNo');
+                    const prodNo = prodNoValue.innerText;
+                    console.log(userId);
+                    console.log(prodNo);
+                    // 카운터 문서객체 생성
+                    const prodCounts = document.querySelectorAll('input.numInput[name="num"]');
+                    // 옵션 문서객체 생성
+                    const optDetailsNo = document.querySelectorAll('input[name="optDetailNo"]');
+                    // 옵션과 갯수 리스트 저장할 배열 선언
+                    const jsonDataArray = [];
+
+                    // optDetailNo 갯수만큼 반복하며 jsonData 를 저장함
+                    optDetailsNo.forEach((optDetailsNo, index) => {
+                        const optNoValue = optDetailsNo.value;
+                        const prodCountValue = prodCounts[index].value;
+
+                        const jsonData = {
+                            "userId" : userId,
+                            "prodNo" : prodNo,
+                            "optDetailNo" : optNoValue,
+                            "count" : prodCountValue
+                        };
+                        jsonDataArray.push(jsonData);
+                    });
+                    console.log(jsonDataArray);
+
+                    const data = fetchPost(`/lotteon/product/orderDirect?userId=${userId}`, jsonDataArray)
+                        .then(response => {
+                            console.log(response);
+
+                        })
+                        .catch(error => {
+
+                        });
+                }
             }
 
             // 장바구니(cart) 버튼 눌렀을 때 호출되는 함수
@@ -384,13 +425,13 @@
                     <span class="desc">본 상품은 국내배송만 가능합니다.</span>
                 </nav>
                 <nav>
-                    <span class="card cardfree"><i>아이콘</i>무이자할부</span>&nbsp;&nbsp;
-                    <span class="card cardadd"><i>아이콘</i>카드추가혜택</span>
+                    <span class="card cardFree"><i>아이콘</i>무이자할부</span>&nbsp;&nbsp;
+                    <span class="card cardAdd"><i>아이콘</i>카드추가혜택</span>
                 </nav>
                 <nav>
                     <span class="origin">원산지-상세설명 참조</span>
                 </nav>
-                <img src="../images/vip_plcc_banner.png" alt="100원만 결제해도 1만원 적립!" class="banner" />
+                <img th:src="@{/images/vip_plcc_banner.png}" alt="100원만 결제해도 1만원 적립!" class="banner" />
 
                 <!--
                     옵션 선택 박스 (product.css 515줄)
