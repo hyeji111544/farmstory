@@ -24,19 +24,19 @@
                 case 1:
                     movingSloganBox.style.transform += 'translateX(560px)';
                     movingSloganBox.style.transition = 'transform  0.5s ease';
-                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[2].cloneNode(true));
+                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[3].cloneNode(true));
                     currentIndex -= 1;
                     break;
                 case 2:
                     movingSloganBox.style.transform += 'translateX(560px)';
                     movingSloganBox.style.transition = 'transform  0.5s ease';
-                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[1].cloneNode(true));
+                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[3].cloneNode(true));
                     currentIndex -= 1;
                     break;
                 case 3:
                     movingSloganBox.style.transform += 'translateX(560px)';
                     movingSloganBox.style.transition = 'transform  0.5s ease';
-                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[0].cloneNode(true));
+                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[3].cloneNode(true));
                     currentIndex -= 1;
                     break;
             }
@@ -48,12 +48,15 @@
 
             switch (currentIndex) {
                 case 0:
+                    console.log(0)
                     movingSloganBox.style.transform += 'translateX(-560px)';
                     movingSloganBox.style.transition = 'transform  0.5s ease';
                     movingSloganBox.appendChild(movingDivAll[0].cloneNode(true));
                     currentIndex += 1;
                     break;
                 case 1:
+                    console.log(1)
+
                     movingSloganBox.style.transform += 'translateX(-560px)';
                     movingSloganBox.style.transition = 'transform  0.5s ease';
                     movingSloganBox.appendChild(movingDivAll[1].cloneNode(true));
