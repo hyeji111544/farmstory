@@ -4,14 +4,12 @@ import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.co.lotteon.dto.GraphInfoDTO;
-import kr.co.lotteon.dto.PageRequestDTO;
-import kr.co.lotteon.dto.ProductPageRequestDTO;
-import kr.co.lotteon.dto.SellerInfoDTO;
+import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.custom.SellerRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +28,7 @@ import java.util.stream.Stream;
 public class SellerRepositoryImpl implements SellerRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final ModelMapper modelMapper;
     private final QOrderDetail qOrderDetail = QOrderDetail.orderDetail;
     private final QProduct qProduct = QProduct.product;
     private final QProductimg qProductimg = QProductimg.productimg;
@@ -471,4 +470,69 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
             return -1;
         }
     }*/
+
+    // 관리자 - 상점관리 - 판매자현황 조회
+    public PageResponseDTO selectSellerList(Pageable pageable, PageRequestDTO pageRequestDTO) {
+        // 검색 여부에 따라 Seller 조회
+        BooleanExpression expression = null;
+        QueryResults<Seller> sellerList = null;
+        if (pageRequestDTO.getKeyword() != null) {
+            if (pageRequestDTO.getType().equals("sellerNo")){
+                expression = qSeller.sellerNo.contains(pageRequestDTO.getKeyword());
+            }else if (pageRequestDTO.getType().equals("company")){
+                expression = qSeller.company.contains(pageRequestDTO.getKeyword());
+            }else if (pageRequestDTO.getType().equals("sellerName")){
+                expression = qSeller.sellerName.contains(pageRequestDTO.getKeyword());
+            }
+            sellerList = jpaQueryFactory
+                    .selectFrom(qSeller)
+                    .where(expression)
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }else {
+            sellerList = jpaQueryFactory
+                    .selectFrom(qSeller)
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }
+        // seller Entity -> SellerDTO로 변환
+        List<SellerDTO> sellerDTOList = new ArrayList<>();
+        for (Seller eachSeller : sellerList.getResults()) {
+            SellerDTO sellerDTO = modelMapper.map(eachSeller, SellerDTO.class);
+
+            // 각 Seller별 총 주문 수량, 총 주문 금액 조회
+            Tuple salesInfo = jpaQueryFactory
+                    .select(qOrderDetail.count(), qOrderDetail.detailPrice.sum())
+                    .from(qOrderDetail)
+                    .where(qOrderDetail.prodSeller.eq(eachSeller.getSellerNo()))
+                    .fetchOne();
+            Long prodCount = jpaQueryFactory
+                    .select(qProduct.count())
+                    .from(qProduct)
+                    .where(qProduct.prodSeller.eq(eachSeller.getSellerNo()))
+                    .fetchOne();
+
+            if (salesInfo.get(0, Long.class) != 0 && salesInfo.get(1, BigDecimal.class) != null) {
+                sellerDTO.setSellerCount(salesInfo.get(0, Long.class));
+                sellerDTO.setSellerSum(salesInfo.get(1, Integer.class));
+                sellerDTO.setProdCount(prodCount);
+            }else {
+                sellerDTO.setSellerCount(0L);
+                sellerDTO.setSellerSum(0);
+                sellerDTO.setProdCount(prodCount);
+            }
+            sellerDTOList.add(sellerDTO);
+        }
+
+        long total = sellerList.getTotal();
+        Page<SellerDTO> PageSeller = new PageImpl<>(sellerDTOList, pageable, total);
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(sellerDTOList)
+                .total((int) PageSeller.getTotalElements())
+                .build();
+    }
 }

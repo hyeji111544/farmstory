@@ -100,7 +100,7 @@ public class MemberController {
 
         userDTO.setUserRole("USER");
         userDTO.setUserGrade("Starter");
-        userDTO.setUserStatus("1");
+        userDTO.setUserStatus("활동가능");
 
 
         LocalDateTime now = LocalDateTime.now();

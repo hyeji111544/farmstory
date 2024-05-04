@@ -290,4 +290,12 @@ public class SellerService {
             return 0;
         }
     }
+
+    // 관리자 - 상점관리 - 판매자현황 //
+    public PageResponseDTO selectSellerList(PageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("No");
+
+        return sellerRepository.selectSellerList(pageable, pageRequestDTO);
+    }
+
 }

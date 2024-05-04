@@ -3,6 +3,7 @@ package kr.co.lotteon.controller.admin;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Banner;
 import kr.co.lotteon.entity.ProdOptDetail;
+import kr.co.lotteon.service.MemberService;
 import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.admin.AdminService;
 import kr.co.lotteon.service.seller.SellerService;
@@ -28,6 +29,7 @@ public class AdminController {
 
     private final AdminService adminService;
     private final SellerService sellerService;
+    private final MemberService memberService;
     private final AdminProductService adminproductService;
 
     // 관리자 인덱스페이지 이동
@@ -299,4 +301,34 @@ public class AdminController {
         return "/admin/order/delivery";
     }
 
+//// admin - 상점관리 ////
+    // 관리자 - 상점관리 - 판매자현황 //
+    @GetMapping("/admin/store/list")
+    public String storeList(Model model, PageRequestDTO pageRequestDTO){
+
+        PageResponseDTO sellerDTO = sellerService.selectSellerList(pageRequestDTO);
+        model.addAttribute("sellerDTO", sellerDTO);
+        return "/admin/store/list";
+    }
+
+
+//// admin - 회원관리 ////
+    // 관리자 - 회원관리 - 회원현황 //
+    @GetMapping("/admin/user/list")
+    public String userList(Model model, PageRequestDTO pageRequestDTO){
+
+        PageResponseDTO userDTO = memberService.selectMemberList(pageRequestDTO);
+        model.addAttribute("userDTO", userDTO);
+        return "/admin/user/list";
+    }
+
+    // 관리자 - 회원관리 - 회원 정보 변경 //
+    @PostMapping("/admin/user/changeInfo")
+    public ResponseEntity<?> changeInfo(@RequestBody Map<String, String> requestData){
+        String userId = requestData.get("userId");
+        String changeType = requestData.get("changeType");
+        String changeValue = requestData.get("changeValue");
+
+        return memberService.changeUserInfo(userId, changeType, changeValue);
+    }
 }
