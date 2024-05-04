@@ -32,4 +32,5 @@ public class Banner {
     private LocalDate banSdate;
     private LocalDate banEdate;
 
+    private String banUsable;
 }

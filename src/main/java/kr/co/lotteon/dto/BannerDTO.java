@@ -28,4 +28,5 @@ public class BannerDTO {
     private LocalDate banSdate;
     private LocalDate banEdate;
 
+    private String banUsable;
 }

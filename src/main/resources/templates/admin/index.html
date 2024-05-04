@@ -3,6 +3,96 @@
       layout:decorate="~{/layout/adminLayout.html}">
 <!--내용 시작-->
     <section id="admin-index" layout:fragment="content">
+        <script th:inline="javascript">
+            window.onload = function (){
+                const monthCount = [[${monthCount}]];  // 최근 한달 일자별 주문 건수
+                const monthPrice = [[${monthPrice}]];  // 최근 한달 일자별 주문 금액
+                const dateArray = [];
+                const countArray = [];
+                const priceArray = [];
+
+                const countKeys = Object.keys(monthCount);
+                for (let i = countKeys.length - 1; i >= 0; i--) {
+                    const key = countKeys[i];
+                    const value = monthCount[key];
+                    dateArray.push(key);
+                    countArray.push(value);
+                }
+                const priceKeys = Object.keys(monthPrice);
+                for (let i = priceKeys.length - 1; i >= 0; i--) {
+                    const key = priceKeys[i];
+                    const value = monthPrice[key];
+                    priceArray.push(value);
+                }
+
+
+                new Chart(document.getElementById("line-chart1"), {
+                    type: 'line',
+                    data: {
+                        labels: dateArray,
+                        datasets: [{
+                            data: countArray,
+                            label: "Africa",
+                            borderColor: "#3e95cd",
+                            fill: false,
+                            pointStyle: 'triangle'
+                        }
+                        ]
+                    },
+                    options: {
+                        responsive: false,
+                        title: {
+                            display: true,
+                            text: '최근 한달 주문 건수',
+                            fontSize: 20,
+                            color: '#111',
+                        },legend: {
+                            display: false // 라벨 숨기기
+                        }
+                    }
+                });
+
+                new Chart(document.getElementById("line-chart2"), {
+                    type: 'line',
+                    data: {
+                        labels: dateArray,
+                        datasets: [{
+                            data: priceArray,
+                            label: "Africa",
+                            borderColor: "#3e95cd",
+                            fill: false,
+                            pointStyle: 'triangle'
+                        }
+                        ]
+                    },
+                    options: {
+                        responsive: false,
+                        title: {
+                            display: true,
+                            text: '최근 한달 주문 금액',
+                            fontSize: 20,
+                            color: '#111',
+                        },legend: {
+                            display: false // 라벨 숨기기
+                        }
+                    }
+                });
+            }
+
+            function viewCountGraph() {
+                const countGraph = document.getElementsByClassName('countGraph')[0];
+                const priceGraph = document.getElementsByClassName('priceGraph')[0];
+                countGraph.style.display = "flex";
+                priceGraph.style.display = "none";
+            }
+            function viewPriceGraph() {
+                const countGraph = document.getElementsByClassName('countGraph')[0];
+                const priceGraph = document.getElementsByClassName('priceGraph')[0];
+                countGraph.style.display = "none";
+                priceGraph.style.display = "flex";
+            }
+
+        </script>
         <nav>
             <h3>관리자 메인</h3>
             <p>
@@ -12,182 +102,7 @@
 
         <h4>쇼핑몰 운영현황</h4>
         <article>
-            <table>
-                <tr>
-                    <td>
-                        <strong>주문건수(건)</strong>
-                        <span>131</span>
-                    </td>
-                    <td>
-                        <strong>주문금액(원)</strong>
-                        <span>1,130,000</span>
-                    </td>
-                    <td>
-                        <strong>회원가입(명)</strong>
-                        <span>1014</span>
-                    </td>
-                    <td>
-                        <strong>쇼핑몰 방문(명)</strong>
-                        <span>1014</span>
-                    </td>
-                    <td>
-                        <strong>신규게시물(건)</strong>
-                        <span>100</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>PC</span>
-                            <span>60</span>
-                        </p>
-                        <p>
-                            <span>Mobile</span>
-                            <span>71</span>
-                        </p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                    <td>
-                        <p>
-                            <span>어제</span>
-                            <span>4</span>
-                        </p>
-                        <p>
-                            <span>주간</span>
-                            <span>10</span>
-                        </p>
-                        <p>
-                            <span>월간</span>
-                            <span>30</span>
-                        </p>
-                    </td>
-                </tr>
-            </table>
-        </article>
-
-        <h4>주문 업무현황</h4>
-        <article>
-            <table>
-                <tr>
-                    <td>
-                        <strong>입금대기(건)</strong>
-                        <span>100</span>
-                    </td>
-                    <td>
-                        <strong>배송준비(건)</strong>
-                        <span>100</span>
-                    </td>
-                    <td>
-                        <strong>취소요청(건)</strong>
-                        <span>100</span>
-                    </td>
-                    <td>
-                        <strong>교환요청(건)</strong>
-                        <span>100</span>
-                    </td>
-                    <td>
-                        <strong>반품요청(건)</strong>
-                        <span>100</span>
-                    </td>
-                </tr>
-            </table>
+            <!--나중에-->
         </article>
 
         <div>

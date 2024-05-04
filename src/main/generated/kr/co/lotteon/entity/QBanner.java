@@ -37,6 +37,8 @@ public class QBanner extends EntityPathBase<Banner> {
 
     public final TimePath<java.time.LocalTime> banStime = createTime("banStime", java.time.LocalTime.class);
 
+    public final StringPath banUsable = createString("banUsable");
+
     public QBanner(String variable) {
         super(Banner.class, forVariable(variable));
     }

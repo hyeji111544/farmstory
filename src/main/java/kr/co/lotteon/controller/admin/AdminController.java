@@ -5,6 +5,7 @@ import kr.co.lotteon.entity.Banner;
 import kr.co.lotteon.entity.ProdOptDetail;
 import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.admin.AdminService;
+import kr.co.lotteon.service.seller.SellerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,19 +27,30 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminController {
 
     private final AdminService adminService;
+    private final SellerService sellerService;
     private final AdminProductService adminproductService;
 
     // 관리자 인덱스페이지 이동
     @GetMapping("/admin/index")
-    public String adminIndex(){
+    public String adminIndex(Model model) {
+
+        String prodSeller = "ADMIN";
+        // 최근 한달치 주문 건수
+        LinkedHashMap<String, Integer> monthCount = sellerService.selectProdSalesCount(prodSeller);
+        // 최근 한달 일자별 주문 금액 합산
+        LinkedHashMap<String, Integer> monthPrice = sellerService.selectSalesForMonth(prodSeller);
+
+        model.addAttribute("monthCount", monthCount);
+        model.addAttribute("monthPrice", monthPrice);
+
 
         return "/admin/index";
     }
 
-// admin - config //
+    // admin - config //
     // 관리자 설정 배너 이동
     @GetMapping("/admin/config/banner")
-    public String configBanner(Model model){
+    public String configBanner(Model model) {
 
         // 카테고리별로 model참조 5번
         List<BannerDTO> main1 = adminService.bannerList("main1");
@@ -57,47 +70,42 @@ public class AdminController {
 
     // 관리자 설정 정보 이동
     @GetMapping("/admin/config/info")
-    public String configInfo(){
+    public String configInfo() {
 
         return "/admin/config/info";
     }
 
-// admin - product //
+    // admin - product //
     // 관리자 상품 목록 이동
     @GetMapping("/admin/product/list")
-    public String productList(Model model, ProductPageRequestDTO productPageRequestDTO){
+    public String productList(Model model, ProductPageRequestDTO productPageRequestDTO) {
 
+        String prodSeller = "ADMIN";
         ProductPageResponseDTO pageResponseDTO = null;
-
-        // productPageRequestDTO가 null인 경우, 기본값으로 객체 생성
-        if (productPageRequestDTO == null) {
-            productPageRequestDTO = new ProductPageRequestDTO();
+        if(productPageRequestDTO.getKeyword() == null) {
+            // 판매자의 전체 상품 목록 조회
+            pageResponseDTO = sellerService.selectProductForSeller(prodSeller, productPageRequestDTO);
+        }else {
+            // 판매자의 검색 상품 목록 조회
+            pageResponseDTO = sellerService.searchProductForSeller(prodSeller, productPageRequestDTO);
         }
 
-        // productPageRequestDTO의 keyword 속성이 null인 경우, 전체 상품 목록 조회
-        if (productPageRequestDTO.getKeyword() == null) {
-            pageResponseDTO = adminproductService.selectProductsForAdmin(productPageRequestDTO);
-        } else {
-            // keyword 속성이 있는 경우, 키워드를 포함하는 상품 목록 조회
-            //pageResponseDTO = productService.searchProductsForAdmin(productPageRequestDTO);
-        }
-
-        model.addAttribute(pageResponseDTO);
-        log.info("here....!!!"+pageResponseDTO);
+        model.addAttribute("pageResponseDTO", pageResponseDTO);
+        log.info("here....!!!" + pageResponseDTO);
 
         return "/admin/product/list";
     }
 
     // 관리자 상품 등록 이동
     @GetMapping("/admin/product/register")
-    public String productRegister(){
+    public String productRegister() {
 
         return "/admin/product/register";
     }
 
     // 관리자 상품등록시 대분류에 따른 중분류 자동출력
     @PutMapping("/admin/product/cate")
-    public ResponseEntity<?> changeCate(@RequestBody Cate02DTO cate02DTO){
+    public ResponseEntity<?> changeCate(@RequestBody Cate02DTO cate02DTO) {
         String cate01No = cate02DTO.getCate01No();
         try {
             ResponseEntity<List<Cate02DTO>> selectedCate02 = adminService.selectCate02(cate01No);
@@ -105,14 +113,14 @@ public class AdminController {
 
             return ResponseEntity.ok().body(cate02DTOList);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("not found");
         }
     }
 
     // 관리자 상품 등록
     @PostMapping("/admin/product/register")
-    public String registerProduct(ProductDTO productDTO, ProductimgDTO productimgDTO){
+    public String registerProduct(ProductDTO productDTO, ProductimgDTO productimgDTO) {
         log.info(productDTO.toString());
         log.info(productimgDTO.toString());
         adminproductService.registerProduct(productDTO, productimgDTO);
@@ -122,7 +130,7 @@ public class AdminController {
 
     // 관리자 상품 옵션 등록 페이지 이동
     @GetMapping("/admin/product/option")
-    public String registerProductOption(Model model, @RequestParam("prodNo") int prodNo){
+    public String registerProductOption(Model model, @RequestParam("prodNo") int prodNo) {
         Map<String, Object> resultMap = adminproductService.selectProductOption(prodNo);
         ProductDTO productDTO = (ProductDTO) resultMap.get("productDTO");
         List<ProdOptionDTO> optionDTOList = (List<ProdOptionDTO>) resultMap.get("optionDTOList");
@@ -152,7 +160,7 @@ public class AdminController {
         - 각각의  이중 List들을 List<DTO>로 변환 후 service로 전달
      */
     @PostMapping("/admin/product/regOption")
-    public ResponseEntity<?> registerOption(@RequestBody Map<String, Object> requestData){
+    public ResponseEntity<?> registerOption(@RequestBody Map<String, Object> requestData) {
         ArrayList<ArrayList<String>> prodOption1List = (ArrayList<ArrayList<String>>) requestData.get("prodOption1");
         ArrayList<ArrayList<String>> prodOption2List = (ArrayList<ArrayList<String>>) requestData.get("prodOption2");
         ArrayList<ArrayList<String>> prodOption3List = (ArrayList<ArrayList<String>>) requestData.get("prodOption3");
@@ -161,7 +169,7 @@ public class AdminController {
 
         // option1 List<ProdOptionDTO>로 변환
         List<ProdOptionDTO> optionDTO1 = new ArrayList<>();
-        for (ArrayList<String> eachOption : prodOption1List){
+        for (ArrayList<String> eachOption : prodOption1List) {
             ProdOptionDTO optionDTO = new ProdOptionDTO();
             optionDTO.setProdNo(Integer.parseInt(eachOption.get(0)));
             optionDTO.setOptName(eachOption.get(1));
@@ -172,7 +180,7 @@ public class AdminController {
 
         // option2 List<ProdOptionDTO>로 변환
         List<ProdOptionDTO> optionDTO2 = new ArrayList<>();
-        for (ArrayList<String> eachOption : prodOption2List){
+        for (ArrayList<String> eachOption : prodOption2List) {
             ProdOptionDTO optionDTO = new ProdOptionDTO();
             optionDTO.setProdNo(Integer.parseInt(eachOption.get(0)));
             optionDTO.setOptName(eachOption.get(1));
@@ -183,7 +191,7 @@ public class AdminController {
 
         // option3 List<ProdOptionDTO>로 변환
         List<ProdOptionDTO> optionDTO3 = new ArrayList<>();
-        for (ArrayList<String> eachOption : prodOption3List){
+        for (ArrayList<String> eachOption : prodOption3List) {
             ProdOptionDTO optionDTO = new ProdOptionDTO();
             optionDTO.setProdNo(Integer.parseInt(eachOption.get(0)));
             optionDTO.setOptName(eachOption.get(1));
@@ -194,7 +202,7 @@ public class AdminController {
 
         // prodOptDetail List<prodOptDetailDTO>로 변환
         List<prodOptDetailDTO> optDetailDTOS = new ArrayList<>();
-        for (ArrayList<String> eachDetail : prodOptionDTOList){
+        for (ArrayList<String> eachDetail : prodOptionDTOList) {
             prodOptDetailDTO OptDetailDTO = new prodOptDetailDTO();
             OptDetailDTO.setProdNo(prodNo);
             OptDetailDTO.setOptDetailNo(Integer.parseInt(eachDetail.get(0)));
@@ -222,24 +230,73 @@ public class AdminController {
 
         if (bannerPath != null) {
             Banner saveBanner = adminService.bannerInsert(bannerDTO);
-            if(saveBanner.getBanNo() > 0){
+            if (saveBanner.getBanNo() > 0) {
                 //저장 성공
                 return "redirect:/admin/config/banner";
-            }else {
+            } else {
                 // 저장실패
                 return "redirect:/admin/config/banner?fail=100";
             }
-        }else {
+        } else {
             // 저장실패
             return "redirect:/admin/config/banner?fail=100";
         }
     }
+
     // 배너 삭제
     @PostMapping("/admin/banner/delete")
-    public ResponseEntity<?> deleteBanner(@RequestBody Map<String, int[]> requestData){
+    public ResponseEntity<?> deleteBanner(@RequestBody Map<String, int[]> requestData) {
         log.info("requestData :" + requestData);
         int[] banNos = requestData.get("banNos");
         log.info("banNos {}", banNos);
         return adminService.deleteBanner(banNos);
     }
+
+
+//// admin - 주문관리 ////
+    // 관리자 주문 관리
+    @GetMapping("/admin/order/orderList")
+    public String SellerOrderList(Model model, PageRequestDTO pageRequestDTO){
+        String prodSeller = "ADMIN";
+        // 최근 한달치 주문 건수
+        LinkedHashMap<String, Integer> orderByDate = sellerService.selectProdSalesCount(prodSeller);
+
+        // 판매자의 판매 목록 최신순
+        PageResponseDTO selectOrder = sellerService.selectProdSalesInfo(prodSeller, pageRequestDTO);
+        log.info("selectOrder : " + selectOrder);
+
+        model.addAttribute("orderByDate", orderByDate);
+        model.addAttribute("selectOrder", selectOrder);
+        return "/admin/order/orderList";
+    }
+
+    // 관리자 매출 현황 //
+    @GetMapping("/admin/order/sales")
+    public String SellerSales(Model model){
+        String prodSeller = "ADMIN";
+        // 최근 한달 일자별 주문 금액 합산
+        LinkedHashMap<String, Integer> orderByDate = sellerService.selectSalesForMonth(prodSeller);
+        // 판매자의 기간별 매출, 취소, 환불 금액 합산
+        Map<String, Map<String, Integer>> resultMap = sellerService.selectSalesAverages(prodSeller);
+        // 최근 일주일 일자별 주문 상세 (매출, 취소, 교환, 환불 금액 / 건수)
+        LinkedHashMap<String, OrderPriceCountDTO> orderForWeek = sellerService.selectSalesForWeek(prodSeller);
+
+        model.addAttribute("orderByDate", orderByDate);
+        model.addAttribute("resultMap", resultMap);
+        model.addAttribute("orderForWeek", orderForWeek);
+        return "/admin/order/sales";
+    }
+
+    // 판매자 배송 관리 //
+    @GetMapping("/admin/order/delivery")
+    public String SellerDelivery(Model model, PageRequestDTO pageRequestDTO){
+        String prodSeller = "ADMIN";
+        // 판매자의 판매 목록 최신순
+        PageResponseDTO selectOrder = sellerService.selectProdSalesInfo(prodSeller, pageRequestDTO);
+        log.info("selectOrder : " + selectOrder);
+
+        model.addAttribute("selectOrder", selectOrder);
+        return "/admin/order/delivery";
+    }
+
 }

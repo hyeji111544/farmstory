@@ -7,6 +7,7 @@
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
     <script th:src="@{https://kit.fontawesome.com/20962f3e4b.js}" crossorigin="anonymous"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js}"></script>
     <script th:src="@{/js/admin/gnb.js}"></script>
     <link rel="stylesheet" th:href="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css}"/>
     <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}"/>
@@ -17,25 +18,13 @@
     <div id="admin-wrapper">
         <header>
             <div>
-                <!--로그인 안 했을때-->
-                <th:block th:if="${!#authorization.expression('isAuthenticated()')}">
-                    <a th:href="@{/member/login}">로그인</a>
-                    <a th:href="@{/member/join}">회원가입</a>
-                </th:block>
-                <!--로그인 했을때-->
-                <th:block th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
-                    <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
-
-                    <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
-                    <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
-
-                    <a th:href="@{product/cart(userId=${#authentication.principal.user.userId})}">
-                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
-                    </a>
-                    <a th:href="@{/member/logout}">로그아웃</a>
-
-                </th:block>
+                <a th:href="@{/admin/index}" class="logo">BUSINESS</a>
+                <p>
+                    <span>관리자123 님 반갑습니다.</span>
+                    <a th:href="@{/}">HOME |</a>
+                    <a th:href="@{/member/logout}">로그아웃 |</a>
+                    <a th:href="@{/cs/index}">고객센터</a>
+                </p>
             </div>
         </header>
         <main>
@@ -76,10 +65,10 @@
                     <li>
                         <a href="#"><i class="fa fa-credit-card" aria-hidden="true"></i>주문관리</a>
                         <ol>
-                            <li><a href="#">주문현황</a></li>
-                            <li><a href="#">매출현황</a></li>
+                            <li><a th:href="@{/admin/order/orderList}">주문현황</a></li>
+                            <li><a th:href="@{/admin/order/sales}">매출현황</a></li>
                             <li><a href="#">결제관리</a></li>
-                            <li><a href="#">배송관리</a></li>
+                            <li><a th:href="@{/admin/order/delivery}">배송관리</a></li>
                         </ol>
                     </li>
                     <li>
