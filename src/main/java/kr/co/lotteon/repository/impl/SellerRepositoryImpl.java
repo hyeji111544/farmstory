@@ -178,42 +178,37 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
 
         log.info("sellerInfoDTO : " + sellerInfoDTO);
 
-
-        // count, price 속성의 최댓값을 구함
-        OptionalInt maxCount = graphInfoList.stream()
-                .mapToInt(GraphInfoDTO::getCount)
-                .max();
-        OptionalInt maxPrice = graphInfoList.stream()
-                .mapToInt(GraphInfoDTO::getPrice)
-                .max();
-        // 최댓값이 존재하는지 확인하고, 존재한다면 값을 가져옴
-        if (maxCount.isPresent() && maxPrice.isPresent()) {
-            int count = maxCount.getAsInt();
-            int price = maxPrice.getAsInt();
-            sellerInfoDTO.setMaxCount(count);
-            sellerInfoDTO.setMaxPrice(price);
-            log.info("최댓값: " + count);
-            log.info("최댓값: " + price);
-        } else {
-            log.info("최댓값없음");
-        }
         return sellerInfoDTO;
     }
 
     // 판매자 관리페이지 - 상품목록 - 상품관리 (전체 상품 목록)
     public Page<Tuple> selectProductForSeller(String prodSeller, ProductPageRequestDTO productPageRequestDTO, Pageable pageable) {
 
-        // product - productImg 테이블 join / 판매자 아이디와 일치하는 경우 최신순
-        QueryResults<Tuple> selectProducts = jpaQueryFactory
-                                    .select(qProduct, qProductimg.thumb190)
-                                    .from(qProduct)
-                                    .join(qProductimg)
-                                    .on(qProduct.prodNo.eq(qProductimg.prodNo))
-                                    .where(qProduct.prodSeller.eq(prodSeller))
-                                    .orderBy(qProduct.prodRdate.desc())
-                                    .offset(pageable.getOffset())
-                                    .limit(pageable.getPageSize())
-                                    .fetchResults();
+        QueryResults<Tuple> selectProducts = null;
+        if (prodSeller.equals("ADMIN")){
+            // product - productImg 테이블 join / 판매자 아이디와 일치하는 경우 최신순
+            selectProducts = jpaQueryFactory
+                    .select(qProduct, qProductimg.thumb190)
+                    .from(qProduct)
+                    .join(qProductimg)
+                    .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                    .orderBy(qProduct.prodRdate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }else {
+            // product - productImg 테이블 join / 판매자 아이디와 일치하는 경우 최신순
+            selectProducts = jpaQueryFactory
+                    .select(qProduct, qProductimg.thumb190)
+                    .from(qProduct)
+                    .join(qProductimg)
+                    .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                    .where(qProduct.prodSeller.eq(prodSeller))
+                    .orderBy(qProduct.prodRdate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }
 
         List<Tuple> productsResults = selectProducts.getResults();
         long total = selectProducts.getTotal();
@@ -240,18 +235,32 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
             expression = qProduct.prodCompany.contains(keyword);
         }
 
-        // product - productImg 테이블 join / 판매자 아이디와 일치하는 경우 / type과 keyword가 일치하는 경우 / 최신순
-        QueryResults<Tuple> selectProducts = jpaQueryFactory
-                .select(qProduct, qProductimg.thumb190)
-                .from(qProduct)
-                .join(qProductimg)
-                .on(qProduct.prodNo.eq(qProductimg.prodNo))
-                .where(qProduct.prodSeller.eq(prodSeller))
-                .where(expression)
-                .orderBy(qProduct.prodRdate.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
+        QueryResults<Tuple> selectProducts = null;
+        if (prodSeller.equals("ADMIN")){
+            selectProducts = jpaQueryFactory
+                    .select(qProduct, qProductimg.thumb190)
+                    .from(qProduct)
+                    .join(qProductimg)
+                    .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                    .where(expression)
+                    .orderBy(qProduct.prodRdate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        } else {
+            // product - productImg 테이블 join / 판매자 아이디와 일치하는 경우 / type과 keyword가 일치하는 경우 / 최신순
+            selectProducts = jpaQueryFactory
+                    .select(qProduct, qProductimg.thumb190)
+                    .from(qProduct)
+                    .join(qProductimg)
+                    .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                    .where(qProduct.prodSeller.eq(prodSeller))
+                    .where(expression)
+                    .orderBy(qProduct.prodRdate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }
 
         List<Tuple> productsResults = selectProducts.getResults();
         long total = selectProducts.getTotal();
@@ -262,12 +271,21 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
     // 판매자 관리페이지 - 주문관리 - 매출현황 (최근 한달 주문 금액 for 그래프)
     public List<OrderDetail> selectSalesForMonth(String prodSeller) {
         LocalDate oneMonthsAgo = LocalDate.now().minusMonths(1);
-        return jpaQueryFactory
+
+        if (prodSeller.equals("ADMIN")) {
+            return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .where(qOrderDetail.detailDate.between(oneMonthsAgo, LocalDate.now()))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
+        }else {
+            return jpaQueryFactory
                     .selectFrom(qOrderDetail)
                     .where(qOrderDetail.prodSeller.eq(prodSeller))
                     .where(qOrderDetail.detailDate.between(oneMonthsAgo, LocalDate.now()))
                     .orderBy(qOrderDetail.detailDate.desc())
                     .fetch();
+        }
     }
     
     // 판매자 관리페이지 - 주문관리 - 주문현황 (주문 상품 정보 출력)
@@ -293,6 +311,9 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
             }else if (pageRequestDTO.getKeyword().equals("refund")){
                 expression = qOrderDetail.detailStatus.contains("환불요청");
             }
+        }
+
+        if (pageRequestDTO.getKeyword() != null && !prodSeller.equals("ADMIN")) {
             selectOrders = jpaQueryFactory
                     .select(qOrderDetail, qProduct.prodName, qOrders)
                     .from(qOrderDetail)
@@ -306,7 +327,20 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetchResults();
-        }else {
+        }else if(pageRequestDTO.getKeyword() != null && prodSeller.equals("ADMIN")) {
+            selectOrders = jpaQueryFactory
+                    .select(qOrderDetail, qProduct.prodName, qOrders)
+                    .from(qOrderDetail)
+                    .join(qProduct)
+                    .on(qOrderDetail.prodNo.eq(qProduct.prodNo))
+                    .join(qOrders)
+                    .on(qOrderDetail.orderNo.eq(qOrders.orderNo))
+                    .where(expression)
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
+        }else if(pageRequestDTO.getKeyword() == null && !prodSeller.equals("ADMIN")) {
             selectOrders = jpaQueryFactory
                     .select(qOrderDetail, qProduct.prodName, qOrders)
                     .from(qOrderDetail)
@@ -319,7 +353,20 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetchResults();
+        }else if(pageRequestDTO.getKeyword() == null && prodSeller.equals("ADMIN")) {
+            selectOrders = jpaQueryFactory
+                    .select(qOrderDetail, qProduct.prodName, qOrders)
+                    .from(qOrderDetail)
+                    .join(qProduct)
+                    .on(qOrderDetail.prodNo.eq(qProduct.prodNo))
+                    .join(qOrders)
+                    .on(qOrderDetail.orderNo.eq(qOrders.orderNo))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .fetchResults();
         }
+
         List<Tuple> orderResults = selectOrders.getResults();
         long total = selectOrders.getTotal();
         return new PageImpl<>(orderResults, pageable, total);
@@ -327,33 +374,56 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
 
     // 판매자 관리페이지 - 주문관리 - 매출현황 (전체 기간 매출 요약)
     public List<OrderDetail> selectSalesForTotal(String prodSeller) {
-        return jpaQueryFactory
-                .selectFrom(qOrderDetail)
-                .where(qOrderDetail.prodSeller.eq(prodSeller))
-                .orderBy(qOrderDetail.detailDate.desc())
-                .fetch();
+        if (prodSeller.equals("ADMIN")){
+            return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
+        }else {
+            return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .where(qOrderDetail.prodSeller.eq(prodSeller))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
+        }
     }
 
     // 판매자 관리페이지 - 주문관리 - 매출현황 (최근 일년 매출 요약)
     public List<OrderDetail> selectSalesForYear(String prodSeller) {
         LocalDate oneYearAgo = LocalDate.now().minusYears(1);
-        return jpaQueryFactory
-                .selectFrom(qOrderDetail)
-                .where(qOrderDetail.prodSeller.eq(prodSeller))
-                .where(qOrderDetail.detailDate.between(oneYearAgo, LocalDate.now()))
-                .orderBy(qOrderDetail.detailDate.desc())
-                .fetch();
+        if (prodSeller.equals("ADMIN")){
+            return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .where(qOrderDetail.detailDate.between(oneYearAgo, LocalDate.now()))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
+        }else {
+            return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .where(qOrderDetail.prodSeller.eq(prodSeller))
+                    .where(qOrderDetail.detailDate.between(oneYearAgo, LocalDate.now()))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
+        }
     }
 
     // 판매자 관리페이지 - 주문관리 - 매출현황 (최근 일주일 매출 요약)
     public List<OrderDetail> selectSalesForWeek(String prodSeller) {
         LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
-        return jpaQueryFactory
-                .selectFrom(qOrderDetail)
-                .where(qOrderDetail.prodSeller.eq(prodSeller))
-                .where(qOrderDetail.detailDate.between(oneWeekAgo, LocalDate.now()))
-                .orderBy(qOrderDetail.detailDate.desc())
-                .fetch();
+        if (prodSeller.equals("ADMIN")) {
+            return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .where(qOrderDetail.detailDate.between(oneWeekAgo, LocalDate.now()))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
+        }else {
+            return jpaQueryFactory
+                    .selectFrom(qOrderDetail)
+                    .where(qOrderDetail.prodSeller.eq(prodSeller))
+                    .where(qOrderDetail.detailDate.between(oneWeekAgo, LocalDate.now()))
+                    .orderBy(qOrderDetail.detailDate.desc())
+                    .fetch();
+        }
     }
 
     @Transactional

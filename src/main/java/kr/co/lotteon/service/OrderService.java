@@ -143,9 +143,9 @@ public class OrderService {
         Map<String, String> orders = orderInfoDTO.getOrders();
         String orderPay = orders.get("orderPay");
         if ("type4".equals(orderPay)){
-            orders.put("orderStatus", "waiting");
+            orders.put("orderStatus", "입금대기");
         }else {
-            orders.put("orderStatus", "ready");
+            orders.put("orderStatus", "배송준비");
         }
 
         Orders ordered = saveOrders(orders);
@@ -162,9 +162,9 @@ public class OrderService {
             int detailPrice = Integer.parseInt(orderDetail.get("detailPrice"));
             int detailPoint = (int) Math.round(userUsedPoint * ((double) detailPrice / orderPrice));
             if ("type4".equals(orderPay)){
-                orderDetail.put("detailStatus", "waiting");
+                orderDetail.put("detailStatus", "입금대기");
             }else {
-                orderDetail.put("detailStatus", "ready");
+                orderDetail.put("detailStatus", "배송준비");
             }
 
             orderDetail.put("detailPoint", String.valueOf(detailPoint));
