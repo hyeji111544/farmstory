@@ -28,12 +28,21 @@ public class OrderController {
     private final CartService cartService;
     private final OrderService orderService;
 
-    // 결제 페이지 조회(장바구니-> 결제)
+    // 결제 페이지 조회(제품상세뷰 -> 결제)
     @PostMapping("/product/orderDirect")
-    public String maketBuyDirect(){
+    public String maketBuyDirect(@RequestParam("userId") String userId,
+                                 @RequestBody List<CartInfoDTO> cartInfoDTOS, Model model){
+        UserDTO userDTO = orderService.selectUser(userId);
+        model.addAttribute("user", userDTO);
+
+        log.info("orderDetailDTOS: {}", cartInfoDTOS);
+        Map<String, List<CartInfoDTO>> orderProducts= orderService.orderDirect(cartInfoDTOS);
+        model.addAttribute("orderProducts", orderProducts);
+        log.info("orderProducts" + orderProducts);
 
         return "/product/order";
     }
+
     // 결제 페이지 조회(장바구니-> 결제)
     @PostMapping("/product/order")
     public String maketBuy(@RequestParam("cartProdNo") List<Integer> cartProdNos,

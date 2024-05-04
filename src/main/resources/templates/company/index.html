@@ -8,6 +8,74 @@
             const blogMainText = document.getElementsByClassName('blogMainText')[0];
             blogMainText.classList.add('show');
         };
+
+        let currentIndex = 0;
+        function sloganPrev() {
+            const movingSloganBox = document.getElementsByClassName('movingSloganBox')[0];
+            const movingDivAll = movingSloganBox.querySelectorAll('div');
+
+            switch (currentIndex) {
+                case 0:
+                    movingSloganBox.style.transform += 'translateX(560px)';
+                    movingSloganBox.style.transition = 'transform  0.5s ease';
+                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[3].cloneNode(true));
+                    currentIndex = 3;
+                    break;
+                case 1:
+                    movingSloganBox.style.transform += 'translateX(560px)';
+                    movingSloganBox.style.transition = 'transform  0.5s ease';
+                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[3].cloneNode(true));
+                    currentIndex -= 1;
+                    break;
+                case 2:
+                    movingSloganBox.style.transform += 'translateX(560px)';
+                    movingSloganBox.style.transition = 'transform  0.5s ease';
+                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[3].cloneNode(true));
+                    currentIndex -= 1;
+                    break;
+                case 3:
+                    movingSloganBox.style.transform += 'translateX(560px)';
+                    movingSloganBox.style.transition = 'transform  0.5s ease';
+                    movingSloganBox.insertAdjacentElement('afterbegin', movingDivAll[3].cloneNode(true));
+                    currentIndex -= 1;
+                    break;
+            }
+        }
+
+        function sloganNext() {
+            const movingSloganBox = document.getElementsByClassName('movingSloganBox')[0];
+            const movingDivAll = movingSloganBox.querySelectorAll('div');
+
+            switch (currentIndex) {
+                case 0:
+                    console.log(0)
+                    movingSloganBox.style.transform += 'translateX(-560px)';
+                    movingSloganBox.style.transition = 'transform  0.5s ease';
+                    movingSloganBox.appendChild(movingDivAll[0].cloneNode(true));
+                    currentIndex += 1;
+                    break;
+                case 1:
+                    console.log(1)
+
+                    movingSloganBox.style.transform += 'translateX(-560px)';
+                    movingSloganBox.style.transition = 'transform  0.5s ease';
+                    movingSloganBox.appendChild(movingDivAll[1].cloneNode(true));
+                    currentIndex += 1;
+                    break;
+                case 2:
+                    movingSloganBox.style.transform += 'translateX(-560px)';
+                    movingSloganBox.style.transition = 'transform  0.5s ease';
+                    movingSloganBox.appendChild(movingDivAll[2].cloneNode(true));
+                    currentIndex += 1;
+                    break;
+                case 3:
+                    movingSloganBox.style.transform += 'translateX(-560px)';
+                    movingSloganBox.style.transition = 'transform  0.5s ease';
+                    movingSloganBox.appendChild(movingDivAll[3].cloneNode(true));
+                    currentIndex = 0;
+                    break;
+            }
+        }
     </script>
     <div class="headContent" >
         <div class="logoBox">
@@ -46,27 +114,49 @@
             <div class="contentHead">쇼핑을 새롭게, 세상을 이롭게 만들어나가요.</div>
 
             <div class="sloganBox">
-                <span></span>
-                <span></span>
-                <div>
-                    <img th:src="@{/images/company/sample1.png}">
-                    <p>
-                        고객이 원하고 만족하는<br>서비스를 만들어요
-                    </p>
-                    <p>롯데ON은 단순히 상품만을 판매하는 플랫폼이 아니라,<br>
-                        상품에 대한 경험을 함께 제공할 수 있는 플랫폼을 목표로 하고 있어요.<br>
-                        해외직구, 뷰티, 그로서리, 선물하기 등 다양한 영역에서<br>
-                        새로운 서비스를 만들어가고 있어요.</p>
-                </div>
-                <div>
-                    <img th:src="@{/images/company/sample2.jpg}">
-                    <p>
-                        고객이 원하고 만족하는<br>서비스를 만들어요
-                    </p>
-                    <p>롯데ON은 단순히 상품만을 판매하는 플랫폼이 아니라,<br>
-                        상품에 대한 경험을 함께 제공할 수 있는 플랫폼을 목표로 하고 있어요.<br>
-                        해외직구, 뷰티, 그로서리, 선물하기 등 다양한 영역에서<br>
-                        새로운 서비스를 만들어가고 있어요.</p>
+                <span class="sloganPrev" onclick="sloganPrev()"></span>
+                <span class="sloganNext" onclick="sloganNext()"></span>
+                <div class="movingSloganBox">
+                    <div>
+                        <img th:src="@{/images/company/sample1.png}">
+                        <p>
+                            고객이 원하고 만족하는<br>서비스를 만들어요
+                        </p>
+                        <p>롯데ON은 단순히 상품만을 판매하는 플랫폼이 아니라,<br>
+                            상품에 대한 경험을 함께 제공할 수 있는 플랫폼을 목표로 하고 있어요.<br>
+                            해외직구, 뷰티, 그로서리, 선물하기 등 다양한 영역에서<br>
+                            새로운 서비스를 만들어가고 있어요.</p>
+                    </div>
+                    <div>
+                        <img th:src="@{/images/company/sample2.jpg}">
+                        <p>
+                            고객이 원하고 만족하는<br>서비스를 만들어요
+                        </p>
+                        <p>롯데ON은 단순히 상품만을 판매하는 플랫폼이 아니라,<br>
+                            상품에 대한 경험을 함께 제공할 수 있는 플랫폼을 목표로 하고 있어요.<br>
+                            해외직구, 뷰티, 그로서리, 선물하기 등 다양한 영역에서<br>
+                            새로운 서비스를 만들어가고 있어요.</p>
+                    </div>
+                    <div>
+                        <img th:src="@{/images/company/sample1.jpg}">
+                        <p>
+                            고객이 원하고 만족하는<br>서비스를 만들어요
+                        </p>
+                        <p>롯데ON은 단순히 상품만을 판매하는 플랫폼이 아니라,<br>
+                            상품에 대한 경험을 함께 제공할 수 있는 플랫폼을 목표로 하고 있어요.<br>
+                            해외직구, 뷰티, 그로서리, 선물하기 등 다양한 영역에서<br>
+                            새로운 서비스를 만들어가고 있어요.</p>
+                    </div>
+                    <div>
+                        <img th:src="@{/images/company/sample2.jpg}">
+                        <p>
+                            고객이 원하고 만족하는<br>서비스를 만들어요
+                        </p>
+                        <p>롯데ON은 단순히 상품만을 판매하는 플랫폼이 아니라,<br>
+                            상품에 대한 경험을 함께 제공할 수 있는 플랫폼을 목표로 하고 있어요.<br>
+                            해외직구, 뷰티, 그로서리, 선물하기 등 다양한 영역에서<br>
+                            새로운 서비스를 만들어가고 있어요.</p>
+                    </div>
                 </div>
             </div>
 

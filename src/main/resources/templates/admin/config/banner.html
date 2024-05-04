@@ -19,11 +19,75 @@
                     $('#bannerRegister').addClass('on');
                 });
             });
-            window.onload = function (){
 
-                // 삭제할 체크박스 선택
-                const banCheckBox = document.querySelectorAll('.banCheckBox');
+            let banNos = []; // 전역변수 어디서든 접근, 참조 가능한 변수
+            let trTags = [];
+            function checkBox() {
+                console.log("banNos1 : " + banNos);
+                // 체크를 하면 saveBannerNo에 번호를 저장
+                const button = event.target; // 버튼 본인
+                const btnParent = button.parentNode; // 버튼의 부모태그 (td)
+                const trTag = btnParent.parentNode;
+                const nextParent = btnParent.nextElementSibling; // 버튼의 부모의 다음 td 태그
+                const bannerNo = nextParent.innerText;
+
+
+                if (button.checked) {
+                    banNos.push(bannerNo);
+                    trTags.push(trTag);
+                    console.log("banNos : " + banNos);
+                    console.log("trTags : " + trTags);
+                }else {
+                    // 체크를 풀면 saveBannerNo 번호를 삭제
+                    let index = banNos.indexOf(bannerNo);
+                    let index2 = trTags.indexOf(trTag);
+                    banNos.splice(index, 1);
+                    trTags.splice(index2, 1);
+
+                    console.log("banNos2 : " + banNos);
+                    console.log("trTags2 : " + trTags);
+                }
             }
+            function deleteBtn() {
+
+
+                console.log("banNos : " + banNos);
+                // 삭제 버튼을 클릭하면 saveBannerNo를 가져와서 삭제 진행
+                if (banNos.length != 0) {
+                    confirm("선택하신 글을 삭제하시겠습니까?");
+                }else{
+                    alert("선택된 글이 없습니다.");
+                }
+                if(banNos){
+                    const jsonData ={
+                        "banNos" : banNos
+                    }
+                    fetch("/lotteon/admin/banner/delete",{
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('삭제에 실패했습니다.');
+                            }
+                            return response.json()
+                        })
+                        .then(data => {
+                            if (data.data === '삭제 성공') {
+                                Array.from(trTags).forEach(function (tr) {
+                                    tr.remove();
+                                })
+                            }
+                        })
+                        .catch(err => console.log(err))
+                }else{
+                    banNos.length = 0;
+                    trTags.length = 0;
+                    alert("취소되었습니다.");
+                }
+            }
+
         </script>
         <nav>
             <h3>배너관리</h3>
@@ -62,8 +126,8 @@
                         <th>관리</th>
                     </tr>
 
-                    <tr th:each="banner : ${main1}">
-                        <td><input type="checkbox" class="banCheckBox" name="배너번호"/></td>
+                    <tr class="bannerAll" th:each="banner : ${main1}">
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
                         <td th:text="${banner.banNo}"></td>
                         <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
@@ -84,7 +148,7 @@
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
 
             </section>
@@ -110,7 +174,7 @@
                         <th>관리</th>
                     </tr>
                     <tr th:each="banner : ${main2}">
-                        <td><input type="checkbox" class="banCheckBox" name="배너번호"/></td>
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
                         <td th:text="${banner.banNo}"></td>
                         <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
@@ -131,7 +195,7 @@
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
             </section>
 
@@ -156,7 +220,7 @@
                         <th>관리</th>
                     </tr>
                     <tr th:each="banner : ${product1}">
-                        <td><input type="checkbox" name="배너번호"/></td>
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
                         <td th:text="${banner.banNo}"></td>
                         <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
@@ -177,7 +241,7 @@
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
             </section>
 
@@ -202,8 +266,8 @@
                         <th>관리</th>
                     </tr>
                     <tr th:each="banner : ${member1}">
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td th:text="${banner.banNo}"></td>
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
+                        <td class="banNos" th:text="${banner.banNo}"></td>
                         <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
                             <ul>
@@ -223,7 +287,7 @@
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
             </section>
 
@@ -248,7 +312,7 @@
                         <th>관리</th>
                     </tr>
                     <tr th:each="banner : ${my1}">
-                        <td><input type="checkbox" name="배너번호"/></td>
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
                         <td th:text="${banner.banNo}"></td>
                         <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
@@ -269,7 +333,7 @@
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
             </section>
         </article>

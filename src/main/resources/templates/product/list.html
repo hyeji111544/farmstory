@@ -51,7 +51,7 @@
             </div>
             <div class="dis_price">
               <ins th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
-              <span class="free">무료배송</span>
+              <span th:if="${product.prodDeliveryFee}==0" class="free">무료배송</span>
             </div>
             <div class="score_review">
               <b>★<span>[[${product.tReviewScore}]]</span></b>
@@ -64,13 +64,13 @@
       <!-- 상품목록 페이지번호 -->
       <div class="paging">
        <span class="prev" th:if="${productPageResponseDTO.prev}" >
-                  <a th:href="@{/product/list(pg=${productPageResponseDTO.start - 1})}"><&nbsp;이전</a>
-                </span>
+           <a th:href="@{'/product/list?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.start - 1}}"><&nbsp;이전</a>
+       </span>
         <span class="num" th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
-                  <a th:if="${num != 0}" th:href="@{/product/list(pg=${num})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
-                </span>
+            <a th:if="${num != 0}" th:href="@{/product/list(pg=${num}, cateCode=${productPageResponseDTO.cateCode}, sort=${setSortType})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+        </span>
         <span class="next" th:if="${productPageResponseDTO.next}">
-                     <a th:href="@{/product/list(pg=${productPageResponseDTO.end + 1})}">다음&nbsp;></a>
+                     <a th:href="@{'/product/list?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.end + 1}}">다음&nbsp;></a>
         </span>
       </div>
 

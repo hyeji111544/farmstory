@@ -62,7 +62,7 @@
   <body>
     <div id="bannerTop" class="on" style="background: #e4dfdf;">
       <article>
-        <a href="#"><img th:src="@{/images/topBanner1}"/></a>
+        <a href="#"><img th:src="@{/images/topBanner1.png}"/></a>
         <button class="btnClose">close</button>
       </article>
     </div>
@@ -217,7 +217,7 @@
                 </div>
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((hitItem.prodPrice * (100 - hitItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
-                  <span class="free">무료배송</span>
+                  <span th:if="${hitItem.prodDeliveryFee}==0" class="free">무료배송</span>
                 </div>
               </a>
             </article>
@@ -238,7 +238,7 @@
                 </div>
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((scoreItem.prodPrice * (100 - scoreItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
-                  <span class="free">무료배송</span>
+                  <span th:if="${scoreItem.prodDeliveryFee}==0" class="free">무료배송</span>
                 </div>
               </a>
             </article>
@@ -259,7 +259,7 @@
                 </div>
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((rDateItem.prodPrice * (100 - rDateItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
-                  <span class="free">무료배송</span>
+                  <span th:if="${rDateItem.prodDeliveryFee}==0" class="free">무료배송</span>
                 </div>
               </a>
             </article>
@@ -280,7 +280,7 @@
                 </div>
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((discountItem.prodPrice * (100 - discountItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
-                  <span class="free">무료배송</span>
+                  <span th:if="${discountItem.prodDeliveryFee}==0" class="free">무료배송</span>
                 </div>
               </a>
             </article>
