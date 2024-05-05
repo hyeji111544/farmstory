@@ -1,5 +1,6 @@
 package kr.co.lotteon.service;
 
+import com.querydsl.core.Tuple;
 import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -25,6 +27,7 @@ public class MyService {
     private final UserCouponRepository userCouponRepository;
     private final OrdersRepository ordersRepository;
     private final OrderdetailRepository orderdetailRepository;
+    private final WishRepository wishRepository;
 
     private final CouponsRepository couponsRepository;
     private final ModelMapper modelMapper;
@@ -333,4 +336,42 @@ public class MyService {
 
     }
 
+    // my - wish 조회
+    public PageResponseDTO selectUserWish(String userId, PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<Tuple> userWish = wishRepository.selectUserWish(userId, pageRequestDTO, pageable);
+
+        List<WishDTO> wishDTOList = userWish.getContent().stream()
+                .map(tuple -> {
+                    Wish wish = tuple.get(0, Wish.class);
+                    String prodName = tuple.get(1, String.class);
+                    Integer prodPrice = tuple.get(2, Integer.class);
+                    String thumb190 = tuple.get(3, String.class);
+                    WishDTO wishDTO = modelMapper.map(wish, WishDTO.class);
+                    wishDTO.setProdName(prodName);
+                    wishDTO.setProdPrice(prodPrice);
+                    wishDTO.setThumb190(thumb190);
+                    return wishDTO;
+                        }
+                    ).toList();
+
+        log.info("wishDTOList : " + wishDTOList);
+
+        List<WishDTO> resultWishDTO = new ArrayList<>();
+        for (WishDTO eachWish : wishDTOList) {
+            if (eachWish.getOptNo() != 0) {
+                eachWish.setOptName(wishRepository.selectProdOption(eachWish.getOptNo()));
+            }else {
+                eachWish.setOptName("");
+            }
+            resultWishDTO.add(eachWish);
+        }
+
+        int total = (int) userWish.getTotalElements();
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(resultWishDTO)
+                .total(total)
+                .build();
+    }
 }
