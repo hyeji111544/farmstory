@@ -99,7 +99,7 @@ public class MemberController {
     public String registerUser(UserDTO userDTO){
 
         userDTO.setUserRole("USER");
-        userDTO.setUserGrade("Starter");
+        userDTO.setUserGrade("ACE");
         userDTO.setUserStatus("활동가능");
 
 
