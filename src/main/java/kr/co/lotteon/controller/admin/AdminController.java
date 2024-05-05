@@ -331,4 +331,24 @@ public class AdminController {
 
         return memberService.changeUserInfo(userId, changeType, changeValue);
     }
+
+    // 관리자 - 회원관리 - 포인트관리 //
+    @GetMapping("/admin/user/point")
+    public String userPointControl(Model model, PageRequestDTO pageRequestDTO) {
+
+        PageResponseDTO ResponseDTO = memberService.userPointControl(pageRequestDTO);
+        model.addAttribute("ResponseDTO", ResponseDTO);
+        return "/admin/user/point";
+    }
+
+    // 관리자 - 회원관리 - 포인트관리 - 포인트 지급 & 회수 //
+    @PostMapping("/admin/user/point/control")
+    public ResponseEntity<?> pointControl(@RequestBody Map<String, String> requestData) {
+        String type = requestData.get("type");
+        String userId = requestData.get("userId");
+        String changePoint = requestData.get("changePoint");
+        String changeCode = requestData.get("changeCode");
+
+        return memberService.pointControl(type, userId, changePoint, changeCode);
+    }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface UserPointRepository extends JpaRepository<UserPoint, Integer> , UserPointRepositoryCustom {
 
-    UserPoint findByUserId(String userId);
+    // 회원 아이디로 포인트 조회
+    public UserPoint findByUserId(String userId);
 
 }
