@@ -18,4 +18,8 @@ public class TermsDTO {
     private String privacy;
     private String seller;
 
+    // 추가필드
+    private String termHead;
+    private String termTitle;
+    private String termContent;
 }
