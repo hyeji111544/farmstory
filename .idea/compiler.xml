@@ -28,6 +28,5 @@
         <module name="WorkSpace.lotteon-team1.lotteon.test" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="17" />
   </component>
 </project>

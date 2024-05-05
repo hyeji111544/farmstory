@@ -7,10 +7,10 @@
             <div>
                 <a href="./home.html"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
                 <ol>
-                    <li><a href="#">주문·배송<span class="delivery">1</span></a></li>
-                    <li><a href="#">할인쿠폰<span class="coupon">1</span></a></li>
-                    <li><a href="#">포인트<span class="point">1,000</span></a></li>
-                    <li><a href="#">문의내역<span class="qna">1</span></a></li>
+                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
+                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
+                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point">1,000</span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
                 </ol>
             </div>
         </nav>
@@ -19,7 +19,7 @@
             <ul>
                 <span class="menu_else"></span>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <!--<li><a href="./favorite.html">관심상품</a></li>-->
+                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
                 <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
                 <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
@@ -35,6 +35,7 @@
                     <table border="0">
                         <tr>
                             <th>번호</th>
+                            <th>이미지</th>
                             <th>상품명</th>
                             <th>내용</th>
                             <th>평점</th>
@@ -42,37 +43,16 @@
                         </tr>
                         <tr>
                             <td class="no">5</td>
-                            <td class="prodName"><a href="#">상품명</a></td>
+                            <td>
+                                <img th:src="@{/images/맹구.jpg}" style="width: 90px;">
+                            </td>
+                            <td class="prodName">
+                                <a href="#">상품명</a>
+                            </td>
                             <td class="content">배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                            <td class="score"><span class="rating star1">평점</span></td>
-                            <td class="date">2024-12-12</td>
-                        </tr>
-                        <tr>
-                            <td class="no">4</td>
-                            <td class="prodName"><a href="#">상품명</a></td>
-                            <td class="content">배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                            <td class="score"><span class="rating star2">평점</span></td>
-                            <td class="date">2024-12-12</td>
-                        </tr>
-                        <tr>
-                            <td class="no">3</td>
-                            <td class="prodName"><a href="#">상품명</a></td>
-                            <td class="content">배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                            <td class="score"><span class="rating star3">평점</span></td>
-                            <td class="date">2024-12-12</td>
-                        </tr>
-                        <tr>
-                            <td class="no">2</td>
-                            <td class="prodName"><a href="#">상품명</a></td>
-                            <td class="content">배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                            <td class="score"><span class="rating star4">평점</span></td>
-                            <td class="date">2024-12-12</td>
-                        </tr>
-                        <tr>
-                            <td class="no">1</td>
-                            <td class="prodName"><a href="#">상품명</a></td>
-                            <td class="content">배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                            <td class="score"><span class="rating star5">평점</span></td>
+                            <td class="score">
+                                <span class="rating star1">평점</span>
+                            </td>
                             <td class="date">2024-12-12</td>
                         </tr>
                     </table>

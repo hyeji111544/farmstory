@@ -2,6 +2,8 @@ package kr.co.lotteon.dto;
 
 import lombok.*;
 
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Getter
@@ -11,7 +13,14 @@ import java.util.List;
 @ToString
 public class MyOrderPageResponseDTO {
 
-    private List<MyOrderDTO> myOrderDTOList;
+    private LinkedHashMap<Integer, List<OrderDetailDTO>> myOrderDTOList;
+
+    private String cate;
+    private String type;
+    private String keyword;
+    private LocalDate startDate;
+    private LocalDate finalDate;
+
 
     private int pg;
     private int size;
@@ -21,9 +30,15 @@ public class MyOrderPageResponseDTO {
     private boolean prev, next;
 
     @Builder
-    public MyOrderPageResponseDTO(MyOrderPageRequestDTO pageRequestDTO, List<MyOrderDTO> myOrderDTOList, int total){
-        this.pg = pageRequestDTO.getPg();
+    public MyOrderPageResponseDTO(MyOrderPageRequestDTO pageRequestDTO, LinkedHashMap<Integer, List<OrderDetailDTO>> myOrderDTOList, int total){
         this.size = pageRequestDTO.getSize();
+        this.cate = pageRequestDTO.getCate();
+        this.type = pageRequestDTO.getType();
+        this.startDate = pageRequestDTO.getStartDate();
+        this.finalDate = pageRequestDTO.getFinalDate();
+
+        this.pg = pageRequestDTO.getPg();
+        this.keyword = pageRequestDTO.getKeyword();
         this.total = total;
         this.myOrderDTOList = myOrderDTOList;
 

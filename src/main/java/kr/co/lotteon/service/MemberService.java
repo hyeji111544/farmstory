@@ -4,8 +4,9 @@ import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
-import kr.co.lotteon.dto.SellerDTO;
-import kr.co.lotteon.dto.UserDTO;
+import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.OrderDetail;
+import kr.co.lotteon.entity.Orders;
 import kr.co.lotteon.entity.Seller;
 import kr.co.lotteon.entity.User;
 import kr.co.lotteon.repository.SellerRepository;
@@ -14,12 +15,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -138,8 +145,18 @@ public class MemberService {
                 //사용 가능
                 return  result;
             }
+        }else if(type.equals("fax")){
+            Optional<Seller> optSeller = sellerRepository.findByFax(value);
+            //Optional 비어있는지 체크
+            if (optSeller.isPresent()) {
+                //사용 불가능
+                result = 1;
+                return result;
+            }else {
+                //사용 가능
+                return  result;
+            }
         }
-
         return result;
     }
 
@@ -171,6 +188,51 @@ public class MemberService {
 
         } catch(Exception e){
             log.error("sendEmailCode : " + e.getMessage());
+        }
+    }
+    // UserId 찾기
+    public Optional<User> findUserIdByUserNameAndUserEmail(String userName, String userEmail, HttpSession session) {
+        return userRepository.findUserIdByUserNameAndUserEmail(userName, userEmail);
+    }
+    // 아이디찾기 이메일 확인/발송
+    public int findIdCheckEmail(HttpSession session, String value) {
+        int result = 0;
+
+        //이메일 중복검사
+        Optional<User> optUser = userRepository.findByUserEmail(value);
+        //Optional이 비어있는지 체크
+        if (optUser.isPresent()) {
+            //사용 가능
+            // 인증코드 발송
+            sendEmailConde(session, value);
+            return result;
+        } else {
+            // 사용 불가능
+            result = 1;
+            return result;
+        }
+    }
+    // UserPw 수정
+    public long updatePw(String userId,String userPw, String userEmail, HttpSession session) {
+        String encodedPassword = passwordEncoder.encode(userPw);
+        return userRepository.updateUserPwByUserIdAndUserEmail(userId, encodedPassword, userEmail);
+    }
+    // 비밀번호재설정 이메일 확인/발송
+    public int updatePwCheckEmail(HttpSession session, String value) {
+        int result = 0;
+
+        //이메일 중복검사
+        Optional<User> optUser = userRepository.findByUserEmail(value);
+        //Optional이 비어있는지 체크
+        if (optUser.isPresent()) {
+            //사용 가능
+            // 인증코드 발송
+            sendEmailConde(session, value);
+            return result;
+        } else {
+            // 사용 불가능
+            result = 1;
+            return result;
         }
     }
 
@@ -218,8 +280,58 @@ public class MemberService {
         if (savedUser.getUserId().equals(userDTO.getUserId())  && savedSeller.getUserId().equals(userDTO.getUserId())) {
             result = 1;
         }
-
         return result;
+    }
+    // 관리자 - 회원관리 - 회원현황 //
+    public PageResponseDTO selectMemberList(PageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("No");
+
+        Page<User> pageUser =  userRepository.selectSellerList(pageable, pageRequestDTO);
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User eachUser : pageUser.getContent()) {
+            userDTOs.add(modelMapper.map(eachUser, UserDTO.class));
+        }
+
+        int total = (int) pageUser.getTotalElements();
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(userDTOs)
+                .total(total)
+                .build();
+    }
+    // 관리자 - 회원관리 - 회원 정보 변경 //
+    public ResponseEntity<?> changeUserInfo(String userId, String changeType, String changeValue){
+
+        Optional<User> optUser = userRepository.findById(userId);
+        User resultUser = null;
+        if (optUser.isPresent()){
+            if (changeType.equals("userRole")) {
+                if (changeValue.equals("DELETE")){
+                    optUser.get().setUserStatus("탈퇴회원");
+                }
+                optUser.get().setUserRole(changeValue);
+            }else if (changeType.equals("userGrade")) {
+                optUser.get().setUserGrade(changeValue);
+            }else if (changeType.equals("userStatus")) {
+                if (changeValue.equals("탈퇴회원")){
+                    optUser.get().setUserRole("DELETE");
+                }
+                optUser.get().setUserStatus(changeValue);
+            }
+            optUser.get().setUserUpdate(LocalDateTime.now());
+            resultUser = userRepository.save(optUser.get());
+        }
+
+        Map<String, Integer> resultMap = new HashMap<>();
+        if (resultUser.getUserRole().equals(changeValue)
+                || resultUser.getUserGrade().equals(changeValue)
+                || resultUser.getUserStatus().equals(changeValue)) {
+            resultMap.put("result", 1);
+            return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+        }else {
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
     }
 
 }

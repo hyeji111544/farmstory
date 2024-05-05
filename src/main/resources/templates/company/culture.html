@@ -1,0 +1,155 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/companyLayout.html}">
+<!--내용 시작-->
+<div layout:fragment="content">
+    <script>
+        window.onload = function () {
+            const blogMainText = document.getElementsByClassName('blogMainText')[0];
+            blogMainText.classList.add('show');
+        };
+    </script>
+    <div class="headContent" >
+        <div class="logoBox">
+            <a th:href="@{/}"><img th:src="@{/images/header_logo.png}" alt="로고" style="width: 185px;"/></a>
+        </div>
+
+        <div>
+            <a th:href="@{/company/index}">HOME</a>
+            <a class="tabOn" th:href="@{/company/culture}">기업문화</a>
+            <a th:href="@{/company/story}">소식과 이야기</a>
+            <a th:href="@{/company/recruit}">채용</a>
+            <a th:href="@{/company/media}">미디어</a>
+        </div>
+    </div>
+    </header>
+
+        <div class="companyLogo">
+            <div class="cultureMainImage">
+
+            </div>
+        </div>
+
+        <main>
+            <div class="blogMainText">
+                <p>
+                    대기업의 안정성과 스타트업의 혁신성을 함께,<br>롯데ON에서 우리는 성장하고 있어요.
+                </p>
+            </div>
+
+            <div class="companyIntro" style="margin-top: 20px">
+                롯데ON은 안정성 있게, 혁신성 있게 우리의 문화를 만들어가고 있어요.<br>
+                구성원들은 수평적이고 자율적인 문화 속에서<br>
+                개선을 넘어서 혁신적인 롯데ON만의 서비스를 만들어요.<br>
+                그렇게 굵은 점을 찍어가며, 우리는 롯데ON과 함께 성장하고 있어요.
+            </div>
+
+            <div class="contentHead">대기업 속의 스타트업, 롯데ON은 이렇게 일해요!</div>
+
+            <div class="cultureWork">
+                <div>
+                    <img th:src="@{/images/company/cultureWork1.png}">
+                </div>
+                <div>
+                    <p>스스로 책임지고 자율적으로 일해요</p>
+                    <span>
+                        “어른답게” 서로를 어른으로 대하고 배려하는 것이 중요해요.<br>
+                        스스로 판단하고 자율적으로 행동할 수 있기 때문에<br>
+                        더 높은 효율을 만들어나가며 일을 할 수 있어요.
+                    </span>
+                </div>
+            </div>
+
+            <div class="cultureWork">
+                <div>
+                    <p>스스로 책임지고 자율적으로 일해요</p>
+                    <span>
+                        “어른답게” 서로를 어른으로 대하고 배려하는 것이 중요해요.<br>
+                        스스로 판단하고 자율적으로 행동할 수 있기 때문에<br>
+                        더 높은 효율을 만들어나가며 일을 할 수 있어요.
+                    </span>
+                </div>
+                <div>
+                    <img th:src="@{/images/company/cultureWork1.png}">
+                </div>
+            </div>
+
+            <div class="cultureWork">
+                <div>
+                    <img th:src="@{/images/company/cultureWork1.png}">
+                </div>
+                <div>
+                    <p>스스로 책임지고 자율적으로 일해요</p>
+                    <span>
+                        “어른답게” 서로를 어른으로 대하고 배려하는 것이 중요해요.<br>
+                        스스로 판단하고 자율적으로 행동할 수 있기 때문에<br>
+                        더 높은 효율을 만들어나가며 일을 할 수 있어요.
+                    </span>
+                </div>
+            </div>
+
+            <div class="contentHead">
+                우리의 문화와 제도는 구성원들의<br>
+                성장과 몰입을 위해 존재해요.
+            </div>
+
+            <div class="cultureSystem">
+                <div>
+                    <div>
+                        <img th:src="@{/images/company/icon01.png}">
+                        <p>수평적인 문화</p>
+                    </div>
+                    <div class="systemText">
+                        수평적인 의사소통을 위해 님 호칭을 사용하며,<br>
+                        서로의 의견도, 인격도 존중되는 소통 문화를 만들어가요.<br>
+                        역할 중심의 Career Level,<br>
+                        모든 정보의 공유와 소통으로<br>
+                        수평적인 문화를 지속해나가요.
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <img th:src="@{/images/company/icon01.png}">
+                        <p>수평적인 문화</p>
+                    </div>
+                    <div class="systemText">
+                        수평적인 의사소통을 위해 님 호칭을 사용하며,<br>
+                        서로의 의견도, 인격도 존중되는 소통 문화를 만들어가요.<br>
+                        역할 중심의 Career Level,<br>
+                        모든 정보의 공유와 소통으로<br>
+                        수평적인 문화를 지속해나가요.
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <img th:src="@{/images/company/icon01.png}">
+                        <p>수평적인 문화</p>
+                    </div>
+                    <div class="systemText">
+                        수평적인 의사소통을 위해 님 호칭을 사용하며,<br>
+                        서로의 의견도, 인격도 존중되는 소통 문화를 만들어가요.<br>
+                        역할 중심의 Career Level,<br>
+                        모든 정보의 공유와 소통으로<br>
+                        수평적인 문화를 지속해나가요.
+                    </div>
+                </div>
+
+                <div>
+                    <div>
+                        <img th:src="@{/images/company/icon01.png}">
+                        <p>수평적인 문화</p>
+                    </div>
+                    <div class="systemText">
+                        수평적인 의사소통을 위해 님 호칭을 사용하며,<br>
+                        서로의 의견도, 인격도 존중되는 소통 문화를 만들어가요.<br>
+                        역할 중심의 Career Level,<br>
+                        모든 정보의 공유와 소통으로<br>
+                        수평적인 문화를 지속해나가요.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</html>

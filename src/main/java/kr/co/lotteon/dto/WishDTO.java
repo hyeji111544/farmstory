@@ -16,4 +16,10 @@ public class WishDTO {
     private int optNo;
     private LocalDateTime wishRdate;
     private int wishCount;
+
+    // 관심상품 출력을 위한 추가필드
+    private String prodName;
+    private int prodPrice;
+    private String thumb190;
+    private String optName;
 }

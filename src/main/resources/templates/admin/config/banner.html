@@ -4,7 +4,6 @@
 <!--내용 시작-->
     <section id="admin-config-banner" layout:fragment="content">
         <!--admin/banner 에서만 사용하는 js와 css-->
-        <link rel="stylesheet" th:href="@{/css/admin/adminBanner.css}">
         <script>
             $(function() {
                 $("#tabs").tabs();
@@ -20,6 +19,75 @@
                     $('#bannerRegister').addClass('on');
                 });
             });
+
+            let banNos = []; // 전역변수 어디서든 접근, 참조 가능한 변수
+            let trTags = [];
+            function checkBox() {
+                console.log("banNos1 : " + banNos);
+                // 체크를 하면 saveBannerNo에 번호를 저장
+                const button = event.target; // 버튼 본인
+                const btnParent = button.parentNode; // 버튼의 부모태그 (td)
+                const trTag = btnParent.parentNode;
+                const nextParent = btnParent.nextElementSibling; // 버튼의 부모의 다음 td 태그
+                const bannerNo = nextParent.innerText;
+
+
+                if (button.checked) {
+                    banNos.push(bannerNo);
+                    trTags.push(trTag);
+                    console.log("banNos : " + banNos);
+                    console.log("trTags : " + trTags);
+                }else {
+                    // 체크를 풀면 saveBannerNo 번호를 삭제
+                    let index = banNos.indexOf(bannerNo);
+                    let index2 = trTags.indexOf(trTag);
+                    banNos.splice(index, 1);
+                    trTags.splice(index2, 1);
+
+                    console.log("banNos2 : " + banNos);
+                    console.log("trTags2 : " + trTags);
+                }
+            }
+            function deleteBtn() {
+
+
+                console.log("banNos : " + banNos);
+                // 삭제 버튼을 클릭하면 saveBannerNo를 가져와서 삭제 진행
+                if (banNos.length != 0) {
+                    confirm("선택하신 글을 삭제하시겠습니까?");
+                }else{
+                    alert("선택된 글이 없습니다.");
+                }
+                if(banNos){
+                    const jsonData ={
+                        "banNos" : banNos
+                    }
+                    fetch("/lotteon/admin/banner/delete",{
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('삭제에 실패했습니다.');
+                            }
+                            return response.json()
+                        })
+                        .then(data => {
+                            if (data.data === '삭제 성공') {
+                                Array.from(trTags).forEach(function (tr) {
+                                    tr.remove();
+                                })
+                            }
+                        })
+                        .catch(err => console.log(err))
+                }else{
+                    banNos.length = 0;
+                    trTags.length = 0;
+                    alert("취소되었습니다.");
+                }
+            }
+
         </script>
         <nav>
             <h3>배너관리</h3>
@@ -54,58 +122,33 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
-                        <th>조회</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
 
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="../../images/topBanner1.png" class="thumb"></td>
+                    <tr class="bannerAll" th:each="banner : ${main1}">
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
+                        <td th:text="${banner.banNo}"></td>
+                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
                             <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 1200 x 80</li>
-                                <li class="size">배경색 : #e4dfdf</li>
-                                <li class="link"><a href="#">배너링크</a></li>
+                                <li th:text="${banner.banName}" class="name"></li>
+                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
                             </ul>
                         </td>
-                        <td>메인 - 상단</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
-                        <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="../../images/topBanner2.png" class="thumb"></td>
-                        <td>
-                            <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 1200 x 80</li>
-                                <li class="size">배경색 : #e4dfdf</li>
-                                <li class="link"><a href="#">배너링크</a></li>
-                            </ul>
-                        </td>
-                        <td>메인 - 상단</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
+                        <td th:text="${banner.banImgCate}"></td>
+                        <td th:text="${banner.banSdate}"></td>
+                        <td th:text="${banner.banEdate}"></td>
+                        <td th:text="${banner.banStime}"></td>
+                        <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
 
             </section>
@@ -127,99 +170,32 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
-                        <th>조회</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="../../images/slider_item1.jpg" class="thumb"></td>
+                    <tr th:each="banner : ${main2}">
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
+                        <td th:text="${banner.banNo}"></td>
+                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
                             <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 985 x 447</li>
-                                <li class="link"><a href="#">배너링크</a></li>
+                                <li th:text="${banner.banName}" class="name"></li>
+                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
                             </ul>
                         </td>
-                        <td>메인 - 슬라이더</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
-                        <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="../../images/slider_item2.jpg" class="thumb"></td>
-                        <td>
-                            <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 985 x 447</li>
-                                <li class="link"><a href="#">배너링크</a></li>
-                            </ul>
-                        </td>
-                        <td>메인 - 슬라이더</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
-                        <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="../../images/slider_item3.jpg" class="thumb"></td>
-                        <td>
-                            <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 985 x 447</li>
-                                <li class="link"><a href="#">배너링크</a></li>
-                            </ul>
-                        </td>
-                        <td>메인 - 슬라이더</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
-                        <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="../../images/slider_item4.jpg" class="thumb"></td>
-                        <td>
-                            <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 985 x 447</li>
-                                <li class="link"><a href="#">배너링크</a></li>
-                            </ul>
-                        </td>
-                        <td>메인 - 슬라이더</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
+                        <td th:text="${banner.banImgCate}"></td>
+                        <td th:text="${banner.banSdate}"></td>
+                        <td th:text="${banner.banEdate}"></td>
+                        <td th:text="${banner.banStime}"></td>
+                        <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
             </section>
 
@@ -240,33 +216,32 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
-                        <th>조회</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="../../images/vip_plcc_banner.png" class="thumb"></td>
+                    <tr th:each="banner : ${product1}">
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
+                        <td th:text="${banner.banNo}"></td>
+                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
                             <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 456 x 60</li>
-                                <li class="link"><a href="#">배너링크</a></li>
+                                <li th:text="${banner.banName}" class="name"></li>
+                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
                             </ul>
                         </td>
-                        <td>상품 - 상세보기</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
+                        <td th:text="${banner.banImgCate}"></td>
+                        <td th:text="${banner.banSdate}"></td>
+                        <td th:text="${banner.banEdate}"></td>
+                        <td th:text="${banner.banStime}"></td>
+                        <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
             </section>
 
@@ -287,33 +262,32 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
-                        <th>조회</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="/member/images/member_login_banner.jpg" class="thumb"></td>
+                    <tr th:each="banner : ${member1}">
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
+                        <td class="banNos" th:text="${banner.banNo}"></td>
+                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
                             <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 425 x 260</li>
-                                <li class="link"><a href="#">배너링크</a></li>
+                                <li th:text="${banner.banName}" class="name"></li>
+                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
                             </ul>
                         </td>
-                        <td>회원 - 로그인</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
+                        <td th:text="${banner.banImgCate}"></td>
+                        <td th:text="${banner.banSdate}"></td>
+                        <td th:text="${banner.banEdate}"></td>
+                        <td th:text="${banner.banStime}"></td>
+                        <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
             </section>
 
@@ -334,55 +308,32 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
-                        <th>조회</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="/my/images/my_banner1.jpg" class="thumb"></td>
+                    <tr th:each="banner : ${my1}">
+                        <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
+                        <td th:text="${banner.banNo}"></td>
+                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
                             <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 810 x 86</li>
-                                <li class="link"><a href="#">배너링크</a></li>
+                                <li th:text="${banner.banName}" class="name"></li>
+                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
                             </ul>
                         </td>
-                        <td>마이페이지</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
-                        <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" name="배너번호"/></td>
-                        <td>201603292</td>
-                        <td><img src="/my/images/my_banner2.png" class="thumb"></td>
-                        <td>
-                            <ul>
-                                <li class="name">배너이름</li>
-                                <li class="size">크기 : 810 x 86</li>
-                                <li class="link"><a href="#">배너링크</a></li>
-                            </ul>
-                        </td>
-                        <td>마이페이지</td>
-                        <td>2023/01/01</td>
-                        <td>2023/01/07</td>
-                        <td>13:00</td>
-                        <td>14:00</td>
-                        <td>12</td>
+                        <td th:text="${banner.banImgCate}"></td>
+                        <td th:text="${banner.banSdate}"></td>
+                        <td th:text="${banner.banEdate}"></td>
+                        <td th:text="${banner.banStime}"></td>
+                        <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>
                         </td>
                     </tr>
                 </table>
-                <input type="button" class="btnNegative" value="선택삭제"/>
+                <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
             </section>
         </article>
@@ -390,99 +341,81 @@
             <strong>Tip!</strong>
             전자상거래 등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성 등을 양식에 따라 입력할 수 있습니다.
         </p>
+        <div id="bannerRegister" class="popup">
+            <div style="margin-top: 20px">
+                <nav>
+                    <h1>배너등록</h1>
+                    <button class="btnClose">X</button>
+                </nav>
+                <section>
+                    <article>
+                        <h3>배너 정보입력</h3>
+                        <form th:action="@{/admin/banner/register}" method="post" enctype="multipart/form-data">
+                            <table border="0">
+                                <tr>
+                                    <td>배너이름</td>
+                                    <td>
+                                        <p>배너명을 입력하세요.</p>
+                                        <input type="text" name="banName" placeholder="배너명 입력"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>배너파일</td>
+                                    <td>
+                                        <p>배너 이미지 파일을 추가하세요.</p>
+                                        <input type="file" name="file" placeholder="배너 이미지 파일 선택"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>배너링크</td>
+                                    <td>
+                                        <p>배너를 클릭했을 떄 이동할 페이지 링크주소를 입력하세요.</p>
+                                        <input type="text" name="banLink" placeholder="링크주소 입력"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>배너위치</td>
+                                    <td>
+                                        <p>배너가 노출되는 위치를 선택하십시요.</p>
+                                        <select name="banImgCate">
+                                            <option value="0">선택</option>
+                                            <option value="main1">메인-상단</option>
+                                            <option value="main2">메인-슬라이더</option>
+                                            <option value="product1">상품-상세보기</option>
+                                            <option value="member1">회원-로그인</option>
+                                            <option value="my1">마이페이지</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>배너 노출날짜</td>
+                                    <td>
+                                        <p>배너가 노출되는 기간을 선택하십시요.</p>
+                                        <input type="date" name="banSdate"/>
+                                        <span>~</span>
+                                        <input type="date" name="banEdate"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>배너 노출시간</td>
+                                    <td>
+                                        <p>배너가 노출되는 시간을 선택하십시요.</p>
+                                        <input type="time" name="banStime"/>
+                                        <span>~</span>
+                                        <input type="time" name="banEtime"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div>
+                                <input type="submit" class="btnPositive" value="등록하기"/>
+                            </div>
+
+                        </form>
+                    </article>
+                </section>
+            </div>
+        </div>
     </section>
 <!--내용 끝-->
-    <!--
-        이 아래 코드들은 admin/banner 에서 사용하는 것들
-        추후 개발 단계에서 정리 예정
-    -->
-<div id="bannerRegister" class="popup">
-    <div>
-        <nav>
-            <h1>배너등록</h1>
-            <button class="btnClose">X</button>
-        </nav>
-        <section>
-            <article>
-                <h3>배너 정보입력</h3>
-                <form action="#" method="post">
-                    <table border="0">
-                        <tr>
-                            <td>배너이름</td>
-                            <td>
-                                <p>배너명을 입력하세요.</p>
-                                <input type="text" name="name" placeholder="배너명 입력"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>배너파일</td>
-                            <td>
-                                <p>배너 이미지 파일을 추가하세요.</p>
-                                <input type="file" name="file" placeholder="배너 이미지 파일 선택"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>배너크기</td>
-                            <td>
-                                <p>배너의 크기를 입력하세요.</p>
-                                <input type="text" name="size" placeholder="배너크기"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>배경색</td>
-                            <td>
-                                <p>메인 상단 배너에 적용되는 배너 배경색입니다. ex) #ffff00</p>
-                                <input type="text" name="color" placeholder="배너 배경색 입력"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>배너링크</td>
-                            <td>
-                                <p>배너를 클릭했을 떄 이동할 페이지 링크주소를 입력하세요.</p>
-                                <input type="text" name="link" placeholder="링크주소 입력"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>배너위치</td>
-                            <td>
-                                <p>배너가 노출되는 위치를 선택하십시요.</p>
-                                <select name="position">
-                                    <option value="0">선택</option>
-                                    <option value="MAIN1">메인-상단</option>
-                                    <option value="MAIN2">메인-슬라이더</option>
-                                    <option value="PRODUCT1">상품-상세보기</option>
-                                    <option value="MEMBER1">회원-로그인</option>
-                                    <option value="MY1">마이페이지</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>배너 노출날짜</td>
-                            <td>
-                                <p>배너가 노출되는 기간을 선택하십시요.</p>
-                                <input type="date" name="begin"/>
-                                <span>~</span>
-                                <input type="date" name="end"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>배너 노출시간</td>
-                            <td>
-                                <p>배너가 노출되는 시간을 선택하십시요.</p>
-                                <input type="time" name="begin"/>
-                                <span>~</span>
-                                <input type="time" name="end"/>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <div>
-                        <input type="submit" class="btnPositive" value="등록하기"/>
-                    </div>
-
-                </form>
-            </article>
-        </section>
-    </div>
-</div>
 </html>

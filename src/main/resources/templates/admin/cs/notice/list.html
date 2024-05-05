@@ -27,9 +27,9 @@
                     }
                 });
             });
-            function deleteValue(){
+            function deleteValue(event){
                 console.log("here...1");
-
+                event.preventDefault();
                 const inputChecked = $("input[name='RowCheck']:checked");
 
                 const url = "/lotteon/admin/cs/notice/delete"; //controller를 보내고자하는 url
@@ -94,7 +94,7 @@
             </p>
         </nav>
         <!-- 상품목록 컨텐츠 시작 -->
-        <section>
+        <section class="sectionBox">
             <div>
                 <select name="search" onchange="redirectToCategory()">
                     <option value="choice">유형선택</option>
@@ -123,7 +123,7 @@
                     <td th:if="${notice.noticeCate}=='event'" style="white-space: nowrap;">[이벤트당첨]</td>
                     <td th:if="${notice.noticeCate}=='safe'" style="white-space: nowrap;">[안전거래]</td>
                     <td th:if="${notice.noticeCate}=='danger'" style="white-space: nowrap;">[위해상품]</td>
-                    <td>
+                    <td style="text-align: left">
                         <span>
                             <a th:href="@{/admin/cs/notice/view(noticeNo=${notice.noticeNo})}">
                                 <span th:if="${notice.noticeType == 'guide'}" style="white-space: nowrap;"><span th:text="'[안내]'+ ' ' + ${notice.noticeTitle}"></span></span>
@@ -141,34 +141,26 @@
                     </td>
                 </tr>
             </table>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px">
+                <a class="btn" onclick="deleteValue(event);" style="background-color: #D04848">선택삭제</a>
+                <a class="btn" th:href="@{/admin/cs/notice/write}" style="background-color: #6895D2">작성하기</a>
+            </div>
 
-            <input type="button" value="선택삭제" class="btn btn-outline-info" onclick="deleteValue();" style="background-color: #9e9e9e; color: white; border: none; padding: 10px 20px; cursor: pointer;"/>
-            <a th:href="@{/admin/cs/notice/write}"><input type="button" value="작성하기" style=" float: right; background-color: #4291e9; color: white; border: none; padding: 10px 20px; cursor: pointer;" /></a>
-
-
-            <div class="paging">
-                <span class="prev">
-                    <!-- 이전 버튼 -->
+            <div class="pagingBox">
+                <div class="pagingList">
                     <a th:if="${pageResponseDTO.prev && noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.start - 1})}">이전</a>
                     <a th:if="${pageResponseDTO.prev && noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.start - 1}, noticeCate=${noticeCate})}">이전</a>
-                </span>
-                    <!-- 페이지 링크 -->
-                <span class="num">
+
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                 <a th:if="${noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${num})}"
-                  th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
-                  th:text="${num}"></a>
-                <a th:if="${noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${num}, noticeCate=${noticeCate})}"
-                   th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
-                   th:text="${num}"></a>
+                        <a class="pageNum" th:if="${noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${num}, noticeCate=${noticeCate})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
-                </span>
-                    <!-- 다음 버튼 -->
-                <span class="next">
+
                     <a th:if="${pageResponseDTO.next && noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.end + 1})}">다음</a>
                     <a th:if="${pageResponseDTO.next && noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.end + 1}, noticeCate=${noticeCate})}">다음</a>
-                </span>
                 </div>
+            </div>
+
         </section>
         <!-- 상품목록 컨텐츠 끝 -->
     </section>

@@ -42,8 +42,12 @@ public class ProductController {
     public String prodList(@RequestParam("cateCode") String cateCode, ProductPageRequestDTO productPageRequestDTO, Model model){
         ProductPageResponseDTO pageResponseDTO;
         productPageRequestDTO.setCateCode(cateCode);
+
         pageResponseDTO = productService.selectProductsByCate(productPageRequestDTO);
+        //pageResponseDTO.setCateCode(productPageRequestDTO.getCateCode());
         String setSortType = productPageRequestDTO.getSort();
+        String setCateCode = productPageRequestDTO.getCateCode();
+        pageResponseDTO.setCateCode(setCateCode);
         model.addAttribute("setSortType", setSortType);
         model.addAttribute(pageResponseDTO);
         String cate01 = "";
@@ -162,7 +166,9 @@ public class ProductController {
         if (cartNo != 0){
             Map<String, List<CartInfoDTO>> cartProducts = cartService.findCartProdNo(cartNo);
             model.addAttribute("cartProducts", cartProducts);
+            log.info(cartProducts.toString());
         }
+
 
         return "/product/cart";
     }
@@ -188,10 +194,5 @@ public class ProductController {
         return "/product/order";
     }
 
-    // 상품 주문 완료 이동
-    @GetMapping("/product/complete")
-    public String prodComplete(){
-        return "/product/complete";
-    }
 
 }

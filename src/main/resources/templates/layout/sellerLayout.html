@@ -1,5 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>롯데ON::1조 관리자 페이지</title>
@@ -7,20 +8,20 @@
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
     <script th:src="@{https://kit.fontawesome.com/20962f3e4b.js}" crossorigin="anonymous"></script>
     <script th:src="@{/js/admin/gnb.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js}"></script>
     <link rel="stylesheet" th:href="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css}"/>
     <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}"/>
-    <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
     <link rel="stylesheet" th:href="@{/css/seller/seller.css}">
 </head>
 <body>
     <div id="admin-wrapper">
         <header class="sellerHeader">
             <div>
-                <a th:href="@{/admin/index}" class="logo"><img th:src="@{/images/admin/admin_logo.png}" alt="admin_logo"/></a>
+                <a th:href="@{/seller/index}" class="logo">BUSINESS</a>
                 <p>
                     <span>(주)신난다 님 반갑습니다.</span>
                     <a th:href="@{/}">HOME |</a>
-                    <a href="#">로그아웃 |</a>
+                    <a th:href="@{/member/logout}">로그아웃 |</a>
                     <a th:href="@{/cs/index}">고객센터</a>
                 </p>
             </div>
@@ -29,13 +30,6 @@
             <aside>
                 <!-- Global Navigation Bar -->
                 <ul id="gnb">
-                    <li>
-                        <a href="#"><i class="fas fa-store" aria-hidden="true"></i>상점관리</a>
-                        <ol>
-                            <li><a href="#">판매자현황</a></li>
-                            <li><a href="#">재고관리</a></li>
-                        </ol>
-                    </li>
                     <li>
                         <a href="#"><i class="fas fa-box-open" aria-hidden="true"></i>상품관리</a>
                         <ol>
@@ -46,17 +40,16 @@
                     <li>
                         <a href="#"><i class="fa fa-credit-card" aria-hidden="true"></i>주문관리</a>
                         <ol>
-                            <li><a href="#">주문현황</a></li>
-                            <li><a href="#">매출현황</a></li>
+                            <li><a th:href="@{/seller/order/orderList(prodSeller=${session.prodSeller})}">주문현황</a></li>
+                            <li><a th:href="@{/seller/order/sales(prodSeller=${session.prodSeller})}">매출현황</a></li>
                             <li><a href="#">결제관리</a></li>
-                            <li><a href="#">배송관리</a></li>
+                            <li><a th:href="@{/seller/order/delivery(prodSeller=${session.prodSeller})}">배송관리</a></li>
                         </ol>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>고객센터</a>
                         <ol>
                             <li><a th:href="@{/seller/cs/notice/list}">공지사항</a></li>
-                            <li><a th:href="@{/seller/cs/faq/list}">자주묻는질문</a></li>
                             <li><a th:href="@{/seller/cs/qna/list(prodSeller=${session.prodSeller})}">고객문의관리</a></li>
                         </ol>
                     </li>

@@ -13,6 +13,168 @@
 				새 비밀번호 유효성 검사 후
 				비밀번호 재설정 버튼 클릭시 회원정보 DB에 비밀번호 덮어쓰기
 			 */
+			let isPassOk  = false;
+			const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
+
+			window.onload = function() {
+				const checkUserEmail = document.getElementById('checkUserEmail'); //인증코드 발송버튼
+				const inputEmailCode = document.getElementById('inputEmailCode'); //인증코드 입력
+				const checkCodeLabel = document.getElementById('checkCodeLabel'); //인증코드 확인필드
+				const checkEmailCode = document.getElementById('checkEmailCode'); //인증코드 확인버튼
+				const resultEmailCode = document.getElementById('resultEmailCode'); //인증코드 결과
+				const resultEmail = document.getElementById('resultEmail'); //인증코드 중복체크
+				const inputUserEmail = document.getElementById('userEmail'); //이메일 입력칸
+
+				const updatePw = document.getElementById('join'); // 아이디 찾기 버튼
+				const resultPw = document.getElementById('resultPw'); // 1차비밀번호
+				const resultPwCheck = document.getElementById('resultPwCheck'); // 2차비밀번호
+
+				const userPwCheck = document.getElementById('userPw');
+				const userPwCheck2 = document.getElementById('userPwCheck');
+
+				////////////////////////////////////////////////////////////////////////////////
+				// 1차 비밀번호 유효성체크
+				userPwCheck.addEventListener('blur', function () {
+					const value = userPwCheck.value;
+					const type = "userPw";
+					// 1. 정규표현식 통과
+					if (!value.match(rePass)) {
+						resultPw.innerText = "유효하지 않은 패스워드입니다.";
+						resultPw.style.color = "red";
+						userPwCheck.style.border = "1px solid red";
+						isPassOk = false;
+						return; // 여기서 끝!
+					} else {
+						resultPw.innerText = "사용가능한 비밀번호입니다.";
+						resultPw.style.color = "green";
+						userPwCheck.style.border = "1px solid green";
+						isPassOk = true;
+						return; // 여기서 끝!
+					}
+				});
+				// 2차 비밀번호 체크
+				userPwCheck2.addEventListener('input', function () {
+
+					const value = userPwCheck2.value;
+					const type = "userPw";
+					// 1. 정규표현식 통과
+					if (userPwCheck.value == userPwCheck2.value) {
+
+						if (!value.match(rePass)) {
+							resultPwCheck.innerText = "유효하지 않은 패스워드입니다.";
+							resultPwCheck.style.color = "red";
+							userPwCheck2.style.border = "1px solid red";
+							isPassOk = false;
+							return; // 여기서 끝!
+						} else {
+							resultPwCheck.innerText = "패스워드가 일치합니다.";
+							resultPwCheck.style.color = "green";
+							userPwCheck2.style.border = "1px solid green";
+							isPassOk = true;
+							return; // 여기서 끝!
+						}
+					} else {
+						resultPwCheck.innerText = "패스워드가 일치하지 않습니다.";
+						resultPwCheck.style.color = "red";
+						userPwCheck2.style.border = "1px solid red";
+						isPassOk = false;
+						return; // 여기서 끝
+					}
+				});
+
+				//이메일 인증코드 발급
+				checkUserEmail.onclick = function (e) {
+					e.preventDefault();
+					checkCodeLabel.style.display = 'block';
+
+					const value = inputUserEmail.value;
+					console.log(value);
+					//이메일 중복체크 요청
+					fetch(`/lotteon/member/updatePwEmailCheck/${value}`)
+							.then(response => response.json())
+							.then(data => {
+								if (data.result === 0) {
+									// 이메일이 존재하는 경우
+									resultEmail.innerText = "인증코드가 전송되었습니다.";
+									resultEmail.style.color = "green";
+									inputUserEmail.style.border = "1px solid green";
+								} else {
+									// 이메일이 존재하지 않는 경우
+									resultEmail.innerText = "존재하지않는 이메일입니다.";
+									resultEmail.style.color = "red";
+									inputUserEmail.style.border = "1px solid red";
+								}
+							})
+							.catch(error => {
+								console.log('Error', error);
+							});
+				}
+				checkEmailCode.onclick = function (e) {
+					e.preventDefault();
+					const resultPwAll = document.querySelectorAll('.resultPwAll');
+					const inputCode = inputEmailCode.value;
+
+					console.log(inputCode)
+
+					fetch(`/lotteon/member/checkEmailCode/${inputCode}`)
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+								if (data.result > 0) {
+									resultEmailCode.innerText = "인증번호가 틀렸습니다.";
+									resultEmailCode.style.color = "red";
+									inputEmailCode.style.border = "1px solid red";
+
+								} else {
+									resultEmailCode.innerText = "인증번호 인증완료.";
+									resultEmailCode.style.color = "green";
+									inputEmailCode.style.border = "1px solid green";
+									resultPwAll.forEach(all =>{
+										all.style.display = "block";
+									})
+								}
+							})
+							.catch(err => console.log(err))
+				}
+				updatePw.onclick = function (e) {
+					const userId = document.getElementById('userId').value;
+					const userEmail = document.getElementById('userEmail').value;
+					const code = document.getElementById('inputEmailCode').value;
+					const userPw = document.getElementById('userPw').value;
+					e.preventDefault();
+					console.log("userId :" + userId);
+					console.log("userPw :" + userPw);
+					console.log("userEmail :" + userEmail);
+					if (!isPassOk) {
+						alert('비밀번호가 유효하지 않습니다.');
+						return false;
+					}
+
+					fetch(`/lotteon/member/updatePw`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							"userId": userId,
+							"userPw": userPw,
+							"userEmail": userEmail,
+							"code": code
+						})
+					})
+							.then(response => response.json())
+							.then(data => {
+								console.log(data);
+								if (data === 1) {
+									alert(`비밀번호가 재설정 되었습니다.`);
+									location.href = "/lotteon/member/login";
+								} else {
+									alert(`오류가 발생했습니다.`);
+								}
+							})
+							.catch(err => console.log(err));
+				}
+			}
 		</script>
 
 		<div class="register">
@@ -55,7 +217,7 @@
 					</table>
 				</section>
 
-				<section>
+				<section class="resultPwAll" style="display: none;">
 					<table>
 						<caption>새 비밀번호 설정</caption>
 						<tr>
@@ -80,7 +242,7 @@
 				</section>
 
 				<div>
-					<input type="submit" class="join" value="비밀번호 재설정" />
+					<input type="submit" class="join" ID="join" value="비밀번호 재설정" />
 				</div>
 			</form>
 		</div>

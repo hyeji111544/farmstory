@@ -552,6 +552,22 @@ footer p > strong {
 }
 
 /* my - ordered(전체주문내역) */
+#my > .ordered > section > article > table .rating {
+    display: block;
+    width: 84px;
+    height: 20px;
+    font-size: 0px;
+    background-image: url('../../images/my/my_rating_star.png');
+    background-repeat: no-repeat;
+    background-position: 36px 0px;
+}
+#my > .ordered > section > article > table .rating.star1 {background-position: 0 -40px;}
+#my > .ordered > section > article > table .rating.star2 {background-position: 0 -80px;}
+#my > .ordered > section > article > table .rating.star3 {background-position: 0 -120px;}
+#my > .ordered > section > article > table .rating.star4 {background-position: 0 -160px;}
+#my > .ordered > section > article > table .rating.star5 {background-position: 0 -200px;}
+
+
 #my > .ordered {}        
 #my > .ordered > section > article > .byDate {
     width: 100%;
@@ -1239,9 +1255,9 @@ footer p > strong {
     background-color: #f7f7f7;
 }
 #my > .info > section > article > table input {
+    width: auto;
     padding: 2px;
     box-sizing: border-box;
-    border: 1px solid #999;
     border: 0;
 }
 
@@ -1261,15 +1277,20 @@ footer p > strong {
 }
 
 #my button {
-    padding: 2px;            
+    padding: 4px;
     border: 1px solid #999;
 }
 
-#my button:hover {            
+#my button:hover {
     background-color: #e9e9e9;
     cursor: pointer;
 }
+#btnWithdraw {
+    padding: 4px;
+    font-size: 14px;
+    margin: 20px 0 30px 0;
 
+}
 #my #btnWithdraw {
     background: #e74929;
     border: 1px solid #c84f3c;
@@ -1287,7 +1308,13 @@ footer p > strong {
     font-family: '돋움';
     border: none;
 }
-
+/* 마이페이지 before, after */
+.myOrderInfo > p:nth-child(3):before {
+    content: '수량 : ';
+}
+.myOrderInfo > p:nth-child(4):after {
+    content: '원';
+}
 
 /* 마이페이지 팝업 */
 .popup {                
@@ -1505,4 +1532,293 @@ footer p > strong {
     color: white;
     margin: 10px auto;
     cursor: pointer;
+}
+
+/* my/point 커스텀 */
+.PointList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.PointList > div {
+    display: flex;
+}
+.PointList > div:nth-child(1) > div {
+    font-weight: bold;
+    text-align: center;
+    background-color: #f5f5f5;
+}
+.PointList > div:nth-child(1) > div:nth-child(1) {border-top-left-radius: 10px}
+.PointList > div:nth-child(1) > div:nth-last-child(1) {border-top-right-radius: 10px}
+.PointList > div > div {
+    font-size: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #aaa;
+}
+.PointList > div > div:nth-child(1) {width: 250px; text-align: center}
+.PointList > div > div:nth-child(2) {width: 150px; text-align: center}
+.PointList > div > div:nth-child(3) {width: 160px; text-align: right}
+.PointList > div > div:nth-child(4) {width: 250px; text-align: center}
+.pointAfter:after {
+    content: 'P';
+}
+
+.PointList > .page {
+    display: flex;
+    margin: 10px 0;
+    justify-content: center;
+}
+.PointList > .page > a {
+    padding: 4px 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+.PointList > .page > a:hover {
+    background-color: #c9c9c9;
+}
+.PointList > .page > .on {
+    background-color: #c9c9c9;
+}
+
+    /* my/order 커스텀 */
+.myOrderSearch {
+    display: flex;
+    justify-content: left;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin-top: 20px;
+    padding: 10px;
+}
+.myOrderSearch > p {
+    display: inline-block;
+    font-size: 16px;
+    width: 100px;
+    height: 30px;
+    margin: 0 5px;
+    line-height: 30px;
+    font-weight: bold;
+    box-sizing: border-box;
+    padding-left: 10px;
+}
+.myOrderSearch > a {
+    display: inline-block;
+    width: 50px;
+    height: 30px;
+    margin: 0 5px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+.myOrderSearch > a:hover {
+    background-color: #6cadff;;
+    border: 1px solid #969696;
+    color: white;
+}
+.myOrderSearch > form {
+    display: inline-block;
+    width: 250px;
+    height: 30px;
+    margin: 0 5px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    box-sizing: border-box;
+}
+.myOrderSearch > .searchCustomDate > input {
+    width: 90px;
+}
+.myOrderSearch > .searchCustomDate > input:nth-last-child(1) {
+    width: 30px;
+}
+.myOrderList {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+.orderByCompany {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin-top: 20px;
+}
+.orderByCompany > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.myOrderTitle {
+    width: 768px;
+    height: 50px;
+    justify-content: center;
+    padding: 0 20px;
+    background-color: #eeeeee;
+    border: 1px solid #aaa;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.myOrderTitle > p {
+    display: flex;
+}
+.myOrderTitle > p:nth-child(1) {width: 150px; font-size: 20px; font-weight: bold}
+.myOrderTitle > p:nth-child(2) {width: 150px; font-size: 14px}
+.myOrderTitle > p:nth-child(3) {width: 450px; font-size: 14px}
+.myOrderTitle > p:nth-last-child(1) {
+    justify-content: end;
+}
+.myOrderTitle > p:nth-last-child(2) > span {
+    font-size: 14px;
+    padding-left: 10px;
+}
+.myOrderTitle > p > img {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.myOrderRow {
+    width: 808px;
+    height: 120px;
+    border: 1px solid #aaa;
+    border-top: 0;
+}
+.myOrderRow > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+}
+.myOrderRow > div:nth-child(1) {width: 120px; padding: 10px}
+.myOrderRow > div:nth-child(1) > img {width: 100px; height: 100px;}
+.myOrderRow > div:nth-child(2) {
+    flex-direction: column;
+    align-items: start;
+    width: 400px;
+    padding-left: 20px;
+    border-left: 1px solid #f1f1f1;
+    border-right: 1px solid #f1f1f1;
+}
+.myOrderRow > div:nth-child(2) > p {
+    padding: 2px 0;
+}
+.myOrderRow > div:nth-child(2) > p:nth-child(1) {font-size: 14px; font-weight:bold; color:forestgreen;}
+.myOrderRow > div:nth-child(2) > p:nth-child(2) {font-size: 14px}
+.myOrderRow > div:nth-child(2) > p:nth-child(3) {font-size: 14px}
+.myOrderRow > div:nth-child(2) > p:nth-child(4) {font-size: 16px; font-weight: bold}
+.myOrderRow > div:nth-child(3) {
+    width: 120px;
+    border-right: 1px solid #f1f1f1;
+}
+.myOrderRow > div:nth-child(4) {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+}
+.myOrderRow > div > span {
+    width: 100px;
+    height: 23px;
+    border: 1px solid #f1f1f1;
+    border-radius: 4px;
+    background-color: #6cadff;
+    color: white;
+    margin: 1px 10px 0 10px;
+    text-align: center;
+    line-height: 23px;
+    cursor: pointer;
+}
+
+/* 별 */
+.ratingTd {
+    font-size: 24px;
+}
+
+.star {
+    cursor: pointer;
+    font-size: 30px;
+    color: #999999;
+}
+
+.star:hover,
+.star.clicked {
+    color: #fff400;
+}
+
+/* my - wish */
+.wishTable {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.wishTable > div {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #aaa;
+}
+.wishTable > div > input {
+    width: 20px;
+    height: 20px;
+    margin: 15px;
+}
+.wishTable > div:nth-child(1) {
+    height: 50px;
+    background-color: #f5f5f5;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.wishTable > div:nth-child(1) > div {font-size: 14px; padding-right: 10px}
+.wishTable > .wishContent > img {width: 90px; padding: 10px}
+.wishTable > .wishContent > div:nth-child(3) {width: 500px;}
+.wishTable > .wishContent > div:nth-child(4) {width: 150px; display: flex; flex-direction: column}
+.wishTable > .wishContent > div:nth-child(3) > p {
+    padding: 4px 0;
+}
+.wishTable > .wishContent > div:nth-child(3) > a {
+    padding: 4px 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+.wishTable > .wishContent > div:nth-child(3) > p:nth-child(2) {
+    color: #cecece;
+}
+.wishTable > .wishContent > div:nth-child(3) > p:nth-child(3):before {
+    content: '수량 : ';
+}
+.wishTable > .wishContent > div:nth-child(3) > p:nth-child(4):after {
+    content: '원';
+}
+.wishTable > .wishContent > div:nth-child(4) > span {
+    width: 100px;
+    margin-top: 10px;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+}
+.wishTable > .page {
+    display: flex;
+    margin: 10px 0;
+    justify-content: center;
+}
+.wishTable > .page > a {
+    padding: 4px 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+.wishTable > .page > a:hover {
+    background-color: #c9c9c9;
+}
+.wishTable > .page > .on {
+    background-color: #c9c9c9;
 }

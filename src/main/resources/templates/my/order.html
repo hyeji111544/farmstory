@@ -13,217 +13,50 @@
                 popReview.style.display = "block";
             }
 
-
-            /*
-                #1. 회원이 구매한 모든 상품의 정보를 알고 있음
-                #2. 우리는 10개씩 출력하고 싶음!
-                #3. 우리는 총 구매한 상품의 갯수를 알고 있음
-            */
-
-            window.onload = function (){
-                let MyOrderDTOList = [[${MyOrderDTOList.myOrderDTOList}]];
-                console.log("MyOrderDTOList : " + MyOrderDTOList);
-                console.log("MyOrderDTOList : " + MyOrderDTOList[1].prodName);
-                console.log("MyOrderDTOList : " + MyOrderDTOList[1].prodCompany);
-                console.log("MyOrderDTOList : " + MyOrderDTOList[1].thumb190);
-                console.log("MyOrderDTOList : " + MyOrderDTOList[1].count);
-                console.log("MyOrderDTOList : " + MyOrderDTOList[1].orderNo);
-                console.log("MyOrderDTOList : " + MyOrderDTOList[1].detailPrice);
-                console.log("MyOrderDTOList : " + MyOrderDTOList[1].detailStatus);
-                console.log("MyOrderDTOList : " + MyOrderDTOList[1].orderDate);
-
-                createOrdersList(0, 10);
+            // 팝업 //
+            function popupClose(e) {
+                e.preventDefault();
+                const button = event.target;
+                const popup = button.closest('.popup');
+                popup.style.display = "none";
             }
 
-            function createOrdersList(firstNum, lastNum) {
-                let MyOrderDTOList = [[${MyOrderDTOList.myOrderDTOList}]];
 
-                console.log("firstNum : " + firstNum);
-                console.log("lastNum : " + lastNum);
+            // 주문 번호별 상품 리스트 아코디언
+            /*
+                # 시나리오
+                .myOrderList 안에 10개의 .orderByCompany이 반복
+                버튼 클릭시 .myOrderTitle는 남기고 .myOrderRow들은 숨김
+             */
+            function accordionBtn() {
+                const button = event.target; // 클릭한 버튼
+                const btnParent = button.parentNode; // 버튼의 부모
+                const myOrderTitle = btnParent.parentNode; // 부모의 부모
+                const orderByCompany = myOrderTitle.parentNode; // 부모의 부모의 부모
+                const myOrderRowAll = orderByCompany.querySelectorAll('.myOrderRow') // myOrderRow들
 
-                // 화면이 로드될때 10개를 출력합니다.
-                const ordersListTable = document.getElementById('ordersListTable'); // 테이블 할아버지
-                const tableBody = document.getElementsByTagName('tbody')[0]; // 미국간 아빠
-
-                // for(String aa : aaa)  / for(int i=0; i =< 10; i++)
-                Array.from(MyOrderDTOList).forEach(function (MyOrderDTO, index) {
-                    if (firstNum <= index && index < lastNum) {
-
-                        const orderDate = MyOrderDTO.orderDate;
-                        const formattedDate = orderDate.substring(0, 10);
-
-                        console.log(index);
-                        const eachOrderList = `<tr class="orderTemplate">
-                                            <td class="date">${formattedDate}</td>
-                                            <td>
-                                                <a href="#" class="thumb"><img src="/lotteon/uploads/${MyOrderDTO.thumb190}" alt="" style="width: 80px"></a>
-                                                <ul>
-                                                    <li class="company">${MyOrderDTO.prodCompany}</li>
-                                                    <li class="prodName"><a href="#">${MyOrderDTO.prodName}</a></li>
-                                                    <li>수량 : <span class="prodCount" >${MyOrderDTO.count}</span>개 / 주문번호 : <span class="ordNo" >${MyOrderDTO.orderNo}</span></li>
-                                                    <li class="prodPrice">${MyOrderDTO.detailPrice}</li>
-                                                </ul>
-                                            </td>
-                                            <td class="status">${MyOrderDTO.detailStatus}</td>
-                                            <td class="confirm">
-                                                <a href="#" class="receive">수취확인</a>
-                                                <a href="#" class="review" onclick="orderReviewPopup()">상품평</a>
-                                                <a href="#" class="refund">반품신청</a>
-                                                <a href="#" class="exchange">교환신청</a>
-                                            </td>
-                                        </tr>`;
-
-                        tableBody.insertAdjacentHTML('beforeend', eachOrderList);
+                // myOrderRow들을 하나씩 순회
+                Array.from(myOrderRowAll).forEach(function (myOrderRow) {
+                    // 현재 myOrderRow의 display 상태를 체크해서 접기 or 펼치기
+                    if (myOrderRow.style.display === "none") {
+                        myOrderRow.style.display = "flex"; // 펼치기
+                        button.src = "/lotteon/images/icon-arrow-top.png";
+                    }else {
+                        myOrderRow.style.display = "none"; // 접기
+                        button.src = "/lotteon/images/icon-arrow-bottom.png";
                     }
                 })
             }
 
-            // 페이징 버튼 함수
-            function pushPageButton() {
-                const button = event.target; // 현재 함수를 실행시킨 태그
-                const ordersListTable = document.getElementById('ordersListTable'); // 테이블 할아버지
-                const tableBody = document.getElementsByTagName('tbody')[0]; // 미국간 아빠
-                const orderTemplateAll = tableBody.querySelectorAll('.orderTemplate') // orderTemplate 클래스 네임들
-
-                let num = button.innerText; // 1,2,3,4,5....
-
-                Array.from(orderTemplateAll).forEach(function (orderTemplate){
-                    orderTemplate.remove();
-                })
-                createOrdersList((num-1)*10, num*10);
-            }
-
-            // 10개 다음으로 버튼
-            function pushNextButton() {
-                const button = event.target; // 현재 함수를 실행시킨 태그
-                const ordersListTable = document.getElementById('ordersListTable'); // 테이블 할아버지
-                const tableBody = document.getElementsByTagName('tbody')[0]; // 미국간 아빠
-                const orderTemplateAll = tableBody.querySelectorAll('.orderTemplate') // orderTemplate 클래스 네임들
-
-                const aa = button.parentNode.querySelectorAll('a');
-                const lastNum = parseInt(aa[aa.length-2].innerText);
-                const lastPageNum = Math.ceil([[${MyOrderDTOList.total}]]/10);
-                console.log("lastNum : " + lastNum);
-
-                Array.from(orderTemplateAll).forEach(function (orderTemplate){
-                    orderTemplate.remove();
-                })
-                if (lastNum < lastPageNum){ //lastNum이 lastPageNum보다 작을떄
-
-                    createOrdersList(lastNum*10, (lastNum+1)*10);
-                    changeNextNum(lastPageNum);
-                }else {
-                    console.log("다음 페이지로 넘길 수 없음");
-                    console.log("현재 페이지 그룹의 마지막 번호 : " + lastNum);
-                    console.log("조회한 상품의 마지막 번호 : " + [[${MyOrderDTOList.end}]]);
-                }
-
-            }
-
-            // 10개 이전으로 버튼
-            function pushPrevButton() {
-                const button = event.target; // 현재 함수를 실행시킨 태그
-                const ordersListTable = document.getElementById('ordersListTable'); // 테이블 할아버지
-                const tableBody = document.getElementsByTagName('tbody')[0]; // 미국간 아빠
-                const orderTemplateAll = tableBody.querySelectorAll('.orderTemplate') // orderTemplate 클래스 네임들
-
-                const bb = button.parentNode.querySelectorAll('a');
-                const firstNum = parseInt(bb[1].innerText);
-                const FirstPageNum = Math.ceil([[${MyOrderDTOList.total}]]/10);
-
-                Array.from(orderTemplateAll).forEach(function (orderTemplate){
-                    orderTemplate.remove();
-                });
-
-                if (firstNum > 10){ //firstNum이 10보다 클떄
-
-                    createOrdersList((firstNum-1)*10, firstNum*10);
-                    changePrevNum(firstNum);
-                }else {
-                    console.log("이전 페이지로 넘길 수 없음");
-                    console.log("현재 페이지 그룹의 첫번째ㄴ 번호 : " + firstNum);
-                }
-            }
-
-            // 페이지 넘버링 그룹 번호 변경
-            function changeNextNum(lastPageNum) {
-                /*
-                    자바스크립트 선택자
-                    - 어디서.어떻게(누구를)
-                    - getElementById() : 태그의 Id명으로 선택 (중복 x)
-                    - getElementsByClassName() : 태그의 class명으로 선택 (중복 o -> 배열)
-                    - getElementsByTagName() : 태그명으로 선택 (중복 o -> 배열)
-                    - getElementsByName() : 태그의 name속성명으로 선택 (중복 o -> 배열)
-
-                    - querySelector() : 기준에서 조건에 일치하는 태그 한개 선택 (중복 x)
-                    - querySelectorAll() : 기준에서 조건에 일치하는 태그 모두 선택 (중복 O -> 배열)
-                    - () -> id로 찾으면 #xxx / class로 찾으면 .xxx / 태그명으로 찾으면 그냥
-                 */
-
-                const button = event.target; // 현재 함수를 실행시킨 태그
-                const pageGroup = button.parentNode; //내가 누른 버튼(다음)의 아버지 태그
-                const numAll = pageGroup.querySelectorAll('.num');
-
-                Array.from(numAll).forEach(function (num) {
-                     num.innerText = parseInt(num.innerText)+10;
-                     if (lastPageNum < parseInt(num.innerText)){
-                         num.remove();
-                     }
-                })
-            }
-
-            function changePrevNum(firstNum) {
-                // firstNum => 11, 21, 31, 41 ....
-                // firstNum - 10 => 이전 페이지 그룹의 첫번째 번호
-                console.log("firstNum : " + firstNum);
-                const startNum = parseInt(firstNum)-10;
-                const button = event.target; // 현재 함수를 실행시킨 태그
-                const pageGroup = button.parentNode; //내가 누른 버튼(다음)의 아버지 태그
-                const numAll = pageGroup.querySelectorAll('.num');
-
-                Array.from(numAll).forEach(function (num) {
-                    num.innerText = parseInt(num.innerText)+10;
-                    num.remove();
-                })
-
-                for(let i=9; i >= 0; i--) {
-                    const createPageNum = `<a href="#" class="num" onclick="pushPageButton()">${startNum+ i}</a>`
-
-                    pageGroup.children[0].insertAdjacentHTML('afterend', createPageNum);
-                }
-
-            }
-
-
-            //날짜로 상품 조회하기
-            function submitFroDate() {
-                const button = event.target; // 현재 함수를 실행시킨 태그
-                const inputFrom = button.parent; // 버튼의 부모 태그
-                const dateBegin = document.getElementsByClassName('begin')[0];
-                const dateEnd = document.getElementsByClassName('end')[0];
-                const dateBeginValue = dateBegin.value; // 시작 날짜
-                const dateEndValue = dateEnd.value; // 종료 날짜
-                const userId = [[${#authentication.principal.user.userId}]];
-                console.log("dateBeginValue : " + dateBeginValue);
-                console.log("userId : " + userId);
-                console.log("dateEndValue : " + dateEndValue);
-
-                window.location.href = "/lotteon/my/order?userId=userId&beginDate=dateBeginValue&endDate=dateEndValue"
-
-
-            }
-
-
         </script>
-        <script th:src="@{/js/my/popup.js}"></script>
         <nav>
             <div>
                 <a href="./home.html"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
                 <ol>
-                    <li><a href="#">주문·배송<span class="delivery">1</span></a></li>
-                    <li><a href="#">할인쿠폰<span class="coupon">1</span></a></li>
-                    <li><a href="#">포인트<span class="point">1,000</span></a></li>
-                    <li><a href="#">문의내역<span class="qna">1</span></a></li>
+                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
+                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
+                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point">1,000</span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
                 </ol>
             </div>
         </nav>
@@ -232,7 +65,7 @@
             <ul>
                 <span class="menu_else"></span>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <!--<li><a href="./favorite.html">관심상품</a></li>-->
+                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
                 <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
                 <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
@@ -245,43 +78,64 @@
                 <article class="latest">
                     <h3>전체주문내역</h3>
 
-                    <div class="byDate">
-                        <span class="tit">기간별조회</span>
-                        <ul class="date_3ea">
-                            <li><a href="#"><em>1</em>주일</a></li>
-                            <li><a href="#"><em>15</em>일</a></li>
-                            <li><a href="#" class="on"><em>1</em>개월</a></li>
-                        </ul>
-                        <ul class="date_5ea">
-                            <li><a href="#"><em>11</em>월</a></li>
-                            <li><a href="#"><em>10</em>월</a></li>
-                            <li><a href="#"><em>9</em>월</a></li>
-                            <li><a href="#"><em>8</em>월</a></li>
-                            <li><a href="#"><em>7</em>월</a></li>
-                        </ul>
-                        <p>
-                            <input type="date" name="begin" class="begin"><span>~</span><input type="date" name="end" class="end">
-                        </p>
-                        <button id="checkDate" class="btnConfirm" onclick="submitFroDate()">조회하기</button>
+                    <div class="myOrderSearch">
+                        <p>기간별 조회</p>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='week')}">일주일</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='halfmonth')}">15일</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='month')}">1개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='3month')}">3개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='6month')}">6개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='year')}">12개월</a>
+                        <form th:action="@{/my/order}" method="get" class="searchCustomDate">
+                            <input type="date" name="startDate">
+                            <p style="display: inline-block; width: 10px;">~</p>
+                            <input type="date" name="finalDate">
+                            <input type="hidden" name="cate" value="custom">
+                            <input type="hidden" name="userId" th:value="${#authentication.principal.user.userId}">
+                            <input type="submit" value="검색">
+                        </form>
                     </div>
 
-                    <table border="0" id="ordersListTable">
-                        <tr>
-                            <th>날짜</th>
-                            <th>상품정보</th>
-                            <th>상태</th>
-                            <th>확인/신청</th>
-                        </tr>
-                    </table>
-
+                    <div class="myOrderList">
+                        <div class="orderByCompany latest" th:each="linkedMap : ${MyOrderDTOList.myOrderDTOList}">
+                            <div class="myOrderTitle">
+                                <p th:text="${linkedMap.value.get(0).detailDate}"></p>
+                                <p>주문번호<span th:text="${linkedMap.key}"></span></p>
+                                <p>
+                                    <img th:src="@{/images/icon-arrow-top.png}" onclick="accordionBtn()"/>
+                                </p>
+                            </div>
+                            <div class="myOrderRow" th:each="orderList : ${linkedMap.value}">
+                                <div><img th:src="@{/uploads/__${orderList.thumb190}__}"></div>
+                                <div class="myOrderInfo">
+                                    <p th:text="${orderList.prodCompany}"></p>
+                                    <p th:text="${orderList.prodName}"></p>
+                                    <p th:text="${orderList.count}"></p>
+                                    <p th:text="${#numbers.formatInteger(orderList.detailPrice,3,'COMMA')}"></p>
+                                </div>
+                                <div th:text="${orderList.detailStatus}"></div>
+                                <div class="confirm">
+                                    <span>수취확인</span>
+                                    <span class="review">상품평쓰기</span>
+                                    <span>반품신청</span>
+                                    <span>교환신청</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <p class="page">
-                        <a href="#" class="prev" onclick="pushPrevButton()">이전</a>
+                        <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
+                        <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}">이전</a>
 
-                        <a href="#" class="num" onclick="pushPageButton()" th:if="${MyOrderDTOList.end >= 10}" th:each="n : ${#numbers.sequence(1, 10)}" th:text="${n}"></a>
-                        <a href="#" class="num" onclick="pushPageButton()" th:if="${MyOrderDTOList.end < 10}" th:each="n : ${#numbers.sequence(1, MyOrderDTOList.end)}" th:text="${n}"></a>
+                        <th:block th:each="num:${#numbers.sequence(MyOrderDTOList.start, MyOrderDTOList.end)}">
+                            <a class="pageNum" th:if="${MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == MyOrderDTOList} ? 'on' : ''">[[${num}]]</a>
+                            <a class="pageNum" th:if="${MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${num}, type=${MyOrderDTOList.type}, cate=${MyOrderDTOList.cate}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                        </th:block>
 
-                        <a href="#" class="next" onclick="pushNextButton()">다음</a>
+                        <a th:if="${MyOrderDTOList.next && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>
+                        <a th:if="${MyOrderDTOList.next && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.end + 1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}">다음</a>
                     </p>
 
                 </article>
@@ -289,5 +143,6 @@
         </div>
     </div>
 <!--내용 끝-->
+
 </html>
 

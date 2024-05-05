@@ -3,10 +3,78 @@
     layout:decorate="~{/layout/myLayout.html}">
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
-        <!--/my/home 에서만 사용하는 js와 css-->
-        <script th:src="@{/js/my/jquery.star-rating-svg.min.js}"></script>
-        <script th:src="@{/js/my/popup.js}"></script>
-        <link rel="stylesheet" th:href="@{/css/my/star-rating-svg.css}">
+        <script>
+            function moveProdData() {
+                // 상품평 쓰기 박스로 이름과 번호 전달하기
+                const button = event.target; // 클릭한 버튼
+                const confirm = button.parentNode; // 버튼의 부모
+                const myOrderRow = confirm.parentNode // 버튼의 부모의 부모
+                const myOrderInfo = myOrderRow.querySelector('.myOrderInfo') // 할아버지의 둘째
+                const prodName = myOrderInfo.querySelector('.InfoProdName') // 상품 이름
+                const prodNo = button.id; // 상품 번호
+
+                const popReview = document.getElementById('popReview'); // 상품평쓰기 창
+
+                const productName = popReview.querySelector('.productName');
+                const productNo = popReview.querySelector('.productNo');
+
+                productName.innerText = prodName.innerText;
+                productNo.value = prodNo;
+            }
+
+            // 리뷰 제출 버튼
+            function btnReviewSubmit() {
+                const reviewForm = document.getElementsByClassName('reviewForm')[0]; // 상품평쓰기 창
+                const popReview = document.getElementById('popReview'); // 상품평쓰기 창
+                const revScore = popReview.querySelector('.revScore').value;
+                const revContent = popReview.querySelector('#revContent').value;
+                const revThumb = popReview.querySelector('#revThumb').value;
+                console.log(revScore)
+                console.log(revContent)
+                console.log(revThumb)
+                if (revScore != "" && revContent != "" && revThumb != "") {
+                    reviewForm.submit();
+                }else{
+
+                    alert("항목을 빠짐없이 입력해주세요.");
+                }
+            }
+
+           window.onload = function () {
+               /* 별 */
+               const stars = document.querySelectorAll('.star');
+
+               stars.forEach(star => {
+                   star.addEventListener('mouseover', function() {
+                       const value = this.getAttribute('data-value');
+                       highlightStars(value);
+                   });
+
+                   star.addEventListener('mouseleave', function() {
+                       const ratedValue = document.querySelector('.ratingValue').getAttribute('data-rated');
+                       highlightStars(ratedValue);
+                   });
+
+                   star.addEventListener('click', function() {
+                       const value = this.getAttribute('data-value');
+                       document.querySelector('.ratingValue').setAttribute('data-rated', value);
+                       document.querySelector('.revScore').value = value;
+                       highlightStars(value);
+                       // 여기에 값 설정을 위한 코드 추가
+                   });
+               });
+
+               function highlightStars(value) {
+                   stars.forEach(star => {
+                       if (star.getAttribute('data-value') <= value) {
+                           star.classList.add('clicked');
+                       } else {
+                           star.classList.remove('clicked');
+                       }
+                   });
+               }
+           }
+        </script>
         <!--여기까지-->
         <nav>
             <div>
@@ -18,10 +86,10 @@
                 </div>
 
                 <ol>
-                    <li><a href="#">주문·배송<span class="delivery">1</span></a></li>
-                    <li><a href="#">할인쿠폰<span class="coupon">1</span></a></li>
-                    <li><a href="#">포인트<span class="point">1,000</span></a></li>
-                    <li><a href="#">문의내역<span class="qna">1</span></a></li>
+                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
+                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
+                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point">1,000</span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
                 </ol>
             </div>
         </nav>
@@ -29,7 +97,7 @@
             <ul>
                 <span class="menu_else"></span>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <!--<li><a href="./favorite.html">관심상품</a></li>-->
+                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
                 <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
                 <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
@@ -41,36 +109,36 @@
             <section>
                 <a href="#"><img th:src="@{/images/my/my_banner1.jpg}" alt="패션, 타운 하나로 끝" class="banner"></a>
 
-                <article class="latest">
+                <article class="latest" >
                     <h3>최근주문내역</h3>
                     <a href="#" class="more">더보기</a>
-                    <table border="0">
-                        <tr>
-                            <th>날짜</th>
-                            <th>상품정보</th>
-                            <th>상태</th>
-                            <th>확인/신청</th>
-                        </tr>
-                        <tr>
-                            <td class="date">2022-12-13</td>
-                            <td class="info">
-                                <a href="#" class="thumb"><img src="https://via.placeholder.com/80x80" alt=""></a>
-                                <ul>
-                                    <li class="company"><a href="#">상호명</a></li>
-                                    <li class="prodName"><a href="#">상품명</a></li>
-                                    <li class="orderNo">수량 : <span class="prodCount">1</span>개 / 주문번호 : <a href="#">1012211341</a></li>
-                                    <li class="prodPrice">34,000</li>
-                                </ul>
-                            </td>
-                            <td class="status">배송완료</td>
-                            <td class="confirm">
-                                <a href="#" class="receive">수취확인</a>
-                                <a href="#" class="review">상품평</a>
-                                <a href="#" class="refund">반품신청</a>
-                                <a href="#" class="exchange">교환신청</a>
-                            </td>
-                        </tr>
-                    </table>
+                    <div class="myOrderList">
+                        <div class="orderByCompany latest" th:each="linkedMap : ${myOrder}">
+                            <div class="myOrderTitle">
+                                <p th:text="${linkedMap.value.get(0).detailDate}"></p>
+                                <p>주문번호<span th:text="${linkedMap.key}"></span></p>
+                                <p>
+                                    <img th:src="@{/images/icon-arrow-top.png}" onclick="accordionBtn()"/>
+                                </p>
+                            </div>
+                            <div class="myOrderRow" th:each="orderList : ${linkedMap.value}">
+                                <div><img th:src="@{/uploads/__${orderList.thumb190}__}"></div>
+                                <div class="myOrderInfo">
+                                    <p th:text="${orderList.prodCompany}"></p>
+                                    <p class="InfoProdName" th:text="${orderList.prodName}"></p>
+                                    <p th:text="${orderList.count}"></p>
+                                    <p th:text="${#numbers.formatInteger(orderList.detailPrice,3,'COMMA')}"></p>
+                                </div>
+                                <div th:text="${orderList.detailStatus}"></div>
+                                <div class="confirm">
+                                    <span>수취확인</span>
+                                    <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}">상품평쓰기</span>
+                                    <span>반품신청</span>
+                                    <span>교환신청</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </article>
 
                 <article class="point">
@@ -80,18 +148,14 @@
                         <tr>
                             <th>날짜</th>
                             <th>구분</th>
-                            <th>주문번호</th>
                             <th>적립금액</th>
                             <th>비고</th>
-                            <th>유효기간</th>
                         </tr>
-                        <tr>
-                            <td>2022-12-10</td>
-                            <td>적립</td>
-                            <td>2022121001</td>
-                            <td>340</td>
-                            <td>상품 구매확정</td>
-                            <td>2024-12-10</td>
+                        <tr th:each="point : ${myPoint}">
+                            <td th:text="${#strings.substring(point.changeDate, 0, 10)}"></td>
+                            <td th:text="${point.changeType}"></td>
+                            <td th:text="${point.changePoint}"></td>
+                            <td th:text="${point.changeCode}"></td>
                         </tr>
                     </table>
                 </article>
