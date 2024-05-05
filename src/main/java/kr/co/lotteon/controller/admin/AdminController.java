@@ -227,11 +227,12 @@ public class AdminController {
         // 이미지 파일
         String bannerPath = adminService.bannerUpload(bannerDTO.getBanImgCate(), file);
         bannerDTO.setBanImgName(bannerPath);
+        bannerDTO.setBanUsable("yes".toUpperCase());
         // 나머지 글자 정보들
         log.info("bannerDTO2 : " + bannerDTO);
 
         if (bannerPath != null) {
-            Banner saveBanner = adminService.bannerInsert(bannerDTO);
+            BannerDTO saveBanner = adminService.bannerInsert(bannerDTO);
             if (saveBanner.getBanNo() > 0) {
                 //저장 성공
                 return "redirect:/admin/config/banner";
