@@ -106,7 +106,7 @@
             </article>
 
             <!-- 판매자 회원이 로그인한 경우에만 출력 -->
-            <article>
+            <article th:if="${userDTO.getUserRole() == 'SELLER'}">
                 <h3>판매자 정보 설정</h3>
 
                 <table border="0" th:each="seller : ${sellerDTO}">

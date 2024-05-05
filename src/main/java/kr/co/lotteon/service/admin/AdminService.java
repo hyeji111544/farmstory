@@ -86,12 +86,12 @@ public class AdminService {
                 .build();
     }
     // 배너 DB 저장 메서드
-    public Banner bannerInsert(BannerDTO bannerDTO) {
+    public BannerDTO  bannerInsert(BannerDTO bannerDTO) {
         Banner banner = modelMapper.map(bannerDTO, Banner.class);
         Banner saveBanner = bannerRepository.save(banner);
 
         log.info("saveBanner : " + saveBanner);
-        return saveBanner;
+        return modelMapper.map(saveBanner, BannerDTO.class);
     }
     // 배너 목록 조회 메서드
     public List<BannerDTO> bannerList(String banImgCate) {
