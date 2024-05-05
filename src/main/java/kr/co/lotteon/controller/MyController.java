@@ -217,5 +217,13 @@ public class MyController {
         return "/my/review";
     }
 
+    // 마이페이지 - 관심상품
+    @GetMapping("/my/wish")
+    public String myWish(String userId, Model model, PageRequestDTO pageRequestDTO){
+        PageResponseDTO wishList = myService.selectUserWish(userId, pageRequestDTO);
+
+        model.addAttribute("wishList", wishList);
+        return "/my/wish";
+    }
 
 }
