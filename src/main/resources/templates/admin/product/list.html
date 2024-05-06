@@ -43,10 +43,10 @@
                     <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb" style="width: 70px; height: 70px"></td>
                     <td>[[${product.prodNo}]]</td>
                     <td style="width: 300px">[[${product.prodName}]]</td>
-                    <td style="width: 70px">[[${product.prodPrice}]]</td>
-                    <td style="width: 50px">[[${product.prodDiscount}]]</td>
-                    <td style="width: 60px">[[${product.prodPoint}]]</td>
-                    <td style="width: 50px">[[${product.prodStock}]]</td>
+                    <td class="listPriceAfter" style="width: 70px" th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}"></td>
+                    <td class="percentAfter" style="width: 50px">[[${product.prodDiscount}]]</td>
+                    <td class="afterPoint" style="width: 60px">[[${product.prodPoint}]]</td>
+                    <td class="stockAfter" style="width: 50px">[[${product.prodStock}]]</td>
                     <td style="width: 80px">[[${product.prodSeller}]]</td>
                     <td>[[${product.prodHit}]]</td>
                     <td>

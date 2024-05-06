@@ -70,13 +70,13 @@
                         <div>판매자 등급</div>
                         <div th:text="${seller.sellerGrade}"></div>
                         <div>등록 물품 수량</div>
-                        <div th:text="${seller.prodCount}"></div>
+                        <div class="countAfter" th:text="${seller.prodCount}"></div>
                     </div>
                     <div class="userListTableDetailRow">
                         <div>총 판매 수량</div>
                         <div th:text="${seller.sellerCount}"></div>
-                        <div>총 판매 금액</div>
-                        <div th:text="${seller.sellerSum}"></div>
+                        <div class="countAfter">총 판매 금액</div>
+                        <div class="priceAfter" th:text="${#numbers.formatInteger(seller.sellerSum,3,'COMMA')}"></div>
                     </div>
                 </div>
             </div>

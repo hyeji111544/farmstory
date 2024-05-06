@@ -122,4 +122,26 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
         return resultQna;
     }
 
+    // 관리자 메인페이지 - 고객문의 최신순 5개 조회
+    // 판매자 메인페이지 - 고객문의 최신순 5개 조회
+    public List<ProdQna> selectProdQnaForIndex(String prodSeller) {
+        if(prodSeller.equals("ADMIN")) {
+             return jpaQueryFactory
+                    .selectFrom(qprodQna)
+                    .orderBy(qprodQna.prodQnaDate.desc())
+                    .limit(5)
+                    .fetch();
+        }else {
+            return jpaQueryFactory
+                    .select(qprodQna)
+                    .from(qprodQna)
+                    .join(qProduct)
+                    .on(qprodQna.prodNo.eq(qProduct.prodNo))
+                    .where(qProduct.prodSeller.eq(prodSeller))
+                    .orderBy(qprodQna.prodQnaDate.desc())
+                    .limit(5)
+                    .fetch();
+        }
+    }
+
 }

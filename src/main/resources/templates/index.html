@@ -12,7 +12,7 @@
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
     <script th:src="@{https://kit.fontawesome.com/20962f3e4b.js}" crossorigin="anonymous"></script>
     <script th:src="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js}"></script>
-    <script th:src="@{./js/index.js}"></script>
+    <!--<script th:src="@{./js/index.js}"></script>-->
     <style>
       #bannerTop {
         display: none;
@@ -55,6 +55,44 @@
           $(this).closest('#bannerTop').removeClass('on');
         });
       });
+
+      // 슬라이더
+      let globalBanner = 0;
+
+      window.onload = function () {
+        setInterval(sliderPrev, 5000);
+      }
+
+      function sliderPrev() {
+        const totalImageBox = document.getElementsByClassName('totalImageBox')[0];
+        const movingImages = totalImageBox.querySelectorAll('img');
+        const length = movingImages.length;
+        if (globalBanner === (length-1)) {
+          totalImageBox.style.transform = 'translateX(0px)';
+          totalImageBox.style.transition = 'transform  0.5s ease';
+          globalBanner = 0;
+        }else {
+          totalImageBox.style.transform += 'translateX(-976px)';
+          totalImageBox.style.transition = 'transform  0.5s ease';
+          globalBanner += 1;
+        }
+      }
+
+      function sliderNext() {
+        const totalImageBox = document.getElementsByClassName('totalImageBox')[0];
+        const movingImages = totalImageBox.querySelectorAll('img');
+        const length = movingImages.length;
+        const lastPx = -((length-1)*976)
+        if (globalBanner === 0) {
+          totalImageBox.style.transform = `translateX(${lastPx}px)`;
+          totalImageBox.style.transition = 'transform  0.5s ease';
+          globalBanner = (length - 1);
+        }else {
+          totalImageBox.style.transform += 'translateX(976px)';
+          totalImageBox.style.transition = 'transform  0.5s ease';
+          globalBanner -= 1;
+        }
+      }
 
     </script>
 
@@ -172,39 +210,24 @@
         </aside>
         <section>
           <!-- 슬라이더 영역 -->
-          <section class="slider">
-            <ul>
-              <li>
-                <a href="#"
-                  ><img th:src="@{/images/adadad.jpg}" alt="item1"
-                /></a>
-              </li>
-              <li>
-                <a href="#"
-                  ><img th:src="@{/images/adadad2.jpg}" alt="item2"
-                /></a>
-              </li>
-              <li>
-                <a href="#"
-                  ><img th:src="@{/images/adadad3.jpg}" alt="item3"
-                /></a>
-              </li>
-              <li>
-                <a href="#"
-                  ><img th:src="@{/images/adadad4.jpg}" alt="item4"
-                /></a>
-              </li>
-              <li>
-                <a href="#"
-                  ><img th:src="@{/images/adadad5.jpg}" alt="item5"
-                /></a>
-              </li>
-            </ul>
+          <section class="slider" style="width: 976px;">
+            <div class="totalImageBox"> <!--이 div에서 배너 반복-->
+              <img th:src="@{/images/adadad.jpg}">
+              <img th:src="@{/images/adadad2.jpg}">
+              <img th:src="@{/images/adadad3.jpg}">
+              <img th:src="@{/images/adadad4.jpg}">
+              <img th:src="@{/images/adadad5.jpg}">
+            </div>
+            <span class="sliderPrev" onclick="sliderPrev()">&#10096;</span>
+            <span class="sliderNext" onclick="sliderNext()">&#10097;</span>
           </section>
           <!-- 히트상품 영역 -->
-          <section class="hit">
-            <h3><span>히트상품</span></h3>
-            <article th:each="hitItem , index:${hit}">
+          <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
+            <span style="font-size: 20px; font-weight: bold">히트상품</span>
+          </h3>
+
+          <section class="hit productBox">
+            <div class="product" th:each="hitItem , index:${hit}">
               <a th:href="@{'/product/view?prodNo='+${hitItem.prodNo}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${hitItem.thumb230}__}" alt="t1" style="width: 230px"/>
@@ -212,20 +235,23 @@
                 <h2>[[${hitItem.prodName}]]</h2>
                 <p>[[${hitItem.prodInfo}]]</p>
                 <div class="org_price">
-                  <del>[[${hitItem.prodPrice}]]</del>
-                  <span>[[${hitItem.prodDiscount}]]</span>
+                  <del th:text="${#numbers.formatInteger(hitItem.prodPrice,3,'COMMA')}"></del>
+                  <span th:text="${hitItem.prodDiscount} + '%'"></span>
                 </div>
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((hitItem.prodPrice * (100 - hitItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                   <span th:if="${hitItem.prodDeliveryFee}==0" class="free">무료배송</span>
                 </div>
               </a>
-            </article>
+            </div>
           </section>
           <!-- 추천상품 영역 -->
-          <section class="recommend">
-            <h3><span>추천상품</span></h3>
-            <article th:each="scoreItem, index:${score}">
+          <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
+            <span style="font-size: 20px; font-weight: bold">추천상품</span>
+          </h3>
+
+          <section class="recommend productBox">
+            <div class="product" th:each="scoreItem, index:${score}">
               <a th:href="@{'/product/view?prodNo='+${scoreItem.prodNo}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${scoreItem.thumb230}__}" alt="t1" style="width: 230px"/>
@@ -233,20 +259,23 @@
                 <h2>[[${scoreItem.prodName}]]</h2>
                 <p>[[${scoreItem.prodInfo}]]</p>
                 <div class="org_price">
-                  <del>[[${scoreItem.prodPrice}]]</del>
-                  <span>[[${scoreItem.prodDiscount}]]</span>
+                  <del th:text="${#numbers.formatInteger(scoreItem.prodPrice,3,'COMMA')}"></del>
+                  <span th:text="${scoreItem.prodDiscount} + '%'"></span>
                 </div>
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((scoreItem.prodPrice * (100 - scoreItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                   <span th:if="${scoreItem.prodDeliveryFee}==0" class="free">무료배송</span>
                 </div>
               </a>
-            </article>
+            </div>
           </section>
           <!-- 최신상품 영역 -->
-          <section class="new">
-            <h3><span>최신상품</span></h3>
-            <article th:each="rDateItem, index:${rDate}">
+          <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
+            <span style="font-size: 20px; font-weight: bold">최신상품</span>
+          </h3>
+
+          <section class="new productBox">
+            <div class="product" th:each="rDateItem, index:${rDate}">
               <a th:href="@{'/product/view?prodNo='+${rDateItem.prodNo}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${rDateItem.thumb230}__}" alt="t1" style="width: 230px"/>
@@ -254,20 +283,23 @@
                 <h2>[[${rDateItem.prodName}]]</h2>
                 <p>[[${rDateItem.prodInfo}]]</p>
                 <div class="org_price">
-                  <del>[[${rDateItem.prodPrice}]]</del>
-                  <span>[[${rDateItem.prodDiscount}]]</span>
+                  <del th:text="${#numbers.formatInteger(rDateItem.prodPrice,3,'COMMA')}"></del>
+                  <span th:text="${rDateItem.prodDiscount} + '%'"></span>
                 </div>
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((rDateItem.prodPrice * (100 - rDateItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                   <span th:if="${rDateItem.prodDeliveryFee}==0" class="free">무료배송</span>
                 </div>
               </a>
-            </article>
+            </div>
           </section>
           <!-- 할인상품 영역 -->
-          <section class="discount">
-            <h3><span>할인상품</span></h3>
-            <article th:each="discountItem, index:${discount}">
+          <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
+            <span style="font-size: 20px; font-weight: bold">할인상품</span>
+          </h3>
+
+          <section class="discount productBox">
+            <div class="product" th:each="discountItem, index:${discount}">
               <a th:href="@{'/product/view?prodNo='+${discountItem.prodNo}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${discountItem.thumb230}__}" alt="t1" style="width: 230px"/>
@@ -275,15 +307,15 @@
                 <h2>[[${discountItem.prodName}]]</h2>
                 <p>[[${discountItem.prodInfo}]]</p>
                 <div class="org_price">
-                  <del>[[${discountItem.prodPrice}]]</del>
-                  <span>[[${discountItem.prodDiscount}]]</span>
+                  <del th:text="${#numbers.formatInteger(discountItem.prodPrice,3,'COMMA')}"></del>
+                  <span th:text="${discountItem.prodDiscount} + '%'"></span>
                 </div>
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((discountItem.prodPrice * (100 - discountItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                   <span th:if="${discountItem.prodDeliveryFee}==0" class="free">무료배송</span>
                 </div>
               </a>
-            </article>
+            </div>
           </section>
         </section>
       </main>

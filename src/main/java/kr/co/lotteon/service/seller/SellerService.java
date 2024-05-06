@@ -3,11 +3,10 @@ package kr.co.lotteon.service.seller;
 import com.querydsl.core.Tuple;
 import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
-import kr.co.lotteon.entity.OrderDetail;
-import kr.co.lotteon.entity.Orders;
-import kr.co.lotteon.entity.Product;
-import kr.co.lotteon.entity.Seller;
+import kr.co.lotteon.entity.*;
+import kr.co.lotteon.repository.NoticeRepository;
 import kr.co.lotteon.repository.OrderdetailRepository;
+import kr.co.lotteon.repository.ProdQnaRepository;
 import kr.co.lotteon.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +28,8 @@ public class SellerService {
 
     private final SellerRepository sellerRepository;
     private final OrderdetailRepository orderdetailRepository;
+    private final ProdQnaRepository prodQnaRepository;
+    private final NoticeRepository noticeRepository;
     private final ModelMapper modelMapper;
 
     // 판매자 관리페이지 - 홈
@@ -39,9 +40,14 @@ public class SellerService {
         if (optSeller.isPresent()){
             prodSeller= optSeller.get().getSellerNo();
             session.setAttribute("prodSeller", optSeller.get().getSellerNo());
+            session.setAttribute("sellerCompany", optSeller.get().getCompany());
         }
-
         return sellerRepository.selectSellerInfo(prodSeller);
+    }
+
+    // 관리자 메인페이지 - 홈
+    public SellerInfoDTO selectAdminInfo(){
+        return sellerRepository.selectAdminInfo();
     }
 
     // 판매자 관리페이지 - 상품목록 - 상품관리 (전체 상품 목록)
@@ -122,6 +128,31 @@ public class SellerService {
         return orderByDate;
     }
 
+    // 관리자 메인페이지 - 고객문의 최신순 5개 조회
+    // 판매자 메인페이지 - 고객문의 최신순 5개 조회
+    public List<ProdQnaDTO> selectProdQnaForIndex(String prodSeller) {
+        List<ProdQna> prodQna = prodQnaRepository.selectProdQnaForIndex(prodSeller);
+        List<ProdQnaDTO> prodQnaDTO = new ArrayList<>();
+        for (ProdQna eachQna : prodQna) {
+            ProdQnaDTO eachQnaDTO = modelMapper.map(eachQna, ProdQnaDTO.class);
+            prodQnaDTO.add(eachQnaDTO);
+        }
+        return prodQnaDTO;
+    }
+
+    // 관리자 메인페이지 - 공지사항 최신순 5개 조회
+    // 판매자 메인페이지 - 공지사항 최신순 5개 조회
+    public List<NoticeDTO> selectNoticeForIndex() {
+        List<Notice> notice = noticeRepository.findTop5ByOrderByNoticeDateDesc();
+        List<NoticeDTO> noticeDTO = new ArrayList<>();
+        for (Notice eachNotice : notice) {
+            NoticeDTO eachNoticeDTO = modelMapper.map(eachNotice, NoticeDTO.class);
+            noticeDTO.add(eachNoticeDTO);
+        }
+        return noticeDTO;
+    }
+
+    // 판매자의 판매 목록 최신순 //
     public PageResponseDTO selectProdSalesInfo(String prodSeller, PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("No");
 
