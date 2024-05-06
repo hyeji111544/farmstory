@@ -208,12 +208,18 @@ public class MyController {
 
         myService.writeReview(pdReviewDTO, revImage);
 
-        return null;
+        return "redirect:/my/review";
     }
 
     //마이페이지-리뷰 이동
     @GetMapping("/my/review")
-    public String myReview(){
+    public String myReview(String userId, Model model, PageRequestDTO pageRequestDTO){
+
+        log.info("myReview Controller");
+
+        PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
+        model.addAttribute("myReviewPage", myReviewPage);
+
         return "/my/review";
     }
 
