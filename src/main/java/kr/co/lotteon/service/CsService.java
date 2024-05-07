@@ -39,7 +39,7 @@ public class CsService {
         if(noticeCate == null){
             pageNotice = noticeRepository.findAll(pageable);
         }else{
-            pageNotice = noticeRepository.findByNoticeCate(noticeCate, pageable);
+            pageNotice = noticeRepository.findByNoticeCateOrderByNoticeDateDesc(noticeCate, pageable);
         }
 
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()

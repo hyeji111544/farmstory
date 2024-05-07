@@ -263,6 +263,19 @@ public class AdminController {
         return adminService.deleteBanner(banNos);
     }
 
+    // 배너 활성화 버튼
+    @PostMapping("/admin/banner/banUsable")
+    public ResponseEntity<?> bannerUsableUpdate(@RequestBody Map<String, String> requestData){
+
+        int banNo = Integer.parseInt( requestData.get("banNo"));
+        String banImgCate = requestData.get("banImgCate");
+
+        log.info("banNo :" + banNo);
+        log.info("banImgCate :" + banImgCate);
+
+        return adminService.updateBanners(banImgCate,banNo);
+    }
+
 
 //// admin - 주문관리 ////
     // 관리자 주문 관리
