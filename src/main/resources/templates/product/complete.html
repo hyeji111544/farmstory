@@ -92,6 +92,7 @@
             </td>
             <td th:if="${cartInfoDTOs.optValue1}!= null" class="org_price_value" th:text="${#numbers.formatInteger(cartInfoDTOs.optPrice, 3, 'COMMA')}+'원'"></td>
             <td th:if="${cartInfoDTOs.optValue1}== null" class="org_price_value" th:text="${#numbers.formatInteger(cartInfoDTOs.prodPrice, 3, 'COMMA')}+'원'"></td>
+
             <td th:if="${cartInfoDTOs.optValue1}!= null" class="dis_price_value" th:text="${#numbers.formatInteger(cartInfoDTOs.optPrice * (cartInfoDTOs.prodDiscount*0.01),3,'COMMA')} + '원'">할인 금액</td>
             <td th:if="${cartInfoDTOs.optValue1}== null" class="dis_price_value" th:text="${#numbers.formatInteger(cartInfoDTOs.prodPrice * (cartInfoDTOs.prodDiscount*0.01),3,'COMMA')} + '원'">할인 금액</td>
             <td class="prodCount" th:text="${cartInfoDTOs.count}"></td>

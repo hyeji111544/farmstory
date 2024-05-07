@@ -515,7 +515,10 @@
                     HOME > <span>패션·의류·뷰티</span> > <strong>장바구니</strong>
                 </p>
             </nav>
-            <div id="cartList">
+            <div th:if="${cartProducts.size()==0}" id="emptyList">
+                <p> 장바구니가 비어있습니다. </p>
+            </div>
+            <div th:if="${cartProducts.size()!=0}" id="cartList">
                 <!-- 장바구니 목록 -->
                 <div>
                     <label for="">
@@ -587,7 +590,6 @@
                         <span class="total_price"> = 총 0원</span>
                     </div>
                 </div>
-
             </div>
 
             <!-- 장바구니 전체합계 -->

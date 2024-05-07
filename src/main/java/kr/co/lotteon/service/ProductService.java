@@ -85,6 +85,34 @@ public class ProductService {
                 .build();
     }
 
+    // 검색으로 상품조회
+    public ProductPageResponseDTO searchProducts(ProductPageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("prodNo");
+        Page<Tuple> pageProd = productRepository.searchProductsByCateAndKeyWord(pageRequestDTO, pageable);
+        log.info("searchProdsByCate...."+pageProd.toString());
+        List<ProductDTO> products = pageProd.getContent().stream()
+                .map(tuple -> {
+                    Product product = tuple.get(0, Product.class);
+                    Productimg productImg = tuple.get(1, Productimg.class);
+
+                    // Productimg에서 썸네일 정보를 가져와서 ProductDTO에 설정
+                    if (productImg != null) {
+                        product.setThumb190(productImg.getThumb190());
+                    }
+
+                    return modelMapper.map(product, ProductDTO.class);
+                })
+                .toList();
+
+        int total = (int) pageProd.getTotalElements();
+
+        return ProductPageResponseDTO.builder()
+                .productPageRequestDTO(pageRequestDTO)
+                .dtoList(products)
+                .total(total)
+                .build();
+    }
+
     // 상품 상세보기 페이지로 이동
     public ProductDTO selectProduct(int prodNo) {
         Tuple tuple = productRepository.selectProduct(prodNo);
