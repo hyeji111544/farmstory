@@ -15,6 +15,7 @@
 			 */
 			let isPassOk  = false;
 			const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
+			let isCheck = false;
 
 			window.onload = function() {
 				const checkUserEmail = document.getElementById('checkUserEmail'); //인증코드 발송버튼
@@ -85,7 +86,8 @@
 				//이메일 인증코드 발급
 				checkUserEmail.onclick = function (e) {
 					e.preventDefault();
-					checkCodeLabel.style.display = 'block';
+					resultEmail.innerText = "인증코드를 전송중입니다.";
+					resultEmail.style.color = "green";
 
 					const value = inputUserEmail.value;
 					console.log(value);
@@ -98,6 +100,8 @@
 									resultEmail.innerText = "인증코드가 전송되었습니다.";
 									resultEmail.style.color = "green";
 									inputUserEmail.style.border = "1px solid green";
+									checkCodeLabel.style.display = 'block';
+
 								} else {
 									// 이메일이 존재하지 않는 경우
 									resultEmail.innerText = "존재하지않는 이메일입니다.";
@@ -109,6 +113,8 @@
 								console.log('Error', error);
 							});
 				}
+
+				// 인증번호 인증
 				checkEmailCode.onclick = function (e) {
 					e.preventDefault();
 					const resultPwAll = document.querySelectorAll('.resultPwAll');
@@ -121,14 +127,15 @@
 							.then(data => {
 								console.log(data);
 								if (data.result > 0) {
-									resultEmailCode.innerText = "인증번호가 틀렸습니다.";
+									resultEmailCode.innerText = "인증번호가 일치하지 않습니다.";
 									resultEmailCode.style.color = "red";
 									inputEmailCode.style.border = "1px solid red";
 
 								} else {
-									resultEmailCode.innerText = "인증번호 인증완료.";
+									resultEmailCode.innerText = "인증번호 인증되었습니다.";
 									resultEmailCode.style.color = "green";
 									inputEmailCode.style.border = "1px solid green";
+									isCheck = true;
 									resultPwAll.forEach(all =>{
 										all.style.display = "block";
 									})
@@ -136,7 +143,13 @@
 							})
 							.catch(err => console.log(err))
 				}
+
+				// 비밀번호 변경
 				updatePw.onclick = function (e) {
+					if (!isCheck) {
+						alert("이메일 인증을 먼저 진행해주세요.");
+						return;
+					}
 					const userId = document.getElementById('userId').value;
 					const userEmail = document.getElementById('userEmail').value;
 					const code = document.getElementById('inputEmailCode').value;
@@ -184,12 +197,9 @@
 			<form action="#" name="registerUserForm" method="POST">
 				<section>
 					<table>
-						<caption>사용자 인증</caption>
-						<tr>
-							<td colspan="2">
-								<span>회원님의 아이디 이메일 인증을 통해 비밀번호를 재설정 할 수 있습니다.</span>
-							</td>
-						</tr>
+						<caption>사용자 인증 <br><br>
+							<span>회원님의 아이디 이메일 인증을 통해 비밀번호를 재설정 할 수 있습니다.</span>
+						</caption>
 						<tr>
 							<th><span class="essential">*</span>아이디</th>
 							<td>

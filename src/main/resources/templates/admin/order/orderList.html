@@ -19,18 +19,18 @@
                 }
 
                 // 그래프
-                new Chart(document.getElementById("line-chart"), {
+                const ctx = document.getElementById('line-chart');
+
+                new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: dateArray,
                         datasets: [{
                             data: countArray,
-                            label: "주문건수",
-                            borderColor: "#3e95cd",
-                            fill: false,
-                            pointStyle: 'triangle'
-                        }
-                        ]
+                            borderWidth: 1,
+                            backgroundColor: '#36AE7C',
+                            borderColor: '#36AE7C'
+                        }]
                     },
                     options: {
                         responsive: false,
@@ -40,8 +40,18 @@
                             fontSize: 20,
                             color: '#111',
                         },
-                        legend: {
-                            display: false // 라벨 숨기기
+                        plugins: {
+                            legend: {
+                                display: false // 라벨 숨기기
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    stepSize: 1 // 눈금의 간격
+                                },
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
@@ -127,6 +137,8 @@
         <!-- 상품목록 컨텐츠 시작 -->
         <section>
             <div class="orderListInfo">
+                <h4 style="font-weight: bold; font-size: 15px; margin: 10px 0; text-align: center">한달 주문 건수</h4>
+
                 <div id="data" class="orderListChart">
                     <canvas id="line-chart" width="1000" height="250"></canvas>
                 </div>

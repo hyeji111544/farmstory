@@ -21,12 +21,13 @@
 				const inputUserEmail = document.getElementById('userEmail'); //이메일 입력칸
 				const findId = document.getElementById('join'); // 아이디 찾기 버튼
 				const resultId = document.getElementById('resultId'); // 결과 아이디 영역
-
+				let isCheck = false;
 
 				//이메일 인증코드 발급
 				checkUserEmail.onclick = function (e) {
 					e.preventDefault();
-					checkCodeLabel.style.display = 'block';
+					resultEmail.innerText = "인증코드를 전송중입니다.";
+					resultEmail.style.color = "green";
 
 					const value = inputUserEmail.value;
 					console.log(value);
@@ -39,6 +40,7 @@
 									resultEmail.innerText = "인증코드가 전송되었습니다.";
 									resultEmail.style.color = "green";
 									inputUserEmail.style.border = "1px solid green";
+									checkCodeLabel.style.display = 'block';
 								} else {
 									// 이메일이 존재하지 않는 경우
 									resultEmail.innerText = "존재하지않는 이메일입니다.";
@@ -50,6 +52,8 @@
 								console.log('Error', error);
 							});
 				}
+
+				// 인증번호 인증
 				checkEmailCode.onclick = function (e) {
 					e.preventDefault();
 
@@ -68,11 +72,18 @@
 									resultEmailCode.innerText = "인증번호가 인증되었습니다.";
 									resultEmailCode.style.color = "green";
 									inputEmailCode.style.border = "1px solid green";
+									isCheck = true;
 								}
 							})
 							.catch(err => console.log(err))
 				}
+
+				// 아이디 찾기
 				findId.onclick = function (e) {
+					if (!isCheck) {
+						alert("이메일 인증을 먼저 진행해주세요.");
+						return;
+					}
 					e.preventDefault();
 					const resultIdAll = document.querySelectorAll('.resultIdAll');
 					resultIdAll.forEach(all =>{
@@ -160,9 +171,9 @@
 						</tr>
 					</table>
 				</section>
-				<div>
-					<input type="submit" class="join" id="join" value="아이디 찾기" />
-					<a th:href="@{/member/findPw}" class="join2" id="join2"> 비밀번호 찾기</a>
+				<div style="text-align: center">
+					<a type="submit" class="join findBtn" id="join">아이디찾기</a>
+					<a th:href="@{/member/findPw}" class="join2 findBtn" id="join2"> 비밀번호 찾기</a>
 				</div>
 			</form>
 		</div>

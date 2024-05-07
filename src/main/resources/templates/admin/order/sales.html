@@ -19,18 +19,18 @@
                     priceArray.push(value);
                 }
 
-                new Chart(document.getElementById("line-chart"), {
+                const ctx = document.getElementById('line-chart');
+
+                new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: dateArray,
                         datasets: [{
                             data: priceArray,
-                            label: "주문금액",
-                            borderColor: "#3e95cd",
-                            fill: false,
-                            pointStyle: 'triangle'
-                        }
-                        ]
+                            borderWidth: 1,
+                            backgroundColor: '#187498',
+                            borderColor: '#187498'
+                        }]
                     },
                     options: {
                         responsive: false,
@@ -40,8 +40,18 @@
                             fontSize: 20,
                             color: '#111',
                         },
-                        legend: {
-                            display: false // 라벨 숨기기
+                        plugins: {
+                            legend: {
+                                display: false // 라벨 숨기기
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    stepSize: 100000 // 눈금의 간격
+                                },
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
@@ -84,6 +94,8 @@
         <section>
 
             <div class="orderListInfo">
+                <h4 style="font-weight: bold; font-size: 15px; margin: 10px 0; text-align: center">한달 주문 금액</h4>
+
                 <div class="orderListChart">
                     <canvas id="line-chart" width="1000" height="250"></canvas>
                 </div>
