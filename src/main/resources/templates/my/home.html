@@ -99,6 +99,11 @@
                });
 
            }
+
+           //changePoint 사용일때 - 출력
+            const changePoint = document.getElementById("changePoint");
+
+
         </script>
         <!--여기까지-->
         <nav>
@@ -136,7 +141,7 @@
 
                 <article class="latest" >
                     <h3>최근주문내역</h3>
-                    <a href="#" class="more">더보기</a>
+                    <a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
                     <div class="myOrderList">
                         <div class="orderByCompany latest" th:each="linkedMap : ${myOrder}">
                             <div class="myOrderTitle">
@@ -168,7 +173,7 @@
 
                 <article class="point">
                     <h3>포인트적립내역</h3>
-                    <a href="#" class="more">더보기</a>
+                    <a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
                     <table border="0">
                         <tr>
                             <th>날짜</th>
@@ -178,15 +183,18 @@
                         </tr>
                         <tr th:each="point : ${myPoint}">
                             <td th:text="${#strings.substring(point.changeDate, 0, 10)}"></td>
-                            <td th:text="${point.changeType}"></td>
-                            <td th:text="${point.changePoint}"></td>
+                            <td id="changeType" th:text="${point.changeType}"></td>
+                            <td id="changePoint">
+                                <span th:if="${point.changeType == '사용'}">-</span>
+                                <span th:text="${#numbers.formatInteger(point.changePoint,3,'COMMA')}"></span>
+                            </td>
                             <td th:text="${point.changeCode}"></td>
                         </tr>
                     </table>
                 </article>
                 <article class="review">
                     <h3>상품평</h3>
-                    <a href="#" class="more">더보기</a>
+                    <a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
                     <table border="0">
                         <tr >
                             <th>번호</th>
@@ -215,7 +223,7 @@
 
                 <article class="qna">
                     <h3>문의내역</h3>
-                    <a href="#" class="more">더보기</a>
+                    <a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
                     <table border="0">
                         <tr>
                             <th>번호</th>

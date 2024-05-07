@@ -31,9 +31,11 @@ public class MyController {
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(Model model, String userId){
+    public String myHome(HttpSession session, Model model, String userId){
 
     log.info("My home" +userId);
+
+    myService.selectMyInfo(session, userId);
     
 
         // 회원 정보
