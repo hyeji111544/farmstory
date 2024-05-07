@@ -41,6 +41,29 @@ public class MyService {
     private final UserPointRepository userPointRepository;
     private final SellerRepository sellerRepository;
 
+    //myInfo 출력
+    public void selectMyInfo(HttpSession session , String userId){
+
+        //주문 배송
+        long optOrder = ordersRepository.countByUserId(userId);
+        log.info("optOrder : " +optOrder);
+
+        //할인 쿠폰
+        List<Coupons> couponsList = selectCoupons(userId);
+        log.info("couponsList : " +couponsList);
+
+        session.setAttribute("order", optOrder);
+
+
+
+
+
+        //포인트
+
+
+
+
+    }
 
 
     /*

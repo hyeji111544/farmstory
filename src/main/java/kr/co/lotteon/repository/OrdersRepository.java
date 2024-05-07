@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface OrdersRepository extends JpaRepository<Orders, Integer>, OrdersRepositoryCustom {
     public List<Orders> findByUserId(String UserId);
+    public long countByUserId(String userId);
 }

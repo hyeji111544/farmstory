@@ -144,8 +144,10 @@
                 <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
             </ul>
 
-            <section th:each="banner : ${banMyOrderList}">
+            <section>
+                <th:block th:each="banner : ${banMyOrderList}" >
                 <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
+                </th:block>
                 <article class="latest">
                     <h3>전체주문내역</h3>
 
