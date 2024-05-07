@@ -22,6 +22,7 @@ public interface ProductRepositoryCustom {
     public List<Tuple> selectIndexProducts(String sort);
     // cate 로 프로덕트 조회
     public Page<Tuple> selectProductsByCate(ProductPageRequestDTO pageRequestDTO, Pageable pageable);
+    public Page<Tuple> searchProductsByCateAndKeyWord(ProductPageRequestDTO pageRequestDTO, Pageable pageable);
 
     // 프로덕트 상세 조회
     public Tuple selectProduct(int prodNo);

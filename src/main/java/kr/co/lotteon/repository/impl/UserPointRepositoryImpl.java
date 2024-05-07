@@ -43,15 +43,21 @@ public class UserPointRepositoryImpl implements UserPointRepositoryCustom {
 
         BooleanExpression expression = null; //where절 보관용
         LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);//일주일전
+        LocalDate fifteenDays = LocalDate.now().minusDays(15);//15일전
         LocalDate oneMonthsAgo = LocalDate.now().minusMonths(1);//한달전
         LocalDate threeMonthsAgo = LocalDate.now().minusMonths(3);//3개월전
         LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);//6개월전
         LocalDate yearOneAgo = LocalDate.now().minusYears(1);//1년전
 
+        log.info("fifteenDays : " +fifteenDays);
+        log.info("오늘 날짜 :" +LocalDate.now().plusDays(1).atStartOfDay());
+
         if (pageRequestDTO.getCate() != null) {
             // 날짜로 검색하는 경우
             if (pageRequestDTO.getCate().equals("week")) {
                 expression = qPointHistory.changeDate.between(oneWeekAgo.atStartOfDay(), LocalDate.now().plusDays(1).atStartOfDay());
+            } else if (pageRequestDTO.getCate().equals("15day")) {
+                expression = qPointHistory.changeDate.between(fifteenDays.atStartOfDay(), LocalDate.now().plusDays(1).atStartOfDay());
             } else if (pageRequestDTO.getCate().equals("month")) {
                 expression = qPointHistory.changeDate.between(oneMonthsAgo.atStartOfDay(), LocalDate.now().plusDays(1).atStartOfDay());
             } else if (pageRequestDTO.getCate().equals("3month")) {

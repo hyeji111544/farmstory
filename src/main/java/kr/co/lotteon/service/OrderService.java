@@ -257,7 +257,9 @@ public class OrderService {
 
             int cartProdNo = Integer.parseInt(orderDetail.get("cartProdNo"));
             // cart 테이블에서 삭제
-            cartProductRepository.deleteById(cartProdNo);
+            if (cartProdNo != 0){
+                cartProductRepository.deleteById(cartProdNo);
+            }
 
             int prodNo = Integer.parseInt(orderDetail.get("prodNo"));
             int optNo = Integer.parseInt(orderDetail.get("optNo"));

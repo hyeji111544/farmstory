@@ -39,11 +39,19 @@ public class ProductController {
 
     // 상품 목록 이동
     @GetMapping("/product/list")
-    public String prodList(@RequestParam("cateCode") String cateCode, ProductPageRequestDTO productPageRequestDTO, Model model){
+    public String prodList(@RequestParam("cateCode") String cateCode,
+                           ProductPageRequestDTO productPageRequestDTO,
+                           Model model){
         ProductPageResponseDTO pageResponseDTO;
         productPageRequestDTO.setCateCode(cateCode);
+        if (productPageRequestDTO.getKeyword() == null){
+            log.info("그냥 조회");
+            pageResponseDTO = productService.selectProductsByCate(productPageRequestDTO);
+        }else {
+            log.info("검색 조회");
+            pageResponseDTO = productService.searchProducts(productPageRequestDTO);
+        }
 
-        pageResponseDTO = productService.selectProductsByCate(productPageRequestDTO);
         //pageResponseDTO.setCateCode(productPageRequestDTO.getCateCode());
         String setSortType = productPageRequestDTO.getSort();
         String setCateCode = productPageRequestDTO.getCateCode();

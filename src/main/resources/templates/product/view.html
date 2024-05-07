@@ -202,6 +202,7 @@
             function changeNum(change) {
                 var numInput = event.target.parentNode.querySelector('input');
                 var inputPrice = document.getElementById("totalPrice");
+
                 //파싱된 형태 그대로 가져와서 ',' 쉼표를 제거하여 사용함.
                 var priceText = document.getElementById("disPrice").innerText;
                 var price = parseFloat(priceText.replace(',', ''));
@@ -320,16 +321,18 @@
                             "count" : prodCountValue
                         };
                         jsonDataArray.push(jsonData);
+                        console.log(jsonDataArray);
                     });
                     console.log(jsonDataArray);
 
-                    const data = fetchPost(`/lotteon/product/orderDirect?userId=${userId}`, jsonDataArray)
+                    const data = fetchPost(`/lotteon/product/orderView`, jsonDataArray)
                         .then(response => {
                             console.log(response);
-
+                            window.location.href = "/lotteon/product/orderDirect";
                         })
                         .catch(error => {
-
+                            console.error("장바구니 추가에 실패했습니다.",error);
+                            alert("잠시후에 다시 시도해 주세요.");
                         });
                 }
             }
@@ -459,7 +462,7 @@
                         </div>
                         <div class="optionPrice">
                             <span>
-                                <span th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" style="font-size: 20px"></span>원
+                                <span class="eachCost" th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" style="font-size: 20px"></span>원
                             </span>
                             <input type="hidden" name="optDetailNo" value=""/>
                         </div>

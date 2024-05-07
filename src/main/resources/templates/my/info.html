@@ -9,7 +9,7 @@
     <!---->
     <nav>
         <div>
-            <a href="./home.html"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
+            <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
             <ol>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>

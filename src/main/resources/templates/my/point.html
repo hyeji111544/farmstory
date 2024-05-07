@@ -5,7 +5,7 @@
     <div id="my" layout:fragment="content">
         <nav>
             <div>
-                <a href="./home.html"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
+                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
                 <ol>
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
@@ -36,7 +36,7 @@
                         <p>기간별 조회</p>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">전체</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='week')}">일주일</a>
-                        <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='halfmonth')}">15일</a>
+                        <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='15day')}">15일</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='month')}">1개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='3month')}">3개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='6month')}">6개월</a>
