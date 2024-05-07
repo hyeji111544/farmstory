@@ -7,6 +7,7 @@ import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.repository.UserPointRepository;
 import kr.co.lotteon.repository.pointHistoryRepository;
 import kr.co.lotteon.service.MyService;
+import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ public class MyController {
     private final MyService myService;
     private final UserPointRepository userPointRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AdminService adminService;
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
@@ -170,9 +172,12 @@ public class MyController {
     public String myOrder(String userId, Model model, MyOrderPageRequestDTO myOrderPageRequestDTO){
         log.info(userId);
         log.info(myOrderPageRequestDTO.toString());
+        String bannerMyOrder = "my1";
 
         MyOrderPageResponseDTO MyOrderDTOList = myService.selectOrders(userId, myOrderPageRequestDTO);
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(bannerMyOrder);
         model.addAttribute("MyOrderDTOList", MyOrderDTOList);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         return "/my/order";
     }

@@ -671,10 +671,12 @@ footer p > strong {
 .totalImageBox {
   display: flex;
 }
-.totalImageBox > img {
+.totalImageBox > a {
   display: block;
   width: 100%;
   height: 100%;
+}
+.totalImageBox > a > img {
 }
 .sliderPrev {
   font-size: 30px;

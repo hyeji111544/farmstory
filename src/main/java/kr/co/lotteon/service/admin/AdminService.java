@@ -88,8 +88,17 @@ public class AdminService {
     // 배너 DB 저장 메서드
     public BannerDTO  bannerInsert(BannerDTO bannerDTO) {
         Banner banner = modelMapper.map(bannerDTO, Banner.class);
-        Banner saveBanner = bannerRepository.save(banner);
-
+        Banner saveBanner = new Banner();
+        if (banner.getBanImgCate().equals("main2")) {
+            saveBanner = bannerRepository.save(banner);
+        } else {
+            List<Banner> bannerList = bannerRepository.findByBanImgCate(banner.getBanImgCate());
+            for(Banner eachBanner : bannerList) {
+                eachBanner.setBanUsable("NO");
+                bannerRepository.save(eachBanner);
+            }
+            saveBanner = bannerRepository.save(banner);
+        }
         log.info("saveBanner : " + saveBanner);
         return modelMapper.map(saveBanner, BannerDTO.class);
     }
@@ -175,6 +184,46 @@ public class AdminService {
                 return "bannerMy_" + sName;
             default:
                 return null;
+        }
+    }
+
+    //배너 불러오기
+    public List<BannerDTO> selectBanners(String banImgCate) {
+
+        List<Banner> bannerList = bannerRepository.selectBanners(banImgCate);
+        List<BannerDTO> bannerDTOS = new ArrayList<>();
+        for (Banner eachBanner : bannerList) {
+            bannerDTOS.add(modelMapper.map(eachBanner, BannerDTO.class));
+        }
+        return bannerDTOS;
+    }
+
+    //배너 활성화 업데이트
+    public ResponseEntity<?> updateBanners(String banImgCate, int banNo){
+        
+        // 같은 카테고리를 가진 배너의 활성화를 NO로 변경
+        List<Banner> bannerList = bannerRepository.selectBannerUsable(banImgCate);
+        for (Banner eachBanner : bannerList) {
+            eachBanner.setBanUsable("NO");
+            bannerRepository.save(eachBanner);
+        }
+
+        // 선택한 배너의 활성화를 YES로 변경
+        Optional<Banner> optBanner = bannerRepository.findById(banNo);
+        Banner resultBanner = new Banner();
+        if (optBanner.isPresent()) {
+            optBanner.get().setBanUsable("YES");
+            resultBanner = bannerRepository.save(optBanner.get());
+        }
+
+        // 결과 반환
+        Map<String, Integer> resultMap = new HashMap<>();
+        if (resultBanner.getBanUsable() == "YES") {
+            resultMap.put("result", 1);
+            return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+        }else {
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
         }
     }
 }

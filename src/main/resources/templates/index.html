@@ -11,7 +11,7 @@
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js}"></script>
     <script th:src="@{https://kit.fontawesome.com/20962f3e4b.js}" crossorigin="anonymous"></script>
-    <script th:src="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js}"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.j  s}"></script>
     <!--<script th:src="@{./js/index.js}"></script>-->
     <style>
       #bannerTop {
@@ -93,14 +93,13 @@
           globalBanner -= 1;
         }
       }
-
     </script>
 
   </head>
   <body>
     <div id="bannerTop" class="on" style="background: #e4dfdf;">
-      <article>
-        <a href="#"><img th:src="@{/images/topBanner1.png}"/></a>
+      <article th:each="banner : ${bannerList1}">
+        <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}"/></a>
         <button class="btnClose">close</button>
       </article>
     </div>
@@ -212,11 +211,9 @@
           <!-- 슬라이더 영역 -->
           <section class="slider" style="width: 976px;">
             <div class="totalImageBox"> <!--이 div에서 배너 반복-->
-              <img th:src="@{/images/adadad.jpg}">
-              <img th:src="@{/images/adadad2.jpg}">
-              <img th:src="@{/images/adadad3.jpg}">
-              <img th:src="@{/images/adadad4.jpg}">
-              <img th:src="@{/images/adadad5.jpg}">
+              <a th:each="banner : ${bannerList2}" th:href="@{http://__${banner.banLink}__}">
+                <img th:src="@{/uploads/__${banner.banImgName}__}">
+              </a>
             </div>
             <span class="sliderPrev" onclick="sliderPrev()">&#10096;</span>
             <span class="sliderNext" onclick="sliderNext()">&#10097;</span>
