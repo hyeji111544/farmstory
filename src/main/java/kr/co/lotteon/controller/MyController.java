@@ -37,31 +37,36 @@ public class MyController {
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(Model model, String UserId){
+    public String myHome(Model model, String userId){
 
-    log.info("My home" +UserId);
+    log.info("My home" +userId);
+    
 
         // 회원 정보
 
 
 
         // 최근주문내역
-        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(UserId);
+        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(userId);
         model.addAttribute("myOrder", myOrder);
 
 
         // 포인트적립내역
-        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(UserId);
+        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(userId);
         model.addAttribute("myPoint", myPoint);
 
         log.info("myPoint : " + myPoint);
-        // 상품평
 
+        // 상품평
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setSize(5);
+        log.info("pageRequestDTO : " + pageRequestDTO);
+        PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
+        model.addAttribute("myReviewPage", myReviewPage);
+
+        log.info("myReviewPage : " + myReviewPage);
 
         // 문의내역
-
-
-
 
         return "/my/home";
 
@@ -69,9 +74,12 @@ public class MyController {
 
     //마이페이지-쿠폰 이동
     @GetMapping("/my/coupon")
-    public String myCoupon(String UserId, Model model){
+    public String myCoupon(String userId, Model model){
 
-        List<Coupons> haveCoupons = myService.selectCoupons(UserId);
+        List<Coupons> haveCoupons = myService.selectCoupons(userId);
+
+        log.info("haveCoupons" +haveCoupons);
+
         model.addAttribute("haveCoupons", haveCoupons); // Map<String ,List<Coupons>>  / Map<String, int>
         return "/my/coupon";
     }
@@ -213,7 +221,7 @@ public class MyController {
 
         myService.writeReview(pdReviewDTO, revImage);
 
-        return "redirect:/my/review";
+        return "redirect:/my/review?userId="+pdReviewDTO.getUserId();
     }
 
     //마이페이지-리뷰 이동
@@ -223,7 +231,11 @@ public class MyController {
         log.info("myReview Controller");
 
         PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
+
+        log.info("myReviewPage" +myReviewPage);
+
         model.addAttribute("myReviewPage", myReviewPage);
+
 
         return "/my/review";
     }
