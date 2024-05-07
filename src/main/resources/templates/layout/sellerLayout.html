@@ -19,7 +19,7 @@
             <div>
                 <a th:href="@{/seller/index}" class="logo">BUSINESS</a>
                 <p>
-                    <span>(주)신난다 님 반갑습니다.</span>
+                    <span th:text="'[판매자] ' + ${session.sellerCompany} + '님 반갑습니다.'"> </span>
                     <a th:href="@{/}">HOME |</a>
                     <a th:href="@{/member/logout}">로그아웃 |</a>
                     <a th:href="@{/cs/index}">고객센터</a>

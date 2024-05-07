@@ -136,7 +136,7 @@
                     <td th:text="${notice.noticeHit}"></td>
                     <td th:if="${notice.noticeDate != null}" th:text="${#temporals.format(notice.noticeDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
                     <td>
-                        <a th:href="@{/admin/cs/notice/delete(noticeNo=${notice.noticeNo})}">[삭제]</a><br>
+                        <a th:href="@{/admin/cs/notice/delete(noticeNo=${notice.noticeNo})}">[삭제]</a>
                         <a th:href="@{/admin/cs/notice/modify(noticeNo=${notice.noticeNo})}">[수정]</a>
                     </td>
                 </tr>

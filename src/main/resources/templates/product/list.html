@@ -38,28 +38,33 @@
         </ul>
 
       <!-- 상품목록 -->
-      <section class="productBox">
-        <article th:each="product, index:${productPageResponseDTO.dtoList}" id="product">
-            <a th:href="@{'/product/view?cateCode=' + ${product.cateCode} + '&sort='+ ${setSortType} + '&prodNo=' +  ${product.prodNo}}">
-            <div class="thumb">
-              <img th:src="@{/uploads/__${product.thumb190}__}" alt="t1" />
+        <section class="productBox">
+            <div th:each="product, index:${productPageResponseDTO.dtoList}" class="product">
+                <a th:href="@{'/product/view?cateCode=' + ${product.cateCode} + '&sort='+ ${setSortType} + '&prodNo=' +  ${product.prodNo}}">
+                    <div class="thumb">
+                        <img th:src="@{/uploads/__${product.thumb190}__}" alt="t1" />
+                    </div>
+
+                    <h2>[[${product.prodName}]]</h2>
+
+                    <div class="org_price">
+                        <del th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" id="prodPrice"></del>
+                        <span th:text="${product.prodDiscount} + '%'"></span>
+                    </div>
+
+                    <div class="dis_price">
+                        <ins th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
+                        <span th:if="${product.prodDeliveryFee}==0" class="free">무료배송</span>
+                    </div>
+
+                    <div class="score_review">
+                        <b>★ <span>[[${product.tReviewScore}]]</span></b>
+                        <b>리뷰 <span>[[${product.tReviewCount}]]</span></b>
+                        <span>고객만족우수</span>
+                    </div>
+                </a>
             </div>
-            <h2>[[${product.prodName}]]</h2>
-            <div class="org_price">
-              <del th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" id="prodPrice"></del>
-              <span th:text="${product.prodDiscount} + '%'"></span>
-            </div>
-            <div class="dis_price">
-              <ins th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
-              <span th:if="${product.prodDeliveryFee}==0" class="free">무료배송</span>
-            </div>
-            <div class="score_review">
-              <b>★<span>[[${product.tReviewScore}]]</span></b>
-              <b>| 리뷰<span>[[${product.tReviewCount}]]</span></b>
-            </div>
-          </a>
-        </article>
-      </section>
+        </section>
 
       <!-- 상품목록 페이지번호 -->
       <div class="paging">

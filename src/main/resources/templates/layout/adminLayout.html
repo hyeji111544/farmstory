@@ -18,9 +18,9 @@
     <div id="admin-wrapper">
         <header>
             <div>
-                <a th:href="@{/admin/index}" class="logo">BUSINESS</a>
+                <a th:href="@{/admin/index}" class="logo">ADMINISTER</a>
                 <p>
-                    <span>관리자123 님 반갑습니다.</span>
+                    <span th:text="'[관리자] ' + ${#authentication.principal.user.userName} + '님 반갑습니다.'"></span>
                     <a th:href="@{/}">HOME |</a>
                     <a th:href="@{/member/logout}">로그아웃 |</a>
                     <a th:href="@{/cs/index}">고객센터</a>
@@ -48,7 +48,7 @@
                         <a href="#"><i class="fa fa-users" aria-hidden="true"></i>회원관리</a>
                         <ol>
                             <li><a th:href="@{/admin/user/list}">회원현황</a></li>
-                            <li><a href="#">포인트관리</a></li>
+                            <li><a th:href="@{/admin/user/point}">포인트관리</a></li>
                             <li><a href="#">접속자집계</a></li>
                         </ol>
                     </li>

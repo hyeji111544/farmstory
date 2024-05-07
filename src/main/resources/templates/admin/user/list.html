@@ -229,9 +229,9 @@
                     </div>
                     <div class="userListTableDetailRow">
                         <div>가입일</div>
-                        <div th:text="${user.userRegDate}"></div>
+                        <div th:text="${#temporals.format(user.userRegDate, 'yyyy-MM-dd HH:mm')}"></div>
                         <div>정보수정일</div>
-                        <div th:text="${user.userUpdate}"></div>
+                        <div th:text="${#temporals.format(user.userUpdate, 'yyyy-MM-dd HH:mm')}"></div>
                     </div>
                     <div class="userListTableDetailRow">
                         <div>주소</div>
