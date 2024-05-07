@@ -4,7 +4,6 @@
 <!--내용 시작-->
     <section id="admin-config-banner" layout:fragment="content">
         <!--admin/banner 에서만 사용하는 js와 css-->
-        <link rel="stylesheet" th:href="@{/css/admin/adminBanner.css}">
         <script>
             $(function() {
                 $("#tabs").tabs();
@@ -89,6 +88,43 @@
                 }
             }
 
+
+            // 활성화 버튼을 누르면 나머지 배너들은 비활성화 되고 누른것만 활성화로 변함
+            function banUsable() {
+                const button = event.target;
+                const banImgCate = button.id;
+                const banNo = button.parentNode.parentNode.querySelectorAll('td')[1].innerText;
+
+                console.log(banImgCate);
+                console.log(banNo);
+                // 활성화시킬 배너 No값
+                // 비활성화시킬 배너 cate값
+
+                const jsonData = {
+                    "banImgCate" : banImgCate,
+                    "banNo" : banNo
+                }
+
+                fetch("/lotteon/admin/banner/banUsable", {
+                    method : 'POST',
+                    headers : {'Content-Type': 'application/json'},
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // 데이터가 성공적으로 수정되었을 때의 동작
+                            alert("활성화가 되었습니다!");
+                            return response.json();
+                        } else {
+                            // 오류가 발생한 경우
+                            throw new Error('Network response was not ok.');
+                        }
+                    })
+
+                    .catch(err => console.log(err));
+            }
+
+
         </script>
         <nav>
             <h3>배너관리</h3>
@@ -123,6 +159,7 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
 
@@ -141,9 +178,9 @@
                         <td th:text="${banner.banEdate}"></td>
                         <td th:text="${banner.banStime}"></td>
                         <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
+                            <span onclick="banUsable()" id="main1" style="cursor: pointer">[활성]</span>
                         </td>
                     </tr>
                 </table>
@@ -169,6 +206,7 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
                     <tr th:each="banner : ${main2}">
@@ -186,6 +224,7 @@
                         <td th:text="${banner.banEdate}"></td>
                         <td th:text="${banner.banStime}"></td>
                         <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>
@@ -213,6 +252,7 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
                     <tr th:each="banner : ${product1}">
@@ -230,6 +270,7 @@
                         <td th:text="${banner.banEdate}"></td>
                         <td th:text="${banner.banStime}"></td>
                         <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>
@@ -257,6 +298,7 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
                     <tr th:each="banner : ${member1}">
@@ -274,6 +316,7 @@
                         <td th:text="${banner.banEdate}"></td>
                         <td th:text="${banner.banStime}"></td>
                         <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>
@@ -301,6 +344,7 @@
                         <th>종료날짜</th>
                         <th>시작시간</th>
                         <th>종료시간</th>
+                        <th>활성화</th>
                         <th>관리</th>
                     </tr>
                     <tr th:each="banner : ${my1}">
@@ -318,6 +362,7 @@
                         <td th:text="${banner.banEdate}"></td>
                         <td th:text="${banner.banStime}"></td>
                         <td th:text="${banner.banEtime}"></td>
+                        <td th:text="${banner.banUsable}"></td>
                         <td>
                             <a href="#">[비활성]</a>
                             <a href="#">[활성]</a>

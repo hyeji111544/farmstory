@@ -303,7 +303,7 @@
                     <td th:text="${faq.faqHit}"></td>
                     <td th:if="${faq.faqDate != null}" th:text="${#temporals.format(faq.faqDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
                     <td>
-                        <a th:href="@{/admin/cs/faq/delete(faqNo=${faq.faqNo})}">[삭제]</a><br>
+                        <a th:href="@{/admin/cs/faq/delete(faqNo=${faq.faqNo})}">[삭제]</a>
                         <a th:href="@{/admin/cs/faq/modify(faqNo=${faq.faqNo})}">[수정]</a>
                     </td>
                 </tr>

@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -18,4 +19,9 @@ public class PdReviewDTO {
     private String revContent;
     private int revScore;
     private LocalDateTime revAddDate;
+
+    //PdReviewImg
+    private int revImgNo;
+    private String revThumb;
+    private String prodName;
 }

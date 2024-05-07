@@ -17,6 +17,23 @@
 
 </head>
 <body>
+<script>
+    function getCateCodeFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('cateCode');
+    }
+
+    // cateCode 값을 가져와서 input 필드에 할당하는 함수
+    function setCateCodeInputValue() {
+        const cateCode = getCateCodeFromUrl();
+        document.getElementById('cateCodeInput').value = cateCode || '';
+    }
+
+    // 페이지 로드 시 cateCode 값을 input 필드에 할당
+    window.onload = function() {
+        setCateCodeInputValue();
+    };
+</script>
 <div id="wrapper">
     <header>
         <div class="top">
@@ -45,8 +62,9 @@
         <div class="logo">
             <div>
                 <a th:href="@{/}"><img th:src="@{/images/header_logo.png}" alt="로고" /></a>
-                <form action="#">
+                <form action="/lotteon/product/list" method="get">
                     <input type="text" name="keyword"/>
+                    <input type="hidden" name="cateCode" id="cateCodeInput" value="">
                     <button><i class="fa fa-search"></i></button>
                 </form>
             </div>
@@ -106,9 +124,9 @@
     <footer>
         <ul>
             <li><a th:href="@{/company/index}">회사소개</a></li>
-            <li><a th:href="@{/policy/buyer}">서비스이용약관</a></li>
-            <li><a th:href="@{/policy/privacy}">개인정보처리방침</a></li>
-            <li><a th:href="@{/policy/finance}">전자금융거래약관</a></li>
+            <li><a th:href="@{/policy/terms(cate=buyer)}">서비스이용약관</a></li>
+            <li><a th:href="@{/policy/terms(cate=privacy)}">개인정보처리방침</a></li>
+            <li><a th:href="@{/policy/terms(cate=finance)}">전자금융거래약관</a></li>
             <li><a href="#">[[${appInfo.version}]]</a></li>
         </ul>
         <div>

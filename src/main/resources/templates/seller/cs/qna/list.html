@@ -26,7 +26,7 @@
             </div>
             <table class="qna">
                 <tr>
-                    <th><input type="checkbox" name="all"/></th>
+                    <th style="width: 1px;"></th>
                     <th>번호</th>
                     <th>제목</th>
                     <th>상품명</th>
@@ -36,27 +36,21 @@
                 </tr>
 
                 <tr th:each="ProdQnaDTO : ${prodQnaList.dtoList}">
-                    <td><input type="checkbox" name="글번호"/></td>
+                    <td style="width: 1px;"></td>
                     <td th:text="${ProdQnaDTO.prodNo}"></td>
-                    <td style="text-align: left">
+                    <td style="text-align: left; background-color: transparent; width: 350px">
                         <span>
                             <a th:href="@{/seller/cs/qna/view(qnaNo=${ProdQnaDTO.prodQnaNo})}">
                                 <span th:text="${ProdQnaDTO.prodQnaTitle}"></span>
                             </a>
                         </span>
                     </td>
-                    <td th:text="${ProdQnaDTO.prodName}"></td>
+                    <td th:text="${ProdQnaDTO.prodName}" style="width:300px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; text-align: left;"></td>
                     <td th:text="${ProdQnaDTO.userId}"></td>
                     <td th:if="${ProdQnaDTO.prodQnaDate != null}" th:text="${#temporals.format(ProdQnaDTO.prodQnaDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
                     <td th:text="${ProdQnaDTO.prodQnaStatus}"></td>
                 </tr>
             </table>
-
-
-            <div style="display: flex; justify-content: space-between; margin-top: 10px">
-                <a class="btn btn-outline-info" onclick="deleteValue(event);" style="background-color: #D04848">선택삭제</a>
-            </div>
-
 
             <div class="pagingBox">
                 <div class="pagingList">

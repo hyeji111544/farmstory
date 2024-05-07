@@ -107,37 +107,59 @@
             <div class="shopInfo">
                 <div class="shopAverage">
                     <div class="shopGroup">
-                        <img th:src="@{/images/seller/seller_admin_icon2.png}">
+                        <div>주문 건수</div>
                         <div>
-                            <p>총 주문건수<span th:text="${sellerInfoDTO.allCount}"></span></p>
-                            <p>신규 주문건수<span th:text="${sellerInfoDTO.oneDayCount}"></span></p>
-                            <p>주간 주문건수<span th:text="${sellerInfoDTO.oneWeekCount}"></span></p>
-                            <p>월간 주문건수<span th:text="${sellerInfoDTO.oneMonthsCount}"></span></p>
+                            <img th:src="@{/images/seller/seller_admin_icon2.png}">
+                            <div>
+                                <p>전체<span th:text="${sellerInfoDTO.allCount} + '건'"></span></p>
+                                <p>신규<span th:text="${sellerInfoDTO.oneDayCount} + '건'"></span></p>
+                                <p>주간<span th:text="${sellerInfoDTO.oneWeekCount} + '건'"></span></p>
+                                <p>월간<span th:text="${sellerInfoDTO.oneMonthsCount} + '건'"></span></p>
+                            </div>
                         </div>
                     </div>
                     <div class="shopGroup">
-                        <img th:src="@{/images/seller/seller_admin_icon1.png}">
+                        <div>주문 금액</div>
                         <div>
-                            <p>총 주문금액<span th:text="${sellerInfoDTO.allPrice}"></span></p>
-                            <p>신규 주문금액<span th:text="${sellerInfoDTO.oneDayPrice}"></span></p>
-                            <p>주간 주문금액<span th:text="${sellerInfoDTO.oneWeekPrice}"></span></p>
-                            <p>월간 주문금액<span th:text="${sellerInfoDTO.oneMonthsPrice}"></span></p>
+                            <img th:src="@{/images/seller/seller_admin_icon1.png}">
+                            <div>
+                                <p>전체<span th:text="${#numbers.formatInteger(sellerInfoDTO.allPrice,3,'COMMA')} + '원'"></span></p>
+                                <p>신규<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneDayPrice,3,'COMMA')} + '원'"></span></p>
+                                <p>주간<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneWeekPrice,3,'COMMA')} + '원'"></span></p>
+                                <p>월간<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneMonthsPrice,3,'COMMA')} + '원'"></span></p>
+                            </div>
                         </div>
                     </div>
                     <div class="shopGroup">
-                        <img th:src="@{/images/seller/seller_admin_icon3.png}">
+                        <div>배송 관리</div>
                         <div>
-                            <p>입금 대기<span th:text="${sellerInfoDTO.statusCountMap.get('입금 대기')}"></span></p>
-                            <p>배송 준비<span th:text="${sellerInfoDTO.statusCountMap.get('배송 준비')}"></span></p>
-                            <p>배송 중<span th:text="${sellerInfoDTO.statusCountMap.get('배송 중')}"></span></p>
+                            <img th:src="@{/images/seller/seller_admin_icon3.png}">
+                            <div>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('입금대기') != null}">입금대기<span th:text="${sellerInfoDTO.statusCountMap.get('입금대기')} + '건'"></span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('입금대기') == null}">입금대기<span>0건</span></p>
+
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('배송준비') != null}" style="margin: 10px 0">배송준비<span th:text="${sellerInfoDTO.statusCountMap.get('배송준비')} + '건'"></span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('배송준비') == null}" style="margin: 10px 0">배송준비<span>0건</span></p>
+
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('배송중') != null}">배송중<span th:text="${sellerInfoDTO.statusCountMap.get('배송중')} + '건'"></span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('배송중') == null}">배송중<span>0건</span></p>
+                            </div>
                         </div>
                     </div>
                     <div class="shopGroup">
-                        <img th:src="@{/images/seller/seller_admin_icon1.png}">
+                        <div>주문 관리</div>
                         <div>
-                            <p>취소 요청<span th:text="${sellerInfoDTO.statusCountMap.get('취소 요청')}"></span></p>
-                            <p>교환 요청<span th:text="${sellerInfoDTO.statusCountMap.get('교환 요청')}"></span></p>
-                            <p>환불 요청<span th:text="${sellerInfoDTO.statusCountMap.get('환불 요청')}"></span></p>
+                            <img th:src="@{/images/seller/seller_admin_icon4.png}">
+                            <div>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('취소요청') != null}">취소요청<span th:text="${sellerInfoDTO.statusCountMap.get('취소요청')} + '건'"></span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('취소요청') == null}">취소요청<span>0건</span></p>
+
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('교환요청') != null}" style="margin: 10px 0">교환요청<span th:text="${sellerInfoDTO.statusCountMap.get('교환요청')} + '건'"></span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('교환요청') == null}" style="margin: 10px 0">교환요청<span>0건</span></p>
+
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('환불요청') != null}">환불요청<span th:text="${sellerInfoDTO.statusCountMap.get('환불요청')} + '건'"></span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('환불요청') == null}">환불요청<span>0건</span></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -160,25 +182,9 @@
             <div style="display: inline-block; margin-right: 52px">
                 <h4>공지사항</h4>
                 <article class="articleBox">
-                    <p>
-                        <a>[공지] 판매자님들은 주기적인 비밀번호 변경을 하세요. 판매자님들은 주기적인 비밀번호 변경을 하세요.</a>
-                        <span>20-07-08 12:23</span>
-                    </p>
-                    <p>
-                        <a>[공지] 1주년 기념 신규가입 사은품 안내</a>
-                        <span>20-07-08 12:23</span>
-                    </p>
-                    <p>
-                        <a>[공지] 1주년 기념 신규가입 사은품 안내</a>
-                        <span>20-07-08 12:23</span>
-                    </p>
-                    <p>
-                        <a>[공지] 1주년 기념 신규가입 사은품 안내</a>
-                        <span>20-07-08 12:23</span>
-                    </p>
-                    <p>
-                        <a>[공지] 1주년 기념 신규가입 사은품 안내</a>
-                        <span>20-07-08 12:23</span>
+                    <p th:each="notice : ${noticeDTO}">
+                        <a th:href="@{/seller/cs/notice/view(noticeNo=${notice.noticeNo})}" th:text="'[공지] ' + ${notice.noticeTitle}"></a>
+                        <span th:text="${#temporals.format(notice.noticeDate, 'yyyy-MM-dd hh:mm')}"></span>
                     </p>
                 </article>
             </div>
@@ -186,25 +192,9 @@
             <div style="display: inline-block">
                 <h4>고객문의</h4>
                 <article class="articleBox">
-                    <p>
-                        <a>[문의] 상품이 잘못 왔습니다.</a>
-                        <span>20-07-08 12:23</span>
-                    </p>
-                    <p>
-                        <a>[문의] 안녕하세요. 주문자 입니다. 구매한 상품에 문제가 있어서 이렇게 문의글을 남깁니다.</a>
-                        <span>20-07-08 12:23</span>
-                    </p>
-                    <p>
-                        <a>[문의] 상품이 1개 잘못 왔습니다.</a>
-                        <span>20-07-08 12:23</span>
-                    </p>
-                    <p>
-                        <a>[문의] 상품이 1개 잘못 왔습니다.</a>
-                        <span>20-07-08 12:23</span>
-                    </p>
-                    <p>
-                        <a>[문의] 상품이 1개 잘못 왔습니다.</a>
-                        <span>20-07-08 12:23</span>
+                    <p th:each="qna : ${prodQnaDTO}">
+                        <a th:href="@{/seller/cs/qna/view(qnaNo=${qna.prodQnaNo})}" th:text="'[문의] ' + ${qna.prodQnaTitle}"></a>
+                        <span th:text="${#temporals.format(qna.prodQnaDate, 'yyyy-MM-dd hh:mm')}"></span>
                     </p>
                 </article>
             </div>

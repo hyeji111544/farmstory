@@ -127,6 +127,55 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         return new PageImpl<>(content, pageable, total);
     }
 
+    public Page<Tuple> searchProductsByCateAndKeyWord(ProductPageRequestDTO pageRequestDTO, Pageable pageable){
+        String keyword = pageRequestDTO.getKeyword();
+        log.info("keyword : " + keyword);
+
+        String sort = pageRequestDTO.getSort();
+        String seletedCate = pageRequestDTO.getCateCode();
+        OrderSpecifier<?> orderSpecifier = null;
+        log.info("here1 : " + sort);
+
+        if (sort != null && sort.startsWith("prodSold")){
+            orderSpecifier = qProduct.prodSold.desc();
+        }else if (sort != null && sort.startsWith("prodLowPrice")) {
+            orderSpecifier = qProduct.prodPrice.asc();
+        }else if (sort != null && sort.startsWith("prodHighPrice")) {
+            orderSpecifier = qProduct.prodPrice.desc();
+        }else if (sort != null && sort.startsWith("prodScore")) {
+            orderSpecifier = qProduct.tReviewScore.desc();
+        }else if (sort != null && sort.startsWith("prodReview")) {
+            orderSpecifier = qProduct.tReviewCount.desc();
+        }else if (sort != null && sort.startsWith("prodRdate")) {
+            orderSpecifier = qProduct.prodRdate.desc();
+        }else if (sort != null && sort.startsWith("prodHit")) {
+            orderSpecifier = qProduct.prodHit.desc();
+        }else if (sort != null && sort.startsWith("prodDiscount")){
+            orderSpecifier = qProduct.prodDiscount.desc();
+        }else {
+            orderSpecifier = qProduct.prodSold.desc();
+        }
+
+        QueryResults<Tuple> results = jpaQueryFactory
+                .select(qProduct, qProductimg)
+                .from(qProduct)
+                .join(qProductimg)
+                .on(qProduct.prodNo.eq(qProductimg.prodNo))
+                .where(qProduct.prodName.contains(keyword)
+                        .and(qProduct.cateCode.like(seletedCate+"%")))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(orderSpecifier)
+                .fetchResults();
+
+        List<Tuple> content = results.getResults();
+        log.info(content.toString());
+        long total = results.getTotal();
+        log.info("total : {}", total);
+        return new PageImpl<>(content, pageable, total);
+
+    }
+
     // 제품 상세 조회
     @Override
     public Tuple selectProduct(int prodNo){

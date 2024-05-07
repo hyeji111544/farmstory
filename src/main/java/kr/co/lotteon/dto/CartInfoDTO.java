@@ -37,4 +37,6 @@ public class CartInfoDTO {
     private int count;
     private int cartProdNo;
 
+    private  String userId;
+
 }

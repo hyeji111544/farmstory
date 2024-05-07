@@ -4,25 +4,27 @@ import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
-import kr.co.lotteon.dto.SellerDTO;
-import kr.co.lotteon.dto.UserDTO;
-import kr.co.lotteon.entity.Seller;
-import kr.co.lotteon.entity.User;
-import kr.co.lotteon.repository.SellerRepository;
-import kr.co.lotteon.repository.UserRepository;
+import kr.co.lotteon.dto.*;
+import kr.co.lotteon.entity.*;
+import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Slf4j
@@ -34,6 +36,11 @@ public class MemberService {
     private final ModelMapper modelMapper;
     private final SellerRepository sellerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserPointRepository userPointRepository;
+    private final pointHistoryRepository pointHistoryRepository;
+    private final CartRepository cartRepository;
+    private final UserCouponRepository userCouponRepository;
+
 
     // email 전송
     private final JavaMailSender javaMailSender;
@@ -239,8 +246,22 @@ public class MemberService {
         userDTO.setUserPw(encoded);
 
         User user = modelMapper.map(userDTO, User.class);
-
         User savedUser = userRepository.save(user);
+
+        UserPoint userPoint = new UserPoint();
+        userPoint.setUserId(savedUser.getUserId());
+        userPoint.setPointBalance(0);
+        userPointRepository.save(userPoint);
+
+        UserCoupon userCoupon = new UserCoupon();
+        userCoupon.setUserId(savedUser.getUserId());
+        userCoupon.setCpNo(1);
+        userCoupon.setUcpStatus("사용가능");
+        userCouponRepository.save(userCoupon);
+
+        Cart cart = new Cart();
+        cart.setUserId(savedUser.getUserId());
+        cartRepository.save(cart);
         return savedUser;
     }
     // UserId 찾기(if optional = null -> return Optional.empty();)
@@ -276,8 +297,91 @@ public class MemberService {
         if (savedUser.getUserId().equals(userDTO.getUserId())  && savedSeller.getUserId().equals(userDTO.getUserId())) {
             result = 1;
         }
-
         return result;
     }
+    // 관리자 - 회원관리 - 회원현황 //
+    public PageResponseDTO selectMemberList(PageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("No");
 
+        Page<User> pageUser =  userRepository.selectSellerList(pageable, pageRequestDTO);
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User eachUser : pageUser.getContent()) {
+            userDTOs.add(modelMapper.map(eachUser, UserDTO.class));
+        }
+
+        int total = (int) pageUser.getTotalElements();
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(userDTOs)
+                .total(total)
+                .build();
+    }
+    // 관리자 - 회원관리 - 회원 정보 변경 //
+    public ResponseEntity<?> changeUserInfo(String userId, String changeType, String changeValue){
+
+        Optional<User> optUser = userRepository.findById(userId);
+        User resultUser = null;
+        if (optUser.isPresent()){
+            if (changeType.equals("userRole")) {
+                if (changeValue.equals("DELETE")){
+                    optUser.get().setUserStatus("탈퇴회원");
+                }
+                optUser.get().setUserRole(changeValue);
+            }else if (changeType.equals("userGrade")) {
+                optUser.get().setUserGrade(changeValue);
+            }else if (changeType.equals("userStatus")) {
+                if (changeValue.equals("탈퇴회원")){
+                    optUser.get().setUserRole("DELETE");
+                }
+                optUser.get().setUserStatus(changeValue);
+            }
+            optUser.get().setUserUpdate(LocalDateTime.now());
+            resultUser = userRepository.save(optUser.get());
+        }
+
+        Map<String, Integer> resultMap = new HashMap<>();
+        if (resultUser.getUserRole().equals(changeValue)
+                || resultUser.getUserGrade().equals(changeValue)
+                || resultUser.getUserStatus().equals(changeValue)) {
+            resultMap.put("result", 1);
+            return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+        }else {
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
+    // 관리자 - 회원관리 - 포인트관리 //
+    public PageResponseDTO userPointControl(PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable("No");
+        return userPointRepository.userPointControl(pageRequestDTO, pageable);
+    }
+
+    // 관리자 - 회원관리 - 포인트관리 - 포인트 지급 & 회수 //
+    public ResponseEntity<?> pointControl(String type, String userId, String changePoint, String changeCode) {
+        UserPoint userPoint = userPointRepository.findByUserId(userId);
+
+        PointHistory pointHistory = new PointHistory();
+        pointHistory.setPointNo(userPoint.getPointNo());
+        pointHistory.setChangeCode(changeCode);
+        if (type.equals("plus")) {
+            pointHistory.setChangeType("적립");
+            pointHistory.setChangePoint(Integer.parseInt(changePoint));
+            userPoint.setPointBalance(userPoint.getPointBalance() + Integer.parseInt(changePoint));
+        }else {
+            pointHistory.setChangeType("사용");
+            pointHistory.setChangePoint(Integer.parseInt("-" + changePoint));
+            userPoint.setPointBalance(userPoint.getPointBalance() - Integer.parseInt(changePoint));
+        }
+        UserPoint updatePoint = userPointRepository.save(userPoint);
+        PointHistory updateHistory = pointHistoryRepository.save(pointHistory);
+
+        Map<String, UserPoint> resultMap = new HashMap<>();
+        if (updateHistory.getChangeCode().equals(changeCode)) {
+            resultMap.put("result", updatePoint);
+            return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+        }else {
+            resultMap.put("result", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
 }

@@ -5,7 +5,7 @@
     <div id="my" layout:fragment="content">
         <nav>
             <div>
-                <a href="./home.html"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
+                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
                 <ol>
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
@@ -19,7 +19,7 @@
             <ul>
                 <span class="menu_else"></span>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <!--<li><a href="./favorite.html">관심상품</a></li>-->
+                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
                 <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
                 <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
@@ -36,7 +36,7 @@
                         <p>기간별 조회</p>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">전체</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='week')}">일주일</a>
-                        <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='halfmonth')}">15일</a>
+                        <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='15day')}">15일</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='month')}">1개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='3month')}">3개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='6month')}">6개월</a>
@@ -51,35 +51,33 @@
                         </form>
                     </div>
 
+                    <div class="PointList">
+                        <div>
+                            <div>날짜</div>
+                            <div>구분</div>
+                            <div>적립금액</div>
+                            <div>비고</div>
+                        </div>
+                        <div th:each="point : ${pageResponseDTO.dtoList}">
+                            <div th:text="${#strings.substring(point.changeDate, 0, 10)}"></div>
+                            <div th:text="${point.changeType}"></div>
+                            <div class="pointAfter" th:text="${#numbers.formatInteger(point.changePoint, 3, 'COMMA')}"></div>
+                            <div th:text="${point.changeCode}"></div>
+                        </div>
 
-                    <table class="PointList" border="0">
-                        <tr>
-                            <th>날짜</th>
-                            <th>구분</th>
-                            <th>적립금액</th>
-                            <th>비고</th>
-                        </tr>
-                        <tr class="PointListContent" id="point" th:each="point : ${pageResponseDTO.dtoList}">
-                            <td class="date" th:text="${#strings.substring(point.changeDate, 0, 10)}" ></td>
-                            <td class="type">[[${point.changeType}]]</td>
-                            <td class="point">[[${point.changePoint}]]</td>
-                            <td class="desc">[[${point.changeCode}]]</td>
-                        </tr>
+                        <p class="page">
+                            <a th:if="${pageResponseDTO.prev && pageResponseDTO.cate == null}" th:href="@{/my/point(pg=${pageResponseDTO.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
+                            <a th:if="${pageResponseDTO.prev && pageResponseDTO.cate != null}" th:href="@{/my/point(pg=${pageResponseDTO.start -1}, userId=${#authentication.principal.user.userId}, cate=${pageResponseDTO.cate}, startDate=${pageResponseDTO.startDate}, finalDate=${pageResponseDTO.finalDate})}">이전</a>
 
-                    </table>
+                            <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                                <a class="pageNum" th:if="${pageResponseDTO.cate == null}" th:href="@{/my/point(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+                                <a class="pageNum" th:if="${pageResponseDTO.cate != null}" th:href="@{/my/point(pg=${num}, cate=${pageResponseDTO.cate}, userId=${#authentication.principal.user.userId}, startDate=${pageResponseDTO.startDate}, finalDate=${pageResponseDTO.finalDate})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+                            </th:block>
 
-                    <p class="page">
-                        <a th:if="${pageResponseDTO.prev && pageResponseDTO.cate == null}" th:href="@{/my/point(pg=${pageResponseDTO.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
-                        <a th:if="${pageResponseDTO.prev && pageResponseDTO.cate != null}" th:href="@{/my/point(pg=${pageResponseDTO.start -1}, userId=${#authentication.principal.user.userId}, cate=${pageResponseDTO.cate}, startDate=${pageResponseDTO.startDate}, finalDate=${pageResponseDTO.finalDate})}">이전</a>
-
-                        <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                            <a class="pageNum" th:if="${pageResponseDTO.cate == null}" th:href="@{/my/point(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == pageResponseDTO} ? 'on' : ''">[[${num}]]</a>
-                            <a class="pageNum" th:if="${pageResponseDTO.cate != null}" th:href="@{/my/point(pg=${num}, cate=${pageResponseDTO.cate}, userId=${#authentication.principal.user.userId}, startDate=${pageResponseDTO.startDate}, finalDate=${pageResponseDTO.finalDate})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
-                        </th:block>
-
-                        <a th:if="${pageResponseDTO.next && pageResponseDTO.cate == null}" th:href="@{/my/point(pg=${pageResponseDTO.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>
-                        <a th:if="${pageResponseDTO.next && pageResponseDTO.cate != null}" th:href="@{/my/point(pg=${pageResponseDTO.end + 1}, userId=${#authentication.principal.user.userId}, cate=${pageResponseDTO.cate}, startDate=${pageResponseDTO.startDate}, finalDate=${pageResponseDTO.finalDate})}">다음</a>
-                    </p>
+                            <a th:if="${pageResponseDTO.next && pageResponseDTO.cate == null}" th:href="@{/my/point(pg=${pageResponseDTO.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>
+                            <a th:if="${pageResponseDTO.next && pageResponseDTO.cate != null}" th:href="@{/my/point(pg=${pageResponseDTO.end + 1}, userId=${#authentication.principal.user.userId}, cate=${pageResponseDTO.cate}, startDate=${pageResponseDTO.startDate}, finalDate=${pageResponseDTO.finalDate})}">다음</a>
+                        </p>
+                    </div>
 
                 </article>
             </section>

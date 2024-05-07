@@ -40,21 +40,25 @@ public class SellerController {
     @GetMapping("/seller/index")
     public String sellerIndex(HttpSession session, Authentication authentication, Model model){
         String UserId = authentication.getName();
+        // 기간별 주문 건수 & 주문 금액 & 배송 현황 집계 & prodSeller 세션 저장
         SellerInfoDTO sellerInfoDTO = sellerService.selectSellerInfo(session, UserId);
-
 
         String prodSeller = (String) session.getAttribute("prodSeller");
         // 최근 한달치 주문 건수
         LinkedHashMap<String, Integer> monthCount = sellerService.selectProdSalesCount(prodSeller);
         // 최근 한달 일자별 주문 금액 합산
         LinkedHashMap<String, Integer> monthPrice = sellerService.selectSalesForMonth(prodSeller);
-
-        model.addAttribute("monthCount", monthCount);
-        model.addAttribute("monthPrice", monthPrice);
-
-
+        // 공지사항 최신순 5개 조회
+        List<NoticeDTO> noticeDTO = sellerService.selectNoticeForIndex();
+        // 고객문의 최신순 5개 조회
+        List<ProdQnaDTO> prodQnaDTO = sellerService.selectProdQnaForIndex(prodSeller);
 
         model.addAttribute("sellerInfoDTO", sellerInfoDTO);
+        model.addAttribute("monthCount", monthCount);
+        model.addAttribute("monthPrice", monthPrice);
+        model.addAttribute("noticeDTO", noticeDTO);
+        model.addAttribute("prodQnaDTO", prodQnaDTO);
+
         return "/seller/index";
     }
 ////// 상품 관리 (seller/product) //////
@@ -62,21 +66,15 @@ public class SellerController {
     @GetMapping("/seller/product/list")
     public String sellerProdList(String prodSeller, Model model, ProductPageRequestDTO productPageRequestDTO){
 
-        log.info("productPageRequestDTO.getKeyword() : " + productPageRequestDTO.getKeyword());
-        log.info("productPageRequestDTO.getType() : " + productPageRequestDTO.getType());
         ProductPageResponseDTO pageResponseDTO = null;
-
         if(productPageRequestDTO.getKeyword() == null) {
             // 판매자의 전체 상품 목록 조회
             pageResponseDTO = sellerService.selectProductForSeller(prodSeller, productPageRequestDTO);
         }else {
-            log.info("하이");
             // 판매자의 검색 상품 목록 조회
             pageResponseDTO = sellerService.searchProductForSeller(prodSeller, productPageRequestDTO);
         }
-        log.info("pageResponseDTO : " + pageResponseDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
-
         return "/seller/product/list";
     }
 

@@ -31,6 +31,7 @@ window.onload = function (){
     let reFax = /^\d{2,3}-\d{3,4}-\d{4}$/;
 
     // 판매자 이름 유효성 검사
+    if(sellerNameCheck){
     sellerNameCheck.addEventListener('blur', function (){
 
         const value = sellerNameCheck.value;
@@ -48,131 +49,135 @@ window.onload = function (){
             return;
         }
     });
+    }
     // 판매자 이름 수정
-    btnChangeSellerName.onclick = function (e) {
+    if (btnChangeSellerName) {
+        btnChangeSellerName.onclick = function (e) {
 
-        if(btnChangeSellerName.className === 'change'){
-            sellerNameCheck.value = "";
-            sellerNameCheck.style.border = "1px solid #999";
-            sellerNameCheck.style.border = "1px solid #999";
-            sellerNameCheck.readOnly = false;
-            sellerNameCheck.readOnly = false;
-            btnChangeSellerName.classList.remove('change');
-            btnChangeSellerName.classList.add('save');
-        }
-        else if(btnChangeSellerName.className === 'save'){
+            if (btnChangeSellerName.className === 'change') {
+                sellerNameCheck.value = "";
+                sellerNameCheck.style.border = "1px solid #999";
+                sellerNameCheck.style.border = "1px solid #999";
+                sellerNameCheck.readOnly = false;
+                sellerNameCheck.readOnly = false;
+                btnChangeSellerName.classList.remove('change');
+                btnChangeSellerName.classList.add('save');
+            } else if (btnChangeSellerName.className === 'save') {
 
-            const userIdValue= document.getElementById('userId').innerText;
-            const sellerNameValue= document.getElementById('sellerName').value;
-            e.preventDefault();
-            console.log(userIdValue);
+                const userIdValue = document.getElementById('userId').innerText;
+                const sellerNameValue = document.getElementById('sellerName').value;
+                e.preventDefault();
+                console.log(userIdValue);
 
-            fetch(`/lotteon/my/updateSellerName`,{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "userId": userIdValue,
-                    "sellerName": sellerNameValue
+                fetch(`/lotteon/my/updateSellerName`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "userId": userIdValue,
+                        "sellerName": sellerNameValue
+                    })
                 })
-            })
-                .then(response => response.json())
-                .then(data =>{
-                    console.log(data);
-                    if(data === 1){
-                        alert(`판매자 이름이 수정되었습니다.`);
-                        sellerNameCheck.readOnly = true;
-                        sellerNameCheck.style.border = "0";
-                        sellerNameCheck.classList.add('change');
-                        sellerNameCheck.classList.remove('save');
-                    }else{
-                        alert(`오류가 발생했습니다.`);
-                    }
-                })
-                .catch(err => console.log(err));
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data === 1) {
+                            alert(`판매자 이름이 수정되었습니다.`);
+                            sellerNameCheck.readOnly = true;
+                            sellerNameCheck.style.border = "0";
+                            sellerNameCheck.classList.add('change');
+                            sellerNameCheck.classList.remove('save');
+                        } else {
+                            alert(`오류가 발생했습니다.`);
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
         }
     }
     // 판매자 연락처 수정 및 유효성 검사
-    btnChangeSellerHp.onclick = function() {
+    if (btnChangeSellerHp) {
+        btnChangeSellerHp.onclick = function () {
 
-        const totalSellerHp = sellerHp1.value + "-" + sellerHp2.value + "-" + sellerHp3.value;
-        const value = totalSellerHp;
-        const type = "sellerHp"
+            const totalSellerHp = sellerHp1.value + "-" + sellerHp2.value + "-" + sellerHp3.value;
+            const value = totalSellerHp;
+            const type = "sellerHp"
 
-        if (!value.match(reHp)) {
-            sellerHpError.innerText = "유효하지 않은 전화번호입니다.";
-            sellerHpError.style.color = "red";
-            isHpOk = false;
-            return; // 여기서 끝!
-        }
-        // input태그 활성화
-        if (btnChangeSellerHp.className === 'change') {
-            sellerHp1.value = "";
-            sellerHp2.value = "";
-            sellerHp3.value = "";
-            sellerHp1.style.border = "1px solid #999";
-            sellerHp2.style.border = "1px solid #999";
-            sellerHp3.style.border = "1px solid #999";
-            sellerHp1.readOnly = false;
-            sellerHp2.readOnly = false;
-            sellerHp3.readOnly = false;
-            btnChangeSellerHp.classList.remove('change');
-            btnChangeSellerHp.classList.add('save');
-        } else if (btnChangeSellerHp.className === 'save') {
-            let savedSellerHp1 = sellerHp1.value;
-            let savedSellerHp2 = sellerHp2.value;
-            let savedSellerHp3 = sellerHp3.value;
-            let sellerHp = savedSellerHp1 + "-" + savedSellerHp2 + "-" + savedSellerHp3;
+            if (!value.match(reHp)) {
+                sellerHpError.innerText = "유효하지 않은 전화번호입니다.";
+                sellerHpError.style.color = "red";
+                isHpOk = false;
+                return; // 여기서 끝!
+            }
+            // input태그 활성화
+            if (btnChangeSellerHp.className === 'change') {
+                sellerHp1.value = "";
+                sellerHp2.value = "";
+                sellerHp3.value = "";
+                sellerHp1.style.border = "1px solid #999";
+                sellerHp2.style.border = "1px solid #999";
+                sellerHp3.style.border = "1px solid #999";
+                sellerHp1.readOnly = false;
+                sellerHp2.readOnly = false;
+                sellerHp3.readOnly = false;
+                btnChangeSellerHp.classList.remove('change');
+                btnChangeSellerHp.classList.add('save');
+            } else if (btnChangeSellerHp.className === 'save') {
+                let savedSellerHp1 = sellerHp1.value;
+                let savedSellerHp2 = sellerHp2.value;
+                let savedSellerHp3 = sellerHp3.value;
+                let sellerHp = savedSellerHp1 + "-" + savedSellerHp2 + "-" + savedSellerHp3;
 
-            const jsonData = {
-                "userId": userId,
-                "sellerHp": sellerHp
-            };
-            // 2. 중복 체크 (DB)
-            fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
+                const jsonData = {
+                    "userId": userId,
+                    "sellerHp": sellerHp
+                };
+                // 2. 중복 체크 (DB)
+                fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
 
-                    if (data.result > 0) {
-                        // 중복일 경우
-                        sellerHpError.innerText = "중복된 전화번호입니다.";
-                        sellerHpError.style.color = "red";
-                        isHpOk = false;
-                    } else {
-                        // 중복이 아닐경우
-                        sellerHpError.innerText = "사용가능한 전화입니다.";
-                        sellerHpError.style.color = "green";
-                        isHpOk = true;
+                        if (data.result > 0) {
+                            // 중복일 경우
+                            sellerHpError.innerText = "중복된 전화번호입니다.";
+                            sellerHpError.style.color = "red";
+                            isHpOk = false;
+                        } else {
+                            // 중복이 아닐경우
+                            sellerHpError.innerText = "사용가능한 전화입니다.";
+                            sellerHpError.style.color = "green";
+                            isHpOk = true;
 
-                        fetch("/lotteon/my/updateSellerHp", {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(jsonData)
-                        })
-                            .then(response => {
-                                if (response.ok) {
-                                    sellerHp1.readOnly = true;
-                                    sellerHp2.readOnly = true;
-                                    sellerHp3.readOnly = true;
-                                    sellerHp1.style.border = "0";
-                                    sellerHp2.style.border = "0";
-                                    sellerHp3.style.border = "0";
-                                    btnChangeSellerHp.classList.add('change');
-                                    btnChangeSellerHp.classList.remove('save');
-                                    alert("수정완료");
-                                } else {
-                                    alert("수정실패");
-                                }
-                                return response.json();
+                            fetch("/lotteon/my/updateSellerHp", {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify(jsonData)
                             })
-                            .then(data => {
-                            })
-                            .catch(err => console.log(err));
-                    }
-                })
-                .catch(err => console.log(err));
+                                .then(response => {
+                                    if (response.ok) {
+                                        sellerHp1.readOnly = true;
+                                        sellerHp2.readOnly = true;
+                                        sellerHp3.readOnly = true;
+                                        sellerHp1.style.border = "0";
+                                        sellerHp2.style.border = "0";
+                                        sellerHp3.style.border = "0";
+                                        btnChangeSellerHp.classList.add('change');
+                                        btnChangeSellerHp.classList.remove('save');
+                                        alert("수정완료");
+                                    } else {
+                                        alert("수정실패");
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                })
+                                .catch(err => console.log(err));
+                        }
+                    })
+                    .catch(err => console.log(err));
+            }
         }
     }
     // 회원 연락처 수정
@@ -509,6 +514,7 @@ window.onload = function (){
     const resultPw = document.getElementById('resultPw');
 
     // 비밀번호 유효성 체크
+    if(changePw){
     changePw.addEventListener('blur', function (){
         const value = changePw.value;
         const type = "userPw";
@@ -527,7 +533,7 @@ window.onload = function (){
             return; // 여기서 끝!
         }
     });
-
+    }
     btnChangePass.onclick = function (){
         // input태그 활성화
         if (btnChangePass.className === 'change') {

@@ -1,19 +1,25 @@
 package kr.co.lotteon.service;
 
+import com.querydsl.core.Tuple;
 import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Slf4j
@@ -25,11 +31,16 @@ public class MyService {
     private final UserCouponRepository userCouponRepository;
     private final OrdersRepository ordersRepository;
     private final OrderdetailRepository orderdetailRepository;
+    private final WishRepository wishRepository;
+
+    private final PdReviewRepository pdReviewRepository;
+    private final PdReviewImgRepository pdReviewImgRepository;
 
     private final CouponsRepository couponsRepository;
     private final ModelMapper modelMapper;
     private final UserPointRepository userPointRepository;
     private final SellerRepository sellerRepository;
+
 
 
     /*
@@ -242,9 +253,10 @@ public class MyService {
 
 
     // 마이페이지 - 쿠폰 조회
-    public List<Coupons> selectCoupons(String UserId){
+    public List<Coupons> selectCoupons(String userId){
+
         // userId로 userCoupon 조회
-        List<UserCoupon> selectUserCoupon = userCouponRepository.findByUserId(UserId);
+        List<UserCoupon> selectUserCoupon = userCouponRepository.findByUserId(userId);
 
         log.info("selectUserCoupon : " + selectUserCoupon);
 
@@ -319,18 +331,102 @@ public class MyService {
     }
 
     //myHome 주문내역
-    public  LinkedHashMap<Integer, List<OrderDetailDTO>> myHomeSelectOrder (String UserId){
+    public  LinkedHashMap<Integer, List<OrderDetailDTO>> myHomeSelectOrder (String userId){
 
-        return ordersRepository.selectMyOrdersHome(UserId);
+        return ordersRepository.selectMyOrdersHome(userId);
 
     }
 
     // my-review 작성
-    public void writeReview(PdReviewDTO pdReviewDTO, MultipartFile revImage){
+    @Value("${file.upload.path}")
+    private String fileUploadPath;
+    public String writeReview(PdReviewDTO pdReviewDTO, MultipartFile revImage){
         // 1. 이미지 저장
-        
-        // 2. 리뷰정보 DB 저장
+        String path = new File(fileUploadPath).getAbsolutePath();
 
+        String sName = null;
+        if(!revImage.isEmpty()){
+            String oName = revImage.getOriginalFilename();
+
+            String ext = oName.substring(oName.lastIndexOf("."));
+
+            sName = UUID.randomUUID().toString()+ext;
+
+            try{
+                Thumbnails.of(revImage.getInputStream())
+                        .size(100, 100)
+                        .toFile(new File(path, "review"+sName));
+
+                //2. 리뷰정보 DB저장
+                //review 저장
+                PdReview pdReview = modelMapper.map(pdReviewDTO, PdReview.class);
+
+                PdReview saveReview = pdReviewRepository.save(pdReview);
+
+                //review 이미지 저장
+                PdReviewImg pdReviewImg = new PdReviewImg();
+                pdReviewImg.setRevThumb("review"+sName);
+
+                pdReviewImg.setRevNo(saveReview.getRevNo());
+
+                pdReviewImgRepository.save(pdReviewImg);
+
+
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+        }else {
+            return null;
+        }
+
+        return null;
     }
 
+    //myReview 조회
+    public PageResponseDTO selectReivews(String userId, PageRequestDTO pageRequestDTO){
+
+        //페이징 처리
+        Pageable pageable = pageRequestDTO.getPageable("no");
+
+        return pdReviewRepository.selectReviews(userId, pageable, pageRequestDTO);
+    }
+
+    // my - wish 조회
+    public PageResponseDTO selectUserWish(String userId, PageRequestDTO pageRequestDTO) {
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<Tuple> userWish = wishRepository.selectUserWish(userId, pageRequestDTO, pageable);
+
+        List<WishDTO> wishDTOList = userWish.getContent().stream()
+                .map(tuple -> {
+                    Wish wish = tuple.get(0, Wish.class);
+                    String prodName = tuple.get(1, String.class);
+                    Integer prodPrice = tuple.get(2, Integer.class);
+                    String thumb190 = tuple.get(3, String.class);
+                    WishDTO wishDTO = modelMapper.map(wish, WishDTO.class);
+                    wishDTO.setProdName(prodName);
+                    wishDTO.setProdPrice(prodPrice);
+                    wishDTO.setThumb190(thumb190);
+                    return wishDTO;
+                        }
+                    ).toList();
+
+        log.info("wishDTOList : " + wishDTOList);
+
+        List<WishDTO> resultWishDTO = new ArrayList<>();
+        for (WishDTO eachWish : wishDTOList) {
+            if (eachWish.getOptNo() != 0) {
+                eachWish.setOptName(wishRepository.selectProdOption(eachWish.getOptNo()));
+            }else {
+                eachWish.setOptName("");
+            }
+            resultWishDTO.add(eachWish);
+        }
+
+        int total = (int) userWish.getTotalElements();
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(resultWishDTO)
+                .total(total)
+                .build();
+    }
 }

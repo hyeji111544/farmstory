@@ -6,6 +6,7 @@
     <title>롯데ON::1조 고객센터</title>
     <link rel="shortcut icon" type="image/x-icon" th:href="@{/images/favicon.ico}" />
     <link rel="stylesheet" th:href="@{/css/cs/style.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
 </head>
 <body>
 <div id="wrapper">
@@ -47,9 +48,9 @@
     <footer>
         <ul>
             <li><a th:href="@{/company/index}">회사소개</a></li>
-            <li><a th:href="@{/policy/buyer}">서비스이용약관</a></li>
-            <li><a th:href="@{/policy/privacy}">개인정보처리방침</a></li>
-            <li><a th:href="@{/policy/finance}">전자금융거래약관</a></li>
+            <li><a th:href="@{/policy/terms(cate=buyer)}">서비스이용약관</a></li>
+            <li><a th:href="@{/policy/terms(cate=privacy)}">개인정보처리방침</a></li>
+            <li><a th:href="@{/policy/terms(cate=finance)}">전자금융거래약관</a></li>
             <li><a href="#">[[${appInfo.version}]]</a></li>
         </ul>
         <div>

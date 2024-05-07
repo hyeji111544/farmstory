@@ -203,7 +203,10 @@ main table tr > td:nth-child(3) {width: 50px;}
 main table tr > td:nth-child(5) {width: 50px;}
 main table tr > td:nth-child(6) {width: 80px;}
 main table tr > td:nth-child(7) {width: 100px;}
-
+.percentAfter:after {content: '%'}
+.listPriceAfter:after {content: '원'}
+.afterPoint:after {content: 'P'}
+.stockAfter:after {content: '개'}
 .contentStyle {
     width: 750px!important;
     padding: 20px 10px;
@@ -378,7 +381,7 @@ header > div > .logo {
 .articleBox {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 516px;
     height: 200px;
     box-sizing: border-box;
     border: 1px solid #c4c4c4;
@@ -388,19 +391,18 @@ header > div > .logo {
     background-color: #fafafa;
 }
 .articleBox > p {
-    padding: 4px 0;
+    padding: 10px 0;
     overflow: hidden;
     cursor: pointer;
 }
 .articleBox > p > a {
     float: left;
     display: block;
-    width: 400px;
+    width: 360px;
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: left;
     overflow: hidden;
-    padding-top: 4px;
 }
 .articleBox > p > span {
     float: right;
@@ -411,12 +413,13 @@ header > div > .logo {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 120px;
+    height: 150px;
     box-sizing: border-box;
     margin-bottom: 10px;
 }
 .shopGroup {
     display: flex;
+    flex-direction: column;
     align-items: center;
     width: 260px;
     height: 100%;
@@ -426,30 +429,40 @@ header > div > .logo {
     border-radius: 4px;
     background-color: #fafafa;
 }
-.shopGroup > img {
-    width: 70px;
-    height: 70px;
+.shopGroup > div:nth-child(1){
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 0;
 }
 .shopGroup > div {
+    width: 238px;
+    display: flex;
+    align-items: center;
+}
+.shopGroup > div > img {
+    width: 90px;
+    height: 90px;
+}
+.shopGroup > div > div {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 0 6px;
+    padding: 0 10px;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
 }
-.shopGroup > div > p {
+.shopGroup > div > div > p {
     display: flex;
     font-size: 14px;
     font-weight: bold;
     margin: 2px 0;
     justify-content: space-between;
 }
-.shopGroup > div > p > span {
+.shopGroup > div > div > p > span {
     font-size: 14px;
 }
-
 
     /* 그래프 */
 .shopGraph {
@@ -1317,3 +1330,166 @@ header > div > .logo {
     background-color: transparent;
 }
 
+/* 회원목록, 판매자목록 테이블 */
+.userListTableTitle {
+    display: flex;
+    width: 100%;
+    padding: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    box-sizing: border-box;
+}
+.userListTableTitle > div {
+    font-size: 14px;
+    font-weight: bold;
+}
+.userListTableTitle > div:nth-child(1) {width: 50px;}
+.userListTableTitle > div:nth-child(2) {width: 200px;}
+.userListTableTitle > div:nth-child(3) {width: 200px;}
+.userListTableTitle > div:nth-child(4) {width: 300px;}
+.userListTableTitle > div:nth-child(5) {width: 150px;}
+.userListTableTitle > div:nth-child(6) {width: 130px;}
+
+
+.userListTableContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.userListTableRow {
+    display: flex;
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+.userListTableRow > div:nth-child(1) {width: 50px;}
+.userListTableRow > div:nth-child(2) {width: 200px;}
+.userListTableRow > div:nth-child(3) {width: 200px;}
+.userListTableRow > div:nth-child(4) {width: 300px;}
+.userListTableRow > div:nth-child(5) {width: 150px;}
+.userListTableRow > div:nth-child(6) {width: 130px; cursor: pointer}
+.userListTableDetail {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+    border: 2px solid #ececec;
+    border-top: 0;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+.userListTableDetailRow {
+    display: flex;
+    width: 75%;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    align-items: center;
+}
+.userListTableDetailRow > div:nth-child(1) {width: 150px; font-weight: bold}
+.userListTableDetailRow > div:nth-child(2) {width: 200px;}
+.userListTableDetailRow > div:nth-child(3) {width: 150px; font-weight: bold}
+.userListTableDetailRow > div:nth-child(4) {width: 200px;}
+.userListTableDetailRow > .countAfter:after {content: ' 건'}
+.userListTableDetailRow > .priceAfter:after {content: ' 원'}
+.popupStyle {
+    display: none;
+    position: fixed;
+    left: 45%;
+    top: 45%;
+    flex-wrap: wrap;
+    width: 400px;
+    height: auto;
+    padding: 10px 20px 20px 20px;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+.popupStyle > p {
+    width: 360px;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+.popupStyle > span {
+    width: 400px;
+    font-size: 14px;
+    margin-top: 20px;
+}
+.userRolePopup > div, .userStatusPopup > div {
+    display: inline-block;
+    width: 80px;
+    margin: 0 10px;
+    padding: 5px 0;
+    text-align: center;
+    box-sizing: border-box;
+    font-weight: bold;
+    font-size: 16px;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.userGradePopup > div {
+    display: inline-block;
+    width: 100px;
+    margin: 0 10px;
+    padding: 5px 0;
+    text-align: center;
+    box-sizing: border-box;
+    font-weight: bold;
+    font-size: 16px;
+    border: 1px solid #c4c4c4;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* admin - user - point */
+.userPointTableDetailRow {
+    display: flex;
+    width: 75%;
+    padding: 10px 20px;
+    border-bottom: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    align-items: center;
+}
+.userPointTableDetailRow:nth-child(1) > div {
+    font-weight: bold;
+}
+.userPointTableDetailRow > div {
+    text-align: center;
+}
+.userPointTableDetailRow > div:nth-child(1) {width: 200px; font-weight: bold}
+.userPointTableDetailRow > div:nth-child(2) {width: 100px; text-align: right}
+.pointAfter:after {content: 'P'}
+.userPointTableDetailRow > div:nth-child(3) {width: 250px;}
+.userPointTableDetailRow > div:nth-child(4) {width: 150px;}
+
+.changePoint > div {
+    margin-bottom: 10px;
+}
+.changePoint > div > span {
+    display: inline-block;
+    width: 80px;
+}
+.changePoint > div:nth-child(3) > input {
+    width: 100px;
+}
+.changePoint > div:nth-child(4) > input {
+    width: 250px;
+}
+.changePoint > span {
+    padding: 6px 10px;
+    align-content: center;
+    text-align: center;
+    cursor: pointer;
+    margin: 0 100px;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+}
