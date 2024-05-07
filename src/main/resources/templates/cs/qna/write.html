@@ -19,7 +19,7 @@
           child.remove();
         })
         // 새로운 옵션 삽입
-        const TypeOption = `<option>1차선택</option>
+        const TypeOption = `<option>2차선택</option>
                                         <option value="cpregi">등록방법</option>
                                         <option value="cplimit">유효기간</option>
                                         <option value="cpevent">이벤트기간</option>
@@ -32,7 +32,7 @@
           child.remove();
         })
         // 새로운 옵션 삽입
-        const TypeOption = `<option>1차선택</option>
+        const TypeOption = `<option>2차선택</option>
                                         <option value="regi">가입</option>
                                         <option value="leave">탈퇴</option>
                                         <option value="info">회원정보</option>
@@ -44,7 +44,7 @@
           child.remove();
         })
         // 새로운 옵션 삽입
-        const TypeOption = `<option>1차선택</option>
+        const TypeOption = `<option>2차선택</option>
                                         <option value="list">주문내역</option>
                                         <option value="way">결제방법</option>
                                         <option value="payment">결제수단</option>
@@ -56,7 +56,7 @@
           child.remove();
         })
         // 새로운 옵션 삽입
-        const TypeOption = `<option>1차선택</option>
+        const TypeOption = `<option>2차선택</option>
                                         <option value="deldate">배송일</option>
                                         <option value="deldelay">배송지연</option>
                                         <option value="delchange">배송지변경</option>
@@ -68,7 +68,7 @@
           child.remove();
         })
         // 새로운 옵션 삽입
-        const TypeOption = `<option>1차선택</option>
+        const TypeOption = `<option>2차선택</option>
                                         <option value="return">반품신청</option>
                                         <option value="ocancel">주문취소</option>
                                         <option value="refund">환불신청</option>
@@ -80,7 +80,7 @@
           child.remove();
         })
         // 새로운 옵션 삽입
-        const TypeOption = `<option>1차선택</option>
+        const TypeOption = `<option>2차선택</option>
                                         <option value="tlist">숙박시설</option>
                                         <option value="treco">여행지추천</option>
                                         <option value="tway">결제방법</option>
@@ -92,13 +92,23 @@
           child.remove();
         })
         // 새로운 옵션 삽입
-        const TypeOption = `<option>1차선택</option>
+        const TypeOption = `<option>2차선택</option>
                                         <option value="care">주의사항</option>
                                         <option value="sway">결제방법</option>
                                         <option value="sacc">입금계좌</option>
                                         <option value="sfee">수수료</option>`;
         qnaType.insertAdjacentHTML('beforeend', TypeOption);
       }
+    }
+    function checkSelection() {
+      const cate = document.getElementsByName('qnaCate')[0].value;
+      const type = document.getElementsByName('qnaType')[0].value;
+
+      if (cate === '1차선택' || type === '2차선택') {
+        alert('문의유형의 모든 항목을 선택해주세요.');
+        return false;
+      }
+      return true;
     }
   </script>
         <div class="qna">
@@ -125,7 +135,7 @@
                 <h1>회원</h1>
                 <h2>회원 관련 문의내용 입니다.</h2>
               </nav>
-              <form th:action="@{/cs/qna/write}" method="post">
+              <form th:action="@{/cs/qna/write}" method="post" onsubmit="return checkSelection()">
                 <input type="hidden" name="qnaId" th:value="gudals1234" />
                 <input type="hidden" name="qnaStatus" th:value="검토중" />
                 <table>

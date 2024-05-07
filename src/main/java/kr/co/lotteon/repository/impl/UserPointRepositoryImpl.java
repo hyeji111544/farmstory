@@ -1,20 +1,24 @@
 package kr.co.lotteon.repository.impl;
 
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.PageRequestDTO;
-import kr.co.lotteon.entity.PointHistory;
-import kr.co.lotteon.entity.QPointHistory;
-import kr.co.lotteon.entity.QUserPoint;
+import kr.co.lotteon.dto.PageResponseDTO;
+import kr.co.lotteon.dto.PointHistoryDTO;
+import kr.co.lotteon.dto.UserPointDTO;
+import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.custom.UserPointRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -24,6 +28,8 @@ public class UserPointRepositoryImpl implements UserPointRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
     private final QUserPoint qUserPoint = QUserPoint.userPoint;
     private final QPointHistory qPointHistory = QPointHistory.pointHistory;
+    private final QUser qUser = QUser.user;
+    private final ModelMapper modelMapper;
     
     //My/point 내역 조회
     public Page<PointHistory> selectPoints(String userId, PageRequestDTO pageRequestDTO, Pageable pageable) {
@@ -143,6 +149,56 @@ public class UserPointRepositoryImpl implements UserPointRepositoryCustom {
 
     log.info("myPointHistoryResult" +myPointHistoryResult);
     return myPointHistoryResult;
+    }
 
+    // 관리자 - 회원관리 - 포인트관리 (ㅎ) //
+    public PageResponseDTO userPointControl(PageRequestDTO pageRequestDTO, Pageable pageable) {
+
+        QueryResults<Tuple> pointResult = jpaQueryFactory
+                .select(qUserPoint, qUser.userName)
+                .from(qUserPoint)
+                .join(qUser)
+                .on(qUserPoint.userId.eq(qUser.userId))
+                .orderBy(qUserPoint.pointNo.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Tuple> userPointList = pointResult.getResults();
+        int total = (int) pointResult.getTotal();
+        Page<Tuple> userPointPage = new PageImpl<>(userPointList, pageable, total);
+
+        List<UserPointDTO> userPointDTOList = userPointPage.getContent().stream()
+                .map(tuple -> {
+                    UserPoint userPoint = tuple.get(0, UserPoint.class);
+                    String userName = tuple.get(1, String.class);
+                    UserPointDTO userPointDTO = modelMapper.map(userPoint, UserPointDTO.class);
+                    userPointDTO.setUserName(userName);
+                    return userPointDTO;
+                }).toList();
+
+        List<UserPointDTO> resultPointDTO = new ArrayList<>();
+        for (UserPointDTO eachPoint : userPointDTOList) {
+            List<PointHistory> pointHistoryList = jpaQueryFactory
+                    .selectFrom(qPointHistory)
+                    .where(qPointHistory.pointNo.eq(eachPoint.getPointNo()))
+                    .orderBy(qPointHistory.pointHisNo.desc())
+                    .limit(5)
+                    .fetch();
+
+            List<PointHistoryDTO> pointHistoryDTO = new ArrayList<>();
+            for (PointHistory eachHistory : pointHistoryList) {
+                PointHistoryDTO historyDTO = modelMapper.map(eachHistory, PointHistoryDTO.class);
+                pointHistoryDTO.add(historyDTO);
+            }
+            eachPoint.setHistoryDTOList(pointHistoryDTO);
+            resultPointDTO.add(eachPoint);
+        }
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(resultPointDTO)
+                .total((int)userPointPage.getTotalElements())
+                .build();
     }
 }

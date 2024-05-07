@@ -1535,23 +1535,57 @@ footer p > strong {
 }
 
 /* my/point 커스텀 */
-.PointListContent > td:nth-child(1){
+.PointList {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.PointList > div {
+    display: flex;
+}
+.PointList > div:nth-child(1) > div {
+    font-weight: bold;
     text-align: center;
+    background-color: #f5f5f5;
+}
+.PointList > div:nth-child(1) > div:nth-child(1) {border-top-left-radius: 10px}
+.PointList > div:nth-child(1) > div:nth-last-child(1) {border-top-right-radius: 10px}
+.PointList > div > div {
+    font-size: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #aaa;
+}
+.PointList > div > div:nth-child(1) {width: 250px; text-align: center}
+.PointList > div > div:nth-child(2) {width: 150px; text-align: center}
+.PointList > div > div:nth-child(3) {width: 160px; text-align: right}
+.PointList > div > div:nth-child(4) {width: 250px; text-align: center}
+.pointAfter:after {
+    content: 'P';
 }
 
-.PointListContent > td:nth-child(2){
-    text-align: center;
+.PointList > .page {
+    display: flex;
+    margin: 10px 0;
+    justify-content: center;
+}
+.PointList > .page > a {
+    padding: 4px 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+.PointList > .page > a:hover {
+    background-color: #c9c9c9;
+}
+.PointList > .page > .on {
+    background-color: #c9c9c9;
 }
 
-.PointListContent > td:nth-child(3){
-    text-align: right;
-}
-
-.PointListContent > td:nth-child(4){
-    text-align: right;
-}
-
-/* my/order 커스텀 */
+    /* my/order 커스텀 */
 .myOrderSearch {
     display: flex;
     justify-content: left;
@@ -1713,4 +1747,78 @@ footer p > strong {
 .star:hover,
 .star.clicked {
     color: #fff400;
+}
+
+/* my - wish */
+.wishTable {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.wishTable > div {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #aaa;
+}
+.wishTable > div > input {
+    width: 20px;
+    height: 20px;
+    margin: 15px;
+}
+.wishTable > div:nth-child(1) {
+    height: 50px;
+    background-color: #f5f5f5;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.wishTable > div:nth-child(1) > div {font-size: 14px; padding-right: 10px}
+.wishTable > .wishContent > img {width: 90px; padding: 10px}
+.wishTable > .wishContent > div:nth-child(3) {width: 500px;}
+.wishTable > .wishContent > div:nth-child(4) {width: 150px; display: flex; flex-direction: column}
+.wishTable > .wishContent > div:nth-child(3) > p {
+    padding: 4px 0;
+}
+.wishTable > .wishContent > div:nth-child(3) > a {
+    padding: 4px 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+.wishTable > .wishContent > div:nth-child(3) > p:nth-child(2) {
+    color: #cecece;
+}
+.wishTable > .wishContent > div:nth-child(3) > p:nth-child(3):before {
+    content: '수량 : ';
+}
+.wishTable > .wishContent > div:nth-child(3) > p:nth-child(4):after {
+    content: '원';
+}
+.wishTable > .wishContent > div:nth-child(4) > span {
+    width: 100px;
+    margin-top: 10px;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+}
+.wishTable > .page {
+    display: flex;
+    margin: 10px 0;
+    justify-content: center;
+}
+.wishTable > .page > a {
+    padding: 4px 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+.wishTable > .page > a:hover {
+    background-color: #c9c9c9;
+}
+.wishTable > .page > .on {
+    background-color: #c9c9c9;
 }

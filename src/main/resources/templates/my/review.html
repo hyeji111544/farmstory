@@ -19,7 +19,7 @@
             <ul>
                 <span class="menu_else"></span>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <!--<li><a href="./favorite.html">관심상품</a></li>-->
+                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
                 <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
                 <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
@@ -35,16 +35,24 @@
                     <table border="0">
                         <tr >
                             <th>번호</th>
+                            <th>이미지</th>
                             <th>상품명</th>
                             <th>내용</th>
                             <th>평점</th>
                             <th>작성일</th>
                         </tr>
                         <tr>
-                            <td class="no" >5</td>
-                            <td class="prodName"><a href="#">상품명</a></td>
+                            <td class="no">5</td>
+                            <td>
+                                <img th:src="@{/images/맹구.jpg}" style="width: 90px;">
+                            </td>
+                            <td class="prodName">
+                                <a href="#">상품명</a>
+                            </td>
                             <td class="content">배송이 빠릅니다. 잘 사용하겠습니다.</td>
-                            <td class="score"><span class="rating star1">평점</span></td>
+                            <td class="score">
+                                <span class="rating star1">평점</span>
+                            </td>
                             <td class="date">2024-12-12</td>
                         </tr>
                     </table>

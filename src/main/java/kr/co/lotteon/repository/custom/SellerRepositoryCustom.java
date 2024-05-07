@@ -1,9 +1,7 @@
 package kr.co.lotteon.repository.custom;
 
 import com.querydsl.core.Tuple;
-import kr.co.lotteon.dto.PageRequestDTO;
-import kr.co.lotteon.dto.ProductPageRequestDTO;
-import kr.co.lotteon.dto.SellerInfoDTO;
+import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.OrderDetail;
 import kr.co.lotteon.entity.Seller;
 import org.springframework.data.domain.Page;
@@ -49,4 +47,7 @@ public interface SellerRepositoryCustom {
 /*
     // 마이페이지 판매자 팩스번호 수정
     public long updateSellerFaxByUserId(String userId, String fax);*/
+
+    // 관리자 - 상점관리 - 판매자현황 조회
+    public PageResponseDTO selectSellerList(Pageable pageable, PageRequestDTO pageRequestDTO);
 }

@@ -230,7 +230,7 @@ public class OrderService {
         if ("type4".equals(orderPay)){
             orders.put("orderStatus", "입금대기");
         }else {
-            orders.put("orderStatus", "결제완료");
+            orders.put("orderStatus", "배송준비");
         }
 
         Orders ordered = saveOrders(orders);
@@ -249,7 +249,7 @@ public class OrderService {
             if ("type4".equals(orderPay)){
                 orderDetail.put("detailStatus", "입금대기");
             }else {
-                orderDetail.put("detailStatus", "상품준비");
+                orderDetail.put("detailStatus", "배송준비");
             }
 
             orderDetail.put("detailPoint", String.valueOf(detailPoint));

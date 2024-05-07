@@ -10,4 +10,9 @@
         select * from terms
     </select>
 
+    <!-- 카테고리별 이용약관 출력-->
+    <select id="selectTermsForPolicy" resultType="String">
+        select ${cate} from terms
+    </select>
+
 </mapper>

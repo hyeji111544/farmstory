@@ -218,13 +218,13 @@ public class SellerService {
         orderByCondition.put("refund", 0);
         // for문으로 상태별로 금액 합산
         for (OrderDetail order : ordersByPeriod) {
-            if (order.getDetailStatus().equals("배송완료")) {
+            if (order.getDetailStatus().contains("배송")) {
                 int eachPrice = order.getDetailPrice();
                 orderByCondition.put("sales", orderByCondition.get("sales")+eachPrice);
-            }else if (order.getDetailStatus().equals("취소완료")) {
+            }else if (order.getDetailStatus().contains("취소")) {
                 int eachPrice = order.getDetailPrice();
                 orderByCondition.put("cancel", orderByCondition.get("cancel")+eachPrice);
-            }else if (order.getDetailStatus().equals("환불완료")) {
+            }else if (order.getDetailStatus().contains("환불")) {
                 int eachPrice = order.getDetailPrice();
                 orderByCondition.put("refund", orderByCondition.get("refund")+eachPrice);
             }
@@ -290,4 +290,12 @@ public class SellerService {
             return 0;
         }
     }
+
+    // 관리자 - 상점관리 - 판매자현황 //
+    public PageResponseDTO selectSellerList(PageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("No");
+
+        return sellerRepository.selectSellerList(pageable, pageRequestDTO);
+    }
+
 }

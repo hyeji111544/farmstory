@@ -4,6 +4,7 @@ package kr.co.lotteon.service.admin;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Banner;
 import kr.co.lotteon.entity.Cate02;
+import kr.co.lotteon.entity.OrderDetail;
 import kr.co.lotteon.repository.BannerRepository;
 import kr.co.lotteon.repository.Cate02Repository;
 import net.coobird.thumbnailator.Thumbnails;
@@ -22,7 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -81,12 +86,12 @@ public class AdminService {
                 .build();
     }
     // 배너 DB 저장 메서드
-    public Banner bannerInsert(BannerDTO bannerDTO) {
+    public BannerDTO  bannerInsert(BannerDTO bannerDTO) {
         Banner banner = modelMapper.map(bannerDTO, Banner.class);
         Banner saveBanner = bannerRepository.save(banner);
 
         log.info("saveBanner : " + saveBanner);
-        return saveBanner;
+        return modelMapper.map(saveBanner, BannerDTO.class);
     }
     // 배너 목록 조회 메서드
     public List<BannerDTO> bannerList(String banImgCate) {

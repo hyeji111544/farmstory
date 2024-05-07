@@ -62,21 +62,15 @@ public class SellerController {
     @GetMapping("/seller/product/list")
     public String sellerProdList(String prodSeller, Model model, ProductPageRequestDTO productPageRequestDTO){
 
-        log.info("productPageRequestDTO.getKeyword() : " + productPageRequestDTO.getKeyword());
-        log.info("productPageRequestDTO.getType() : " + productPageRequestDTO.getType());
         ProductPageResponseDTO pageResponseDTO = null;
-
         if(productPageRequestDTO.getKeyword() == null) {
             // 판매자의 전체 상품 목록 조회
             pageResponseDTO = sellerService.selectProductForSeller(prodSeller, productPageRequestDTO);
         }else {
-            log.info("하이");
             // 판매자의 검색 상품 목록 조회
             pageResponseDTO = sellerService.searchProductForSeller(prodSeller, productPageRequestDTO);
         }
-        log.info("pageResponseDTO : " + pageResponseDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
-
         return "/seller/product/list";
     }
 

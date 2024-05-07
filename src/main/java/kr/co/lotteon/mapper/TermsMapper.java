@@ -9,4 +9,7 @@ public interface TermsMapper {
     //이용약관 동의 출력
     public TermsDTO selectTerms();
 
+    //이용약관 동의 출력
+    public String selectTermsForPolicy(String cate);
+
 }
