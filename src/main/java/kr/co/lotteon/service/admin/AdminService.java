@@ -226,4 +226,17 @@ public class AdminService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
         }
     }
+    public ResponseEntity<?> updateMainBanners(int banNo, String banUsable){
+        long result = bannerRepository.updateBannerUsable(banNo, banUsable);
+        Map<String, Integer> resultMap = new HashMap<>();
+        if(result > 0){
+            //업데이트가 됐을경우
+            resultMap.put("result", 1);
+            return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+        }else{
+            //업데이트 실패
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
 }

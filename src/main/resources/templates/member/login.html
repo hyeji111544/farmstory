@@ -102,7 +102,9 @@
                 <a th:href="@{/member/findPw}">비밀번호 찾기</a>
 
             </form>
-            <img th:src="@{/images/member/member_certifi_logo.gif}" alt="banner">
+            <div th:each="banner : ${bannerMember1}">
+                <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
+            </div>
         </div>
     </main>
 <!--내용 끝-->
