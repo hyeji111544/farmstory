@@ -28,11 +28,11 @@ public class PdReviewRepositoryImpl implements PdReviewRepositoryCustom {
     private final QProduct qProduct = QProduct.product;
     private final ModelMapper modelMapper;
 
-    //my/Review 조화
-    public PageResponseDTO selectReviews(String UserId, Pageable pageable, PageRequestDTO pageRequestDTO) {
+    //my/Review 조회
+    public PageResponseDTO selectReviews(String userId, Pageable pageable, PageRequestDTO pageRequestDTO) {
         log.info("IMPL 시작");
+        log.info("UserId : " + userId);
 
-        log.info("UserId : " + UserId);
 
         // SELECT * FROM `pdreview` AS a JOIN `pdreview` AS b ON a.revNo = b.revNo WHERE a.userid = '?';
         QueryResults<Tuple> selectPdReviews = jpaQueryFactory
@@ -40,7 +40,7 @@ public class PdReviewRepositoryImpl implements PdReviewRepositoryCustom {
                 .from(qPdReview)
                 .join(qPdReviewImg)
                 .on(qPdReview.revNo.eq(qPdReviewImg.revNo))
-                .where(qPdReview.userId.eq(UserId))
+                .where(qPdReview.userId.eq(userId))
                 .orderBy(qPdReview.revAddDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -60,7 +60,7 @@ public class PdReviewRepositoryImpl implements PdReviewRepositoryCustom {
                     PdReviewImg pdReviewImg = tuple.get(1, PdReviewImg.class);
                     PdReviewDTO pdReviewDTO = modelMapper.map(pdReview, PdReviewDTO.class);
                     pdReviewDTO.setRevThumb(pdReviewImg.getRevThumb());
-                    pdReviewDTO.setUserId(UserId);
+                    pdReviewDTO.setUserId(userId);
                     return pdReviewDTO;
                 }).toList();
 
@@ -90,4 +90,6 @@ public class PdReviewRepositoryImpl implements PdReviewRepositoryCustom {
                 .total(total)
                 .build();
     }
+
+
 }

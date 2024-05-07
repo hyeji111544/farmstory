@@ -14,4 +14,5 @@ public interface OrdersRepositoryCustom {
     public MyOrderPageResponseDTO selectMyOrdersByDate(String userId,Pageable pageable,MyOrderPageRequestDTO myOrderPageRequestDTO);
 
     LinkedHashMap<Integer, List<OrderDetailDTO>> selectMyOrdersHome(String userId);
+
 }

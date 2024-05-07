@@ -42,6 +42,7 @@ public class MyService {
     private final SellerRepository sellerRepository;
 
 
+
     /*
         마이페이지 출력을 위한 service
          - user_id로 user테이블 조회 후 userDTO 반환
@@ -252,9 +253,10 @@ public class MyService {
 
 
     // 마이페이지 - 쿠폰 조회
-    public List<Coupons> selectCoupons(String UserId){
+    public List<Coupons> selectCoupons(String userId){
+
         // userId로 userCoupon 조회
-        List<UserCoupon> selectUserCoupon = userCouponRepository.findByUserId(UserId);
+        List<UserCoupon> selectUserCoupon = userCouponRepository.findByUserId(userId);
 
         log.info("selectUserCoupon : " + selectUserCoupon);
 
@@ -329,9 +331,9 @@ public class MyService {
     }
 
     //myHome 주문내역
-    public  LinkedHashMap<Integer, List<OrderDetailDTO>> myHomeSelectOrder (String UserId){
+    public  LinkedHashMap<Integer, List<OrderDetailDTO>> myHomeSelectOrder (String userId){
 
-        return ordersRepository.selectMyOrdersHome(UserId);
+        return ordersRepository.selectMyOrdersHome(userId);
 
     }
 
@@ -381,12 +383,12 @@ public class MyService {
     }
 
     //myReview 조회
-    public PageResponseDTO selectReivews(String UserId, PageRequestDTO pageRequestDTO){
+    public PageResponseDTO selectReivews(String userId, PageRequestDTO pageRequestDTO){
 
         //페이징 처리
         Pageable pageable = pageRequestDTO.getPageable("no");
 
-        return pdReviewRepository.selectReviews(UserId, pageable, pageRequestDTO);
+        return pdReviewRepository.selectReviews(userId, pageable, pageRequestDTO);
     }
 
     // my - wish 조회

@@ -3,9 +3,36 @@
     layout:decorate="~{/layout/myLayout.html}">
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
+
+        <script>
+            window.onload = function () {
+                let rating = document.getElementsByClassName("rating");
+                Array.from(rating).forEach(function (element) {
+                    const revScore = parseInt(element.innerText);
+                    switch (revScore){
+                        case 1:
+                            element.classList.add('star1');
+                            break;
+                        case 2:
+                            element.classList.add('star2');
+                            break;
+                        case 3:
+                            element.classList.add('star3');
+                            break;
+                        case 4:
+                            element.classList.add('star4');
+                            break;
+                        case 5:
+                            element.classList.add('star5');
+                            break;
+                    }
+                });
+            }
+        </script>
+
         <nav>
             <div>
-                <a href="./home.html"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
+                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
                 <ol>
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
@@ -41,19 +68,19 @@
                             <th>평점</th>
                             <th>작성일</th>
                         </tr>
-                        <tr>
-                            <td class="no">5</td>
+                        <tr th:each="eachReviewPage : ${myReviewPage.dtoList} ">
+                            <td class="no" th:text="${eachReviewPage.revNo}"></td>
                             <td>
-                                <img th:src="@{/images/맹구.jpg}" style="width: 90px;">
+                                <img th:src="@{/uploads/__${eachReviewPage.revThumb}__}" style="width: 90px;">
                             </td>
                             <td class="prodName">
-                                <a href="#">상품명</a>
+                                <a href="#" th:text="${eachReviewPage.prodName}"></a>
                             </td>
-                            <td class="content">배송이 빠릅니다. 잘 사용하겠습니다.</td>
+                            <td class="content" th:text="${eachReviewPage.revContent}"></td>
                             <td class="score">
-                                <span class="rating star1">평점</span>
+                                <span class="rating" th:text="${eachReviewPage.revScore}"></span>
                             </td>
-                            <td class="date">2024-12-12</td>
+                            <td class="date" th:text="${#temporals.format(eachReviewPage.revAddDate, 'yyyy-MM-dd')}"></td>
                         </tr>
                     </table>
 
