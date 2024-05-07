@@ -66,4 +66,19 @@ public class BannerRepositoryImpl implements BannerRepositoryCustom {
                 .fetch();
     }
 
+    @Transactional
+    public long updateBannerUsable(int banNo, String banUsable) {
+        try{
+            long result = jpaQueryFactory
+                    .update(qBanner)
+                    .set(qBanner.banUsable, banUsable)
+                    .where(qBanner.banNo.eq(banNo))
+                    .execute();
+
+            return result;
+        }catch(Exception e){
+            log.error("error msg :" + e.getMessage());
+            return -1;
+        }
+    }
 }

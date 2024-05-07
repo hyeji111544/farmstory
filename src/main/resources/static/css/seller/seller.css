@@ -423,7 +423,6 @@ header > div > .logo {
     align-items: center;
     width: 260px;
     height: 100%;
-    padding: 0 10px;
     box-sizing: border-box;
     border: 1px solid #c4c4c4;
     border-radius: 4px;
@@ -439,6 +438,7 @@ header > div > .logo {
     width: 238px;
     display: flex;
     align-items: center;
+    margin: 0 10px;
 }
 .shopGroup > div > img {
     width: 90px;
@@ -478,11 +478,12 @@ header > div > .logo {
 .graphTitle {
     display: flex;
     justify-content: center;
-    width: 100%;
     height: 60px;
     align-items: center;
     box-sizing: border-box;
     padding: 10px;
+    margin: 0 400px;
+    border-bottom: 1px solid #909090;
 }
 .graphContent {
     display: flex;
@@ -494,17 +495,17 @@ header > div > .logo {
 }
 .graphBtn {
     width: 150px;
-    height: 40px;
-    border: 1px solid red;
     border-radius: 4px;
-    margin: 20px;
     text-align: center;
-    line-height: 40px;
     font-size: 16px;
     cursor: pointer;
+    padding: 10px;
+    margin: 20px 0;
+    font-weight: bold;
 }
 .graphBtn:hover {
-    background-color: red;
+    color: white;
+    background-color: #909090;
 }
 
 #admin-cs-list > section > .qna tr > td:nth-child(5) {width: 80px; text-align: left;}

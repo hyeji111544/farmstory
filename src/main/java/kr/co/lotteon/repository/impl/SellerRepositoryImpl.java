@@ -271,6 +271,9 @@ public class SellerRepositoryImpl implements SellerRepositoryCustom {
 
         }else if(type.equals("prodCompany")){
             expression = qProduct.prodCompany.contains(keyword);
+
+        }else if(type.equals("sellerNo")){
+            expression = qProduct.prodSeller.contains(keyword);
         }
 
         QueryResults<Tuple> selectProducts = null;
