@@ -26,18 +26,20 @@
                 }
 
 
-                new Chart(document.getElementById("line-chart1"), {
+                const ctx = document.getElementById('line-chart1');
+                const ctx2 = document.getElementById('line-chart2');
+
+                new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: dateArray,
                         datasets: [{
+                            label: '',
                             data: countArray,
-                            label: "Africa",
-                            borderColor: "#3e95cd",
-                            fill: false,
-                            pointStyle: 'triangle'
-                        }
-                        ]
+                            borderWidth: 1,
+                            backgroundColor: '#36AE7C',
+                            borderColor: '#36AE7C'
+                        }]
                     },
                     options: {
                         responsive: false,
@@ -46,24 +48,33 @@
                             text: '최근 한달 주문 건수',
                             fontSize: 20,
                             color: '#111',
-                        },legend: {
-                            display: false // 라벨 숨기기
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // 라벨 숨기기
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    stepSize: 1 // 눈금의 간격
+                                },
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
 
-                new Chart(document.getElementById("line-chart2"), {
+                new Chart(ctx2, {
                     type: 'line',
                     data: {
                         labels: dateArray,
                         datasets: [{
                             data: priceArray,
-                            label: "Africa",
-                            borderColor: "#3e95cd",
-                            fill: false,
-                            pointStyle: 'triangle'
-                        }
-                        ]
+                            borderWidth: 1,
+                            backgroundColor: '#187498',
+                            borderColor: '#187498'
+                        }]
                     },
                     options: {
                         responsive: false,
@@ -72,8 +83,19 @@
                             text: '최근 한달 주문 금액',
                             fontSize: 20,
                             color: '#111',
-                        },legend: {
-                            display: false // 라벨 숨기기
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // 라벨 숨기기
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    stepSize: 100000 // 눈금의 간격
+                                },
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
@@ -167,10 +189,10 @@
                         <div class="graphBtn" onclick="viewPriceGraph()">매출 금액</div>
                     </div>
                     <div class="graphContent countGraph">
-                        <canvas id="line-chart1" width="800" height="250"></canvas>
+                        <canvas id="line-chart1" width="1000" height="250"></canvas>
                     </div>
                     <div class="graphContent priceGraph" style="display: none">
-                        <canvas id="line-chart2" width="800" height="250"></canvas>
+                        <canvas id="line-chart2" width="1000" height="250"></canvas>
                     </div>
                 </div>
             </div>

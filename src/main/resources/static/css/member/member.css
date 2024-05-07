@@ -522,6 +522,19 @@ header {
   cursor: pointer;
 }
 
+.findBtn {
+  width: 150px;
+  display: inline-block;
+  font-size: 20px;
+  text-align: center;
+  background: #ef3f43;
+  color: #fff;
+  border-radius: 2px;
+  padding: 10px;
+  margin: 30px 20px 0 20px;
+  cursor: pointer;
+}
+
 /* member > .registerSeller */
 #member > .registerSeller {
   width: 900px;
