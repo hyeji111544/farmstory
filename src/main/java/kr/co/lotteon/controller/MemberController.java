@@ -2,12 +2,14 @@ package kr.co.lotteon.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import kr.co.lotteon.dto.BannerDTO;
 import kr.co.lotteon.dto.SellerDTO;
 import kr.co.lotteon.dto.TermsDTO;
 import kr.co.lotteon.dto.UserDTO;
 import kr.co.lotteon.entity.User;
 import kr.co.lotteon.service.MemberService;
 import kr.co.lotteon.service.TermsService;
+import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,10 +30,17 @@ public class MemberController {
 
     private final TermsService termsService;
     private final MemberService memberService;
+    private final AdminService adminService;
 
     // 로그인 이동
     @GetMapping("/member/login")
-    public String login(){
+    public String login(Model model){
+        String bannerMember = "member1";
+
+        List<BannerDTO> bannerMember1 = adminService.selectBanners(bannerMember);
+
+        model.addAttribute("bannerMember1", bannerMember1);
+
         return "/member/login";
     }
     

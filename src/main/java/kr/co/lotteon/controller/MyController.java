@@ -1,11 +1,8 @@
 package kr.co.lotteon.controller;
 
-import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
-import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.repository.UserPointRepository;
-import kr.co.lotteon.repository.pointHistoryRepository;
 import kr.co.lotteon.service.MyService;
 import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +74,10 @@ public class MyController {
 
         log.info("haveCoupons" +haveCoupons);
 
+        String bannerMy = "my1";
+        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
+
+        model.addAttribute("bannerMy1", bannerMy1);
         model.addAttribute("haveCoupons", haveCoupons); // Map<String ,List<Coupons>>  / Map<String, int>
         return "/my/coupon";
     }
@@ -90,12 +88,17 @@ public class MyController {
         Map<String, Object> result = myService.selectUserInfo(userId);
         UserDTO userDTO = (UserDTO) result.get("user");
         SellerDTO sellerDTO = (SellerDTO) result.get("seller");
+        
+        String bannerMy = "my1";
+        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
 
         log.info("userDTO : " + userDTO);
         log.info("sellerDTO : " + sellerDTO);
+        log.info("bannerMy1 : " + bannerMy1);
 
         model.addAttribute("userDTO", userDTO);
         model.addAttribute("sellerDTO", sellerDTO);
+        model.addAttribute("bannerMy1", bannerMy1);
         return "/my/info";
     }
 
@@ -197,9 +200,11 @@ public class MyController {
                           PageRequestDTO pageRequestDTO){
 
         PageResponseDTO pageResponseDTO = myService.selectPoints(userId, pageRequestDTO);
-        //userPointRepository.selectPoints(userId, pageRequestDTO);
 
-        log.info("pageResponseDTO : " +pageResponseDTO);
+        String bannerMy = "my1";
+        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
+
+        model.addAttribute("bannerMy1", bannerMy1);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
         return "/my/point";
@@ -207,7 +212,11 @@ public class MyController {
 
     //마이페이지-QnA 이동
     @GetMapping("/my/qna")
-    public String myQna(){
+    public String myQna(Model model){
+        String bannerMy = "my1";
+        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
+
+        model.addAttribute("bannerMy1", bannerMy1);
         return "/my/qna";
     }
 
@@ -227,13 +236,12 @@ public class MyController {
     //마이페이지-리뷰 이동
     @GetMapping("/my/review")
     public String myReview(String userId, Model model, PageRequestDTO pageRequestDTO){
-
-        log.info("myReview Controller");
-
         PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
+        String bannerMy = "my1";
 
-        log.info("myReviewPage" +myReviewPage);
+        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
 
+        model.addAttribute("bannerMy1", bannerMy1);
         model.addAttribute("myReviewPage", myReviewPage);
 
 
@@ -244,7 +252,10 @@ public class MyController {
     @GetMapping("/my/wish")
     public String myWish(String userId, Model model, PageRequestDTO pageRequestDTO){
         PageResponseDTO wishList = myService.selectUserWish(userId, pageRequestDTO);
+        String bannerMy = "my1";
+        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
 
+        model.addAttribute("bannerMy1", bannerMy1);
         model.addAttribute("wishList", wishList);
         return "/my/wish";
     }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.io.Console;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,8 @@ public class MainController {
         String prodHit      = "prodHit";
         String bannerMain2  = "main2";
         String bannerMain1  = "main1";
+        log.info("bannerMain2222 : " + bannerMain2);
+        log.info("bannerMain1111 : " + bannerMain1);
         List<ProductDTO> discountList = productService.selectIndexProducts(prodDiscount);
         List<ProductDTO> soldList = productService.selectIndexProducts(prodSold);
         List<ProductDTO> rDateList = productService.selectIndexProducts(prodRdate);
