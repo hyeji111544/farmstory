@@ -7,7 +7,9 @@ import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.coobird.thumbnailator.Thumbnails;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 @Slf4j
@@ -28,6 +32,9 @@ public class MyService {
     private final OrdersRepository ordersRepository;
     private final OrderdetailRepository orderdetailRepository;
     private final WishRepository wishRepository;
+
+    private final PdReviewRepository pdReviewRepository;
+    private final PdReviewImgRepository pdReviewImgRepository;
 
     private final CouponsRepository couponsRepository;
     private final ModelMapper modelMapper;
@@ -329,11 +336,57 @@ public class MyService {
     }
 
     // my-review 작성
-    public void writeReview(PdReviewDTO pdReviewDTO, MultipartFile revImage){
+    @Value("${file.upload.path}")
+    private String fileUploadPath;
+    public String writeReview(PdReviewDTO pdReviewDTO, MultipartFile revImage){
         // 1. 이미지 저장
-        
-        // 2. 리뷰정보 DB 저장
+        String path = new File(fileUploadPath).getAbsolutePath();
 
+        String sName = null;
+        if(!revImage.isEmpty()){
+            String oName = revImage.getOriginalFilename();
+
+            String ext = oName.substring(oName.lastIndexOf("."));
+
+            sName = UUID.randomUUID().toString()+ext;
+
+            try{
+                Thumbnails.of(revImage.getInputStream())
+                        .size(100, 100)
+                        .toFile(new File(path, "review"+sName));
+
+                //2. 리뷰정보 DB저장
+                //review 저장
+                PdReview pdReview = modelMapper.map(pdReviewDTO, PdReview.class);
+
+                PdReview saveReview = pdReviewRepository.save(pdReview);
+
+                //review 이미지 저장
+                PdReviewImg pdReviewImg = new PdReviewImg();
+                pdReviewImg.setRevThumb("review"+sName);
+
+                pdReviewImg.setRevNo(saveReview.getRevNo());
+
+                pdReviewImgRepository.save(pdReviewImg);
+
+
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+        }else {
+            return null;
+        }
+
+        return null;
+    }
+
+    //myReview 조회
+    public PageResponseDTO selectReivews(String UserId, PageRequestDTO pageRequestDTO){
+
+        //페이징 처리
+        Pageable pageable = pageRequestDTO.getPageable("no");
+
+        return pdReviewRepository.selectReviews(UserId, pageable, pageRequestDTO);
     }
 
     // my - wish 조회
