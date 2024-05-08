@@ -32,8 +32,10 @@
             <!--회원가입구현되면 위에 파라미터 바꾸기-->
         </ul>
 
-        <section th:each="banner : ${bannerMy1}">
+        <section>
+            <th:block th:each="banner : ${banMyOrderList}" >
                 <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
+            </th:block>
             <article>
                 <h3>회원정보 설정</h3>
 

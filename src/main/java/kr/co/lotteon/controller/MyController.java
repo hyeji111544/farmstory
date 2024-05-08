@@ -72,9 +72,9 @@ public class MyController {
 
     //마이페이지-쿠폰 이동
     @GetMapping("/my/coupon")
-    public String myCoupon(String UserId, Model model){
+    public String myCoupon(String userId, Model model){
 
-        List<Coupons> haveCoupons = myService.selectCoupons(UserId);
+        List<Coupons> haveCoupons = myService.selectCoupons(userId);
         model.addAttribute("haveCoupons", haveCoupons); // Map<String ,List<Coupons>>  / Map<String, int>
         return "/my/coupon";
     }
@@ -218,9 +218,23 @@ public class MyController {
 
     //마이페이지-리뷰 이동
     @GetMapping("/my/review")
-    public String myReview(){
+    public String myReview(String userId, Model model, PageRequestDTO pageRequestDTO){
+        PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
+
+        log.info("myReviewPage" +myReviewPage);
+
+        model.addAttribute("myReviewPage", myReviewPage);
+
+
         return "/my/review";
     }
 
+    // 마이페이지 - 관심상품
+    @GetMapping("/my/wish")
+    public String myWish(String userId, Model model, PageRequestDTO pageRequestDTO){
+        PageResponseDTO wishList = myService.selectUserWish(userId, pageRequestDTO);
+        model.addAttribute("wishList", wishList);
+        return "/my/wish";
+    }
 
 }
