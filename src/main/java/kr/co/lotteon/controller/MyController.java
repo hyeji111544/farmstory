@@ -37,7 +37,9 @@ public class MyController {
     @GetMapping("/my/home")
     public String myHome(Model model, String UserId){
 
-    log.info("My home" +UserId);
+        log.info("My home" + userId);
+    
+        myService.selectMyInfo(session, userId);
 
         // 회원 정보
 
