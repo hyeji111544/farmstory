@@ -36,8 +36,12 @@ public class MyController {
 
     log.info("My home" +userId);
 
+<<<<<<< HEAD
+        myService.selectMyInfo(session, userId);
+=======
     myService.selectMyInfo(session, userId);
     
+>>>>>>> 1eeaf66500e973e62fb0410b5b83d5135f3a1453
 
         // 회원 정보
 

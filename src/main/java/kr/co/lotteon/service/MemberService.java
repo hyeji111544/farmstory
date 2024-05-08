@@ -18,11 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,7 +33,7 @@ public class MemberService {
     private final SellerRepository sellerRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserPointRepository userPointRepository;
-    private final pointHistoryRepository pointHistoryRepository;
+    private final PointHistoryRepository pointHistoryRepository;
     private final CartRepository cartRepository;
     private final UserCouponRepository userCouponRepository;
 

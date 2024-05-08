@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/lotteon.test.iml" filepath="$PROJECT_DIR$/.idea/modules/lotteon.test.iml" />
+=======
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/WorkSpace.lotteon-team1.lotteon.test.iml" filepath="$PROJECT_DIR$/.idea/modules/WorkSpace.lotteon-team1.lotteon.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test~1.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test~1.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test~2.iml" filepath="$PROJECT_DIR$/.idea/modules/kr.co.lotteon.lotteon.test~2.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/lotteon-team1.lotteon.test.iml" filepath="$PROJECT_DIR$/.idea/modules/lotteon-team1.lotteon.test.iml" />
+>>>>>>> 1eeaf66500e973e62fb0410b5b83d5135f3a1453
     </modules>
   </component>
 </project>
