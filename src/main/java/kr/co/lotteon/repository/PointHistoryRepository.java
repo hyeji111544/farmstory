@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface pointHistoryRepository extends JpaRepository<PointHistory, Integer> {
+public interface PointHistoryRepository extends JpaRepository<PointHistory, Integer> {
 }

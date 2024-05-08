@@ -52,7 +52,7 @@
                       <span th:if="${notice.noticeType == 'uservice'}" style="white-space: nowrap;"><span th:text="'[고객서비스]'+ ' ' + ${notice.noticeTitle}"></span></span>
                     </a>
                   </td>
-                  <td th:if="${notice.noticeDate != null}" th:text="${#temporals.format(notice.noticeDate, 'yyyy-MM-dd')}" style="text-align: right;"></td>
+                  <td th:if="${notice.noticeDate != null}" th:text="${#temporals.format(notice.noticeDate, 'yy-MM-dd')}" style="text-align: right;"></td>
                 </tr>
               </table>
 

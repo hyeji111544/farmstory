@@ -13,5 +13,5 @@ public interface UserCouponRepository extends JpaRepository<UserCoupon, Integer>
     // userId로 userCoupon 조회
     public List<UserCoupon> findByUserId(String userId);
 
-
+    public int countByUserIdAndUcpStatus(String userId, String couponStatus);
 }

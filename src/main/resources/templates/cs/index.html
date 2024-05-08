@@ -13,7 +13,7 @@
                 <a th:href="@{/cs/notice/view(noticeNo=${notices.noticeNo})}" class="title" th:if="${notices.noticeType == 'announce'}" th:text="'[발표]' + ' ' + ${notices.noticeTitle}"></a>
                 <a th:href="@{/cs/notice/view(noticeNo=${notices.noticeNo})}" class="title" th:if="${notices.noticeType == 'prodinfo'}" th:text="'[위해상품정보]' + ' ' + ${notices.noticeTitle}"></a>
                 <a th:href="@{/cs/notice/view(noticeNo=${notices.noticeNo})}" class="title" th:if="${notices.noticeType == 'uservice'}" th:text="'[고객서비스]' + ' ' + ${notices.noticeTitle}"></a>
-                <span class="date" th:text="${#temporals.format(notices.noticeDate, 'yyyy-MM-dd')}"></span>
+                <span class="date" th:text="${#temporals.format(notices.noticeDate, 'yy-MM-dd')}"></span>
               </li>
             </ul>
           </section>
@@ -48,7 +48,7 @@
                 <a th:href="@{/cs/qna/view(qnaNo=${qnas.qnaNo})}" class="title" th:if="${qnas.qnaCate == 'safe'}">[안전결제]  [[${qnas.qnaTitle}]]</a>
                 <p>
                   <span class="uid" th:text="${#strings.substring(qnas.userId, 0, 3)} + '****'"></span>
-                  <span class="date" th:text="${#temporals.format(qnas.qnaDate, 'yyyy-MM-dd')}"></span>
+                  <span class="date" th:text="${#temporals.format(qnas.qnaDate, 'yy-MM-dd')}"></span>
                 </p>
               </li>
             </ul>
