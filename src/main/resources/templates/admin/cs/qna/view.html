@@ -33,7 +33,10 @@
           </tr>
           <tr>
             <td>답변</td>
-            <td th:text="${view.qnaReply}" style="width: 90%; height: 230px;"><textarea></textarea></td>
+            <td style="width: 90%; height: 230px;">
+              <textarea th:if="${view.qnaReply == '' || view.qnaReply == null}" >답변 대기중입니다.</textarea>
+              <textarea th:if="${view.qnaReply != '' && view.qnaReply != null}">[[${view.qnaReply}]]</textarea>
+            </td>
           </tr>
           </tbody>
         </table>

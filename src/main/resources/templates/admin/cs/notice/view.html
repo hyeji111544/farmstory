@@ -34,7 +34,7 @@
         <div style="text-align: right; margin-top: 50px">
           <a class="btn" th:href="@{/admin/cs/notice/delete(noticeNo=${view.noticeNo})}" style="background-color: #D04848">삭제</a>
           <a class="btn" th:href="@{/admin/cs/notice/modify(noticeNo=${view.noticeNo})}" style="background-color: #6895D2">수정</a>
-          <a class="btn" th:href="@{/admin/cs/notice/list}">목록</a>
+          <a class="btn" th:href="@{/admin/cs/notice/list(noticeCate=${view.noticeCate})}">목록</a>
         </div>
     </article>
 

@@ -19,4 +19,8 @@ public interface NoticeRepository extends JpaRepository<Notice, Integer> {
     // 관리자 메인페이지 - 공지사항 최신순 5개 조회
     // 판매자 메인페이지 - 공지사항 최신순 5개 조회
     public List<Notice> findTop5ByOrderByNoticeDateDesc();
+
+    List<Notice> findAllByOrderByNoticeDateDesc();
+
+    Page<Notice> findAllByOrderByNoticeDateDesc(Pageable pageable);
 }
