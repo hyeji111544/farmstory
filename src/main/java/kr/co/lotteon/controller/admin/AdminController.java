@@ -333,7 +333,10 @@ public class AdminController {
         PageResponseDTO selectOrder = sellerService.selectProdSalesInfo(prodSeller, pageRequestDTO);
         log.info("selectOrder : " + selectOrder);
 
+        SellerInfoDTO sellerInfoDTO = sellerService.selectAdminInfo();
+
         model.addAttribute("selectOrder", selectOrder);
+        model.addAttribute("sellerInfoDTO", sellerInfoDTO);
         return "/admin/order/delivery";
     }
 
