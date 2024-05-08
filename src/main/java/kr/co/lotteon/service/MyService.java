@@ -42,11 +42,10 @@ public class MyService {
     private final SellerRepository sellerRepository;
     private final ProductRepository productRepository;
 
-
     public void selectMyInfo(HttpSession session, String userId){
 
         //주문 배송 확인 (개수)
-        int countOrder = ordersRepository.countByUserId(userId);
+        long countOrder = ordersRepository.countByUserId(userId);
         log.info("countOrder : " +countOrder);
 
         //할인 쿠폰 (개수)

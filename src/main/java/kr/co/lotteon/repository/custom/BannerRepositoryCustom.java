@@ -14,4 +14,7 @@ public interface BannerRepositoryCustom {
 
     // 배너 활성화
     public List<Banner> selectBannerUsable(String banImgCate);
+
+    // 메인배너 상태 업데이트
+    public long updateBannerUsable(int banNo, String banUsable);
 }

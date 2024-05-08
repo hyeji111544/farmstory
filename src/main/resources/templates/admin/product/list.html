@@ -3,6 +3,26 @@
     layout:decorate="~{/layout/adminLayout.html}">
 <!--내용 시작-->
     <section id="admin-product-list" layout:fragment="content">
+
+        <script>
+
+            function deleteProduct() {
+                const button = event.target;
+                const eachProduct = button.parentNode.parentNode;
+                const prodNo = eachProduct.querySelector('.prodNo').value;
+
+                console.log(prodNo);
+
+                /*
+                    product와 연관된 테이블들......??
+                    wish / productimg / prodqnanote / prodqna / prodoption / prodoptdetail
+                    / pdreviewimg / pdreview / orders / orderdetail / cartproduct / cart
+                 */
+
+            }
+
+        </script>
+
         <nav>
             <h3>상품목록</h3>
             <p>
@@ -17,6 +37,7 @@
                         <option value="prodName">상품명</option>
                         <option value="prodNo">상품코드</option>
                         <option value="prodCompany">제조사</option>
+                        <option value="sellerNo">판매자</option>
                     </select>
                     <input class="searchInput" type="text" name="keyword">
                     <input type="hidden" name="prodSeller" th:value="ADMIN" readonly>
@@ -39,7 +60,7 @@
                 </tr>
 
                 <tr th:each="product, index:${pageResponseDTO.dtoList}" id="product">
-                    <td><input type="checkbox" name="상품코드"/></td>
+                    <td><input class="prodNo" type="checkbox" name="상품코드" th:value="${product.prodNo}"/></td>
                     <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb" style="width: 70px; height: 70px"></td>
                     <td>[[${product.prodNo}]]</td>
                     <td style="width: 300px">[[${product.prodName}]]</td>
@@ -50,7 +71,7 @@
                     <td style="width: 80px">[[${product.prodSeller}]]</td>
                     <td>[[${product.prodHit}]]</td>
                     <td>
-                        <a href="#">[삭제]</a>
+                        <a href="#" onclick="deleteProduct()">[삭제]</a>
                         <a th:href="@{/admin/product/option(prodNo=${product.prodNo})}">[수정]</a>
                     </td>
                 </tr>

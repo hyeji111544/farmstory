@@ -102,6 +102,11 @@
                });
 
            }
+
+           //changePoint 사용일때 - 출력
+            const changePoint = document.getElementById("changePoint");
+
+
         </script>
         <!--여기까지-->
         <nav>
@@ -182,9 +187,8 @@
                         <tr th:each="point : ${myPoint}">
                             <td th:text="${#strings.substring(point.changeDate, 0, 10)}"></td>
                             <td id="changeType" th:text="${point.changeType}"></td>
-
                             <td id="changePoint">
-                                <span th:if="${point.changeType == '사용'}"></span>
+                                <span th:if="${point.changeType == '사용'}">-</span>
                                 <span th:text="${#numbers.formatInteger(point.changePoint,3,'COMMA')}"></span>
                             </td>
                             <td th:text="${point.changeCode}"></td>
