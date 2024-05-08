@@ -35,7 +35,7 @@ public class MyController {
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(Model model, String UserId){
+    public String myHome(HttpSession session, Model model, String userId){
 
         log.info("My home" + userId);
     
@@ -46,17 +46,20 @@ public class MyController {
 
 
         // 최근주문내역
-        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(UserId);
+        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(userId);
         model.addAttribute("myOrder", myOrder);
 
 
         // 포인트적립내역
-        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(UserId);
+        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(userId);
         model.addAttribute("myPoint", myPoint);
 
-        log.info("myPoint : " + myPoint);
         // 상품평
+        PageRequestDTO pageRequestDTO = new PageRequestDTO();
+        pageRequestDTO.setSize(5);
+        PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
 
+        model.addAttribute("myReviewPage", myReviewPage);
 
         // 문의내역
 
