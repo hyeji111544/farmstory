@@ -45,26 +45,30 @@
                         </dl>
                     </div>
 
-                    <table border="0">
-                        <tr>
-                            <th>쿠폰명</th>
-                            <th>할인금액</th>
-                            <th>적용기준/제한조건</th>
-                            <th>유효기간</th>
-                            <th>상태</th>
-                        </tr>
-                        <!--
-                            List<String> bb;
-                            for(String aa : bb){...}
-                            -->
-                        <tr th:each="coupons : ${haveCoupons}">
-                            <td class="tit" th:text="${coupons.cpName}"></td>
-                            <td class="discount"><span th:text="${coupons.cpDcPrice}"></span>원</td>
-                            <td class="condition"><span th:text="${coupons.cpMinPrice}"></span>원 이상 구매시</td>
-                            <td class="expire" th:text="${coupons.cpEndDate}"></td>
-                            <td class="status" th:text="${coupons.cpStatus}"></td>
-                        </tr>
-                    </table>
+                    <div class="myTableStyle">
+                        <div class="myTableHead myCouponRow">
+                            <div>쿠폰명</div>
+                            <div>할인금액</div>
+                            <div>적용기준/제한조건</div>
+                            <div>유효기간</div>
+                            <div>상태</div>
+                        </div>
+                        <div class="myTableBody myCouponRow" th:each="coupons : ${haveCoupons}">
+                            <div th:text="${coupons.cpName}"></div>
+                            <div th:text="${#numbers.formatInteger(coupons.cpDcPrice,3,'COMMA')}"></div>
+                            <div th:text="${#numbers.formatInteger(coupons.cpMinPrice,3,'COMMA')}"></div>
+                            <div th:text="${#temporals.format(coupons.cpEndDate, 'yy-MM-dd')}"></div>
+                            <div th:text="${coupons.cpStatus}"></div>
+                        </div>
+
+                        <p class="page">
+                            <a href="#" class="prev">이전</a>
+                            <a href="#" class="num on">1</a>
+                            <a href="#" class="num">2</a>
+                            <a href="#" class="num">3</a>
+                            <a href="#" class="next">다음</a>
+                        </p>
+                    </div>
 
                     <ul class="info">
                         <li>순금/골드바/돌반지/상품권 등 환금성 카테고리 및 중고상품 및 일부 프로모션 상품에는 쿠폰사용이 제한됩니다.</li>
