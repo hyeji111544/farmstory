@@ -14,4 +14,6 @@ import java.util.List;
 public interface QnaRepository extends JpaRepository<Qna, Integer> {
 
     public Page<Qna> findByQnaCate(String cate, Pageable pageable);
+
+    List<Qna> findAllByOrderByQnaDateDesc();
 }

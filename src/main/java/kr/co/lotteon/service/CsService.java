@@ -27,17 +27,18 @@ public class CsService {
     private final FaqRepository faqRepository;
     private final ModelMapper modelMapper;
 
-    // notice 리스트
+    // notice 인덱스페이지  리스트
     public List<Notice> noticeList(){
-        return noticeRepository.findAll();
+        return noticeRepository.findAllByOrderByNoticeDateDesc();
     }
+
     // notice page 리스트 출력
     public PageResponseDTO selectNoticePages(PageRequestDTO pageRequestDTO,String noticeCate){
         Pageable pageable = pageRequestDTO.getPageable("noticeNo");
 
         Page<Notice> pageNotice;
         if(noticeCate == null){
-            pageNotice = noticeRepository.findAll(pageable);
+            pageNotice = noticeRepository.findAllByOrderByNoticeDateDesc(pageable);
         }else{
             pageNotice = noticeRepository.findByNoticeCateOrderByNoticeDateDesc(noticeCate, pageable);
         }
@@ -77,9 +78,9 @@ public class CsService {
         log.info("savedQna ={}", savedQna.toString());
     }
 
-    //  qna 리스트
+    //  qna 인덱스페이지 리스트
     public List<Qna> qnaList(){
-        return qnaRepository.findAll();
+        return qnaRepository.findAllByOrderByQnaDateDesc();
     }
 
     // qna page 리스트 출력
@@ -145,13 +146,6 @@ public class CsService {
                 }
             }
             return faqMap;
-            // List<faq> test
-            // test[0] test[1]
-            // List<List<faq>> faqList => [List<faq>, List<faq>, List<faq> ...]
-            // faqList[0][0]  faqList[0][1]  faqList[1][0] faqList[1][1] ..
-            // Map<String, List<faq>> faqMap
-            // faqMap [이름, [0]]
-
         }
     }
 
