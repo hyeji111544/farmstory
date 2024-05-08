@@ -3,9 +3,10 @@ package kr.co.lotteon.controller;
 import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
+import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.repository.UserPointRepository;
+import kr.co.lotteon.repository.PointHistoryRepository;
 import kr.co.lotteon.service.MyService;
-import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,46 +32,34 @@ public class MyController {
     private final MyService myService;
     private final UserPointRepository userPointRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AdminService adminService;
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(HttpSession session, Model model, String userId){
+    public String myHome(Model model, String UserId){
 
-    log.info("My home" +userId);
-
-<<<<<<< HEAD
-        myService.selectMyInfo(session, userId);
-=======
-    myService.selectMyInfo(session, userId);
-    
->>>>>>> 1eeaf66500e973e62fb0410b5b83d5135f3a1453
+    log.info("My home" +UserId);
 
         // 회원 정보
 
 
 
         // 최근주문내역
-        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(userId);
+        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(UserId);
         model.addAttribute("myOrder", myOrder);
 
 
         // 포인트적립내역
-        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(userId);
+        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(UserId);
         model.addAttribute("myPoint", myPoint);
 
         log.info("myPoint : " + myPoint);
-
         // 상품평
-        PageRequestDTO pageRequestDTO = new PageRequestDTO();
-        pageRequestDTO.setSize(5);
-        log.info("pageRequestDTO : " + pageRequestDTO);
-        PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
-        model.addAttribute("myReviewPage", myReviewPage);
 
-        log.info("myReviewPage : " + myReviewPage);
 
         // 문의내역
+
+
+
 
         return "/my/home";
 
@@ -75,16 +67,9 @@ public class MyController {
 
     //마이페이지-쿠폰 이동
     @GetMapping("/my/coupon")
-    public String myCoupon(String userId, Model model){
+    public String myCoupon(String UserId, Model model){
 
-        List<Coupons> haveCoupons = myService.selectCoupons(userId);
-
-        log.info("haveCoupons" +haveCoupons);
-
-        String bannerMy = "my1";
-        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
-
-        model.addAttribute("bannerMy1", bannerMy1);
+        List<Coupons> haveCoupons = myService.selectCoupons(UserId);
         model.addAttribute("haveCoupons", haveCoupons); // Map<String ,List<Coupons>>  / Map<String, int>
         return "/my/coupon";
     }
@@ -95,17 +80,12 @@ public class MyController {
         Map<String, Object> result = myService.selectUserInfo(userId);
         UserDTO userDTO = (UserDTO) result.get("user");
         SellerDTO sellerDTO = (SellerDTO) result.get("seller");
-        
-        String bannerMy = "my1";
-        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
 
         log.info("userDTO : " + userDTO);
         log.info("sellerDTO : " + sellerDTO);
-        log.info("bannerMy1 : " + bannerMy1);
 
         model.addAttribute("userDTO", userDTO);
         model.addAttribute("sellerDTO", sellerDTO);
-        model.addAttribute("bannerMy1", bannerMy1);
         return "/my/info";
     }
 
@@ -190,12 +170,9 @@ public class MyController {
     public String myOrder(String userId, Model model, MyOrderPageRequestDTO myOrderPageRequestDTO){
         log.info(userId);
         log.info(myOrderPageRequestDTO.toString());
-        String bannerMyOrder = "my1";
 
         MyOrderPageResponseDTO MyOrderDTOList = myService.selectOrders(userId, myOrderPageRequestDTO);
-        List<BannerDTO> banMyOrderList = adminService.selectBanners(bannerMyOrder);
         model.addAttribute("MyOrderDTOList", MyOrderDTOList);
-        model.addAttribute("banMyOrderList", banMyOrderList);
 
         return "/my/order";
     }
@@ -207,11 +184,9 @@ public class MyController {
                           PageRequestDTO pageRequestDTO){
 
         PageResponseDTO pageResponseDTO = myService.selectPoints(userId, pageRequestDTO);
+        //userPointRepository.selectPoints(userId, pageRequestDTO);
 
-        String bannerMy = "my1";
-        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
-
-        model.addAttribute("bannerMy1", bannerMy1);
+        log.info("pageResponseDTO : " +pageResponseDTO);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
         return "/my/point";
@@ -219,11 +194,7 @@ public class MyController {
 
     //마이페이지-QnA 이동
     @GetMapping("/my/qna")
-    public String myQna(Model model){
-        String bannerMy = "my1";
-        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
-
-        model.addAttribute("bannerMy1", bannerMy1);
+    public String myQna(){
         return "/my/qna";
     }
 
@@ -237,34 +208,14 @@ public class MyController {
 
         myService.writeReview(pdReviewDTO, revImage);
 
-        return "redirect:/my/review?userId="+pdReviewDTO.getUserId();
+        return null;
     }
 
     //마이페이지-리뷰 이동
     @GetMapping("/my/review")
-    public String myReview(String userId, Model model, PageRequestDTO pageRequestDTO){
-        PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
-        String bannerMy = "my1";
-
-        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
-
-        model.addAttribute("bannerMy1", bannerMy1);
-        model.addAttribute("myReviewPage", myReviewPage);
-
-
+    public String myReview(){
         return "/my/review";
     }
 
-    // 마이페이지 - 관심상품
-    @GetMapping("/my/wish")
-    public String myWish(String userId, Model model, PageRequestDTO pageRequestDTO){
-        PageResponseDTO wishList = myService.selectUserWish(userId, pageRequestDTO);
-        String bannerMy = "my1";
-        List<BannerDTO> bannerMy1 = adminService.selectBanners(bannerMy);
-
-        model.addAttribute("bannerMy1", bannerMy1);
-        model.addAttribute("wishList", wishList);
-        return "/my/wish";
-    }
 
 }
