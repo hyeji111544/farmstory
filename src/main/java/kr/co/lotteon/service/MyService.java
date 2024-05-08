@@ -43,7 +43,7 @@ public class MyService {
     private final ProductRepository productRepository;
 
     public void selectMyInfo(HttpSession session, String userId){
-
+        log.info("countOrder : " +userId);
         //주문 배송 확인 (개수)
         long countOrder = ordersRepository.countByUserId(userId);
         log.info("countOrder : " +countOrder);
