@@ -390,4 +390,11 @@ public class AdminController {
 
         return memberService.pointControl(type, userId, changePoint, changeCode);
     }
+
+    // 관리자 - 회원관리 - 접속자 집계 //
+    @GetMapping("/admin/user/counting")
+    public String UserCounting(){
+
+        return "/admin/user/counting";
+    }
 }

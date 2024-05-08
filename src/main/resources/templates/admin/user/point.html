@@ -93,7 +93,7 @@
         <nav>
             <h3>회원 현황</h3>
             <p>
-                HOME > 상점관리 > <strong>회원 현황</strong>
+                HOME > 회원관리 > <strong>회원 현황</strong>
             </p>
         </nav>
         <!-- 판매자 현황 시작 -->
@@ -110,7 +110,7 @@
                     <input class="searchBtn" type="submit" value="검색">
                 </form>
             </div>
-            <div class="userListTableTitle">
+            <div class="userListTableTitle" style="text-align: center">
                 <div style="width: 50px;">구분</div>
                 <div style="width: 220px;">아이디</div>
                 <div style="width: 200px;">이름</div>
@@ -119,13 +119,13 @@
                 <div style="width: 150px;">포인트 회수</div>
                 <div style="width: 150px;"></div>
             </div>
-            <div class="userListTableContent" th:each="point, index : ${ResponseDTO.dtoList}">
+            <div class="userListTableContent" th:each="point, index : ${ResponseDTO.dtoList}" style="text-align: center">
                 <div class="userListTableRow">
                     <div th:text="${ResponseDTO.startNo - index.index}" style="width: 50px;"></div>
                     <div class="userId" th:text="${point.userId}" style="width: 220px;"></div>
                     <div th:text="${point.userName}" style="width: 200px;"></div>
-                    <div class="pointAfter" th:if="${point.pointBalance == 0}" style="width: 150px;">0</div>
-                    <div class="pointAfter" th:if="${point.pointBalance != 0}" th:text="${#numbers.formatInteger(point.pointBalance, 3, 'COMMA')}" style="width: 150px;"></div>
+                    <div class="pointAfter" th:if="${point.pointBalance == 0}" style="width: 120px; text-align: right; padding-right: 30px"></div>
+                    <div class="pointAfter" th:if="${point.pointBalance != 0}" th:text="${#numbers.formatInteger(point.pointBalance, 3, 'COMMA')}" style="width: 120px; text-align: right; padding-right: 30px"></div>
                     <div onclick="plusPointModal()" style="width: 150px; cursor: pointer;">지급하기</div>
                     <div onclick="minusPointModal()" style="width: 150px; cursor: pointer;">회수하기</div>
                     <div onclick="accordion()" style="width: 150px; cursor: pointer">변동내역</div>
