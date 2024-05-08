@@ -3,6 +3,30 @@
       layout:decorate="~{/layout/adminLayout.html}">
 <!--내용 시작-->
 <section id="admin-product-list" layout:fragment="content">
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const noticeCateSelect = document.getElementsByName('noticeCate')[0];
+      const noticeCateValue = document.getElementsByName('noticeCate3')[0];
+
+        console.log(noticeCateValue.value);
+        switch (noticeCateValue.value) {
+          case 'service':
+            noticeCateSelect.value = 'service';
+            break;
+          case 'event':
+            noticeCateSelect.value = 'event';
+            break;
+          case 'safe':
+            noticeCateSelect.value = 'safe';
+            break;
+          case 'danger':
+            noticeCateSelect.value = 'danger';
+            break;
+          default:
+            break;
+        }
+    });
+  </script>
   <nav>
     <h3>공지사항 수정</h3>
     <p>
@@ -13,13 +37,14 @@
     <article>
       <form th:action="@{/admin/cs/notice/modify}" method="post">
         <input type="hidden" name="noticeNo" th:value="${notice.noticeNo}" />
+        <input type="hidden" name="noticeCate3" th:value="${notice.noticeCate}" />
         <table>
           <tbody>
           <tr>
             <td>유형</td>
             <td>
               <select name="noticeCate">
-                <option value="service">[고객서비스]</option>
+                <option value="service" >[고객서비스]</option>
                 <option value="event">[이벤트당첨]</option>
                 <option value="safe">[안전거래]</option>
                 <option value="danger">[위해상품]</option>

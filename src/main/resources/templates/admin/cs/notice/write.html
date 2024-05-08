@@ -3,6 +3,19 @@
       layout:decorate="~{/layout/adminLayout.html}">
 <!--내용 시작-->
 <section id="admin-product-list" layout:fragment="content">
+  <script>
+    function checkSelection() {
+      const cate = document.getElementsByName('noticeCate')[0].value;
+      const type = document.getElementsByName('noticeType')[0].value;
+
+      if (cate === '유형선택' || type === '타입선택') {
+        alert('문의유형의 모든 항목을 선택해주세요.');
+        return false;
+      }
+      return true;
+    }
+
+  </script>
   <nav>
     <h3>공지사항 작성</h3>
     <p>
@@ -11,7 +24,7 @@
   </nav>
   <!-- 상품목록 컨텐츠 시작 -->
     <article>
-      <form th:action="@{/admin/cs/notice/write}" method="post">
+      <form th:action="@{/admin/cs/notice/write}" method="post" onsubmit="return checkSelection()">
         <table>
           <tbody>
           <tr>
@@ -36,13 +49,13 @@
                 <option value="prodinfo">위해상품정보</option>
                 <option value="uservice">고객서비스</option>
               </select>
-              <input type="text" name="noticeTitle" style="width: 200px; height: 33px; margin-bottom: 4px;"  placeholder="제목을 입력하세요."/>
+              <input type="text" name="noticeTitle" style="width: 200px; height: 33px; margin-bottom: 4px;"  placeholder="제목을 입력하세요." required/>
             </td>
           </tr>
           <tr>
             <td>내용</td>
             <td>
-              <textarea name="noticeContent" cols="120" rows="20" placeholder="내용을 입력하세요."></textarea>
+              <textarea name="noticeContent" cols="120" rows="20" placeholder="내용을 입력하세요." required></textarea>
             </td>
           </tr>
           </tbody>
