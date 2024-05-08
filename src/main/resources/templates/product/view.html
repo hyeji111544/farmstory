@@ -111,7 +111,7 @@
                                 optionBtn.innerText = optionName[index];
                             })
                         } else {
-                            const selected = `<div>
+                            const selected = `<div class="selectedValue">
                                             <h4>${selectedOptName}</h4>
                                             <div class="count">
                                                 <button class="decrease" onclick="changeNum(-1)">-</button>
@@ -119,18 +119,53 @@
                                                 <button class="increase" onclick="changeNum(1)">+</button>
                                             </div>
                                             <div class="optionPrice">
-                                                <span>${matchingDTOs.optPrice}원</span>
+                                                <span id="optProdPrice">원</span>
+                                                <input type="text" id="saveOptProdPrice"/>
                                                 <input type="hidden" name="optDetailNo" value="${matchingDTOs.optDetailNo}"/>
                                                 <span onclick="delSelectedOption()">x</span>
                                             </div>
                                         </div>`;
                             selectedOption.insertAdjacentHTML('beforeend', selected);
+                            const optionPrices = document.querySelectorAll('.optionPrice');
+                            let disValueHtml = document.getElementById('disCount');
+                            let disValue = 0;
+                            if (disValueHtml === null){
+                                disValueHtml = 0
+                            }else {
+                                disValue = parseInt(disValueHtml.innerHTML.replace('%', ''));
+                            }
+
+                            console.log(optionPrices);
+                            const newOptionPrices = document.querySelectorAll('.optionPrice:not(.processed)');
+
+                            newOptionPrices.forEach(function(optionPrice){
+                                const pricePlace = optionPrice.querySelector('#optProdPrice');
+                                let savePricePlace = optionPrice.querySelector('#saveOptProdPrice');
+                                let optValue = matchingDTOs.optPrice;
+                                let optDisValue = optValue * (100 - disValue) * 0.01;
+                                console.log("optValue" + optDisValue);
+                                pricePlace.textContent = optDisValue.toLocaleString() + '원';
+                                savePricePlace.value = optDisValue;
+                                // 처리가 완료된 항목에 클래스를 추가하여 다음에는 처리되지 않도록 합니다.
+                                optionPrice.classList.add('processed');
+
+                                // 추가된 옵션 합계에 합산
+                                var inputPrice = document.querySelector('[name="totalPrice"]');
+                                let totalPrice = parseInt((inputPrice.innerText.replace(',','')));
+                                console.log("totalPrice...1 : " + totalPrice);
+                                totalPrice += parseInt(savePricePlace.value);
+                                console.log("totalPrice : " + totalPrice);
+                                var formattedTotalPrice = new Intl.NumberFormat('ko-KR').format(totalPrice);
+                                inputPrice.innerText = formattedTotalPrice;
+                            });
+
                             let optionMap = [[${OptionDTOs.optionMap}]];
                             const optionName = Object.keys(optionMap)
                             Array.from(btnSelectOptionAll).forEach(function (optionBtn, index) {
                                 optionBtn.innerText = optionName[index];
                             })
                         }
+
                     }
                 } else {
                     // 마지막 옵션이 아닌 경우
@@ -201,11 +236,14 @@
             /* +, - 버튼 눌렀을 때 동작하며 할인 금액 계산하여 총 액에나타나게함 */
             function changeNum(change) {
                 var numInput = event.target.parentNode.querySelector('input');
-                var inputPrice = document.getElementById("totalPrice");
-
+                var inputPrice = document.querySelector('[name="totalPrice"]');
+                var optValue = event.target.closest('.selectedValue');
+                var selectOptPrice = optValue.querySelector('[id="optProdPrice"]');
+                var saveOptPrice = optValue.querySelector('[id = "saveOptProdPrice"]').value;
+                console.log("표시되는 가격: " + selectOptPrice);
                 //파싱된 형태 그대로 가져와서 ',' 쉼표를 제거하여 사용함.
-                var priceText = document.getElementById("disPrice").innerText;
-                var price = parseFloat(priceText.replace(',', ''));
+                //var priceText = document.getElementById("disPrice").innerText;
+                //var price = parseFloat(priceText.replace(',', ''));
 
                 var currentValue = parseInt(numInput.value) + change;
                 // 최소값은 1, 최대값은 99로 제한
@@ -217,11 +255,16 @@
 
                 numInput.value = currentValue; // 변경된 값 적용
 
-                var totalPrice = price * currentValue;
+                var totalPriceText = inputPrice.innerText;
+                var totalPrice = parseInt(totalPriceText.replace(',', ''));
+                console.log(" 총 상품 금액 : "+ totalPrice);
+                totalPrice = saveOptPrice * currentValue;
+                console.log("선택된 가격 :"+ saveOptPrice + " 갯수 :" + currentValue);
                 if (!isNaN(totalPrice)) {
                     // 금액 콤마 표시를 위해 포멧팅
-                    var formattedTotalPrice = new Intl.NumberFormat('ko-KR').format(totalPrice);
-                    inputPrice.innerText = formattedTotalPrice;
+                    //var formattedTotalPrice = new Intl.NumberFormat('ko-KR').format(totalPrice);
+                    selectOptPrice.textContent = totalPrice.toLocaleString() + '원';
+                    //inputPrice.innerText = formattedTotalPrice;
                 } else {
                     inputPrice.innerText = "0";
                 }
@@ -414,16 +457,17 @@
                     <h5 class="rating star4"><a href="#">상품평보기</a></h5>
                 </nav>
                 <nav>
-                    <div class="org_price">
+                    <div th:if="${product.prodDiscount!=0}" class="org_price" >
                         <del th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" id="prodPrice"></del>
-                        <span>[[${product.prodDiscount}]]%</span>
+                        <span id="disCount">[[${product.prodDiscount}]]%</span>
                     </div>
                     <div class="dis_price">
                         <ins id="disPrice" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                     </div>
                 </nav>
                 <nav>
-                    <span class="delivery">무료배송</span>
+                    <span th:if="${product.prodDeliveryFee==0}" class="delivery">무료배송</span>
+                    <span th:if="${product.prodDeliveryFee!=0}" class="delivery" th:text="'배송비 : '+${#numbers.formatInteger(product.prodDeliveryFee, 3, 'COMMA')+'원'}"></span>
                     <span class="arrival" id="arrivalDate"></span>
                     <span class="desc">본 상품은 국내배송만 가능합니다.</span>
                 </nav>
@@ -462,7 +506,7 @@
                         </div>
                         <div class="optionPrice">
                             <span>
-                                <span class="eachCost" th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" style="font-size: 20px"></span>원
+                                <span class="eachCost" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}" style="font-size: 20px"></span>원
                             </span>
                             <input type="hidden" name="optDetailNo" value=""/>
                         </div>
@@ -470,7 +514,8 @@
                 </div>
 
                 <div class="total">
-                    <span id="totalPrice" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></span>
+                    <span th:if="${OptionDTOs.getOptionMap().size()==0}" name="totalPrice" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></span>
+                    <span th:if="${OptionDTOs.getOptionMap().size()!=0}" name="totalPrice" th:text="0"></span>
                     <em>총 상품금액</em>
                 </div>
 
