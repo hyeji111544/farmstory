@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,6 +31,7 @@ public class MyService {
     private final OrdersRepository ordersRepository;
     private final OrderdetailRepository orderdetailRepository;
     private final WishRepository wishRepository;
+    private final PointHistoryRepository pointHistoryRepository;
 
     private final PdReviewRepository pdReviewRepository;
     private final PdReviewImgRepository pdReviewImgRepository;
@@ -40,8 +40,32 @@ public class MyService {
     private final ModelMapper modelMapper;
     private final UserPointRepository userPointRepository;
     private final SellerRepository sellerRepository;
+    private final ProductRepository productRepository;
+
+    public void selectMyInfo(HttpSession session, String userId){
+        log.info("countOrder : " +userId);
+        //주문 배송 확인 (개수)
+        long countOrder = ordersRepository.countByUserId(userId);
+        log.info("countOrder : " +countOrder);
+
+        //할인 쿠폰 (개수)
+        String couponStatus = "사용 가능";
+        int couponCount = userCouponRepository.countByUserIdAndUcpStatus(userId, couponStatus);
+        log.info("couponCount : " +couponCount);
+
+        //포인트 (총합)
+        UserPoint userPointsList = userPointRepository.findByUserId(userId);
+        int pointBalance = userPointsList.getPointBalance();
+        log.info("pointBalance : " +pointBalance);
+
+        //문의내역 (검토중)
 
 
+        session.setAttribute("countOrder", countOrder);
+        session.setAttribute("couponCount", couponCount);
+        session.setAttribute("pointBalance", pointBalance);
+
+    }
 
     /*
         마이페이지 출력을 위한 service
@@ -371,10 +395,71 @@ public class MyService {
 
                 pdReviewImgRepository.save(pdReviewImg);
 
+                // 리뷰작성 포인트 지급
+                // 0. orderDetail에서 포인트 얼마 지급할지 조회
+                Optional<OrderDetail> optOrderDetail = orderdetailRepository.findById(Integer.parseInt(pdReviewDTO.getDetailNo()));
+                //null 나오는걸 방지하기위해 Optional이라는 상자로 감쌈
+                int detailPrice = 0;
+                if (optOrderDetail.isPresent()) {
+                    detailPrice = optOrderDetail.get().getDetailPrice();
+                }
+                int savePoint = (int) (Math.ceil(detailPrice * 0.01));
+
+                // 1. UserPoint에 잔여포인트 합산
+                String userId = pdReviewDTO.getUserId();
+                UserPoint oldUserPoint = userPointRepository.findByUserId(userId);
+
+                log.info("id로 조회한 oldUserPoint 엔티티 : " + oldUserPoint);
+                log.info("원래 가지고 있던 포인트 : " + oldUserPoint.getPointBalance());
+                log.info("적립할 포인트 : " + savePoint);
+
+                oldUserPoint.setPointBalance(oldUserPoint.getPointBalance() + savePoint);
+                log.info("변경된 포인트 : " + oldUserPoint.getPointBalance());
+
+                userPointRepository.save(oldUserPoint);
+
+                // 2. 포인트 히스토리 생성
+                PointHistory pointHistory = new PointHistory();
+                log.info("비어있는 pointHistory 엔티티 : " + pointHistory);
+
+                pointHistory.setChangeCode("상품리뷰작성");
+                pointHistory.setChangePoint(savePoint);
+                pointHistory.setChangeType("적립");
+                pointHistory.setPointNo(oldUserPoint.getPointNo());
+
+                log.info("내용이 채워진 pointHistory 엔티티 : " + pointHistory);
+                pointHistoryRepository.save(pointHistory);
+                
+                // 3. product 별점 업데이트
+                Optional<Product> optProduct = productRepository.findById(pdReviewDTO.getProdNo());
+
+                if(optProduct.isPresent()){
+
+                    float oldScore = optProduct.get().getTReviewScore(); //현재 product에 리뷰점수
+                    int starCount = optProduct.get().getTReviewCount(); //현재 product에 리뷰개수
+
+                    log.info("현재 product에 리뷰점수 : " +oldScore);
+                    log.info("현재 product에 리뷰개수 : " +starCount);
+
+                    float totalScore = oldScore * starCount; //product 리뷰 총합점수
+
+                    log.info("product 리뷰 총합점수 : " +totalScore);
+
+                    float insertScore = (totalScore + pdReviewDTO.getRevScore()) / (starCount+1);
+
+                    log.info("insertScore : " + insertScore);
+
+                    optProduct.get().setTReviewCount(optProduct.get().getTReviewCount()+1);
+                    optProduct.get().setTReviewScore(insertScore);
+                    productRepository.save(optProduct.get());
+
+                    log.info("optProduct : " +optProduct);
+                }
 
             } catch (IOException e) {
                 log.error(e.getMessage());
             }
+
         }else {
             return null;
         }

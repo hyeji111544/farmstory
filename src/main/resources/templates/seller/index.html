@@ -26,19 +26,20 @@
                     priceArray.push(value);
                 }
 
+                const ctx = document.getElementById('line-chart1');
+                const ctx2 = document.getElementById('line-chart2');
 
-                new Chart(document.getElementById("line-chart1"), {
+                new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: dateArray,
                         datasets: [{
+                            label: '',
                             data: countArray,
-                            label: "Africa",
-                            borderColor: "#3e95cd",
-                            fill: false,
-                            pointStyle: 'triangle'
-                        }
-                        ]
+                            borderWidth: 1,
+                            backgroundColor: '#36AE7C',
+                            borderColor: '#36AE7C'
+                        }]
                     },
                     options: {
                         responsive: false,
@@ -47,24 +48,33 @@
                             text: '최근 한달 주문 건수',
                             fontSize: 20,
                             color: '#111',
-                        },legend: {
-                            display: false // 라벨 숨기기
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // 라벨 숨기기
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    stepSize: 1 // 눈금의 간격
+                                },
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
 
-                new Chart(document.getElementById("line-chart2"), {
+                new Chart(ctx2, {
                     type: 'line',
                     data: {
                         labels: dateArray,
                         datasets: [{
                             data: priceArray,
-                            label: "Africa",
-                            borderColor: "#3e95cd",
-                            fill: false,
-                            pointStyle: 'triangle'
-                        }
-                        ]
+                            borderWidth: 1,
+                            backgroundColor: '#187498',
+                            borderColor: '#187498'
+                        }]
                     },
                     options: {
                         responsive: false,
@@ -73,8 +83,19 @@
                             text: '최근 한달 주문 금액',
                             fontSize: 20,
                             color: '#111',
-                        },legend: {
-                            display: false // 라벨 숨기기
+                        },
+                        plugins: {
+                            legend: {
+                                display: false // 라벨 숨기기
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    stepSize: 100000 // 눈금의 간격
+                                },
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
@@ -109,37 +130,34 @@
                     <div class="shopGroup">
                         <div>주문 건수</div>
                         <div>
-                            <img th:src="@{/images/seller/seller_admin_icon2.png}">
                             <div>
-                                <p>전체<span th:text="${sellerInfoDTO.allCount} + '건'"></span></p>
-                                <p>신규<span th:text="${sellerInfoDTO.oneDayCount} + '건'"></span></p>
-                                <p>주간<span th:text="${sellerInfoDTO.oneWeekCount} + '건'"></span></p>
-                                <p>월간<span th:text="${sellerInfoDTO.oneMonthsCount} + '건'"></span></p>
+                                <p>전체 주문<span th:text="${sellerInfoDTO.allCount} + '건'"></span></p>
+                                <p>신규 주문<span th:text="${sellerInfoDTO.oneDayCount} + '건'"></span></p>
+                                <p>주간 주문<span th:text="${sellerInfoDTO.oneWeekCount} + '건'"></span></p>
+                                <p>월간 주문<span th:text="${sellerInfoDTO.oneMonthsCount} + '건'"></span></p>
                             </div>
                         </div>
                     </div>
                     <div class="shopGroup">
                         <div>주문 금액</div>
                         <div>
-                            <img th:src="@{/images/seller/seller_admin_icon1.png}">
                             <div>
-                                <p>전체<span th:text="${#numbers.formatInteger(sellerInfoDTO.allPrice,3,'COMMA')} + '원'"></span></p>
-                                <p>신규<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneDayPrice,3,'COMMA')} + '원'"></span></p>
-                                <p>주간<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneWeekPrice,3,'COMMA')} + '원'"></span></p>
-                                <p>월간<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneMonthsPrice,3,'COMMA')} + '원'"></span></p>
+                                <p>전체 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.allPrice,3,'COMMA')} + '원'"></span></p>
+                                <p>신규 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneDayPrice,3,'COMMA')} + '원'"></span></p>
+                                <p>주간 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneWeekPrice,3,'COMMA')} + '원'"></span></p>
+                                <p>월간 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneMonthsPrice,3,'COMMA')} + '원'"></span></p>
                             </div>
                         </div>
                     </div>
                     <div class="shopGroup">
                         <div>배송 관리</div>
                         <div>
-                            <img th:src="@{/images/seller/seller_admin_icon3.png}">
                             <div>
                                 <p th:if="${sellerInfoDTO.statusCountMap.get('입금대기') != null}">입금대기<span th:text="${sellerInfoDTO.statusCountMap.get('입금대기')} + '건'"></span></p>
                                 <p th:if="${sellerInfoDTO.statusCountMap.get('입금대기') == null}">입금대기<span>0건</span></p>
 
-                                <p th:if="${sellerInfoDTO.statusCountMap.get('배송준비') != null}" style="margin: 10px 0">배송준비<span th:text="${sellerInfoDTO.statusCountMap.get('배송준비')} + '건'"></span></p>
-                                <p th:if="${sellerInfoDTO.statusCountMap.get('배송준비') == null}" style="margin: 10px 0">배송준비<span>0건</span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('배송준비') != null}" style="margin: 16px 0">배송준비<span th:text="${sellerInfoDTO.statusCountMap.get('배송준비')} + '건'"></span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('배송준비') == null}" style="margin: 16px 0">배송준비<span>0건</span></p>
 
                                 <p th:if="${sellerInfoDTO.statusCountMap.get('배송중') != null}">배송중<span th:text="${sellerInfoDTO.statusCountMap.get('배송중')} + '건'"></span></p>
                                 <p th:if="${sellerInfoDTO.statusCountMap.get('배송중') == null}">배송중<span>0건</span></p>
@@ -149,13 +167,12 @@
                     <div class="shopGroup">
                         <div>주문 관리</div>
                         <div>
-                            <img th:src="@{/images/seller/seller_admin_icon4.png}">
                             <div>
                                 <p th:if="${sellerInfoDTO.statusCountMap.get('취소요청') != null}">취소요청<span th:text="${sellerInfoDTO.statusCountMap.get('취소요청')} + '건'"></span></p>
                                 <p th:if="${sellerInfoDTO.statusCountMap.get('취소요청') == null}">취소요청<span>0건</span></p>
 
-                                <p th:if="${sellerInfoDTO.statusCountMap.get('교환요청') != null}" style="margin: 10px 0">교환요청<span th:text="${sellerInfoDTO.statusCountMap.get('교환요청')} + '건'"></span></p>
-                                <p th:if="${sellerInfoDTO.statusCountMap.get('교환요청') == null}" style="margin: 10px 0">교환요청<span>0건</span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('교환요청') != null}" style="margin: 16px 0">교환요청<span th:text="${sellerInfoDTO.statusCountMap.get('교환요청')} + '건'"></span></p>
+                                <p th:if="${sellerInfoDTO.statusCountMap.get('교환요청') == null}" style="margin: 16px 0">교환요청<span>0건</span></p>
 
                                 <p th:if="${sellerInfoDTO.statusCountMap.get('환불요청') != null}">환불요청<span th:text="${sellerInfoDTO.statusCountMap.get('환불요청')} + '건'"></span></p>
                                 <p th:if="${sellerInfoDTO.statusCountMap.get('환불요청') == null}">환불요청<span>0건</span></p>
@@ -169,10 +186,10 @@
                         <div class="graphBtn" onclick="viewPriceGraph()">매출 금액</div>
                     </div>
                     <div class="graphContent countGraph">
-                        <canvas id="line-chart1" width="800" height="250"></canvas>
+                        <canvas id="line-chart1" width="1000" height="250"></canvas>
                     </div>
                     <div class="graphContent priceGraph" style="display: none">
-                        <canvas id="line-chart2" width="800" height="250"></canvas>
+                        <canvas id="line-chart2" width="1000" height="250"></canvas>
                     </div>
                 </div>
             </div>

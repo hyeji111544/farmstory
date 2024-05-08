@@ -28,7 +28,7 @@ public class Product {
     private int prodSold;
 
     private int tReviewCount;
-    private int tReviewScore;
+    private float tReviewScore;
     private int prodHit;
 
     @CreationTimestamp

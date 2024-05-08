@@ -174,7 +174,7 @@ main > section > article section > p {
 }
 
 main h4 {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -328,7 +328,7 @@ button[type=submit] {
 /**/
 
 #admin-wrapper {
-    background-color: #dadada;
+    background-color: #e7e7e7;
 }
 .shopInfo {
     display: flex;
@@ -413,17 +413,16 @@ header > div > .logo {
     display: flex;
     justify-content: space-between;
     width: 100%;
-    height: 150px;
+    height: 160px;
     box-sizing: border-box;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 .shopGroup {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 260px;
-    height: 100%;
-    padding: 0 10px;
+    height: 160px;
     box-sizing: border-box;
     border: 1px solid #c4c4c4;
     border-radius: 4px;
@@ -439,6 +438,7 @@ header > div > .logo {
     width: 238px;
     display: flex;
     align-items: center;
+    margin: 0 10px;
 }
 .shopGroup > div > img {
     width: 90px;
@@ -457,7 +457,7 @@ header > div > .logo {
     display: flex;
     font-size: 14px;
     font-weight: bold;
-    margin: 2px 0;
+    margin: 4px 0;
     justify-content: space-between;
 }
 .shopGroup > div > div > p > span {
@@ -474,15 +474,17 @@ header > div > .logo {
     border: 1px solid #c4c4c4;
     border-radius: 4px;
     background-color: #fafafa;
+    margin-bottom: 20px;
 }
 .graphTitle {
     display: flex;
     justify-content: center;
-    width: 100%;
     height: 60px;
     align-items: center;
     box-sizing: border-box;
     padding: 10px;
+    margin: 0 400px;
+    border-bottom: 1px solid #909090;
 }
 .graphContent {
     display: flex;
@@ -494,17 +496,17 @@ header > div > .logo {
 }
 .graphBtn {
     width: 150px;
-    height: 40px;
-    border: 1px solid red;
     border-radius: 4px;
-    margin: 20px;
     text-align: center;
-    line-height: 40px;
     font-size: 16px;
     cursor: pointer;
+    padding: 10px;
+    margin: 20px 0;
+    font-weight: bold;
 }
 .graphBtn:hover {
-    background-color: red;
+    color: white;
+    background-color: #909090;
 }
 
 #admin-cs-list > section > .qna tr > td:nth-child(5) {width: 80px; text-align: left;}
@@ -859,8 +861,9 @@ header > div > .logo {
 .deliveryPopup {
     display: none;
     position: fixed;
-    left: 45%;
-    top: 45%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     flex-wrap: wrap;
     width: 400px;
     height: auto;
@@ -872,17 +875,20 @@ header > div > .logo {
 .deliveryPopup > p {
     width: 100%;
     text-align: right;
+    margin-bottom: 10px;
 }
 .deliveryPopup > p > span {
     cursor: pointer;
 }
 .deliveryPopup > div {
-    width: 80px;
-    height: 30px;
-    margin: 5px 10px;
-    border: 1px solid red;
+    width: 90px;
+    height: 40px;
+    margin: 15px 5px;
+    border: 1px solid #909090;
+    border-radius: 10px;
     box-sizing: border-box;
-    line-height: 30px;
+    font-size: 14px;
+    line-height: 40px;
     text-align: center;
     cursor: pointer;
 }
@@ -1401,8 +1407,9 @@ header > div > .logo {
 .popupStyle {
     display: none;
     position: fixed;
-    left: 45%;
-    top: 45%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     flex-wrap: wrap;
     width: 400px;
     height: auto;
@@ -1490,6 +1497,6 @@ header > div > .logo {
     text-align: center;
     cursor: pointer;
     margin: 0 100px;
-    border: 1px solid #e6e6e6;
+    border: 1px solid #999999;
     border-radius: 10px;
 }

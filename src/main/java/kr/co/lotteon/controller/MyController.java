@@ -5,9 +5,8 @@ import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
 import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.repository.UserPointRepository;
-import kr.co.lotteon.repository.pointHistoryRepository;
+import kr.co.lotteon.repository.PointHistoryRepository;
 import kr.co.lotteon.service.MyService;
-import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +32,14 @@ public class MyController {
     private final MyService myService;
     private final UserPointRepository userPointRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AdminService adminService;
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(Model model, String userId){
+    public String myHome(HttpSession session, Model model, String userId){
 
-    log.info("My home" +userId);
+        log.info("My home" + userId);
     
+        myService.selectMyInfo(session, userId);
 
         // 회원 정보
 
@@ -55,18 +54,17 @@ public class MyController {
         List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(userId);
         model.addAttribute("myPoint", myPoint);
 
-        log.info("myPoint : " + myPoint);
-
         // 상품평
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
         pageRequestDTO.setSize(5);
-        log.info("pageRequestDTO : " + pageRequestDTO);
         PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
+
         model.addAttribute("myReviewPage", myReviewPage);
 
-        log.info("myReviewPage : " + myReviewPage);
-
         // 문의내역
+
+
+
 
         return "/my/home";
 
@@ -77,9 +75,6 @@ public class MyController {
     public String myCoupon(String userId, Model model){
 
         List<Coupons> haveCoupons = myService.selectCoupons(userId);
-
-        log.info("haveCoupons" +haveCoupons);
-
         model.addAttribute("haveCoupons", haveCoupons); // Map<String ,List<Coupons>>  / Map<String, int>
         return "/my/coupon";
     }
@@ -180,12 +175,9 @@ public class MyController {
     public String myOrder(String userId, Model model, MyOrderPageRequestDTO myOrderPageRequestDTO){
         log.info(userId);
         log.info(myOrderPageRequestDTO.toString());
-        String bannerMyOrder = "my1";
 
         MyOrderPageResponseDTO MyOrderDTOList = myService.selectOrders(userId, myOrderPageRequestDTO);
-        List<BannerDTO> banMyOrderList = adminService.selectBanners(bannerMyOrder);
         model.addAttribute("MyOrderDTOList", MyOrderDTOList);
-        model.addAttribute("banMyOrderList", banMyOrderList);
 
         return "/my/order";
     }
@@ -221,15 +213,12 @@ public class MyController {
 
         myService.writeReview(pdReviewDTO, revImage);
 
-        return "redirect:/my/review?userId="+pdReviewDTO.getUserId();
+        return null;
     }
 
     //마이페이지-리뷰 이동
     @GetMapping("/my/review")
     public String myReview(String userId, Model model, PageRequestDTO pageRequestDTO){
-
-        log.info("myReview Controller");
-
         PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
 
         log.info("myReviewPage" +myReviewPage);
@@ -244,7 +233,6 @@ public class MyController {
     @GetMapping("/my/wish")
     public String myWish(String userId, Model model, PageRequestDTO pageRequestDTO){
         PageResponseDTO wishList = myService.selectUserWish(userId, pageRequestDTO);
-
         model.addAttribute("wishList", wishList);
         return "/my/wish";
     }

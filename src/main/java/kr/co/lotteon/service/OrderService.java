@@ -3,7 +3,6 @@ package kr.co.lotteon.service;
 import com.querydsl.core.Tuple;
 import kr.co.lotteon.dto.CartInfoDTO;
 import kr.co.lotteon.dto.OrderInfoDTO;
-import kr.co.lotteon.dto.OrdersDTO;
 import kr.co.lotteon.dto.UserDTO;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
@@ -26,7 +25,7 @@ public class OrderService {
     private final OrdersRepository ordersRepository;
     private final OrderdetailRepository orderdetailRepository;
     private final UserPointRepository userPointRepository;
-    private final pointHistoryRepository pointHistoryRepository;
+    private final PointHistoryRepository pointHistoryRepository;
 
     // 장바구니 조회
     public Map<String, List<CartInfoDTO>> findCartProdNo(int cartProdNo) {

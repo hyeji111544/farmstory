@@ -176,7 +176,7 @@
         <nav>
             <h3>회원 현황</h3>
             <p>
-                HOME > 상점관리 > <strong>회원 현황</strong>
+                HOME > 회원관리 > <strong>회원 현황</strong>
             </p>
         </nav>
         <!-- 판매자 현황 시작 -->
@@ -193,7 +193,7 @@
                     <input class="searchBtn" type="submit" value="검색">
                 </form>
             </div>
-            <div class="userListTableTitle">
+            <div class="userListTableTitle" style="text-align: center">
                 <div style="width: 50px;">구분</div>
                 <div style="width: 200px;">아이디</div>
                 <div style="width: 150px;">이름</div>
@@ -203,10 +203,10 @@
                 <div style="width: 100px;">관리</div>
                 <div></div>
             </div>
-            <div class="userListTableContent" th:each="user, index : ${userDTO.dtoList}">
+            <div class="userListTableContent" th:each="user, index : ${userDTO.dtoList}" style="text-align: center">
                 <div class="userListTableRow">
                     <div th:text="${userDTO.startNo - index.index}" style="width: 50px;"></div>
-                    <div th:text="${user.userId}" style="width: 200px;"></div>
+                    <div th:text="${#strings.substring(user.userId, 0, 6)} + '****'" style="width: 200px;"></div>
                     <div th:text="${user.userName}" style="width: 150px;"></div>
                     <div th:text="${user.userRole}" style="width: 150px;"></div>
                     <div th:text="${user.userGrade}" style="width: 150px;"></div>
@@ -258,10 +258,10 @@
             <!-- 회원 정보 관리 모달창 -->
             <div class="deliveryPopup">
                 <p><span onclick="closeModal()">닫기</span></p>
-                <div onclick="userRoleControl()" style="width: 110px;">회원 권환 관리</div>
-                <div onclick="userGradeControl()" style="width: 110px;">회원 등급 관리</div>
-                <div onclick="userStatusControl()" style="width: 110px;">회원 상태 관리</div>
-                <div onclick="deleteUserInfo()" style="width: 110px;">회원 정보 삭제</div>
+                <div onclick="userRoleControl()" style="width: 110px; margin: 15px 11px">회원 권환 관리</div>
+                <div onclick="userGradeControl()" style="width: 110px; margin: 15px 11px">회원 등급 관리</div>
+                <div onclick="userStatusControl()" style="width: 110px; margin: 15px 11px">회원 상태 관리</div>
+                <div onclick="deleteUserInfo()" style="width: 110px; margin: 15px 11px">회원 정보 삭제</div>
             </div>
 
             <div class="popupStyle userRolePopup" id="userRole">

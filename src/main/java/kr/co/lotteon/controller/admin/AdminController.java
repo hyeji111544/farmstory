@@ -276,6 +276,20 @@ public class AdminController {
         return adminService.updateBanners(banImgCate,banNo);
     }
 
+    //메인 배너 상태 업데이트
+    @PostMapping("/admin/banner/updateBanUsable")
+    public ResponseEntity<?> updateMainBanUsable(@RequestBody Map<String, Object> requestData){
+        String banNoStr = requestData.get("banNo").toString(); // banNo를 문자열로 가져옴
+        int banNo = Integer.parseInt(banNoStr); // 문자열을 정수로 변환
+        String banUsable = requestData.get("banUsable").toString(); // banUsable을 문자열로 가져옴
+
+        log.info("banNo: " + banNo);
+        log.info("banUsable: " + banUsable);
+
+        return adminService.updateMainBanners(banNo, banUsable);
+
+    }
+
 
 //// admin - 주문관리 ////
     // 관리자 주문 관리
@@ -319,7 +333,10 @@ public class AdminController {
         PageResponseDTO selectOrder = sellerService.selectProdSalesInfo(prodSeller, pageRequestDTO);
         log.info("selectOrder : " + selectOrder);
 
+        SellerInfoDTO sellerInfoDTO = sellerService.selectAdminInfo();
+
         model.addAttribute("selectOrder", selectOrder);
+        model.addAttribute("sellerInfoDTO", sellerInfoDTO);
         return "/admin/order/delivery";
     }
 
@@ -372,5 +389,12 @@ public class AdminController {
         String changeCode = requestData.get("changeCode");
 
         return memberService.pointControl(type, userId, changePoint, changeCode);
+    }
+
+    // 관리자 - 회원관리 - 접속자 집계 //
+    @GetMapping("/admin/user/counting")
+    public String UserCounting(){
+
+        return "/admin/user/counting";
     }
 }

@@ -1,9 +1,11 @@
 package kr.co.lotteon.dto;
 
+import kr.co.lotteon.entity.PointHistory;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -19,6 +21,12 @@ public class PdReviewDTO {
     private String revContent;
     private int revScore;
     private LocalDateTime revAddDate;
+
+    //OrderDetail
+    private String detailNo;
+
+    //PointHistory
+    private List<PointHistory> pointHistoriList;
 
     //PdReviewImg
     private int revImgNo;

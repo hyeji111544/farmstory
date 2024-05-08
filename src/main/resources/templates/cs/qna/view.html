@@ -42,11 +42,13 @@
               </div>
               <nav>
                 <h2 class="title2" th:text="${'☞[답변]' + ' '+ view.qnaTitle}"></h2>
-                <p class="reply">
-                    <td th:text="${view.qnaReply}"></td>
-                </p>
+                <p class="reply"></p>
               </nav>
-              <a th:href="@{/cs/qna/list}" class="btnList">목록</a>
+              <div style="text-align: center; font-size: 15px; padding-top: 60px;">
+              <td th:if="${view.qnaReply == '' || view.qnaReply == null}">답변 대기중입니다.</td>
+              <td th:if="${view.qnaReply != '' || view.qnaReply != null}">[[${view.qnaReply}]]</td>
+              </div>
+              <a th:href="@{/cs/qna/list(qnaCate=${view.qnaCate})}" class="btnList">목록</a>
             </article>
           </section>
         </div>

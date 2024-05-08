@@ -66,7 +66,7 @@
               <td th:if="${qna.qnaStatus == '검토중'}" th:text="${qna.qnaStatus}"></td>
               <td th:if="${qna.qnaStatus == '답변완료'}" th:text="${qna.qnaStatus}" style="color: #4291e9;"></td>
               <td th:text="${#strings.substring(qna.userId, 0, 3)} + '****'"></td>
-              <td th:if="${qna.qnaDate != null}" th:text="${#temporals.format(qna.qnaDate, 'yyyy-MM-dd')}" style="text-align: right;"></td>
+              <td th:if="${qna.qnaDate != null}" th:text="${#temporals.format(qna.qnaDate, 'yy-MM-dd')}" style="text-align: right;"></td>
           </tr>
         </table>
 
@@ -93,7 +93,7 @@
                     <a th:if="${pageResponseDTO.next && qnaCate != null}" th:href="@{/cs/qna/list(pg=${pageResponseDTO.end + 1}, qnaCate=${qnaCate})}"> 다음</a>
                 </span>
         </div>
-        <a th:href="@{/cs/qna/write}"><input type="button" value="문의하기" style=" float: right; background-color: #4291e9; color: white; border: none; padding: 10px 20px; cursor: pointer;" /></a>
+        <a th:href="@{/cs/qna/write(qnaCate=${qnaCate})}"><input type="button" value="문의하기" style=" float: right; background-color: #4291e9; color: white; border: none; padding: 10px 20px; cursor: pointer;" /></a>
       </article>
     </section>
   </div>

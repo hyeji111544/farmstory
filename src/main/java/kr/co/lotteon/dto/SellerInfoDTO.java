@@ -28,6 +28,6 @@ public class SellerInfoDTO {
     // 주문상태 출력을 위한 필드
     private Map<String, Long> statusCountMap;
     
-    // 그래프 출력을 위한 필드
+    // 그래프 출력을 위한 필드 나중에 지우기
     private List<GraphInfoDTO> graphInfoDTO;
 }

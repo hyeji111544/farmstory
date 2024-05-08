@@ -22,7 +22,7 @@ public class ProductDTO {
     private int prodSold;
 
     private int tReviewCount;
-    private int tReviewScore;
+    private float tReviewScore;
 
     private LocalDateTime prodRdate;
     private String prodCompany;

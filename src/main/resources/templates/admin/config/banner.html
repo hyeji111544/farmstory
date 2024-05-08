@@ -88,15 +88,17 @@
                 }
             }
 
-
             // 활성화 버튼을 누르면 나머지 배너들은 비활성화 되고 누른것만 활성화로 변함
-            function banUsable() {
+            function banUsable(sectionId) {
                 const button = event.target;
                 const banImgCate = button.id;
                 const banNo = button.parentNode.parentNode.querySelectorAll('td')[1].innerText;
+                const banStatus = button.parentNode.previousElementSibling;
 
                 console.log(banImgCate);
                 console.log(banNo);
+                console.log(banStatus);
+
                 // 활성화시킬 배너 No값
                 // 비활성화시킬 배너 cate값
 
@@ -105,26 +107,109 @@
                     "banNo" : banNo
                 }
 
+                const confirmResult = confirm("배너를 활성화 하시겠습니까?");
+                if (confirmResult) {
                 fetch("/lotteon/admin/banner/banUsable", {
                     method : 'POST',
                     headers : {'Content-Type': 'application/json'},
                     body: JSON.stringify(jsonData)
                 })
-                    .then(response => {
-                        if (response.ok) {
-                            // 데이터가 성공적으로 수정되었을 때의 동작
-                            alert("활성화가 되었습니다!");
-                            return response.json();
-                        } else {
-                            // 오류가 발생한 경우
-                            throw new Error('Network response was not ok.');
+                    .then(response => response.json())
+                    .then(data =>{
+                        console.log(data);
+                        if(data.result > 0){
+                            const allBanStatuses = document.querySelectorAll(`#${sectionId} table tr td:nth-child(10)`);
+                            allBanStatuses.forEach(td => {
+                                td.innerText = "NO";
+                            });
+                            alert("배너가 성공적으로 활성화되었습니다.");
+                            banStatus.innerText = "YES";
+                        }else{
+                            alert("오류가 발생했습니다.");
                         }
                     })
-
-                    .catch(err => console.log(err));
+                    .catch(err => console.log(err))
+            }
             }
 
+            // 활성화 버튼을 누르면 yes
+            function yesUsable() {
+                const button = event.target;
+                const banImgCate = button.id;
+                const banNo = button.parentNode.parentNode.querySelectorAll('td')[1].innerText;
+                const banUsable = button.parentNode.previousElementSibling.innerText;
 
+                console.log(banImgCate);
+                console.log(banNo);
+                console.log(banUsable);
+
+                // 활성화시킬 배너 No값
+                // 비활성화시킬 배너 cate값
+
+                const jsonData = {
+                    "banUsable" : "YES",
+                    "banNo" : banNo
+                }
+
+                const confirmResult = confirm("배너를 활성화 하시겠습니까?");
+                if (confirmResult) {
+                    fetch("/lotteon/admin/banner/updateBanUsable", {
+                        method : 'POST',
+                        headers : {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => response.json())
+                        .then(data =>{
+                            console.log(data);
+                            if(data.result > 0){
+                                alert("배너가 성공적으로 활성화되었습니다.");
+                                button.parentNode.previousElementSibling.innerText = "YES";
+                            }else{
+                                alert("오류가 발생했습니다.");
+                            }
+                        })
+                        .catch(err => console.log(err))
+                }
+            }
+            //비활성화 버튼누르면 NO
+            function noUsable() {
+                const button = event.target;
+                const banImgCate = button.id;
+                const banNo = button.parentNode.parentNode.querySelectorAll('td')[1].innerText;
+                const banUsable = button.parentNode.previousElementSibling.innerText;
+
+                console.log(banImgCate);
+                console.log(banNo);
+                console.log(banUsable);
+
+                // 활성화시킬 배너 No값
+                // 비활성화시킬 배너 cate값
+
+                const jsonData = {
+                    "banUsable" : "NO",
+                    "banNo" : banNo
+                }
+
+                const confirmResult = confirm("배너를 비활성화 하시겠습니까?");
+                if (confirmResult) {
+                    fetch("/lotteon/admin/banner/updateBanUsable", {
+                        method : 'POST',
+                        headers : {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => response.json())
+                        .then(data =>{
+                            console.log(data);
+                            if(data.result > 0){
+                                alert("배너가 성공적으로 비활성화되었습니다.");
+                                button.parentNode.previousElementSibling.innerText = "NO";
+                            }else{
+                                alert("오류가 발생했습니다.");
+                            }
+                        })
+                        .catch(err => console.log(err))
+                }
+            }
         </script>
         <nav>
             <h3>배너관리</h3>
@@ -180,7 +265,7 @@
                         <td th:text="${banner.banEtime}"></td>
                         <td th:text="${banner.banUsable}"></td>
                         <td>
-                            <span onclick="banUsable()" id="main1" style="cursor: pointer">[활성]</span>
+                            <span onclick="banUsable('tabs1')" id="main1" style="cursor: pointer">[활성]</span>
                         </td>
                     </tr>
                 </table>
@@ -226,8 +311,8 @@
                         <td th:text="${banner.banEtime}"></td>
                         <td th:text="${banner.banUsable}"></td>
                         <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
+                            <span onclick="noUsable()" style="cursor: pointer">[비활성]</span>
+                            <span onclick="yesUsable()" style="cursor: pointer">[활성]</span>
                         </td>
                     </tr>
                 </table>
@@ -272,8 +357,7 @@
                         <td th:text="${banner.banEtime}"></td>
                         <td th:text="${banner.banUsable}"></td>
                         <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
+                            <span onclick="banUsable('tabs3')" id="product1" style="cursor: pointer">[활성]</span>
                         </td>
                     </tr>
                 </table>
@@ -318,8 +402,7 @@
                         <td th:text="${banner.banEtime}"></td>
                         <td th:text="${banner.banUsable}"></td>
                         <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
+                            <span onclick="banUsable('tabs4')" id="member1" style="cursor: pointer">[활성]</span>
                         </td>
                     </tr>
                 </table>
@@ -364,8 +447,7 @@
                         <td th:text="${banner.banEtime}"></td>
                         <td th:text="${banner.banUsable}"></td>
                         <td>
-                            <a href="#">[비활성]</a>
-                            <a href="#">[활성]</a>
+                            <span onclick="banUsable('tabs5')" id="my1" style="cursor: pointer">[활성]</span>
                         </td>
                     </tr>
                 </table>

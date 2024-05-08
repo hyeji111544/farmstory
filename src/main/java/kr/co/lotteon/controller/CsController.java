@@ -1,5 +1,7 @@
 package kr.co.lotteon.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.FaqDTO;
 import kr.co.lotteon.dto.PageRequestDTO;
 import kr.co.lotteon.dto.PageResponseDTO;
@@ -92,7 +94,11 @@ public class CsController {
 
     // qna 글쓰기 이동
     @GetMapping("/cs/qna/write")
-    public String qnaWriteForm(){
+    public String qnaWriteForm(Model model,String qnaCate,String userId){
+
+        log.info("QnaCate333 {}", qnaCate);
+        model.addAttribute("qnaCate", qnaCate);
+        model.addAttribute("userId", userId);
         return "/cs/qna/write";
     }
 
@@ -100,9 +106,9 @@ public class CsController {
     @PostMapping("/cs/qna/write")
     public String qnaWrite(QnaDTO qnaDTO){
 
-        qnaDTO.setUserId("gudals1234");
         csService.insertQna(qnaDTO);
         log.info("QnaDTO {}", qnaDTO);
+
         return "redirect:/cs/qna/list?qnaCate=" + qnaDTO.getQnaCate();
     }
     // qna 글보기

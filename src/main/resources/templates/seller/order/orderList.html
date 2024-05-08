@@ -19,18 +19,18 @@
                 }
 
                 // 그래프
-                new Chart(document.getElementById("line-chart"), {
+                const ctx = document.getElementById('line-chart');
+
+                new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: dateArray,
                         datasets: [{
                             data: countArray,
-                            label: "주문건수",
-                            borderColor: "#3e95cd",
-                            fill: false,
-                            pointStyle: 'triangle'
-                        }
-                        ]
+                            borderWidth: 1,
+                            backgroundColor: '#36AE7C',
+                            borderColor: '#36AE7C'
+                        }]
                     },
                     options: {
                         responsive: false,
@@ -40,31 +40,42 @@
                             fontSize: 20,
                             color: '#111',
                         },
-                        legend: {
-                            display: false // 라벨 숨기기
+                        plugins: {
+                            legend: {
+                                display: false // 라벨 숨기기
+                            }
+                        },
+                        scales: {
+                            y: {
+                                ticks: {
+                                    stepSize: 1 // 눈금의 간격
+                                },
+                                beginAtZero: true
+                            }
                         }
                     }
                 });
             }
 
-            // 주문 상세정보 drop 버튼
-            function createDetailInfo() {
-                const click = event.target;
-                const index = click.className;
-                const orderInfo = click.parentNode;
-                const orderListBody = orderInfo.parentNode;
-                const detailInfo = orderListBody.querySelector('.detailInfo');
-                console.log(detailInfo)
-                if (detailInfo != null) {
-                    orderInfo.style.backgroundColor = "#fafafa";
-                    detailInfo.remove();
-                    click.innerText = "자세히"
-                }else {
-                    orderInfo.style.backgroundColor = "#ececec";
-                    createDetailInfoTag(orderListBody, index);
-                    click.innerText = "접기"
+
+                // 주문 상세정보 drop 버튼
+                function createDetailInfo() {
+                    const click = event.target;
+                    const index = click.className;
+                    const orderInfo = click.parentNode;
+                    const orderListBody = orderInfo.parentNode;
+                    const detailInfo = orderListBody.querySelector('.detailInfo');
+                    console.log(detailInfo)
+                    if (detailInfo != null) {
+                        orderInfo.style.backgroundColor = "#fafafa";
+                        detailInfo.remove();
+                        click.innerText = "자세히"
+                    } else {
+                        orderInfo.style.backgroundColor = "#ececec";
+                        createDetailInfoTag(orderListBody, index);
+                        click.innerText = "접기"
+                    }
                 }
-            }
 
             function createDetailInfoTag(orderListBody, index) {
                 const dtoList = [[${selectOrder.dtoList}]]
@@ -74,48 +85,49 @@
                 if (orders.orderMemo === null) {
                     memo = "배송메모가 없습니다.";
                 }
-                const price = new Intl.NumberFormat('ko-KR').format(orders.detailPrice)+'원';
-                const userId = (orders.userId).substring(0,6) + "****";
+                const price = new Intl.NumberFormat('ko-KR').format(orders.detailPrice) + '원';
+                const userId = (orders.userId).substring(0, 6) + "****";
                 const newTag = `<div class="detailInfo">
-                                    <div class="detailInfoRow">
-                                        <div>구매자</div>
-                                        <div>${userId}</div>
-                                        <div>결제금액</div>
-                                        <div>${price}</div>
-                                    </div>
-                                    <div class="detailInfoRow">
-                                        <div>받는사람</div>
-                                        <div>${orders.orderReceiver}</div>
-                                        <div>연락처</div>
-                                        <div>${orders.orderHp}</div>
-                                    </div>
-                                    <div class="detailInfoRow">
-                                        <div>결제수단</div>
-                                        <div>${orders.orderPay}</div>
-                                        <div>주문상태</div>
-                                        <div>${orders.detailStatus}</div>
-                                    </div>
-                                    <div class="detailInfoAddr">
-                                        <div>배송주소</div>
-                                        <div>${orders.orderAddr}</div>
-                                    </div>
-                                    <div class="detailInfoAddr">
-                                        <div>배송메모</div>
-                                        <div>${memo}</div>
-                                    </div>
-                                </div>`
+                                <div class="detailInfoRow">
+                                    <div>구매자</div>
+                                    <div>${userId}</div>
+                                    <div>결제금액</div>
+                                    <div>${price}</div>
+                                </div>
+                                <div class="detailInfoRow">
+                                    <div>받는사람</div>
+                                    <div>${orders.orderReceiver}</div>
+                                    <div>연락처</div>
+                                    <div>${orders.orderHp}</div>
+                                </div>
+                                <div class="detailInfoRow">
+                                    <div>결제수단</div>
+                                    <div>${orders.orderPay}</div>
+                                    <div>주문상태</div>
+                                    <div>${orders.detailStatus}</div>
+                                </div>
+                                <div class="detailInfoAddr">
+                                    <div>배송주소</div>
+                                    <div>${orders.orderAddr}</div>
+                                </div>
+                                <div class="detailInfoAddr">
+                                    <div>배송메모</div>
+                                    <div>${memo}</div>
+                                </div>
+                            </div>`
                 orderListBody.insertAdjacentHTML('beforeend', newTag);
             }
 
             function filterDrop() {
                 const button = event.target;
                 const filterList = button.nextElementSibling;
-                if (filterList.style.display === "block"){
+                if (filterList.style.display === "block") {
                     filterList.style.display = "none";
-                }else {
+                } else {
                     filterList.style.display = "block";
                 }
             }
+
         </script>
 
         <nav>
@@ -127,6 +139,8 @@
         <!-- 상품목록 컨텐츠 시작 -->
         <section>
             <div class="orderListInfo">
+                <h4 style="font-weight: bold; font-size: 15px; margin: 10px 0; text-align: center">한달 주문 건수</h4>
+
                 <div id="data" class="orderListChart">
                     <canvas id="line-chart" width="1000" height="250"></canvas>
                 </div>

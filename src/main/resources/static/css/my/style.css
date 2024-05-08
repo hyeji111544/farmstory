@@ -1822,3 +1822,106 @@ footer p > strong {
 .wishTable > .page > .on {
     background-color: #c9c9c9;
 }
+
+/**/
+.myQnaNav {
+    display: flex;
+    border-bottom: 1px solid #aaa;
+}
+.myQnaNav > a {
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+}
+.myQnaNav > a:hover {
+    color: #ef2a23;
+}
+.myQnaNav > .navOn {
+    color: #ef2a23;
+}
+.myTableStyle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.myTableHead {
+    display: flex;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.myTableHead > div {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center!important;
+}
+.myTableBody {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #aaa;
+}
+.myQnaRow > div {padding: 10px; text-align: center}
+.myQnaRow > div:nth-child(1) {width: 50px;}
+.myQnaRow > div:nth-child(2) {width: 100px;}
+.myQnaRow > div:nth-child(3) {width: 360px; text-align: left}
+.myQnaRow > div:nth-child(4) {width: 100px;}
+.myQnaRow > div:nth-child(5) {width: 100px;}
+
+.myTableStyle > .page {
+    display: flex;
+    padding: 10px 0;
+    justify-content: center;
+    border-top: 1px solid #aaa;
+}
+.myTableStyle > .page > a {
+    padding: 4px 8px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+.myTableStyle > .page > a:hover {
+    background-color: #c9c9c9;
+}
+.myTableStyle > .page > .on {
+    background-color: #c9c9c9;
+}
+
+.myCouponRow > div {padding: 10px; text-align: center}
+.myCouponRow > div:nth-child(1) {width: 150px;}
+.myCouponRow > div:nth-child(2) {width: 100px;}
+.myCouponRow > div:nth-child(2):after {content: '원'}
+.myCouponRow:nth-child(1) > div:nth-child(2):after {content: ''}
+.myCouponRow > div:nth-child(3) {width: 260px;}
+.myCouponRow > div:nth-child(3):after {content: '원 이상 구매시'}
+.myCouponRow:nth-child(1) > div:nth-child(3):after {content: ''}
+.myCouponRow > div:nth-child(4) {width: 100px;}
+.myCouponRow > div:nth-child(5) {width: 100px;}
+
+.myReviewRow > div {padding: 10px; text-align: center; align-self: center}
+.myReviewRow > div:nth-child(1) {width: 30px;}
+.myReviewRow > div:nth-child(2) {width: 90px;}
+.myReviewRow > div:nth-child(3) {width: 220px;}
+.myReviewRow > div:nth-child(4) {width: 150px;}
+.myReviewRow > div:nth-child(5) {width: 120px;}
+.myReviewRow > div:nth-child(6) {width: 100px;}
+
+.myReviewRow .rating {
+    display: block;
+    width: 84px;
+    height: 20px;
+    font-size: 0px;
+    background-image: url('../../images/my/my_rating_star.png');
+    background-repeat: no-repeat;
+    background-position: 36px 0px;
+}
+.myReviewRow .rating.star1 {background-position: 0 -40px;}
+.myReviewRow .rating.star2 {background-position: 0 -80px;}
+.myReviewRow .rating.star3 {background-position: 0 -120px;}
+.myReviewRow .rating.star4 {background-position: 0 -160px;}
+.myReviewRow .rating.star5 {background-position: 0 -200px;}
+
