@@ -1,5 +1,6 @@
 package kr.co.lotteon.controller;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
 import kr.co.lotteon.repository.UserPointRepository;
