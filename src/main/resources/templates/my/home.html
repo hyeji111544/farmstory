@@ -134,7 +134,7 @@
                 <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
                 <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
-                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의하기</a></li>
+                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, table='qna')}">문의하기</a></li>
                 <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
                 <!--회원가입구현되면 위에 파라미터 바꾸기-->
             </ul>

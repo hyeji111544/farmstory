@@ -41,6 +41,7 @@ public class MyService {
     private final UserPointRepository userPointRepository;
     private final SellerRepository sellerRepository;
     private final ProductRepository productRepository;
+    private final QnaRepository qnaRepository;
 
     public void selectMyInfo(HttpSession session, String userId){
         log.info("countOrder : " +userId);
@@ -514,4 +515,11 @@ public class MyService {
                 .total(total)
                 .build();
     }
+
+    //myQna 조회
+    public void selectMyQna(String userId, PageRequestDTO pageRequestDTO){
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        qnaRepository.selectMyQna(userId, pageRequestDTO, pageable);
+    }
+
 }

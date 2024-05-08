@@ -199,7 +199,12 @@ public class MyController {
 
     //마이페이지-QnA 이동
     @GetMapping("/my/qna")
-    public String myQna(){
+    public String myQna(String userId, PageRequestDTO pageRequestDTO){
+
+        myService.selectMyQna(userId, pageRequestDTO);
+
+        pageRequestDTO.setCate("qna");
+
         return "/my/qna";
     }
 
