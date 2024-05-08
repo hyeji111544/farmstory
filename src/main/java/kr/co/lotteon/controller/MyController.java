@@ -34,14 +34,9 @@ public class MyController {
     @GetMapping("/my/home")
     public String myHome(HttpSession session, Model model, String userId){
 
-    log.info("My home" +userId);
-
-<<<<<<< HEAD
-        myService.selectMyInfo(session, userId);
-=======
-    myService.selectMyInfo(session, userId);
+        log.info("My home" +userId);
     
->>>>>>> 1eeaf66500e973e62fb0410b5b83d5135f3a1453
+        myService.selectMyInfo(session, userId);
 
         // 회원 정보
 
