@@ -3,9 +3,7 @@ package kr.co.lotteon.controller;
 import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
-import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.repository.UserPointRepository;
-import kr.co.lotteon.repository.pointHistoryRepository;
 import kr.co.lotteon.service.MyService;
 import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +32,11 @@ public class MyController {
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(Model model, String userId){
+    public String myHome(HttpSession session, Model model, String userId){
 
     log.info("My home" +userId);
-    
+
+        myService.selectMyInfo(session, userId);
 
         // 회원 정보
 

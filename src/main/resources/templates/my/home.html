@@ -12,15 +12,18 @@
                 const myOrderRow = confirm.parentNode // 버튼의 부모의 부모
                 const myOrderInfo = myOrderRow.querySelector('.myOrderInfo') // 할아버지의 둘째
                 const prodName = myOrderInfo.querySelector('.InfoProdName') // 상품 이름
+                const detailNo = button.getAttribute('data-detailNo'); // 상품 번호
                 const prodNo = button.id; // 상품 번호
 
                 const popReview = document.getElementById('popReview'); // 상품평쓰기 창
 
                 const productName = popReview.querySelector('.productName');
                 const productNo = popReview.querySelector('.productNo');
+                const prodDetailNo = popReview.querySelector('.detailNo');
 
                 productName.innerText = prodName.innerText;
                 productNo.value = prodNo;
+                prodDetailNo.value = detailNo;
             }
 
             // 리뷰 제출 버튼
@@ -111,9 +114,9 @@
                 </div>
 
                 <ol>
-                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
-                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
-                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point">1,000</span></a></li>
+                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
+                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
+                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
                     <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
                 </ol>
             </div>
@@ -136,7 +139,7 @@
 
                 <article class="latest" >
                     <h3>최근주문내역</h3>
-                    <a href="#" class="more">더보기</a>
+                    <a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
                     <div class="myOrderList">
                         <div class="orderByCompany latest" th:each="linkedMap : ${myOrder}">
                             <div class="myOrderTitle">
@@ -168,7 +171,7 @@
 
                 <article class="point">
                     <h3>포인트적립내역</h3>
-                    <a href="#" class="more">더보기</a>
+                    <a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
                     <table border="0">
                         <tr>
                             <th>날짜</th>
@@ -178,15 +181,19 @@
                         </tr>
                         <tr th:each="point : ${myPoint}">
                             <td th:text="${#strings.substring(point.changeDate, 0, 10)}"></td>
-                            <td th:text="${point.changeType}"></td>
-                            <td th:text="${point.changePoint}"></td>
+                            <td id="changeType" th:text="${point.changeType}"></td>
+
+                            <td id="changePoint">
+                                <span th:if="${point.changeType == '사용'}"></span>
+                                <span th:text="${#numbers.formatInteger(point.changePoint,3,'COMMA')}"></span>
+                            </td>
                             <td th:text="${point.changeCode}"></td>
                         </tr>
                     </table>
                 </article>
                 <article class="review">
                     <h3>상품평</h3>
-                    <a href="#" class="more">더보기</a>
+                    <a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
                     <table border="0">
                         <tr >
                             <th>번호</th>
@@ -215,7 +222,7 @@
 
                 <article class="qna">
                     <h3>문의내역</h3>
-                    <a href="#" class="more">더보기</a>
+                    <a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
                     <table border="0">
                         <tr>
                             <th>번호</th>

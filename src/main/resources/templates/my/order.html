@@ -53,17 +53,22 @@
                 const button = event.target; // 클릭한 버튼
                 const confirm = button.parentNode; // 버튼의 부모
                 const myOrderRow = confirm.parentNode // 버튼의 부모의 부모
-                const myOrderInfo = myOrderRow.querySelector('.myOrderInfo') // 할아버지의 둘째
-                const prodName = myOrderInfo.querySelector('.InfoProdName') // 상품 이름
+                const myOrderInfo = myOrderRow.querySelector('.myOrderInfo'); // 할아버지의 둘째
+                const prodName = myOrderInfo.querySelector('.InfoProdName'); // 상품 이름
+                const detailNo = button.getAttribute('data-detailNo'); // 상품 번호
                 const prodNo = button.id; // 상품 번호
+
+                console.log(detailNo);
 
                 const popReview = document.getElementById('popReview'); // 상품평쓰기 창
 
                 const productName = popReview.querySelector('.productName');
                 const productNo = popReview.querySelector('.productNo');
+                const prodDetailNo = popReview.querySelector('.detailNo');
 
                 productName.innerText = prodName.innerText;
                 productNo.value = prodNo;
+                prodDetailNo.value = detailNo;
             }
 
             // 리뷰 제출 버튼
@@ -124,9 +129,9 @@
             <div>
                 <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
                 <ol>
-                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery">1</span></a></li>
-                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon">1</span></a></li>
-                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point">1,000</span></a></li>
+                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
+                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
+                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
                     <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
                 </ol>
             </div>
@@ -188,7 +193,7 @@
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
                                     <span>수취확인</span>
-                                    <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}">상품평쓰기</span>
+                                    <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}" th:data-detailNo="${orderList.detailNo}">상품평쓰기</span>
                                     <span>반품신청</span>
                                     <span>교환신청</span>
                                 </div>
