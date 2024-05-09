@@ -1042,7 +1042,6 @@ header > div > .logo {
     padding: 0 10px;
     box-sizing: border-box;
     height: auto;
-    border: 1px solid red;
 }
 .existOptionTitle {
     display: flex;
@@ -1082,7 +1081,6 @@ header > div > .logo {
     padding: 0 10px;
     box-sizing: border-box;
     height: auto;
-    border: 1px solid red;
 }
 .existOptDetailTitle {
     display: flex;
@@ -1125,7 +1123,6 @@ header > div > .logo {
     padding: 0 10px;
     box-sizing: border-box;
     height: auto;
-    border: 1px solid red;
 }
 .makeOption > div {
     width: 150px;
@@ -1219,7 +1216,6 @@ header > div > .logo {
     padding: 0 10px;
     box-sizing: border-box;
     height: auto;
-    border: 1px solid red;
 }
 .registerOption > div {
     padding: 10px;

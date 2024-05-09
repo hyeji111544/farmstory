@@ -2,6 +2,7 @@ package kr.co.lotteon.repository.custom;
 
 import com.querydsl.core.Tuple;
 import kr.co.lotteon.dto.PageRequestDTO;
+import kr.co.lotteon.dto.PageResponseDTO;
 import kr.co.lotteon.entity.ProdQna;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,4 +25,7 @@ public interface ProdQnaRepositoryCustom {
     // 관리자 메인페이지 - 고객문의 최신순 5개 조회
     // 판매자 메인페이지 - 고객문의 최신순 5개 조회
     public List<ProdQna> selectProdQnaForIndex(String prodSeller);
+
+    // 상품 문의 조회
+    public PageResponseDTO selectProdQna(int prodNo, Pageable pageable, PageRequestDTO pageRequestDTO);
 }

@@ -38,7 +38,7 @@
                     <!--로그인 했을때-->
                     <th:block th:if="${#authorization.expression('isAuthenticated()')}">
                         <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
-                        <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+                        <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}">마이페이지</a>
 
                         <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
                         <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>

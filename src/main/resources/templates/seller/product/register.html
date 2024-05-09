@@ -111,6 +111,12 @@
                 alert("2차 분류를 선택해야 합니다.");
                 return false;
             }
+
+            var cate03No = document.forms["prodRegisterForm"]["cate03No"].value;
+            if (cate03No === "") {
+                alert("3차 분류를 선택해야 합니다.");
+                return false;
+            }
             // 기본정보 섹션 필수 입력 필드 검사
             var prodName = document.forms["prodRegisterForm"]["prodName"].value;
             var prodPrice = document.forms["prodRegisterForm"]["prodPrice"].value;
