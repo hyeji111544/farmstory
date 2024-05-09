@@ -144,4 +144,23 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
         }
     }
 
+
+    // 상품 문의 조회
+    public Page<Tuple> selectProdQna(int prodNo, Pageable pageable, PageRequestDTO pageRequestDTO) {
+
+        QueryResults<Tuple> results = jpaQueryFactory
+                .select(qprodQna, qProdQnaNote)
+                .from(qprodQna)
+                .join(qProdQnaNote)
+                .on(qprodQna.prodQnaNo.eq(qProdQnaNote.prodQnaNo))
+                .where(qprodQna.prodNo.eq(prodNo))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Tuple> tupleList = results.getResults();
+        int total = (int) results.getTotal();
+        return new PageImpl<>(tupleList, pageable ,total);
+    }
+
 }

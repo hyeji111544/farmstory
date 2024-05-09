@@ -711,6 +711,44 @@
     border-radius: 2px;    
     white-space: normal;
 }
+.changTabBox {
+    height: 46px!important;
+    margin-bottom: 5px!important;
+}
+.btnProdReview {
+    width: 130px;
+    height: 36px;
+    border: 1px solid #111;
+    border-top-left-radius: 10px;
+    padding: 4px 10px!important;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: -1px;
+    margin-right: -5px;
+    line-height: 36px!important;
+}
+.btnProdQna {
+    width: 130px;
+    height: 36px;
+    border: 1px solid #111;
+    padding: 4px 10px!important;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: -1px;
+    margin-right: -5px;
+    line-height: 36px!important;
+}
+.btnProdQnaWrite {
+    width: 130px;
+    height: 36px;
+    border: 1px solid #111;
+    border-top-right-radius: 10px;
+    padding: 4px 10px!important;
+    text-align: center;
+    cursor: pointer;
+    margin-bottom: -1px;
+    line-height: 36px!important;
+}
 
 #product > .view > .review * {
 }
@@ -719,27 +757,36 @@
     box-sizing: border-box;
 }
 #product > .view > .review > ul > li {
+    display: flex;
     padding-top: 16px;
     border-bottom: 1px solid #ececec;
     box-sizing: border-box;
 }
+#product > .view > .review > ul > li > img {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+}
 #product > .view > .review > ul > li > div {
+    padding: 10px;
+}
+#product > .view > .review > ul > li > div > div {
     overflow: hidden;
 }
-#product > .view > .review > ul > li > div > h5 {
+#product > .view > .review > ul > li > div > div > h5 {
     float: left;
 }
 
-#product > .view > .review > ul > li > div > span {
+#product > .view > .review > ul > li > div > div > span {
     float: right;
     color: #555;
     padding-right: 20px;
 }
-#product > .view > .review > ul > li > h3 {
+#product > .view > .review > ul > li > div > h3 {
     color: #555;
     margin-top: 6px;
 }
-#product > .view > .review > ul > li > p {
+#product > .view > .review > ul > li > div > p {
     width: 100%;
     height: 60px;
     color: #555;
@@ -749,53 +796,54 @@
     word-wrap: break-word;
     margin-top: 10px;
 }
-#product > .view > .review > ul > li > ul {
-    padding-top: 10px;
-    padding-left: 40px;
+
+.prodQnaNotice {
+    border-bottom: 1px solid #f3f3f3;
+    padding: 20px 0 20px 0;
+}
+.prodQnaQuestion, .prodQnaAnswer {
+    display: flex;
+    flex-direction: column;
+}
+.prodQnaQuestion {
+    margin-top: 20px;
+    border-bottom: 1px solid #f3f3f3;
+    border-right: 1px solid #f3f3f3;
+    border-left: 1px solid #f3f3f3;
+}
+.prodQnaAnswer {
+    padding-top: 5px;
+}
+.questionHead, .answerHead {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f3f3f3;
+    border-top: 1px solid #f3f3f3;
+    padding: 5px 10px;
+}
+.questionBody, .answerBody {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 10px 20px;
+}
+.questionBody > div, .answerBody> div {
+    font-size: 14px;
+    padding: 10px 0;
+}
+.questionHead > p, .answerHead > p {
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 20px;
+}
+.questionHead > span, .answerHead > span {
+    font-size: 12px;
+    width: 100px;
+    color: #555;
+}
+.answerBody {
     background-color: #f3f3f3;
 }
-#product > .view > .review > ul > li > ul > li > div {
-    overflow: hidden;
-}
-#product > .view > .review > ul > li > ul > li > div > h5 {
-    float: left;
-    font-size: 16px;
-    font-weight: bold;
-}
-#product > .view > .review > ul > li > ul > li > div > span {
-    float: right;
-    color: #555;
-    padding-right: 20px;
-}
-#product > .view > .review > ul > li > ul > li > h3 {
-    color: #555;
-    margin-top: 6px;
-}
-#product > .view > .review > ul > li > ul > li > p {
-    width: 100%;
-    height: 60px;
-    color: #555;
-    font-size: 14px;
-    line-height: 19px;
-    word-break: break-all;
-    word-wrap: break-word;
-    margin-top: 10px;
-}
-.prodQnaBtn {
-    display: inline-block;
-    padding: 4px 10px;
-    border: 1px solid #e9e9e9;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-.prodQnaNotice {
-    border-bottom: 2px solid #f3f3f3;
-    border-top: 2px solid #f3f3f3;
-    padding: 20px 0;
-    margin-top: 10px;
-}
+
 
 
 #product > .view > .review > .paging {
