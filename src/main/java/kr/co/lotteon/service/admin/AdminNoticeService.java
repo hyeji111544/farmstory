@@ -55,9 +55,9 @@ public class AdminNoticeService {
 
         Page<Notice> pageNotice;
         if(noticeCate == null){
-            pageNotice = adminNoticeRepository.findAll(pageable);
+            pageNotice = adminNoticeRepository.findAllByOrderByNoticeDateDesc(pageable);
         }else{
-            pageNotice = adminNoticeRepository.findByNoticeCate(noticeCate, pageable);
+            pageNotice = adminNoticeRepository.findByNoticeCateOrderByNoticeDateDesc(noticeCate, pageable);
         }
         // Entity -> DTO
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()
