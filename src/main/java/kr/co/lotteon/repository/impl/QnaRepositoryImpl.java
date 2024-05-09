@@ -7,6 +7,7 @@ import kr.co.lotteon.entity.Qna;
 import kr.co.lotteon.repository.custom.QnaRepositoryCustom;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
@@ -18,9 +19,9 @@ public class QnaRepositoryImpl implements QnaRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final QQna qQna = QQna.qna;
-    long total = 0;
 
-    public PageImpl<Qna> selectMyQna(String userId, PageRequestDTO pageRequestDTO, Pageable pageable){
+
+    public Page<Qna> selectMyQna(String userId, PageRequestDTO pageRequestDTO, Pageable pageable){
 
         //user qnd 조회
         List<Qna> selectMyQna = jpaQueryFactory
@@ -31,7 +32,7 @@ public class QnaRepositoryImpl implements QnaRepositoryCustom {
                                     .limit(pageable.getPageSize())
                                     .fetch();
 
-        total = jpaQueryFactory
+        long total = jpaQueryFactory
                 .select(qQna.count())
                 .from(qQna)
                 .where(qQna.userId.eq(userId))

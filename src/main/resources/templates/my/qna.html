@@ -3,14 +3,62 @@
     layout:decorate="~{/layout/myLayout.html}">
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
+        
+        <script th:inline="javascript">
+
+            const qnaCateType = {
+                "user" : "회원", "coupon" : "쿠폰/이벤트", "order" : "주문/결제", "delivery" : "배송", "cancel" : "취소/반품/환불", "travel" : "여행/숙박/항공", "safe" : "안전결제",
+                "regi" : "가입", "leave" : "탈퇴", "info" : "회원정보", "login" : "로그인",
+                "cpregi" : "등록방법", "cplimit" : "유효기간", "event" : "이벤트기간", "ejoin" : "이벤트참여",
+                "list" : "주문내역", "way" : "결제방법", "payment" : "결제수단", "oway" : "주문방법",
+                "deldate" : "배송일", "deldelay" : "배송지연", "delchange" : "배송지변경", "delcheck" : "배송현황",
+                "return" : "반품신청", "ocancel" : "주문취소", "refund" : "환불신청", "coption" : "환불조건",
+                "tlist" : "숙박시설", "treco" : "여행지추천", "tway" : "결제방법", "ttime" : "비행시간",
+                "care" : "주의사항", "sway" : "결제방법", "sacc" : "입금계좌", "sfee" : "수수료"
+            }
+
+            window.onload = function () {
+                aa();
+            }
+
+
+            function qnaCateType() {
+                const myQnaRow = document.getElementsByClassName('myQnaRow');
+
+                Array.from(myQnaRow).forEach(function (eachRow) {
+                    let cateType = eachRow.querySelectorAll('div')[1];
+
+                    if(cateType.innerText !== "문의유형") {
+                        let type = cateType.className;
+                        let cate = cateType.innerText;
+
+                        console.log("type : " + type);
+                        console.log("cate : " + cate);
+
+                        let qnaCate = qnaCateType[type];
+                        let qnaType = qnaCateType[cate];
+
+                        cateType.innerText = qnaCate + " - " + qnaType;
+                    }
+                })
+            }
+
+        </script>
+
         <nav>
             <div>
-                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
+                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img
+                        th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
                 <ol>
-                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
-                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
-                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
+                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span
+                            class="delivery" th:text="${session.countOrder}"></span></a></li>
+                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span
+                            class="coupon" th:text="${session.couponCount}"></span></a></li>
+                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span
+                            class="point"
+                            th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span
+                            class="qna">1</span></a></li>
                 </ol>
             </div>
         </nav>
@@ -28,18 +76,20 @@
             </ul>
 
             <section>
-                <th:block th:each="banner : ${banMyOrderList}" >
-                    <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
+                <th:block th:each="banner : ${banMyOrderList}">
+                    <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}"
+                                                                      alt="패션, 타운 하나로 끝" class="banner"></a>
                 </th:block>
                 <article>
 
                     <div class="myQnaNav">
-                        <a class="navOn" href="#">고객문의</a>
-                        <a href="#">상품문의</a>
+                        <a class="navOn"
+                           th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">고객문의</a>
+                        <a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='prodqna')}">상품문의</a>
                     </div>
 
                     <!--고객문의 테이블-->
-                    <div class="myTableStyle">
+                    <div class="myTableStyle" th:if="${selectMyQna != null}">
                         <div class="myTableHead myQnaRow">
                             <div>번호</div>
                             <div>문의유형</div>
@@ -47,25 +97,33 @@
                             <div>작성일</div>
                             <div>상태</div>
                         </div>
-                        <div class="myTableBody myQnaRow">
-                            <div>1</div>
-                            <div>주문/결제</div>
-                            <div><a href="#">신용카드 결제 중 오류가 난 경우 어떻게 하나요?</a></div>
-                            <div>2024-12-12</div>
-                            <div>답변완료</div>
+                        <div class="myTableBody myQnaRow" th:each="qna, index : ${selectMyQna.dtoList}">
+                            <div th:text="${selectMyQna.startNo - index.index}"></div>
+                            <div th:class="${qna.qnaType}">[[${qna.qnaCate}]]</div>
+                            <div><a th:href="@{/cs/qna/view(qnaNo=${qna.qnaNo})}" th:text="${qna.qnaContent}"></a></div>
+
+                            <div th:text="${qna.qnaDate}"></div>
+                            <div th:text="${qna.qnaStatus}"></div>
                         </div>
 
                         <p class="page">
-                            <a href="#" class="prev">이전</a>
-                            <a href="#" class="num on">1</a>
-                            <a href="#" class="num">2</a>
-                            <a href="#" class="num">3</a>
-                            <a href="#" class="next">다음</a>
+                            <a th:if="${selectMyQna.prev && selectMyQna.cate == null}"
+                               th:href="@{/my/qna(pg=${selectMyQna.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
+                            <a th:if="${selectMyQna.prev && selectMyQna.cate != null}"
+                               th:href="@{/my/qna(pg=${selectMyQna.start -1}, type=${selectMyQna.type}, keyword=${selectMyQna.keyword}, userId=${#authentication.principal.user.userId})}">이전</a>
+
+                            <th:block th:each="num:${#numbers.sequence(selectMyQna.start, selectMyQna.end)}">
+                                <a class="pageNum" th:if="${selectMyQna.cate == null}" th:href="@{/my/qna(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == selectMyQna} ? 'on' : ''">[[${num}]]</a>
+                                <a class="pageNum" th:if="${selectMyQna.cate != null}" th:href="@{/my/qna(pg=${num}, type=${selectMyQna.type}, cate=${selectMyQna.cate}, keyword=${selectMyQna.keyword}, userId=${#authentication.principal.user.userId})}" th:class="${num == selectMyQna.pg} ? 'on' : ''">[[${num}]]</a>
+                            </th:block>
+
+                            <a th:if="${selectMyQna.next && selectMyQna.cate == null}" th:href="@{/my/qna(pg=${selectMyQna.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>
+                            <a th:if="${selectMyQna.next && selectMyQna.cate != null}" th:href="@{/my/qna(pg=${selectMyQna.end + 1}, type=${selectMyQna.type}, keyword=${selectMyQna.keyword}, userId=${#authentication.principal.user.userId})}">다음</a>
                         </p>
                     </div>
 
                     <!--상품문의 테이블-->
-                    <div class="myTableStyle">
+                    <div class="myTableStyle" th:if="${selectMyProdQna != null}">
                         <div class="myTableHead myQnaRow">
                             <div>번호</div>
                             <div>문의유형</div>
@@ -73,20 +131,26 @@
                             <div>작성일</div>
                             <div>상태</div>
                         </div>
-                        <div class="myTableBody myQnaRow">
-                            <div>1</div>
-                            <div>상품문의</div>
-                            <div><a href="#">상품의 재입고 날짜는 언제인가요?</a></div>
-                            <div>2024-12-12</div>
-                            <div>답변완료</div>
+                        <div class="myTableBody myQnaRow" th:each="prodqna, index : ${selectMyProdQna.dtoList}">
+                            <div th:text="${selectMyProdQna.startNo - index.index}"></div>
+                            <div>제품문의</div>
+                            <div><a href="#" th:text="${prodqna.prodQnaContent}"></a></div>
+
+                            <div th:text="${prodqna.prodQnaDate}"></div>
+                            <div th:text="${prodqna.prodQnaStatus}"></div>
                         </div>
 
                         <p class="page">
-                            <a href="#" class="prev">이전</a>
-                            <a href="#" class="num on">1</a>
-                            <a href="#" class="num">2</a>
-                            <a href="#" class="num">3</a>
-                            <a href="#" class="next">다음</a>
+                            <a th:if="${selectMyProdQna.prev && selectMyProdQna.cate == null}" th:href="@{/my/qna(pg=${selectMyProdQna.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
+                            <a th:if="${selectMyProdQna.prev && selectMyProdQna.cate != null}" th:href="@{/my/qna(pg=${selectMyProdQna.start -1}, type=${selectMyProdQna.type}, keyword=${selectMyProdQna.keyword}, userId=${#authentication.principal.user.userId})}">이전</a>
+
+                            <th:block th:each="num:${#numbers.sequence(selectMyProdQna.start, selectMyProdQna.end)}">
+                                <a class="pageNum" th:if="${selectMyProdQna.cate == null}" th:href="@{/my/qna(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == selectMyProdQna} ? 'on' : ''">[[${num}]]</a>
+                                <a class="pageNum" th:if="${selectMyProdQna.cate != null}" th:href="@{/my/qna(pg=${num}, type=${selectMyProdQna.type}, cate=${selectMyProdQna.cate}, keyword=${selectMyProdQna.keyword}, userId=${#authentication.principal.user.userId})}" th:class="${num == selectMyProdQna.pg} ? 'on' : ''">[[${num}]]</a>
+                            </th:block>
+
+                            <a th:if="${selectMyProdQna.next && selectMyProdQna.cate == null}" th:href="@{/my/qna(pg=${selectMyProdQna.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>
+                            <a th:if="${selectMyProdQna.next && selectMyProdQna.cate != null}" th:href="@{/my/qna(pg=${selectMyProdQna.end + 1}, type=${selectMyProdQna.type}, keyword=${selectMyProdQna.keyword}, userId=${#authentication.principal.user.userId})}">다음</a>
                         </p>
                     </div>
                 </article>
