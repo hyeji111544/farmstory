@@ -91,5 +91,23 @@ public class PdReviewRepositoryImpl implements PdReviewRepositoryCustom {
                 .build();
     }
 
+    // 상품 리뷰 조회 - 상품 상세 페이지
+    public Page<Tuple> selectProdReviewForView(int prodNo, Pageable pageable, PageRequestDTO pageRequestDTO) {
+
+        QueryResults<Tuple> results = jpaQueryFactory
+                .select(qPdReview, qPdReviewImg.revThumb)
+                .from(qPdReview)
+                .join(qPdReviewImg)
+                .on(qPdReview.revNo.eq(qPdReviewImg.revNo))
+                .where(qPdReview.prodNo.eq(prodNo))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<Tuple> tupleList = results.getResults();
+        int total = (int) results.getTotal();
+        return new PageImpl<>(tupleList, pageable, total);
+    }
 
 }
+

@@ -122,7 +122,7 @@
                                                 <span id="optProdPrice">원</span>
                                                 <input type="text" id="saveOptProdPrice"/>
                                                 <input type="hidden" name="optDetailNo" value="${matchingDTOs.optDetailNo}"/>
-                                                <span onclick="delSelectedOption()">x</span>
+                                                <span onclick="delSelectedOption()" style="cursor: pointer">x</span>
                                             </div>
                                         </div>`;
                             selectedOption.insertAdjacentHTML('beforeend', selected);
@@ -182,6 +182,7 @@
                 const SelectedOptDiv = optionPrice.parentNode // 버튼의 부모의 부모
 
                 SelectedOptDiv.remove();
+                inputTotalCost();
             }
 
             /*
@@ -267,6 +268,60 @@
                     //inputPrice.innerText = formattedTotalPrice;
                 } else {
                     inputPrice.innerText = "0";
+                }
+                inputTotalCost();
+            }
+
+            function inputTotalCost() {
+                var totalCost = 0;
+                var selectOptPrices = document.querySelectorAll('[id="optProdPrice"]');
+                selectOptPrices.forEach(function (optPrice){
+                   var priceText =  optPrice.textContent;
+                    var price = parseInt(priceText.replace('원', '').replace(',', ''));
+                    totalCost += price;
+                });
+                var inputPrice = document.querySelector('[name="totalPrice"]');
+                inputPrice.textContent = totalCost.toLocaleString();
+            }
+
+            /* +, - 버튼 눌렀을 때 동작하며 할인 금액 계산하여 총 액에나타나게함 - 옵션 업는 경우 */
+            function changeNumNoOpt(change) {
+                var numInput = document.getElementById("numInput");
+                var totalPriceElements  = document.getElementsByName('totalPrice');
+                var priceText = document.getElementById("disPrice");
+                var selectProdPrice = document.getElementById("selectProdPrice");
+                var saveProdPrice = document.getElementById('saveProdPrice').value;
+                console.log(saveProdPrice);
+
+                var currentValue = parseInt(numInput.value) + change;
+                console.log("currentValue: " + currentValue);
+
+                // 최소값은 1, 최대값은 99로 제한
+                if (currentValue < 1) {
+                    currentValue = 1;
+                } else if (currentValue > 99) {
+                    currentValue = 99;
+                } else if (isNaN(currentValue)){
+                    currentValue = 1;
+                }
+
+                numInput.value = currentValue; // 변경된 값 적용
+
+                var totalPrice = saveProdPrice * currentValue;
+                if (!isNaN(totalPrice)) {
+                    // 금액 콤마 표시를 위해 포멧팅
+                    var formattedTotalPrice = new Intl.NumberFormat('ko-KR').format(totalPrice);
+                    selectProdPrice.innerText = formattedTotalPrice;
+
+                    // totalPrice 요소의 값을 설정
+                    if (totalPriceElements.length > 0) {
+                        totalPriceElements[0].innerText = formattedTotalPrice;
+                    }
+                } else {
+                    // totalPrice 요소의 값을 0으로 설정
+                    if (totalPriceElements.length > 0) {
+                        totalPriceElements[0].innerText = "0";
+                    }
                 }
             }
 
@@ -427,7 +482,51 @@
                             alert("장바구니 추가에 실패했습니다.");
                         });
                 }
+            }
 
+            // 별점 이미지 계산
+            window.onload = function () {
+                let rating = document.getElementsByClassName("rating");
+                Array.from(rating).forEach(function (element) {
+                    const revScore = parseInt(element.innerText);
+                    switch (revScore){
+                        case 1:
+                            element.classList.add('star1');
+                            break;
+                        case 2:
+                            element.classList.add('star2');
+                            break;
+                        case 3:
+                            element.classList.add('star3');
+                            break;
+                        case 4:
+                            element.classList.add('star4');
+                            break;
+                        case 5:
+                            element.classList.add('star5');
+                            break;
+                    }
+                });
+            }
+
+            // 리뷰 & 문의 활성화 탭
+            function changeTab() {
+                const button = event.target;
+                if (button.classList.value === "btnProdReview") {
+                    const prodReview = document.getElementById('prodReview');
+                    const prodQna = document.getElementById('prodQna');
+                    if (prodReview.style.display === "none") {
+                        prodReview.style.display = "block";
+                        prodQna.style.display = "none";
+                    }
+                }else if (button.classList.value === "btnProdQna") {
+                    const prodReview = document.getElementById('prodReview');
+                    const prodQna = document.getElementById('prodQna');
+                    if (prodQna.style.display === "none") {
+                        prodQna.style.display = "block";
+                        prodReview.style.display = "none";
+                    }
+                }
             }
 
         </script>
@@ -500,13 +599,14 @@
                     <div th:if="${OptionDTOs.optionMap.isEmpty()}">
                         <h4 th:text="${product.prodName}">상품 이름</h4>
                         <div class="count">
-                            <button class="decrease" onclick="changeNum(-1)">-</button>
-                            <input type="text" name="num" class="numInput" value="1" oninput="changeNum(0)"/>
-                            <button class="increase" onclick="changeNum(1)">+</button>
+                            <button class="decrease" onclick="changeNumNoOpt(-1)">-</button>
+                            <input type="text" name="num" id="numInput" value="1" oninput="changeNumNoOpt(0)"/>
+                            <button class="increase" onclick="changeNumNoOpt(1)">+</button>
                         </div>
                         <div class="optionPrice">
                             <span>
-                                <span class="eachCost" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}" style="font-size: 20px"></span>원
+                                <span class="eachCost" id="selectProdPrice" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}" style="font-size: 20px"></span>원
+                                <input type="hidden" id="saveProdPrice" th:value="${(product.prodPrice * (100 - product.prodDiscount)*0.01)}"/>
                             </span>
                             <input type="hidden" name="optDetailNo" value=""/>
                         </div>
@@ -631,71 +731,26 @@
         </article>
 
         <!-- 상품 리뷰 내용 -->
-        <article class="review">
-            <nav>
-                <h1>상품리뷰</h1>
+        <nav class="changTabBox" style="padding-bottom: 0">
+            <h1 class="btnProdReview" onclick="changeTab()">상품 리뷰</h1>
+            <h1 class="btnProdQna" onclick="changeTab()">상품 문의</h1>
+            <h1 class="btnProdQnaWrite" onclick="changeTab()">상품 문의 작성</h1>
+        </nav>
 
-            </nav>
+        <article class="review" id="prodReview">
             <ul>
-                <li>
+                <li th:each="review : ${prodReview.dtoList}">
+                    <img th:src="@{/uploads/__${review.revThumb}__}">
                     <div>
-                        <h5 class="rating star4">상품평</h5>
-                        <span>seo******	2018-07-10</span>
+                        <div>
+                            <h5 class="rating" th:text="${review.revScore}"></h5>
+                            <span th:text="${#temporals.format(review.revAddDate, 'yyyy-MM-dd')}"></span>
+                            <span th:text="${#strings.substring(review.userId, 0, 6)} + '****'"></span>
+                        </div>
+                        <h3 th:text="${product.prodName}"></h3>
+                        <p th:text="${review.revContent}">
+                        </p>
                     </div>
-                    <h3>상품명1/BLUE/L</h3>
-                    <p>
-                        가격대비 정말 괜찮은 옷이라 생각되네요 핏은 음...제가 입기엔 어깨선이 맞고 루즈핏이라 하기도 좀 힘드네요.
-                        아주 약간 루즈한정도...?그래도 이만한 옷은 없다고 봅니다 깨끗하고 포장도 괜찮고 다음에도 여기서 판매하는
-                        제품들을 구매하고 싶네요 정말 만족하고 후기 남깁니다 많이 파시길 바래요 ~ ~ ~
-                    </p>
-                </li>
-                <li>
-                    <div>
-                        <h5 class="rating star4">상품평</h5>
-                        <span>seo******	2018-07-10</span>
-                    </div>
-                    <h3>상품명1/BLUE/L</h3>
-                    <p>
-                        가격대비 정말 괜찮은 옷이라 생각되네요 핏은 음...제가 입기엔 어깨선이 맞고 루즈핏이라 하기도 좀 힘드네요.
-                        아주 약간 루즈한정도...?그래도 이만한 옷은 없다고 봅니다 깨끗하고 포장도 괜찮고 다음에도 여기서 판매하는
-                        제품들을 구매하고 싶네요 정말 만족하고 후기 남깁니다 많이 파시길 바래요 ~ ~ ~
-                    </p>
-                </li>
-                <li>
-                    <div>
-                        <h5 class="rating star4">상품평</h5>
-                        <span>seo******	2018-07-10</span>
-                    </div>
-                    <h3>상품명1/BLUE/L</h3>
-                    <p>
-                        가격대비 정말 괜찮은 옷이라 생각되네요 핏은 음...제가 입기엔 어깨선이 맞고 루즈핏이라 하기도 좀 힘드네요.
-                        아주 약간 루즈한정도...?그래도 이만한 옷은 없다고 봅니다 깨끗하고 포장도 괜찮고 다음에도 여기서 판매하는
-                        제품들을 구매하고 싶네요 정말 만족하고 후기 남깁니다 많이 파시길 바래요 ~ ~ ~
-                    </p>
-                </li>
-                <li>
-                    <div>
-                        <h5 class="rating star4">상품평</h5>
-                        <span>seo******	2018-07-10</span>
-                    </div>
-                    <h3>상품명1/BLUE/L</h3>
-                    <p>
-                        가격대비 정말 괜찮은 옷이라 생각되네요 핏은 음...제가 입기엔 어깨선이 맞고 루즈핏이라 하기도 좀 힘드네요.
-                        아주 약간 루즈한정도...?그래도 이만한 옷은 없다고 봅니다 깨끗하고 포장도 괜찮고 다음에도 여기서 판매하는
-                        제품들을 구매하고 싶네요 정말 만족하고 후기 남깁니다 많이 파시길 바래요 ~ ~ ~
-                    </p>
-                </li>
-                <li>
-                    <div>
-                        <h5 class="rating star4">상품평</h5>
-                        <span>seo******	2018-07-10</span>
-                    </div>
-                    <h3>상품명1/BLUE/L</h3>
-                    <p>
-                        가격대비 정말 괜찮은 옷이라 생각되네요 핏은 음...제가 입기엔 어깨선이 맞고 루즈핏이라 하기도 좀 힘드네요.
-                        아주 약간 루즈한정도...?그래도 이만한 옷은 없다고 봅니다 깨끗하고 포장도 괜찮고 다음에도 여기서 판매하는
-                        제품들을 구매하고 싶네요 정말 만족하고 후기 남깁니다 많이 파시길 바래요 ~ ~ ~
-                    </p>
                 </li>
             </ul>
             <div class="paging">
@@ -718,11 +773,7 @@
 
         </article>
 
-        <article class="review">
-            <nav>
-                <h1>상품 문의</h1>
-            </nav>
-            <a href="#" class="prodQnaBtn">문의하기</a>
+        <article class="review" id="prodQna" style="display: none">
             <p class="prodQnaNotice">
                 구매한 상품의 취소/반품은 마이페이지 구매내역에서 신청 가능합니다.<br>
                 상품문의 및 후기게시판을 통해 취소나 환불, 반품 등은 처리되지 않습니다.<br>
@@ -730,53 +781,28 @@
                 "해당 상품 자체"와 관계없는 글, 양도, 광고성, 욕설, 비방, 도배 등의 글은 예고 없이 이동, 노출제한, 삭제 등의 조치가 취해질 수 있습니다.<br>
                 공개 게시판이므로 전화번호, 메일 주소 등 고객님의 소중한 개인정보는 절대 남기지 말아주세요.
             </p>
-            <ul>
-                <li>
-                    <div>
-                        <h5 style="font-size: 16px; font-weight: bold">문의</h5>
-                        <span>seo******	2018-07-10</span>
-                    </div>
-                    <h3>상품명1/BLUE/L</h3>
-                    <p>
-                        제품 사용 기한은 어떻게 되나요??
-                    </p>
-                    <!--답변-->
-                    <ul>
-                        <li>
-                            <div>
-                                <h5>답변</h5>
-                                <span>2018-07-10</span>
-                            </div>
-                            <p>
-                                구매 후 1년 사용가능합니다.
-                            </p>
-                        </li>
-                    </ul>
-                </li>
 
-                <li>
-                    <div>
-                        <h5 style="font-size: 16px; font-weight: bold">문의</h5>
-                        <span>seo******	2018-07-10</span>
+            <div class="prodQnaQuestion" th:each="qna : ${prodQna}">
+                <div class="questionHead">
+                    <p>문의</p>
+                    <span>상품명</span>
+                    <span th:text="${#strings.substring(qna.userId, 0, 6)} + '****'"></span>
+                    <span th:text="${#temporals.format(qna.prodQnaDate, 'yyyy-MM-dd')}"></span>
+                </div>
+                <div class="questionBody">
+                    <div th:text="${qna.prodQnaContent}" style="white-space: pre-line;"></div>
+                </div>
+                <!--답변-->
+                <div class="prodQnaAnswer">
+                    <div class="answerHead">
+                        <p>&#10551; 답변</p>
+                        <span>2018-07-10</span>
                     </div>
-                    <h3>상품명1/BLUE/L</h3>
-                    <p>
-                        재입고 언제되는지 알수있나요?
-                    </p>
-                    <!--답변-->
-                    <ul>
-                        <li>
-                            <div>
-                                <h5>답변</h5>
-                                <span>2018-07-10</span>
-                            </div>
-                            <p>
-                                한달 뒤에 재입고 됩니다.
-                            </p>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+                    <div class="answerBody">
+                        <div>구매 후 1년 사용가능합니다.</div>
+                    </div>
+                </div>
+            </div>
         </article>
 
     </section>

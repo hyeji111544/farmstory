@@ -63,9 +63,11 @@ public class AdminFaqService {
         log.info("faqType {}", faqType);
         Page<Faq> pageFaq;
         if(faqCate == null && faqType == null){
-            pageFaq = adminFaqRepository.findAll(pageable);
+            pageFaq = adminFaqRepository.findAllByOrderByFaqDateDesc(pageable);
+        }else if(faqCate != null && faqType != null){
+            pageFaq = adminFaqRepository.findByFaqCateAndFaqTypeOrderByFaqDateDesc(faqCate, faqType, pageable);
         }else{
-            pageFaq = adminFaqRepository.findByFaqCateAndFaqType(faqCate, faqType, pageable);
+            pageFaq = adminFaqRepository.findByFaqCateOrderByFaqDateDesc(faqCate,pageable);
         }
 
         List<FaqDTO> dtoList = pageFaq.getContent().stream()

@@ -43,13 +43,9 @@
 
                 console.log("here...2 : " + valueArr);
 
-                if(valueArr.length == 0){
-                    alert("선택된 글이 없습니다.");
-                } else{
+                if(valueArr.length != 0){
                     const chk = confirm("정말 삭제하시겠습니까?");
-                    console.log("here...3");
-                    //fetch().then().then();
-
+                    if(chk){
                     $.ajax({
                         url : url,              // 전송 URL
                         type : 'POST',          // POST방식
@@ -63,11 +59,6 @@
 
                             if(data.result > 0){
                                 alert("삭제 성공");
-
-                                // for(const input of inputChecked){
-                                //     input.closest('tr').remove();
-                                // }
-
                                 location.replace("/lotteon/admin/cs/notice/list") // list로 페이지 새로고침
 
                             }else{
@@ -75,6 +66,16 @@
                             }
                         }
                     });
+                    }
+                } else{
+                    alert("선택된 글이 없습니다.");
+                    console.log("here...3");
+                }
+            }
+            function deleteNotice(event){
+                const chk = confirm("정말 삭제하시겠습니까?");
+                if(!chk){
+                    event.preventDefault();
                 }
             }
             // // 카테고리별 조회
@@ -136,7 +137,7 @@
                     <td th:text="${notice.noticeHit}"></td>
                     <td th:if="${notice.noticeDate != null}" th:text="${#temporals.format(notice.noticeDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
                     <td>
-                        <a th:href="@{/admin/cs/notice/delete(noticeNo=${notice.noticeNo})}">[삭제]</a>
+                        <a class="deleteNotice" th:href="@{/admin/cs/notice/delete(noticeNo=${notice.noticeNo})}" onclick="deleteNotice(event);">[삭제]</a>
                         <a th:href="@{/admin/cs/notice/modify(noticeNo=${notice.noticeNo})}">[수정]</a>
                     </td>
                 </tr>
@@ -153,7 +154,7 @@
 
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
                         <a class="pageNum" th:if="${noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${num}, noticeCate=${noticeCate})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${num}, noticeCate=${noticeCate})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
                     <a th:if="${pageResponseDTO.next && noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.end + 1})}">다음</a>

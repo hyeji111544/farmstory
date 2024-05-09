@@ -117,9 +117,9 @@ public class SellerQnaService {
 
         Page<Notice> pageNotice = null;
         if (noticeCate == null){
-            pageNotice = noticeRepository.findAll(pageable);
+            pageNotice = noticeRepository.findAllByOrderByNoticeDateDesc(pageable);
         }else {
-            pageNotice = adminNoticeRepository.findByNoticeCate(noticeCate, pageable);
+            pageNotice = adminNoticeRepository.findByNoticeCateOrderByNoticeDateDesc(noticeCate, pageable);
         }
 
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()

@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,8 @@ public class MyService {
     private final UserPointRepository userPointRepository;
     private final SellerRepository sellerRepository;
     private final ProductRepository productRepository;
+    private final QnaRepository qnaRepository;
+    private final ProdQnaRepository prodQnaRepository;
 
     public void selectMyInfo(HttpSession session, String userId){
         log.info("countOrder : " +userId);
@@ -514,4 +517,64 @@ public class MyService {
                 .total(total)
                 .build();
     }
+
+    //myQna 조회
+    public PageResponseDTO selectMyQna(String userId, PageRequestDTO pageRequestDTO){
+
+        //고객문의 조회
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<Qna> pageQna = qnaRepository.selectMyQna(userId, pageRequestDTO, pageable);
+
+        List<QnaDTO> qnaDTOList = pageQna.getContent().stream()
+                .map(qna -> {
+                    QnaDTO qnaDTO = new QnaDTO();
+                    qnaDTO.setQnaNo(qna.getQnaNo());
+                    qnaDTO.setQnaTitle(qna.getQnaTitle());
+                    qnaDTO.setQnaContent(qna.getQnaContent());
+                    qnaDTO.setQnaDate(qna.getQnaDate());
+                    qnaDTO.setQnaType(qna.getQnaType());
+                    qnaDTO.setQnaCate(qna.getQnaCate());
+                    qnaDTO.setQnaStatus(qna.getQnaStatus());
+                    qnaDTO.setQnaReply(qna.getQnaReply());
+
+                    return qnaDTO;
+                })
+                .toList();
+
+        log.info("qnaDTOList : " +qnaDTOList);
+
+        int total = (int) pageQna.getTotalElements();
+        log.info("total : " +total);
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(qnaDTOList)
+                .total(total)
+                .build();
+
+    }
+
+    //myProdQna 조회
+    public PageResponseDTO selectMyProdQna(String userId, PageRequestDTO pageRequestDTO){
+        //상품문의 조회
+        Pageable pageable = pageRequestDTO.getPageable("no");
+        Page<ProdQna> pageProdQna = prodQnaRepository.selectMyProdQna(userId, pageRequestDTO, pageable);
+
+        List<ProdQna> prodQnasList = pageProdQna.getContent();
+        int total = (int) pageProdQna.getTotalElements();
+
+        List<ProdQnaDTO> prodQnaDTOList = new ArrayList<>();
+        for (ProdQna eachProdQna : prodQnasList) {
+            prodQnaDTOList.add(modelMapper.map(eachProdQna, ProdQnaDTO.class));
+        }
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(prodQnaDTOList)
+                .total(total)
+                .build();
+
+
+    }
+
 }

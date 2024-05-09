@@ -52,4 +52,8 @@ public class Product {
     private String thumb456;
     @Transient
     private String thumb940;
+
+    @Transient
+    private int revScore;
+
  }

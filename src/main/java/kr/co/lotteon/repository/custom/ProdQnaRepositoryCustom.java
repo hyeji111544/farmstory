@@ -12,6 +12,9 @@ import java.util.Map;
 
 @Repository
 public interface ProdQnaRepositoryCustom {
+    // myProdQna 조회
+    public Page<ProdQna> selectMyProdQna(String userId, PageRequestDTO pageRequestDTO, Pageable pageable);
+    
     // 판매자 관리페이지 - QNA List - 목록 조회
     public Page<Tuple> selectSellerQnaList(String prodSeller, PageRequestDTO pageRequestDTO, Pageable pageable);
 

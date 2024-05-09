@@ -14,10 +14,13 @@ import org.springframework.stereotype.Repository;
 public interface AdminFaqRepository extends JpaRepository<Faq, Integer>, AdminFaqRepositoryCustom {
 
     // 자주묻는질문 글 리스트 출력 페이징 메서드
-    public Page<Faq> findAll(Pageable pageable);
+    public Page<Faq> findAllByOrderByFaqDateDesc(Pageable pageable);
 
     // 공지사항 카테고리 + 타입별 조회
-    public Page<Faq> findByFaqCateAndFaqType(String cate,String type, Pageable pageable);
+    public Page<Faq> findByFaqCateAndFaqTypeOrderByFaqDateDesc(String cate,String type, Pageable pageable);
+
+    // 공지사항 카테고리만 조회
+    public Page<Faq> findByFaqCateOrderByFaqDateDesc(String cate, Pageable pageable);
 
     // 글 조회수 업
     @Modifying

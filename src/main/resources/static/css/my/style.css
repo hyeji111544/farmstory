@@ -1867,8 +1867,14 @@ footer p > strong {
 }
 .myQnaRow > div {padding: 10px; text-align: center}
 .myQnaRow > div:nth-child(1) {width: 50px;}
-.myQnaRow > div:nth-child(2) {width: 100px;}
-.myQnaRow > div:nth-child(3) {width: 360px; text-align: left}
+.myQnaRow > div:nth-child(2) {width: 150px;}
+.myQnaRow > div:nth-child(3) {
+    width: 310px;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 .myQnaRow > div:nth-child(4) {width: 100px;}
 .myQnaRow > div:nth-child(5) {width: 100px;}
 
