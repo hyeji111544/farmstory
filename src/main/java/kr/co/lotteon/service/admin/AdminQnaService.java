@@ -30,9 +30,11 @@ public class AdminQnaService {
 
         Page<Qna> pageQna;
         if(qnaCate == null && qnaType == null){
-            pageQna = adminQnaRepository.findAll(pageable);
+            pageQna = adminQnaRepository.findAllByOrderByQnaDateDesc(pageable);
+        }else if(qnaCate != null && qnaType != null){
+            pageQna = adminQnaRepository.findByQnaCateAndQnaTypeOrderByQnaDateDesc(qnaCate, qnaType, pageable);
         }else{
-            pageQna = adminQnaRepository.findByQnaCateAndQnaType(qnaCate, qnaType, pageable);
+            pageQna = adminQnaRepository.findByQnaCateOrderByQnaDateDesc(qnaCate, pageable);
         }
 
         List<QnaDTO> dtoList = pageQna.getContent().stream()
