@@ -86,7 +86,7 @@ public class ProductController {
 
     // 상품 상세보기 이동
     @GetMapping("/product/view")
-    public String prodView(@RequestParam("prodNo") int prodNo, Model model){
+    public String prodView(@RequestParam("prodNo") int prodNo, Model model, PageRequestDTO reviewPageRequestDTO, PageRequestDTO qnaPageRequestDTO){
         log.info("prodView....!!!"+prodNo);
         ProductDTO productDTO = productService.selectProduct(prodNo);
         model.addAttribute("product", productDTO);
@@ -97,8 +97,16 @@ public class ProductController {
 
         // 상품 옵션 정보 조회
         ResponseOptionDTO responseOptionDTO = productService.selectProductOption(prodNo);
-        log.info("responseOptionDTO : " + responseOptionDTO);
         model.addAttribute("OptionDTOs", responseOptionDTO);
+        
+        // 상품 리뷰 조회
+        PageResponseDTO prodReview = productService.selectProdReviewForView(prodNo, reviewPageRequestDTO);
+        model.addAttribute("prodReview", prodReview);
+
+        // 상품 문의 조회
+        PageResponseDTO prodQna = productService.selectProdQna(prodNo, qnaPageRequestDTO);
+        model.addAttribute("prodQna", prodQna);
+
         return "/product/view";
     }
 
