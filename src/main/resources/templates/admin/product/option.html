@@ -4,88 +4,6 @@
 <!--내용 시작-->
     <section id="admin-product-register" layout:fragment="content">
         <script>
-
-            // 이미지 애니메이션
-            function imageScale() {
-
-                const bigImage = ``;
-            }
-
-
-/*
-            // 옵션 디테일 추가
-            window.onload = function () {
-                addEventListener('click', function (e){
-                    if (e.target.className === "btnOptDetailAdd"){
-                        const optDetailTr = e.target.parentElement.parentElement;
-                        const optDetailBox = optDetailTr.querySelector('.optDetailBox');
-                        const optDetail = optDetailTr.querySelectorAll('.optDetail');
-                        if (optDetail.length >= 4) {
-                            alert("더 이상 옵션값을 추가하실수 없습니다.")
-                        }else{
-                            const optDetailTuple = `<div class="optDetail">
-                                                <input type="text" class="optValue" placeholder="옵션값"/>
-                                                <input type="text" class="optPrice" placeholder="옵션가격"/>
-                                                <input type="text" class="optStock" placeholder="옵션재고"/>
-                                                <span class="btnOptDetailDelete">삭제</span>
-                                            </div>`;
-                            optDetailBox.insertAdjacentHTML('beforeend', optDetailTuple);
-                        }
-                    }else if (e.target.className === "btnOptDetailDelete") {
-                        const optDetailDiv = e.target.parentElement;
-                        optDetailDiv.remove();
-                    }else if (e.target.className === "btnOptTupleDelete") {
-                        const optTupleTr = e.target.parentElement.parentElement;
-                        optTupleTr.remove();
-                    }
-
-                })
-
-                const btnNewOaaptAdd = document.getElementById('btnNewOptAdd');
-                btnNewOptAdd.onclick = function (){
-                    const optAddTuple = document.getElementsByClassName('optAddTuple');
-                    const prodNo = document.getElementsByName('prodNo')[0].value;
-
-                    const allOpts = [];
-                    Array.from(optAddTuple).forEach(function (eachOpt) {
-                        const optDetailBox = eachOpt.querySelector('.optDetailBox');
-                        const optName = eachOpt.querySelector('.optName');
-                        const optValue = Array.from(optDetailBox.querySelectorAll('.optValue'));
-                        const optPrice = Array.from(optDetailBox.querySelectorAll('.optPrice'));
-                        const optStock = Array.from(optDetailBox.querySelectorAll('.optStock'));
-                        const opt = [];
-
-                        for (let j = 0; j < optValue.length; j++) {
-                            const optDetail = [];
-                            optDetail.push(prodNo);
-                            optDetail.push(optName.value);
-                            optDetail.push(optValue[j].value);
-                            optDetail.push(optPrice[j].value);
-                            optDetail.push(optStock[j].value);
-                            opt.push(optDetail);
-                        }
-                        allOpts.push(opt);
-                    })
-
-                    const jsonData = {
-                        "allOpts" : allOpts
-                    }
-                    fetch("/lotteon/admin/product/option", {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(jsonData)
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                        })
-                        .catch(err => console.log(err));
-
-                }
-            }
-
- */
-
             // 옵션 이름 추가
             function addOptionName() {
                 const btnAddOptName = event.target;
@@ -202,13 +120,13 @@
                     // 사용자가 입력한 옵션이 1개인 경우
                     if (option2All.length === 0) {
                         console.log( optNameAll[0].value);
-                        const optValue2 = "";
-                        const optValue3 = "";
+                        const optValue2 = "0";
+                        const optValue3 = "0";
                         createEachOption(registerOption, optValue1, optValue2, optValue3);
 
                         optTitle1.innerText = optNameAll[0].value;
-                        optTitle2.innerText = "";
-                        optTitle3.innerText = "";
+                        optTitle2.innerText = "0";
+                        optTitle3.innerText = "0";
 
                     }else{
                         // 사용자가 입력한 옵션이 2개인 경우
@@ -216,12 +134,12 @@
                             const optValue2 = option2.value;
                             console.log(3);
                             if (option3All.length === 0) {
-                                const optValue3 = "";
+                                const optValue3 = "0";
                                 createEachOption(registerOption, optValue1, optValue2, optValue3);
 
                                 optTitle1.innerText = optNameAll[0].value;
                                 optTitle2.innerText = optNameAll[1].value;
-                                optTitle3.innerText = "";
+                                optTitle3.innerText = "0";
 
                             }else{
                                 // 사용자가 입력한 옵션이 3개인 경우
@@ -400,6 +318,7 @@
                     "prodOption3" : prodOption3,
                     "prodOptionDTO" : prodOptionDTO
                 }
+                console.log("jsonData : " + jsonData)
                 fetch("/lotteon/admin/product/regOption", {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},

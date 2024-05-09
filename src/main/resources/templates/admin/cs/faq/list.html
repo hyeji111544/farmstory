@@ -249,12 +249,16 @@
                         console.log("4444:" + typeValue)
                     }else {
                         // 1차 선택일때
-                        cateValue = splitValue.split('=')[1];
+                        let value = splitValue.split('=')[1];
+                        if (isNaN(value)) {
+                            cateValue = value;
+                            console.log("cateValue : " + cateValue);
+                        }
                     }
                 }
                 // 1차 카테고리 선택
                 const faqCate = document.querySelector("select[name='faqCate']");
-                if (cateValue && cateValue !== "") {
+                if (cateValue !== "") {
                     faqCate.value = cateValue;
                 }
                 return typeValue;
@@ -263,7 +267,7 @@
             function onloadSelectType(typeValue) {
                 // 2차 카테고리 선택
                 const faqType = document.querySelector("select[name='faqType']");
-                if (typeValue && typeValue !== "") {
+                if (typeValue !== "") {
                     faqType.value = typeValue;
                 }
             }

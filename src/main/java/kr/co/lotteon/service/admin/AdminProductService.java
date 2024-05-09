@@ -209,17 +209,29 @@ public class AdminProductService {
 
         // option2 List를 배열 반복으로 DB에 저장 후 반환 (optNo 필요함)
         List<ProdOption> SaveOptionList2 = new ArrayList<>();
-        for (ProdOptionDTO option2 : optionDTO2) {
-            ProdOption SaveOption2 = optionRepository.save(modelMapper.map(option2, ProdOption.class));
+        if (optionDTO2.get(0).getOptName().equals("0")) {
+            ProdOption SaveOption2 = new ProdOption();
+            SaveOption2.setOptNo(0);
             SaveOptionList2.add(SaveOption2);
+        }else {
+            for (ProdOptionDTO option2 : optionDTO2) {
+                ProdOption SaveOption2 = optionRepository.save(modelMapper.map(option2, ProdOption.class));
+                SaveOptionList2.add(SaveOption2);
+            }
         }
         log.info("SaveOptionList2 : " + SaveOptionList2);
 
         // option3 List를 배열 반복으로 DB에 저장 후 반환 (optNo 필요함)
         List<ProdOption> SaveOptionList3 = new ArrayList<>();
-        for (ProdOptionDTO option3 : optionDTO3) {
-            ProdOption SaveOption3 = optionRepository.save(modelMapper.map(option3, ProdOption.class));
+        if (optionDTO3.get(0).getOptName().equals("0")) {
+            ProdOption SaveOption3 = new ProdOption();
+            SaveOption3.setOptNo(0);
             SaveOptionList3.add(SaveOption3);
+        }else {
+            for (ProdOptionDTO option3 : optionDTO3) {
+                ProdOption SaveOption3 = optionRepository.save(modelMapper.map(option3, ProdOption.class));
+                SaveOptionList3.add(SaveOption3);
+            }
         }
         log.info("SaveOptionList3 : " + SaveOptionList3);
 
