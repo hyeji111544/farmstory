@@ -2,13 +2,83 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/productLayout.html}">
 <!--내용 시작-->
+<style>
+
+    .sort > .selected {
+        background-color: #f0f0f0; /* 선택된 항목의 배경색을 변경 */
+    }
+</style>
     <section class="list" layout:fragment="content">
+
         <script>
+
+            window.onload = function () {
+                let currentURL = window.location.href;
+                let splitURL = currentURL.split('?')[1];
+                let sortCode = ""
+                let sortText = '';
+                if (splitURL !== undefined){
+                    let params = new URLSearchParams(window.location.search);
+                    sortCode = params.get('sort');
+                }
+                const sortNav = document.getElementsByClassName('sort')[0];
+                const aTag = sortNav.querySelectorAll('a');
+
+                switch (sortCode) {
+                    case 'prodSold':
+                        aTag[0].classList.add('navOn');
+                        sortText = ' > 판매많은순';
+                        break;
+                    case 'prodLowPrice':
+                        aTag[1].classList.add('navOn');
+                        sortText = ' > 낮은가격순';
+                        break;
+                    case 'prodHighPrice':
+                        aTag[2].classList.add('navOn');
+                        sortText = ' > 높은가격순';
+                        break;
+                    case 'prodScore':
+                        aTag[3].classList.add('navOn');
+                        sortText = ' > 평점높은순';
+                        break;
+                    case 'prodReview':
+                        aTag[4].classList.add('navOn');
+                        sortText = ' > 후기많은순';
+                        break;
+                    case 'prodRdate':
+                        aTag[5].classList.add('navOn');
+                        sortText = ' > 최근등록순';
+                        break;
+                    case 'prodHit-main':
+                        aTag[0].classList.add('headerOn');
+                        sortText = ' > 히트상품';
+                        break;
+                    case 'prodScore-main':
+                        aTag[1].classList.add('headerOn');
+                        sortText = ' > 추천상품';
+                        break;
+                    case 'prodRdate-main':
+                        aTag[2].classList.add('headerOn');
+                        sortText = ' > 최신상품';
+                        break;
+                    case 'prodSold-main':
+                        aTag[3].classList.add('headerOn');
+                        sortText = ' > 인기상품';
+                        break;
+                    case 'prodDiscount-main':
+                        aTag[4].classList.add('headerOn');
+                        sortText = ' > 할인상품';
+                        break;
+                    default:
+                        sortText = '';
+                }
+                document.getElementById('sortText').innerText = sortText;
+
+            }
+
             function sort(sortType){
                 const currentUrl = new URL(window.location.href);
-
                 currentUrl.searchParams.set('sort', sortType);
-
                 window.location.href = currentUrl.toString();
             }
 
@@ -16,12 +86,13 @@
       <!-- 제목, 페이지 네비게이션 -->
       <nav>
         <h1>상품목록</h1>
-          <p>HOME >
-              <span th:if="${resultMap.cate01Name != null}" th:text="${resultMap.cate01Name}"></span>
+          <p>HOME
+              <span th:if="${resultMap.cate01Name != null}" th:text="' > ' + ${resultMap.cate01Name}"></span>
               <span th:if="${resultMap.cate01Name != null and resultMap.cate02Name != null}"> > </span>
               <strong th:if="${resultMap.cate02Name != null}" th:text="${resultMap.cate02Name}"></strong>
               <span th:if="${resultMap.cate02Name != null and resultMap.cate03Name != null}"> > </span>
               <span th:if="${resultMap.cate03Name != null}" th:text="${resultMap.cate03Name}"></span>
+              <span th:if="${param.sort != null}" id="sortText"></span>
           </p>
 
       </nav>
@@ -29,12 +100,12 @@
       <!-- 정렬 메뉴 -->
 
         <ul class="sort">
-            <li><a href="#" onclick="sort('prodSold')"> 판매많은순</a></li>
-            <li><a href="#" onclick="sort('prodLowPrice')"> 낮은가격순</a></li>
-            <li><a href="#" onclick="sort('prodHighPrice')"> 높은가격순</a></li>
+            <li><a href="#" onclick="sort('prodSold')" > 판매많은순</a></li>
+            <li><a href="#" onclick="sort('prodLowPrice')" > 낮은가격순</a></li>
+            <li><a href="#" onclick="sort('prodHighPrice')" > 높은가격순</a></li>
             <li><a href="#" onclick="sort('prodScore')"> 평점높은순</a></li>
-            <li><a href="#" onclick="sort('prodReview')"> 후기많은순</a></li>
-            <li><a href="#" onclick="sort('prodRdate')"> 최근등록순</a></li>
+            <li><a href="#" onclick="sort('prodReview')" > 후기많은순</a></li>
+            <li><a href="#" onclick="sort('prodRdate')" > 최근등록순</a></li>
         </ul>
 
       <!-- 상품목록 -->
@@ -47,7 +118,7 @@
 
                     <h2>[[${product.prodName}]]</h2>
 
-                    <div class="org_price">
+                    <div th:if="${product.prodDiscount != 0}" class="org_price">
                         <del th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}" id="prodPrice"></del>
                         <span th:text="${product.prodDiscount} + '%'"></span>
                     </div>
@@ -72,7 +143,7 @@
            <a th:href="@{'/product/list?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.start - 1}}"><&nbsp;이전</a>
        </span>
         <span class="num" th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
-            <a th:if="${num != 0}" th:href="@{/product/list(pg=${num}, cateCode=${productPageResponseDTO.cateCode}, sort=${setSortType})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+            <a th:if="${num != 0}" th:href="@{/product/list(pg=${num}, cateCode=${productPageResponseDTO.cateCode}, sort=${setSortType})}" th:class="${num == productPageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
         </span>
         <span class="next" th:if="${productPageResponseDTO.next}">
                      <a th:href="@{'/product/list?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.end + 1}}">다음&nbsp;></a>

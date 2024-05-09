@@ -695,4 +695,11 @@ footer p > strong {
   cursor: pointer;
 }
 
+.headerOn {
+  color: #ef2a23;
+}
 
+.mainSort li:hover a {
+  color: #ef2a23;
+  font-weight: bold;
+}

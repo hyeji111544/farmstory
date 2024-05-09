@@ -1946,3 +1946,10 @@ border-radius: 10px;
     border-radius: 4px;
     margin: 10px 0;
 }
+.navOn {
+    color: #ef2a23;
+}
+.sort li:hover a {
+    color: #ef2a23;
+    font-weight: bold;
+}
