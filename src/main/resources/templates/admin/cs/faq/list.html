@@ -104,12 +104,11 @@
 
                 // URL 구성
                 let url = "/lotteon/admin/cs/faq/list?";
-
+                let faqCateValue = faqCate.value;
                 // faqCate 파라미터 추가
                 if (faqCate) {
                     url += "faqCate=" + faqCate;
                 }
-
                 // faqType 파라미터 추가
                 if (faqType) {
                     url += "&faqType=" + faqType;
@@ -242,17 +241,15 @@
                         // 2차 선택을 함
                         // [user, faqType]
                         cateValue = splitValue2[1].split('&')[0];
-                        console.log("3333:" + cateValue)
                         // [regi]
                         // [faqCate, delivery&faqType, deldate] 이상태에서 splitValue2[2]=deldate &가 없어서 그냥 반영
                         typeValue = splitValue2[2].split('&')[0];
-                        console.log("4444:" + typeValue)
                     }else {
-                        // 1차 선택일때
+                        // 1차 선택일때 value엔 pg 넘버가 들어감
                         let value = splitValue.split('=')[1];
-                        if (isNaN(value)) {
+                        // isNaN은 변수가 숫자인지 문자인지 검사하고 문자이면 true반환 숫자이면 false반환 value값이 숫자면 cateValue가 null
+                        if(isNaN(value)){
                             cateValue = value;
-                            console.log("cateValue : " + cateValue);
                         }
                     }
                 }
