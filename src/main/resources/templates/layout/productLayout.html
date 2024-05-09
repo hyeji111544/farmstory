@@ -31,6 +31,7 @@
         return urlParams.get('cateCode');
     }
 
+
     // cateCode 값을 가져와서 input 필드에 할당하는 함수
     function setCateCodeInputValue() {
         const cateCode = getCateCodeFromUrl();
@@ -39,6 +40,7 @@
 
     // 페이지 로드 시 cateCode 값을 input 필드에 할당
     window.onload = function() {
+
         setCateCodeInputValue();
     };
 </script>
@@ -80,12 +82,12 @@
         </div>
         <div class="menu">
             <div>
-                <ul>
-                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodHit'}">히트상품</a></li>
-                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodScore'}">추천상품</a></li>
-                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodRdate'}">최신상품</a></li>
-                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodSold'}">인기상품</a></li>
-                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodDiscount'}">할인상품</a></li>
+                <ul class="mainSort">
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodHit-main'}">히트상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodScore-main'}">추천상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodRdate-main'}">최신상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodSold-main'}">인기상품</a></li>
+                    <li><a th:href="@{'/product/list?cateCode='+'&sort=prodDiscount-main'}">할인상품</a></li>
                 </ul>
                 <ul>
                     <li><a href="#">쿠폰존</a></li>
