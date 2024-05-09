@@ -161,39 +161,42 @@
         <form th:action="@{/seller/product/register}" method="post" id="prodRegisterForm" enctype="multipart/form-data">
 
             <!-- 상품분류 -->
-            <section>
+            <section style="margin-top: 0">
                 <h4>상품분류</h4>
                 <p>
                     기본분류는 반드시 선택하셔야 합니다. 하나의 상품에 1개의 분류를 지정 합니다.
                 </p>
-                <table>
-                    <tr>
-                        <td>1차 분류</td>
-                        <td>
+                <div class="myTableStyle">
+                    <div class="myTableBody prodRegiRow" style="border-top: 0">
+                        <div>1차 분류</div>
+                        <div>
                             <select name="cate01No" onchange="changeCate02()">
                                 <option value="">1차 분류 선택</option>
                                 <option class="changeOpt" th:each="cate01 : ${cate01DTOs}" th:value="${cate01.cate01No}" th:text="${cate01.cate01Name}">패션·의류·뷰티</option>
                             </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2차 분류</td>
-                        <td>
+                        </div>
+                    </div>
+                    <div class="myTableBody prodRegiRow">
+                        <div>2차 분류</div>
+                        <div>
                             <select name="cate02No" onchange="changeCate03()">
                                 <option value="">2차 분류 선택</option>
                             </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3차 분류</td>
-                        <td>
+                        </div>
+                    </div>
+                    <div class="myTableBody prodRegiRow">
+                        <div>3차 분류</div>
+                        <div>
                             <select name="cate03No" onchange="createCateCode()">
                                 <option value="">3차 분류 선택</option>
                             </select>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                </div>
             </section>
+
+
+
             <p><input type="hidden" class="cateCode" name="cateCode"></p>
             <p><input type="hidden" name="prodSeller" th:value="${session.prodSeller}"></p>
             <!-- 기본정보 -->

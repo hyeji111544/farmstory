@@ -82,6 +82,17 @@
                         checkedTurn = 0;
                     }
                 }
+                // URL 파라미터값을 통해 1차 select 박스 value 값 지정
+                let typeValue = onloadSelectCate();
+
+                // 1차 select 박스 value 값을 바탕으로 2차 select 박스 option 생성
+                const faqCate = document.querySelector("select[name='faqCate']");
+                typeList(faqCate.value);
+
+                // 2차 select 박스 선택한 경우에만 2차 select 박스 value 값 지정
+                if (typeValue !== ""){
+                    onloadSelectType(typeValue);
+                }
             }
             // // 카테고리별 조회
             function redirectToCateType() {
@@ -109,12 +120,23 @@
             }
             // 타입별 카테조회
             function firstOption() {
-                const CateOption = event.target;  //
-                const CateValue = CateOption.value;  // sele/ 내가 함수를 호출한 현재 태그ct태그의 value값
+                const faqCate = document.querySelector("select[name='faqCate']").value;
+
+                if (faqCate !== "1차선택") {
+                    // URL 구성
+                    let url = "/lotteon/admin/cs/faq/list?";
+                    // faqCate 파라미터 추가
+                    if (faqCate) {
+                        url += "faqCate=" + faqCate;
+                    }
+                    // 페이지 이동
+                    location.href = url;
+                }
+            }
+
+            function typeList(CateValue) {
+                console.log(CateValue)
                 const faqType = document.getElementsByName('faqType')[0];
-
-                console.log(CateValue);
-
                 if (CateValue == 'coupon'){
                     // 원래 있던 option들 삭제
                     const faqTypeChild = faqType.childNodes;  // name이 faqType인 select태그 안에있는 option태그 전부
@@ -122,10 +144,10 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="cpregi">등록방법</option>
                                         <option value="cplimit">유효기간</option>
-                                        <option value="cpevent">이벤트기간</option>
+                                        <option value="event">이벤트기간</option>
                                         <option value="ejoin">이벤트참여</option>`;
                     faqType.insertAdjacentHTML('beforeend', TypeOption);
                 }else if (CateValue == 'user'){
@@ -135,7 +157,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="regi">가입</option>
                                         <option value="leave">탈퇴</option>
                                         <option value="info">회원정보</option>
@@ -147,7 +169,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="list">주문내역</option>
                                         <option value="way">결제방법</option>
                                         <option value="payment">결제수단</option>
@@ -159,7 +181,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="deldate">배송일</option>
                                         <option value="deldelay">배송지연</option>
                                         <option value="delchange">배송지변경</option>
@@ -171,7 +193,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="return">반품신청</option>
                                         <option value="ocancel">주문취소</option>
                                         <option value="refund">환불신청</option>
@@ -183,7 +205,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="tlist">숙박시설</option>
                                         <option value="treco">여행지추천</option>
                                         <option value="tway">결제방법</option>
@@ -195,7 +217,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="care">주의사항</option>
                                         <option value="sway">결제방법</option>
                                         <option value="sacc">입금계좌</option>
@@ -203,6 +225,56 @@
                     faqType.insertAdjacentHTML('beforeend', TypeOption);
                 }
             }
+            //1차 카테 URL로 이동된 후 기준으로 시작
+            function onloadSelectCate() {
+                // 카테별 타입 옵션 띄우기
+                let currentURL = window.location.href;
+                // splitValue은 faqCate=delivery
+                let splitValue = currentURL.split('?')[1];
+                let cateValue = ""
+                let typeValue = ""
+                if (splitValue != null) {
+                    // splitURL2 = [faqCate, coupon]
+                    // [faqCate, user&faqType, regi]
+                    let splitValue2 = splitValue.split('=');
+                    //2차 카테를 선택했으면 발동
+                    if (splitValue2.length > 2) {
+                        // 2차 선택을 함
+                        // [user, faqType]
+                        cateValue = splitValue2[1].split('&')[0];
+                        console.log("3333:" + cateValue)
+                        // [regi]
+                        // [faqCate, delivery&faqType, deldate] 이상태에서 splitValue2[2]=deldate &가 없어서 그냥 반영
+                        typeValue = splitValue2[2].split('&')[0];
+                        console.log("4444:" + typeValue)
+                    }else {
+                        // 1차 선택일때
+                        cateValue = splitValue.split('=')[1];
+                    }
+                }
+                // 1차 카테고리 선택
+                const faqCate = document.querySelector("select[name='faqCate']");
+                if (cateValue && cateValue !== "") {
+                    faqCate.value = cateValue;
+                }
+                return typeValue;
+            }
+
+            function onloadSelectType(typeValue) {
+                // 2차 카테고리 선택
+                const faqType = document.querySelector("select[name='faqType']");
+                if (typeValue && typeValue !== "") {
+                    faqType.value = typeValue;
+                }
+            }
+            //삭제 메시지 띄우기
+            function deleteNotice(event){
+                const chk = confirm("정말 삭제하시겠습니까?");
+                if(!chk){
+                    event.preventDefault();
+                }
+            }
+
         </script>
 
         <nav>
@@ -265,7 +337,7 @@
 
                     <td th:if="${faq.faqType == 'cpregi'}" style="white-space: nowrap;">[등록방법]</td>
                     <td th:if="${faq.faqType == 'cplimit'}" style="white-space: nowrap;">[유효기간]</td>
-                    <td th:if="${faq.faqType == 'cpevent'}" style="white-space: nowrap;">[이벤트기간]</td>
+                    <td th:if="${faq.faqType == 'event'}" style="white-space: nowrap;">[이벤트기간]</td>
                     <td th:if="${faq.faqType == 'ejoin'}" style="white-space: nowrap;">[이벤트참여]</td>
 
                     <td th:if="${faq.faqType == 'list'}" style="white-space: nowrap;">[주문내역]</td>
@@ -303,7 +375,7 @@
                     <td th:text="${faq.faqHit}"></td>
                     <td th:if="${faq.faqDate != null}" th:text="${#temporals.format(faq.faqDate, 'yyyy-MM-dd')}" style="white-space: nowrap;" ></td>
                     <td>
-                        <a th:href="@{/admin/cs/faq/delete(faqNo=${faq.faqNo})}">[삭제]</a>
+                        <a th:href="@{/admin/cs/faq/delete(faqNo=${faq.faqNo})}" onclick="deleteNotice(event);">[삭제]</a>
                         <a th:href="@{/admin/cs/faq/modify(faqNo=${faq.faqNo})}">[수정]</a>
                     </td>
                 </tr>
@@ -317,15 +389,16 @@
             <div class="pagingBox">
                 <div class="pagingList">
                     <a th:if="${pageResponseDTO.prev && faqCate == null && faqType == null}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.start - 1})}">이전</a>
-                    <a th:if="${pageResponseDTO.prev && faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.start - 1}, faqCate=${faqCate}, faqType=${faqType})}">이전</a>
+                    <a th:if="${pageResponseDTO.prev && faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(faqCate=${faqCate}, faqType=${faqType}, pg=${pageResponseDTO.start - 1})}">이전</a>
 
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
                         <a class="pageNum" th:if="${faqCate == null && faqType == null}" th:href="@{/admin/cs/faq/list(pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(pg=${num}, faqCate=${faqCate}, faqType=${faqType})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${faqCate != null && faqType == null}" th:href="@{/admin/cs/faq/list(faqCate=${faqCate},pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(faqCate=${faqCate}, faqType=${faqType}, pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
                     <a th:if="${pageResponseDTO.next && faqCate == null && faqType == null}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.end + 1})}">다음</a>
-                    <a th:if="${pageResponseDTO.next && faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(pg=${pageResponseDTO.end + 1}, faqCate=${faqCate}, faqType=${faqType})}">다음</a>
+                    <a th:if="${pageResponseDTO.next && faqCate != null && faqType != null}" th:href="@{/admin/cs/faq/list(faqCate=${faqCate}, faqType=${faqType}, pg=${pageResponseDTO.end + 1})}">다음</a>
                 </div>
             </div>
 

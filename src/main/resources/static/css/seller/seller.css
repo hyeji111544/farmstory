@@ -1500,3 +1500,37 @@ header > div > .logo {
     border: 1px solid #999999;
     border-radius: 10px;
 }
+.myTableStyle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    border: 1px solid #aaa;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+.myTableHead {
+    display: flex;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.myTableHead > div {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center!important;
+}
+.myTableBody {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #aaa;
+}
+
+.prodRegiRow {
+    padding: 10px;
+    align-items: center;
+}
+.prodRegiRow > div {
+    margin: 0 10px;
+}
