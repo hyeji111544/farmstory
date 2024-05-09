@@ -3,7 +3,178 @@
     layout:decorate="~{/layout/adminLayout.html}">
 <!--내용 시작-->
     <section id="admin-product-register" layout:fragment="content">
-        <script>
+        <script th:inline="javascript">
+            window.onload = function (){
+                changeOptNoToName()
+            }
+
+            // 카테고리 번호를 한글로 변경하는 함수
+            function changeOptNoToName() {
+                const opt1No = document.getElementsByClassName('opt1No');
+                const opt2No = document.getElementsByClassName('opt2No');
+                const opt3No = document.getElementsByClassName('opt3No');
+                changeArray(opt1No);
+                changeArray(opt2No);
+                changeArray(opt3No);
+            }
+            function changeArray(optionNo) {
+                const optionList = [[${optionDTOList}]];
+
+                for (let i = 0; i < optionNo.length; i++) {
+                    const eachNo = optionNo[i];
+
+                    for (let j = 0; j < optionList.length; j++) {
+                        const eachOption = optionList[j];
+
+                        if (parseInt(eachNo.value) === parseInt(eachOption.optNo)) {
+                            eachNo.value = eachOption.optValue;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 카테고리 수정 버튼 함수
+            function modifyCateCode() {
+                const button = event.target;
+                const cancelBtn = button.nextElementSibling;
+                const trAll = button.parentNode.parentNode.querySelectorAll('.cateCodeTr');
+
+                if (button.innerText === "수정") {
+                    button.innerText = "저장";
+                    cancelBtn.style.display = "flex";
+                    Array.from(trAll).forEach(function (tr) {
+                        tr.style.display = "table-row";
+                    })
+                }else {
+                    let result = saveCateCode();
+                    if (result) {
+                        button.innerText = "수정";
+                        Array.from(trAll).forEach(function (tr) {
+                            tr.style.display = "none";
+                        })
+                    }
+                }
+            }
+
+            // 카테고리 수정 취소 버튼 함수
+            function cancelCateCode() {
+                const button = event.target;
+                const modifyBtn = button.previousElementSibling;
+                const trAll = button.parentNode.parentNode.querySelectorAll('.cateCodeTr');
+                modifyBtn.innerText = "수정";
+                button.style.display = "none";
+                Array.from(trAll).forEach(function (tr) {
+                    tr.style.display = "none";
+                })
+            }
+
+            // 변경된 카테고리값 DB 저장
+            function saveCateCode() {
+                const prodNo = document.getElementsByName('prodNo')[0];
+                const cate01No = document.getElementsByName('cate01No')[0];
+                const cate02No = document.getElementsByName('cate02No')[0];
+                const cate03No = document.getElementsByName('cate03No')[0];
+
+                if (cate01No.value != null && cate02No.value != null && cate03No.value != null) {
+                    const jsonData = {
+                        "prodNo": prodNo.value,
+                        "cate01No": cate01No.value,
+                        "cate02No": cate02No.value,
+                        "cate03No": cate03No.value
+                    }
+                    console.log("jsonData : " + jsonData)
+                    fetch("/lotteon/admin/product/modifyCate", {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+
+                            if (data.result > 0) {
+                                alert("성공");
+                                location.href = `/lotteon/seller/product/option?prodNo=${prodNo.value}`
+                                return true;
+                            }else {
+                                alert("카테고리를 변경할 수 없습니다.");
+                                return false;
+                            }
+                        })
+                        .catch(err => console.log(err))
+                }else {
+                    alert("카테고리를 변경할 수 없습니다.");
+                    return false;
+                }
+            }
+
+            // 2차 카테고리 분류 생성
+            function changeCate02() {
+                const cate01Data = [[${cate01DTOs}]];
+                const cate02Data = [[${cate02DTOs}]];
+                const cate03Data = [[${cate03DTOs}]];
+
+                const cate01Select = event.target;
+                const selectTable = cate01Select.parentNode.parentNode.parentNode;
+                const cate02Select = selectTable.querySelector('[name="cate02No"]')
+                const cate03Select = selectTable.querySelector('[name="cate03No"]')
+
+                // 기존에 존재하는 option 삭제
+                const nowCate02Option = cate02Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate02Option).forEach(function (option) {
+                    option.remove();
+                })
+
+                // 새로운 option 생성
+                Array.from(cate02Data).forEach(function (data) {
+                    if (data.cate01No === cate01Select.value) {
+                        const cate02Option = `<option class="changeOpt" value="${data.cate02No}">${data.cate02Name}</option>`
+                        cate02Select.insertAdjacentHTML('beforeend', cate02Option);
+                    }
+                })
+
+                // cate03 비우기
+                const nowCate03Option = cate03Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate03Option).forEach(function (option) {
+                    option.remove();
+                })
+            }
+
+            // 3차 카테고리 분류 생성
+            function changeCate03() {
+                const cate01Data = [[${cate01DTOs}]];
+                const cate02Data = [[${cate02DTOs}]];
+                const cate03Data = [[${cate03DTOs}]];
+
+                const cate02Select = event.target;
+                const selectTable = cate02Select.parentNode.parentNode.parentNode;
+                const cate03Select = selectTable.querySelector('[name="cate03No"]');
+
+                // 기존에 존재하는 option 삭제
+                const nowCate03Option = cate03Select.querySelectorAll('.changeOpt');
+                Array.from(nowCate03Option).forEach(function (option) {
+                    option.remove();
+                })
+
+                // 새로운 option 생성
+                Array.from(cate03Data).forEach(function (data) {
+                    if (data.cate02No === cate02Select.value) {
+                        const cate03Option = `<option class="changeOpt" value="${data.cate03No}">${data.cate03Name}</option>`
+                        cate03Select.insertAdjacentHTML('beforeend', cate03Option);
+                    }
+                })
+            }
+
+            // cateCode 생성
+            function createCateCode() {
+                const cateCode = document.getElementsByClassName('cateCode')[0];
+                const cate01Code = document.querySelector('[name="cate01No"]').value;
+                const cate02Code = document.querySelector('[name="cate02No"]').value;
+                const cate03Code = document.querySelector('[name="cate03No"]').value;
+                cateCode.value = cate01Code + cate02Code + cate03Code;
+            }
+
             // 옵션 이름 추가
             function addOptionName() {
                 const btnAddOptName = event.target;
@@ -132,7 +303,6 @@
                         // 사용자가 입력한 옵션이 2개인 경우
                         Array.from(option2All).forEach(function (option2){
                             const optValue2 = option2.value;
-                            console.log(3);
                             if (option3All.length === 0) {
                                 const optValue3 = "0";
                                 createEachOption(registerOption, optValue1, optValue2, optValue3);
@@ -145,7 +315,6 @@
                                 // 사용자가 입력한 옵션이 3개인 경우
                                 Array.from(option3All).forEach(function (option3){
                                     const optValue3 = option3.value;
-                                    console.log(4);
                                     createEachOption(registerOption, optValue1, optValue2, optValue3);
 
                                     optTitle1.innerText = optNameAll[0].value;
@@ -244,7 +413,6 @@
                 const valueCheck2 = new Set(); // 중복값 확인을 위한 set
                 Array.from(regOptContentAll).forEach(function (regOpt) {
                     const optValue2 = regOpt.querySelector('.optValue2').value;
-                    //const optValue3 = regOpt.querySelector('.optValue3').value;
 
                     if (!valueCheck2.has(optValue2)){
                         valueCheck2.add(optValue2);
@@ -254,10 +422,8 @@
                         OptNameValue.push(optTitle2);
                         OptNameValue.push(optValue2);
                         prodOption2.push(OptNameValue);
-                        console.log(OptNameValue);
                     }
                 })
-                console.log(prodOption2);
 
                 // 옵션 3
                 const prodOption3 = [];
@@ -273,10 +439,8 @@
                         OptNameValue.push(optTitle3);
                         OptNameValue.push(optValue3);
                         prodOption3.push(OptNameValue);
-                        console.log(OptNameValue);
                     }
                 })
-                console.log(prodOption3);
 
                 /*
                     상품 옵션 연관 관계 및 가격,재고를 배열로 저장
@@ -336,9 +500,9 @@
         <nav>
             <script th:src="@{/js/util.js}"></script>
 
-            <h3>상품등록</h3>
+            <h3>상품수정</h3>
             <p>
-                HOME > 상품관리 > <strong>상품등록</strong>
+                HOME > 상품관리 > <strong>상품수정</strong>
             </p>
         </nav>
         <!-- 상품등록 컨텐츠 시작 -->
@@ -347,16 +511,47 @@
                   enctype="multipart/form-data">
 
                 <!-- 상품분류 -->
-                <section>
+                <section style="margin-top: 10px">
+                    <h4>상품분류</h4>
+                    <p>
+                        기본분류는 반드시 선택하셔야 합니다. 하나의 상품에 1개의 분류를 지정 합니다.
+                    </p>
                     <h4>상품분류</h4>
                     <table>
                         <tr>
+                            <td>상품 분류</td>
+                            <td class="cateCode" th:text="${productDTO.cateCode}"></td>
+                        </tr>
+                        <tr class="cateCodeTr" style="display: none">
                             <td>1차 분류</td>
-                            <td></td>
+                            <td>
+                                <select name="cate01No" onchange="changeCate02()" style="width: 200px;">
+                                    <option value="">1차 분류 선택</option>
+                                    <option class="changeOpt" th:each="cate01 : ${cate01DTOs}" th:value="${cate01.cate01No}" th:text="${cate01.cate01Name}">패션·의류·뷰티</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="cateCodeTr" style="display: none">
                             <td>2차 분류</td>
-                            <td></td>
+                            <td>
+                                <select name="cate02No" onchange="changeCate03()" style="width: 200px;">
+                                    <option value="">2차 분류 선택</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr class="cateCodeTr" style="display: none">
+                            <td>3차 분류</td>
+                            <td>
+                                <select name="cate03No" onchange="createCateCode()" style="width: 200px;">
+                                    <option value="">3차 분류 선택</option>
+                                </select>
+                            </td>
                         </tr>
                     </table>
+                    <div style="display: flex; align-self: end;">
+                        <span class="modifyBtn" onclick="modifyCateCode()">수정</span>
+                        <span class="modifyBtn" onclick="cancelCateCode()" style="display:none; margin-left: 20px">취소</span>
+                    </div>
                 </section>
                 <!-- 기본정보 -->
                 <section>
@@ -365,46 +560,62 @@
                     <table class="optionTable">
                         <tr>
                             <td>상품명</td>
-                            <td>[[${productDTO.prodName}]]</td>
+                            <td>
+                                <input type="text" name="prodName" th:value="${productDTO.prodName}" readonly>
+                            </td>
                             <td>기본설명</td>
-                            <td>[[${productDTO.prodInfo}]]</td>
+                            <td>
+                                <input type="text" name="prodInfo" th:value="${productDTO.prodInfo}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>제조사</td>
-                            <td>[[${productDTO.prodCompany}]]</td>
+                            <td>
+                                <input type="text" name="prodCompany" th:value="${productDTO.prodCompany}" readonly>
+                            </td>
                             <td>판매가격</td>
-                            <td>[[${productDTO.prodPrice}]]</td>
+                            <td>
+                                <input type="text" name="prodPrice" th:value="${productDTO.prodPrice}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>할인율</td>
-                            <td>[[${productDTO.prodDiscount}]]</td>
+                            <td>
+                                <input type="text" name="prodDiscount" th:value="${productDTO.prodDiscount}" readonly>
+                            </td>
                             <td>포인트</td>
-                            <td>[[${productDTO.prodPoint}]]</td>
+                            <td>
+                                <input type="text" name="prodPoint" th:value="${productDTO.prodPoint}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>재고수량</td>
-                            <td>[[${productDTO.prodStock}]]</td>
+                            <td>
+                                <input type="text" name="prodStock" th:value="${productDTO.prodStock}" readonly>
+                            </td>
                             <td>배송비</td>
-                            <td>[[${productDTO.prodDeliveryFee}]]</td>
+                            <td>
+                                <input type="text" name="prodDeliveryFee" th:value="${productDTO.prodDeliveryFee}" readonly>
+                            </td>
                         </tr>
                         <tr>
                             <td>상품 썸네일</td>
                             <td colspan="3">
                                 <div style="display: flex; justify-content: space-between">
-                                    <label style="width: 250px;">
+                                    <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb190}__}" class="thumb190" style="width: 250px;">
                                         <span>크기 190 x 190</span>
                                     </label>
-                                    <label style="width: 250px;">
+                                    <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb230}__}" class="thumb230" style="width: 250px;">
                                         <span>크기 230 x 230</span>
                                     </label>
-                                    <label style="width: 250px;">
+                                    <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb456}__}" class="thumb456" style="width: 250px;">
                                         <span>크기 456 x 456</span>
                                     </label>
                                 </div>
-                                <div style="display: flex; justify-content: space-between; margin-top: 20px">
+                                <div style="display: none; justify-content: space-between; margin-top: 20px">
                                     <label style="width: 250px;">
                                         <span style="font-size: 14px;">상품 이미지 변경</span>
                                         <input type="file" name="multThumb190"/>
@@ -423,11 +634,17 @@
                         <tr>
                             <td>상세 상품정보</td>
                             <td colspan="3">
-                                <span>크기 가로 940px 높이 제약없음, 크기 최대 1MB, 상세페이지 상품정보에 출력될 이미지 입니다.</span>
-                                <input type="file" name="multThumb940"/>
+                                <label style="display: inline-block; width: 250px; height: 80px; border: 3px solid #e6e6e6; ">
+                                    <b>클릭해서 이미지 보기</b>
+                                </label>
+                                <div style="display: none; width:650px; height: 80px;">
+                                    <span>크기 가로 940px 높이 제약없음, 크기 최대 1MB, 상세페이지 상품정보에 출력될 이미지 입니다.</span>
+                                    <input type="file" name="multThumb940"/>
+                                </div>
                             </td>
                         </tr>
                     </table>
+                    <span class="modifyBtn">수정</span>
                 </section>
 
                 <!---->
@@ -586,6 +803,7 @@
                 </section>
 
                 <input type="submit" value="등록하기"/>
+                <a th:href="@{/seller/product/list(prodSeller=${session.prodSeller})}" style="display:inline-block; width: 90px; padding: 6px; border: 1px solid #959595; font-size: 13px; background-color: #fefefe; color: #333; text-align: center; box-sizing: border-box;">목록</a>
             </form>
         </article>
 
