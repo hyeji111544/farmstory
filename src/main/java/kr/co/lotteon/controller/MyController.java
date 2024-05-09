@@ -35,29 +35,25 @@ public class MyController {
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(HttpSession session, Model model, String userId){
-
-        log.info("My home" + userId);
-    
-        myService.selectMyInfo(session, userId);
+    public String myHome(HttpSession session, Model model, String UserId){
 
         // 회원 정보
-
+        myService.selectMyInfo(session, UserId);
 
 
         // 최근주문내역
-        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(userId);
+        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(UserId);
         model.addAttribute("myOrder", myOrder);
 
 
         // 포인트적립내역
-        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(userId);
+        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(UserId);
         model.addAttribute("myPoint", myPoint);
 
         // 상품평
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
         pageRequestDTO.setSize(5);
-        PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
+        PageResponseDTO myReviewPage = myService.selectReivews(UserId, pageRequestDTO);
 
         model.addAttribute("myReviewPage", myReviewPage);
 

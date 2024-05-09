@@ -280,30 +280,7 @@ public class ProductService {
     // 상품 문의 조회
     public PageResponseDTO selectProdQna(int prodNo, PageRequestDTO pageRequestDTO) {
         Pageable pageable = pageRequestDTO.getPageable("No");
-        Page<Tuple> tuplePage = prodQnaRepository.selectProdQna(prodNo, pageable, pageRequestDTO);
-
-        List<ProdQnaDTO> prodQnaDTOList = tuplePage.getContent().stream()
-                .map(tuple -> {
-                    ProdQna prodQna = tuple.get(0, ProdQna.class);
-                    ProdQnaNote qnaNote = tuple.get(1, ProdQnaNote.class);
-                    ProdQnaDTO prodQnaDTO = modelMapper.map(prodQna, ProdQnaDTO.class);
-                    prodQnaDTO.setContent(qnaNote.getContent());
-                    prodQnaDTO.setCQnaDate(qnaNote.getCQnaDate());
-                    return prodQnaDTO;
-                }).toList();
-
-        int total = (int) tuplePage.getTotalElements();
-
-
-        // 묶어서 가져가야함 문의별로 답변 Map<문의, List<답변>> 이 형식으로
-        // impl 조회부터 다시 해야함 따로 따로 조회해서 문의 랑 답변이랑 따로 조회해서
-
-
-        return PageResponseDTO.builder()
-                .pageRequestDTO(pageRequestDTO)
-                .dtoList(prodQnaDTOList)
-                .total(total)
-                .build();
+        return prodQnaRepository.selectProdQna(prodNo, pageable, pageRequestDTO);
     }
 
 }
