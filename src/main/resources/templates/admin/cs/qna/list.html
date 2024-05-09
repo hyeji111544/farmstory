@@ -128,7 +128,7 @@
                     const TypeOption = `<option>1차선택</option>
                                         <option value="cpregi">등록방법</option>
                                         <option value="cplimit">유효기간</option>
-                                        <option value="cpevent">이벤트기간</option>
+                                        <option value="event">이벤트기간</option>
                                         <option value="ejoin">이벤트참여</option>`;
                     qnaType.insertAdjacentHTML('beforeend', TypeOption);
                 }else if (CateValue == 'user'){
@@ -268,7 +268,7 @@
 
                     <td th:if="${qna.qnaType == 'cpregi'}" style="white-space: nowrap; width: 70px">[등록방법]</td>
                     <td th:if="${qna.qnaType == 'cplimit'}" style="white-space: nowrap; width: 70px">[유효기간]</td>
-                    <td th:if="${qna.qnaType == 'cpevent'}" style="white-space: nowrap; width: 70px">[이벤트기간]</td>
+                    <td th:if="${qna.qnaType == 'event'}" style="white-space: nowrap; width: 70px">[이벤트기간]</td>
                     <td th:if="${qna.qnaType == 'ejoin'}" style="white-space: nowrap; width: 70px">[이벤트참여]</td>
 
                     <td th:if="${qna.qnaType == 'list'}" style="white-space: nowrap; width: 70px">[주문내역]</td>
@@ -320,7 +320,7 @@
 
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
                         <a class="pageNum" th:if="${qnaCate == null && qnaType == null}" th:href="@{/admin/cs/qna/list(pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(pg=${num}, qnaCate=${qnaCate}, qnaType=${qnaType})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(pg=${num}, qnaCate=${qnaCate}, qnaType=${qnaType})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
                     <a th:if="${pageResponseDTO.next && qnaCate == null && qnaType == null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.end + 1})}">다음</a>
