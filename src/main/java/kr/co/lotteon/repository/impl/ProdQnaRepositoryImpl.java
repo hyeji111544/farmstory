@@ -28,6 +28,7 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
     private final QProdQnaNote qProdQnaNote = QProdQnaNote.prodQnaNote;
     private final ModelMapper modelMapper;
 
+
     // 판매자 관리페이지 - QNA List - 목록 조회
     public Page<Tuple> selectSellerQnaList(String prodSeller, PageRequestDTO pageRequestDTO, Pageable pageable){
 
@@ -143,5 +144,29 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
                     .fetch();
         }
     }
+
+    @Override
+    public Page<ProdQna> selectMyProdQna(String userId, PageRequestDTO pageRequestDTO, Pageable pageable) {
+
+        //user qnd 조회
+        List<ProdQna> selectMyQna = jpaQueryFactory
+                .selectFrom(qprodQna)
+                .where(qprodQna.userId.eq(userId))
+                .orderBy(qprodQna.prodQnaDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = jpaQueryFactory
+                .select(qprodQna.count())
+                .from(qprodQna)
+                .where(qprodQna.userId.eq(userId))
+                .fetchOne();
+
+        // 페이징 처리
+        return new PageImpl<>(selectMyQna, pageable, total);
+
+    }
+
 
 }

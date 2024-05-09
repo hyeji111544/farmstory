@@ -199,12 +199,27 @@ public class MyController {
 
     //마이페이지-QnA 이동
     @GetMapping("/my/qna")
-    public String myQna(String userId, PageRequestDTO pageRequestDTO){
+    public String myQna(String userId, PageRequestDTO pageRequestDTO, Model model){
 
-        myService.selectMyQna(userId, pageRequestDTO);
+        log.info("pageRequestDTO : " + pageRequestDTO);
+        log.info("userId : " + userId);
 
-        pageRequestDTO.setCate("qna");
+        if (pageRequestDTO.getCate().equals("qna")) {
 
+            PageResponseDTO selectMyQna = myService.selectMyQna(userId, pageRequestDTO);
+            model.addAttribute("selectMyQna", selectMyQna);
+
+            log.info("selectMyQna : " +selectMyQna);
+
+            return "/my/qna";
+
+        } else if(pageRequestDTO.getCate().equals("prodqna")) {
+
+            PageResponseDTO selectMyProdQna = myService.selectMyProdQna(userId, pageRequestDTO);
+            model.addAttribute("selectMyProdQna", selectMyProdQna);
+
+            return "/my/qna";
+        }
         return "/my/qna";
     }
 
@@ -218,7 +233,7 @@ public class MyController {
 
         myService.writeReview(pdReviewDTO, revImage);
 
-        return null;
+        return "redirect:/my/review?userId=" +pdReviewDTO.getUserId();
     }
 
     //마이페이지-리뷰 이동
