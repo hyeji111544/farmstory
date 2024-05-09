@@ -5,6 +5,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.PageRequestDTO;
+import kr.co.lotteon.dto.PageResponseDTO;
 import kr.co.lotteon.dto.ProdQnaDTO;
 import kr.co.lotteon.dto.ProdQnaNoteDTO;
 import kr.co.lotteon.entity.*;
@@ -169,20 +170,39 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
     }
 
     // 상품 문의 조회
-    public Page<Tuple> selectProdQna(int prodNo, Pageable pageable, PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO selectProdQna(int prodNo, Pageable pageable, PageRequestDTO pageRequestDTO) {
 
-        QueryResults<Tuple> results = jpaQueryFactory
-                .select(qprodQna, qProdQnaNote)
-                .from(qprodQna)
-                .join(qProdQnaNote)
-                .on(qprodQna.prodQnaNo.eq(qProdQnaNote.prodQnaNo))
+        List<ProdQna> results = jpaQueryFactory
+                .selectFrom(qprodQna)
                 .where(qprodQna.prodNo.eq(prodNo))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<Tuple> tupleList = results.getResults();
-        int total = (int) results.getTotal();
-        return new PageImpl<>(tupleList, pageable ,total);
+        int total = results.size();
+
+        List<ProdQnaDTO> prodQnaDTOList = new ArrayList<>();
+        for (ProdQna each : results) {
+            List<ProdQnaNote> prodQnaNotes = jpaQueryFactory
+                    .selectFrom(qProdQnaNote)
+                    .where(qProdQnaNote.prodQnaNo.eq(each.getProdQnaNo()))
+                    .fetch();
+            ProdQnaDTO prodQnaDTO = modelMapper.map(each, ProdQnaDTO.class);
+            List<ProdQnaNoteDTO> prodQnaNoteDTOList = new ArrayList<>();
+            for (ProdQnaNote eachNote : prodQnaNotes) {
+                prodQnaNoteDTOList.add(modelMapper.map(eachNote, ProdQnaNoteDTO.class));
+            }
+            prodQnaDTO.setProdQnaNoteList(prodQnaNoteDTOList);
+            prodQnaDTOList.add(prodQnaDTO);
+        }
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(prodQnaDTOList)
+                .total(total)
+                .build();
+
+
+
     }
 }

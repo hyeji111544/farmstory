@@ -782,7 +782,7 @@
                 공개 게시판이므로 전화번호, 메일 주소 등 고객님의 소중한 개인정보는 절대 남기지 말아주세요.
             </p>
 
-            <div class="prodQnaQuestion" th:each="qna : ${prodQna}">
+            <div class="prodQnaQuestion" th:each="qna : ${prodQna.dtoList}" style="display: none">
                 <div class="questionHead">
                     <p>문의</p>
                     <span>상품명</span>

@@ -11,6 +11,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProdQnaRepository extends JpaRepository<ProdQna, Integer>, ProdQnaRepositoryCustom {
-    // 상품 문의 조회
-    public Page<Tuple> selectProdQna(int prodNo, Pageable pageable, PageRequestDTO qnaPageRequestDTO);
 }

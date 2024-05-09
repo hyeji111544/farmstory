@@ -1,8 +1,10 @@
 package kr.co.lotteon.dto;
 
+import kr.co.lotteon.entity.ProdQnaNote;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +26,5 @@ public class ProdQnaDTO {
     private String prodName;
 
     // 답변을 위한 추가 필드
-    private String content;
-    private LocalDateTime cQnaDate;
+    private List<ProdQnaNoteDTO> ProdQnaNoteList;
 }
