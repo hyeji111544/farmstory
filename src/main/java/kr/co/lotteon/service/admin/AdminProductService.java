@@ -17,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -303,4 +304,33 @@ public class AdminProductService {
         resultMap.put("finalOptDetail", finalOptDetail);
         return ResponseEntity.ok().body(resultMap);
     }
+
+    // 상품 카테고리 수정
+    public ResponseEntity<?> modifyCate(Map<String, Object> requestData) {
+        int prodNo = Integer.parseInt((String)requestData.get("prodNo"));
+        String cate01No = requestData.get("cate01No").toString();
+        String cate02No = requestData.get("cate02No").toString();
+        String cate03No = requestData.get("cate03No").toString();
+
+        Optional<Product> optionalProduct = productRepository.findById(prodNo);
+
+        Map<String, Integer> resultMap = new HashMap<>();
+        if (optionalProduct.isPresent()) {
+            String saveCode = cate01No + cate02No + cate03No;
+            optionalProduct.get().setCateCode(saveCode);
+            Product saveCate = productRepository.save(optionalProduct.get());
+            if (saveCate.getCateCode().equals(saveCode)) {
+                resultMap.put("result", 1);
+                return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+            }else {
+                resultMap.put("result", 0);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+            }
+        }else {
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
+
+
 }

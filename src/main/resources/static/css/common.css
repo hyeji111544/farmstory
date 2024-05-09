@@ -679,20 +679,28 @@ footer p > strong {
 .totalImageBox > a > img {
 }
 .sliderPrev {
+  width: 20px;
+  text-align: center;
   font-size: 30px;
   position: absolute;
-  left: 20px;
+  left: 10px;
   top: 50%;
   z-index: 10;
   cursor: pointer;
+  background-color: #909090;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 .sliderNext {
+  width: 20px;
+  text-align: center;
   font-size: 30px;
   position: absolute;
-  right: 20px;
+  right: 10px;
   top: 50%;
   z-index: 10;
   cursor: pointer;
+  background-color: #909090;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .headerOn {
