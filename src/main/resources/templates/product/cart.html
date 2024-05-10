@@ -293,7 +293,7 @@
             let listForCompany = aa;
 
 
-            console.log("1" + listForCompany);
+            //console.log("listForCompany : " + listForCompany);
 
             if (aa === undefined) {
                 //console.log("2" + listForCompany);
@@ -303,7 +303,7 @@
             // 선택된 체크박스 갯수카운트를 위한 문서객체
             var selectedCheckboxes = document.querySelectorAll('input[name="selectedCart"]:checked');
             var checkedCount = selectedCheckboxes.length;
-            console.log("선택된 상품 개수: " + checkedCount);
+            //console.log("선택된 상품 개수: " + checkedCount);
             const prodCount = document.getElementById('prodCount');
             prodCount.textContent = checkedCount.toLocaleString();
             const listForCompanyChecks = listForCompany.querySelectorAll('input[name="selectedCart"]');
@@ -334,16 +334,17 @@
                     }
 
                     maxDeliveryFee = Math.max(...deliveryFeeList);
-                    //console.log("max : " + maxDeliveryFee);
+                    console.log("최대 배송비 : " + maxDeliveryFee);
 
                     //console.log(cartItem.innerHTML);
-                    //console.log("orgin: " + priceOrgElement.innerHTML + "dis :" + priceDisElement.innerHTML);
+                    console.log("orgin: " + priceOrgElement.innerHTML + ", dis :" + priceDisElement.innerHTML);
 
                     const orgPriceText = priceOrgElement.innerText; // 체크된 상품의 가격
                     const disPriceText = priceDisElement.innerText; // 체크된 상품의 가격
-                    var orgParsePrice = parseFloat(orgPriceText.replace(',', ''));
-                    var disParsePrice = parseFloat(disPriceText.replace(',', ''));
-                    //console.log("원금 :" + orgParsePrice + "dis :" + disParsePrice + "fee :" + maxDeliveryFee);
+                    console.log("할인가텍스트 :" + disPriceText);
+                    var orgParsePrice = parseFloat(orgPriceText.replace(/,/g, ''));
+                    var disParsePrice = parseFloat(disPriceText.replace(/,/g, ''));
+                    console.log("단순계산 : 원금 :" + orgParsePrice + ", dis :" + disParsePrice + ", fee :" + maxDeliveryFee);
 
                     sumOrgPrice += orgParsePrice;
                     discountPrice += orgParsePrice - disParsePrice;
@@ -361,7 +362,7 @@
                 deliveryPrice.textContent = ' + 배송비' + maxDeliveryFee.toLocaleString() + '원';
                 disPrice.textContent = ' - 할인 ' + discountPrice.toLocaleString() + '원';
                 totalPrice.textContent = ' = 총 ' + sumTotalPrice.toLocaleString() + '원';
-                //console.log(orgPrice.innerHTML + ":" + discountPrice.innerHTML + ":" + totalPrice.innerHTML);
+                console.log("회사별가격: "+orgPrice.innerHTML + " : " + disPrice.innerHTML + " : " + totalPrice.innerHTML);
             });
             cartPrice();
         }
