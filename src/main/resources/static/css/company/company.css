@@ -110,9 +110,9 @@ main > div {
 .blogMainText {
     width: 1200px;
     margin: 0 auto;
-    padding-left: 40px;
+    padding-left: 50px;
     position: absolute;
-    bottom: 60px;
+    bottom: 200px;
     opacity: 0;
     transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }

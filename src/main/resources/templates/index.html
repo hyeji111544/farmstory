@@ -122,7 +122,7 @@
             </th:block>
             <!--로그인 했을때-->
             <th:block th:if="${#authorization.expression('isAuthenticated()')}">
-              <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+              <a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">[[${#authentication.principal.user.userName}]]님</a>
               <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
 
               <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
@@ -138,7 +138,7 @@
         </div>
         <div class="logo">
           <div>
-            <a href="#"><img th:src="@{/images/header_logo.png}" alt="로고" /></a>
+            <a th:href="@{/}"><img th:src="@{/images/header_logo.png}" alt="로고" /></a>
             <form action="/lotteon/product/list" method="get">
               <input type="hidden" name="cateCode" value="">
               <input type="text" name="keyword" />
@@ -157,8 +157,8 @@
             </ul>
             <ul>
               <li><a th:href="@{/cs/notice/list}">공지사항</a></li>
-              <li><a th:href="@{/cs/faq/list}">자주묻는질문</a></li>
-              <li><a th:href="@{/cs/qna/list}">문의하기</a></li>
+              <li><a th:href="@{/cs/faq/list(faqCate=user)}">자주묻는질문</a></li>
+              <li><a th:href="@{/cs/qna/list(qnaCate=user)}">문의하기</a></li>
               <li><a th:href="@{/cs/index}">고객센터</a></li>
             </ul>
           </div>
