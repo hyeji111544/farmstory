@@ -85,17 +85,17 @@
                     checkedTurn = 0;
                     }
                 }
-            }
-            // return한 타입값을 넣어줍니다.
-            let typeValue = onloadSelectCate();
+                // return한 타입값을 넣어줍니다.
+                let typeValue = onloadSelectCate();
 
-            // cate값을 바탕으로 type선택 옵션들을 보여줍니다.
-            const qnaCate = document.querySelector("select[name='qnaCate']");
-            typeList(qnaCate.value);
+                // cate값을 바탕으로 type선택 옵션들을 보여줍니다.
+                const qnaCate = document.querySelector("select[name='qnaCate']");
+                typeList(qnaCate.value);
 
-            // type에 고른 type value를 넣어줍니다
-            if (typeValue !== "") {
-                onloadSelectType(typeValue);
+                // type에 고른 type value를 넣어줍니다
+                if (typeValue !== "") {
+                    onloadSelectType(typeValue);
+                }
             }
             // // 카테고리별 조회
             function redirectToCateType() {
@@ -250,10 +250,11 @@
                         }
                    }else{
                        // 1차선택일때 value(cate)엔 pg 넘버가 들어감
-                       let value = splitValue.split('=')[1];
+                       let value2 = splitValue.split('=')[1];
                        // isNan은 숫자,문자 검사하고 문자면 true, 숫자면 false(빈객체) 반환
-                       if(isNaN(value)){
-                           cateValue = value;
+                       if(isNaN(value2)){
+                           cateValue = value2;
+                           console.log("1111 :" + cateValue);
                        }
                    }
                 }
@@ -261,6 +262,7 @@
                 const qnaCate = document.querySelector("select[name='qnaCate']");
                 if(cateValue !== ""){
                     qnaCate.value = cateValue;
+                    console.log("2222 :" + cateValue);
                 }
                 return typeValue;
             }
@@ -382,15 +384,16 @@
             <div class="pagingBox">
                 <div class="pagingList">
                     <a th:if="${pageResponseDTO.prev && qnaCate == null && qnaType == null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.start - 1})}">이전</a>
-                    <a th:if="${pageResponseDTO.prev && qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.start - 1}, qnaCate=${qnaCate}, qnaType=${qnaType})}">이전</a>
+                    <a th:if="${pageResponseDTO.prev && qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(qnaCate=${qnaCate}, qnaType=${qnaType}, pg=${pageResponseDTO.start - 1})}">이전</a>
 
                     <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
                         <a class="pageNum" th:if="${qnaCate == null && qnaType == null}" th:href="@{/admin/cs/qna/list(pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(pg=${num}, qnaCate=${qnaCate}, qnaType=${qnaType})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${qnaCate != null && qnaType == null}" th:href="@{/admin/cs/qna/list(qnaCate=${qnaCate}, pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(qnaCate=${qnaCate}, qnaType=${qnaType}, pg=${num})}" th:class="${num == pageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
                     <a th:if="${pageResponseDTO.next && qnaCate == null && qnaType == null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.end + 1})}">다음</a>
-                    <a th:if="${pageResponseDTO.next && qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(pg=${pageResponseDTO.end + 1}, qnaCate=${qnaCate}, qnaType=${qnaType})}">다음</a>
+                    <a th:if="${pageResponseDTO.next && qnaCate != null && qnaType != null}" th:href="@{/admin/cs/qna/list(qnaCate=${qnaCate}, qnaType=${qnaType},pg=${pageResponseDTO.end + 1})}">다음</a>
                 </div>
             </div>
 

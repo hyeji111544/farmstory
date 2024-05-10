@@ -31,7 +31,6 @@
                 const nextParent = btnParent.nextElementSibling; // 버튼의 부모의 다음 td 태그
                 const bannerNo = nextParent.innerText;
 
-
                 if (button.checked) {
                     banNos.push(bannerNo);
                     trTags.push(trTag);
@@ -48,8 +47,30 @@
                     console.log("trTags2 : " + trTags);
                 }
             }
-            function deleteBtn() {
+            let allBanNos = [];
+            let trTags2 = [];
+            function allCheckBox(){
+                const button = event.target;
+                const btnParent = button.parentNode.parentNode;
+                const trTag2 = btnParent.nextSibling;
+                const banNoTd = document.getElementById('banNoTd');
+                const banNo = banNoTd.innerText;
 
+                if(button.checked){
+                    allBanNos.push(banNo);
+                    trTags2.push(trTag2);
+                    console.log("111: "+ allBanNos);
+                    console.log("222: "+ trTags2);
+                }else{
+                    let index = allBanNos.indexOf(banNo);
+                    let index2 = trTags2.indexOf(trTag2);
+                    allBanNos.splice(index, 1);
+                    trTags2.splice(index2, 1);
+                    console.log("333: "+ allBanNos);
+                    console.log("444: "+ trTags2);
+                }
+            }
+            function deleteBtn() {
 
                 console.log("banNos : " + banNos);
                 // 삭제 버튼을 클릭하면 saveBannerNo를 가져와서 삭제 진행
@@ -131,6 +152,7 @@
                     .catch(err => console.log(err))
             }
             }
+
 
             // 활성화 버튼을 누르면 yes
             function yesUsable() {
@@ -235,7 +257,7 @@
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all"/></th>
+                        <th><input type="checkbox" id="bannerCheckBox" name="all" onclick="allCheckBox()"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -250,7 +272,7 @@
 
                     <tr class="bannerAll" th:each="banner : ${main1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td th:text="${banner.banNo}"></td>
+                        <td id="banNoTd" th:text="${banner.banNo}"></td>
                         <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
                         <td>
                             <ul>
@@ -282,7 +304,7 @@
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox()"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
