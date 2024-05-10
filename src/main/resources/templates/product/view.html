@@ -529,6 +529,26 @@
                 }
             }
 
+            // 상품 문의 하기
+            function prodQnaWrite() {
+                const userForDirect = document.getElementById('userForDirect');
+                if (userForDirect) {
+                    const QnaModalBack = document.getElementsByClassName('prodQnaModalBack')[0];
+                    QnaModalBack.style.display = "block"
+                }else {
+                    alert("로그인 후 이용해주세요.");
+                }
+            }
+
+            // 상품 문의하기 모달창 닫기
+            function closeQnaModal() {
+                const QnaModalBack = document.getElementsByClassName('prodQnaModalBack')[0];
+                const closeBtn = document.getElementsByClassName('closeBtn')[0];
+                if (event.target === QnaModalBack || event.target === closeBtn) {
+                    QnaModalBack.style.display = "none"
+                }
+            }
+
         </script>
 
         <!-- 제목, 페이지 네비게이션 -->
@@ -734,22 +754,20 @@
         <nav class="changTabBox" style="padding-bottom: 0">
             <h1 class="btnProdReview" onclick="changeTab()">상품 리뷰</h1>
             <h1 class="btnProdQna" onclick="changeTab()">상품 문의</h1>
-            <h1 class="btnProdQnaWrite" onclick="changeTab()">상품 문의 작성</h1>
         </nav>
 
         <article class="review" id="prodReview">
             <ul>
                 <li th:each="review : ${prodReview.dtoList}">
                     <img th:src="@{/uploads/__${review.revThumb}__}">
-                    <div>
+                    <div style="width: 780px;">
                         <div>
                             <h5 class="rating" th:text="${review.revScore}"></h5>
                             <span th:text="${#temporals.format(review.revAddDate, 'yyyy-MM-dd')}"></span>
                             <span th:text="${#strings.substring(review.userId, 0, 6)} + '****'"></span>
                         </div>
-                        <h3 th:text="${product.prodName}"></h3>
-                        <p th:text="${review.revContent}">
-                        </p>
+                        <h3 th:text="${product.prodName}" style="width: 300px"></h3>
+                        <p th:text="${review.revContent}" style="white-space: pre-line;"></p>
                     </div>
                 </li>
             </ul>
@@ -761,10 +779,6 @@
                     <a href="#" class="on">1</a>
                     <a href="#">2</a>
                     <a href="#">3</a>
-                    <a href="#">4</a>
-                    <a href="#">5</a>
-                    <a href="#">6</a>
-                    <a href="#">7</a>
                 </span>
                 <span class="next">
                     <a href="#">다음&nbsp;></a>
@@ -782,10 +796,10 @@
                 공개 게시판이므로 전화번호, 메일 주소 등 고객님의 소중한 개인정보는 절대 남기지 말아주세요.
             </p>
 
-            <div class="prodQnaQuestion" th:each="qna : ${prodQna.dtoList}" style="display: none">
+            <div class="prodQnaQuestion" th:each="qna : ${prodQna.dtoList}">
                 <div class="questionHead">
                     <p>문의</p>
-                    <span>상품명</span>
+                    <span th:text="${product.prodName}" style="width: 670px"></span>
                     <span th:text="${#strings.substring(qna.userId, 0, 6)} + '****'"></span>
                     <span th:text="${#temporals.format(qna.prodQnaDate, 'yyyy-MM-dd')}"></span>
                 </div>
@@ -793,17 +807,67 @@
                     <div th:text="${qna.prodQnaContent}" style="white-space: pre-line;"></div>
                 </div>
                 <!--답변-->
-                <div class="prodQnaAnswer">
+                <div class="prodQnaAnswer" th:each="answer : ${qna.ProdQnaNoteList}">
                     <div class="answerHead">
                         <p>&#10551; 답변</p>
-                        <span>2018-07-10</span>
+                        <span th:text="${#temporals.format(answer.cQnaDate, 'yyyy-MM-dd')}"></span>
                     </div>
                     <div class="answerBody">
-                        <div>구매 후 1년 사용가능합니다.</div>
+                        <div th:text="${answer.content}" style="white-space: pre-line;"></div>
                     </div>
                 </div>
             </div>
+
+            <span class="prodQnaWrite" onclick="prodQnaWrite()">상품문의하기</span>
+
+            <div class="paging">
+                <span class="prev">
+                    <a href="#"><&nbsp;이전</a>
+                </span>
+                <span class="num">
+                    <a href="#" class="on">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                </span>
+                <span class="next">
+                    <a href="#">다음&nbsp;></a>
+                </span>
+            </div>
         </article>
+
+        <!--상품 문의 모달창-->
+        <div class="prodQnaModalBack" onclick="closeQnaModal()">
+            <form action="#" class="prodQnaModal">
+                <div>
+                    <span>상품 문의</span>
+                    <span class="closeBtn" onclick="closeQnaModal()" style="cursor: pointer">X</span>
+                </div>
+                <div>
+                    <span>문의 제목</span>
+                    <th:block th:if="${#authentication.principal != 'anonymousUser'}">
+                        <input type="hidden"  name="userId" th:value="${#authentication.principal.user.userId}">
+                    </th:block>
+                    <input type="hidden" name="prodNo" th:value="${product.prodNo}"/>
+                    <input type="text" name="prodQnaTitle" placeholder="문의 제목"/>
+                </div>
+                <div>
+                    <span>문의 내용</span>
+                    <textarea name="prodQnaContent" placeholder="문의 내용"></textarea>
+                </div>
+                <div>
+                    <p>비밀글 여부</p>
+                    <label>
+                        <input type="radio" name="prodQnaSecret" value="Y" checked>
+                        <span>전체공개</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="prodQnaSecret" value="N">
+                        <span>비공개</span>
+                    </label>
+                </div>
+                <input type="submit" value="문의 작성">
+            </form>
+        </div>
 
     </section>
     <!-- 상품 상세페이지 끝 -->
