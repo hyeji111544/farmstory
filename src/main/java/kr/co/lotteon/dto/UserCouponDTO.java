@@ -17,4 +17,7 @@ public class UserCouponDTO {
     private LocalDateTime ucpDate;
     private LocalDateTime ucpUseDate;
     private String ucpStatus;
+
+    // 추가필드
+    private couponsDTO couponsDTO;
 }
