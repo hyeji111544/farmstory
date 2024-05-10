@@ -3,19 +3,26 @@
     layout:decorate="~{/layout/myLayout.html}">
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
+        <!--마이페이지 상단 회원 정보-->
         <nav>
             <div>
                 <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
+
+                <div class="UserInfo">
+                    <p th:text="${#authentication.principal.user.userName}"></p>
+                    <p th:text="${#authentication.principal.user.userGrade}"></p>
+                </div>
                 <ol>
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
                     <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
                 </ol>
             </div>
         </nav>
 
         <div class="coupon">
+            <!--마이페이지 사이드바-->
             <ul>
                 <span class="menu_else"></span>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>

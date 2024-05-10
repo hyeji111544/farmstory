@@ -58,10 +58,10 @@ public class MyController {
         model.addAttribute("myReviewPage", myReviewPage);
 
         // 문의내역
-
-
-
-
+        pageRequestDTO.setCate("qna");
+        pageRequestDTO.setSize(5);
+        PageResponseDTO selectMyQna = myService.selectMyQna(userId, pageRequestDTO);
+        model.addAttribute("selectMyQna", selectMyQna);
 
         return "/my/home";
 
@@ -167,7 +167,7 @@ public class MyController {
         return myService.myInfoUpdateRole(userId,userRole);
     }
 
-    //마이페이지-주문내역 이동
+    //마이페이지 - 주문내역 이동
     @GetMapping("/my/order")
     public String myOrder(String userId, Model model, MyOrderPageRequestDTO myOrderPageRequestDTO){
         log.info(userId);
@@ -179,7 +179,7 @@ public class MyController {
         return "/my/order";
     }
 
-    //마이페이지-포인트 이동
+    //마이페이지 - 포인트 이동
     @GetMapping("/my/point")
     public String myPoint(String userId,
                           Model model,
