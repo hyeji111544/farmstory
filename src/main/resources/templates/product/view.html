@@ -837,7 +837,7 @@
 
         <!--상품 문의 모달창-->
         <div class="prodQnaModalBack" onclick="closeQnaModal()">
-            <form action="#" class="prodQnaModal">
+            <form th:action="@{/product/writeProdQna}" class="prodQnaModal" method="post">
                 <div>
                     <span>상품 문의</span>
                     <span class="closeBtn" onclick="closeQnaModal()" style="cursor: pointer">X</span>
