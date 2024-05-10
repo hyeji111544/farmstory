@@ -18,6 +18,6 @@ public class couponsDTO {
     private String cpInfo;
     private String cpStatus;
     private int cpMinPrice;
-    private LocalDateTime cpEndData;
+    private LocalDateTime cpEndDate;
 
 }

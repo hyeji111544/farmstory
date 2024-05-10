@@ -35,29 +35,30 @@ public class MyController {
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
-    public String myHome(HttpSession session, Model model, String UserId){
+    public String myHome(HttpSession session, Model model, String userId){
 
         // 회원 정보
-        myService.selectMyInfo(session, UserId);
+        myService.selectMyInfo(session, userId);
 
 
         // 최근주문내역
-        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(UserId);
+        LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(userId);
         model.addAttribute("myOrder", myOrder);
 
 
         // 포인트적립내역
-        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(UserId);
+        List<PointHistoryDTO> myPoint = myService.myHomeselectPoints(userId);
         model.addAttribute("myPoint", myPoint);
 
         // 상품평
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
         pageRequestDTO.setSize(5);
-        PageResponseDTO myReviewPage = myService.selectReivews(UserId, pageRequestDTO);
+        PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
 
         model.addAttribute("myReviewPage", myReviewPage);
 
         // 문의내역
+
 
 
 
@@ -68,9 +69,9 @@ public class MyController {
 
     //마이페이지-쿠폰 이동
     @GetMapping("/my/coupon")
-    public String myCoupon(String userId, Model model){
+    public String myCoupon(PageRequestDTO pageRequestDTO, String userId, Model model){
 
-        List<Coupons> haveCoupons = myService.selectCoupons(userId);
+        PageResponseDTO haveCoupons = myService.selectCoupons(pageRequestDTO, userId);
         model.addAttribute("haveCoupons", haveCoupons); // Map<String ,List<Coupons>>  / Map<String, int>
         return "/my/coupon";
     }

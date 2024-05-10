@@ -280,27 +280,51 @@ public class MyService {
 
 
     // 마이페이지 - 쿠폰 조회
-    public List<Coupons> selectCoupons(String userId){
+    public PageResponseDTO selectCoupons(PageRequestDTO pageRequestDTO, String userId){
+
+        Pageable pageable = pageRequestDTO.getPageable("cpNo");
 
         // userId로 userCoupon 조회
-        List<UserCoupon> selectUserCoupon = userCouponRepository.findByUserId(userId);
+        Page<UserCoupon> pageUserCoupon = userCouponRepository.findByUserId(userId, pageable);
+
+        List<UserCoupon> selectUserCoupon = pageUserCoupon.getContent();
+
+        int total = (int) pageUserCoupon.getTotalElements();
 
         log.info("selectUserCoupon : " + selectUserCoupon);
 
         // userCoupon에서 조회한 cpNo로 쿠폰 정보 조회
-        List<Coupons> haveCoupons = new ArrayList<>();
+        List<UserCouponDTO> haveCoupons = new ArrayList<>();
 
-        log.info("haveCoupons : " + haveCoupons);
+        log.info("방금 생성한 haveCoupons : " + haveCoupons);
 
         if (selectUserCoupon !=null && selectUserCoupon.size()>0){
-            for (UserCoupon haveCpNo : selectUserCoupon){
-                Coupons findCoupon = couponsRepository.findByCpNo(haveCpNo.getCpNo());
-                haveCoupons.add(findCoupon);
-                log.info("for문 속 findCoupon : " + findCoupon);
+            for (UserCoupon eachUserCoupon : selectUserCoupon){
+                log.info("for문 시작");
+                // 1. eachUserCoupon 에서 cpNo 꺼내서 쿠폰 정보 조회
+                Coupons findCoupon = couponsRepository.findByCpNo(eachUserCoupon.getCpNo());
+                log.info("findCoupon 1 : " + findCoupon);
+                // 2. 엔티티를 DTO로 변환
+                UserCouponDTO userCouponDTO = modelMapper.map(eachUserCoupon, UserCouponDTO.class);
+                couponsDTO couponsDTO = modelMapper.map(findCoupon, couponsDTO.class);
+                log.info("userCouponDTO 2 : " + userCouponDTO);
+                log.info("couponsDTO 3 : " + couponsDTO);
+
+                // 3. UserCouponDTO 과 couponsDTO 합치기
+                userCouponDTO.setCouponsDTO(couponsDTO);
+                haveCoupons.add(userCouponDTO);
+                log.info("userCouponDTO 4 : " + userCouponDTO);
+                log.info("haveCoupons 5 : " + haveCoupons);
+                log.info("for문 끝");
             }
         }
-        log.info("마지막 haveCoupons : " + haveCoupons);
-        return haveCoupons;
+        log.info("for문 이후의 haveCoupons : " + haveCoupons);
+
+        return PageResponseDTO.builder()
+                .pageRequestDTO(pageRequestDTO)
+                .dtoList(haveCoupons)
+                .total(total)
+                .build();
     }
 
     // 마이페이지 - 포인트내역 조회
