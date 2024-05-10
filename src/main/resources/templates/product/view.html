@@ -377,7 +377,7 @@
                             console.log(response);
 
                             if (confirm("찜하기로 이동하시겠습니까?")){
-                                window.location.href = "위시페이지 주소가...?";
+                                window.location.href = `/lotteon/my/wish?userId=${userId}`;
                             }
                         })
                         .catch(error => {
