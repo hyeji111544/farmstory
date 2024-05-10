@@ -120,7 +120,7 @@
                                             </div>
                                             <div class="optionPrice">
                                                 <span id="optProdPrice">원</span>
-                                                <input type="text" id="saveOptProdPrice"/>
+                                                <input type="hidden" id="saveOptProdPrice"/>
                                                 <input type="hidden" name="optDetailNo" value="${matchingDTOs.optDetailNo}"/>
                                                 <span onclick="delSelectedOption()" style="cursor: pointer">x</span>
                                             </div>
@@ -277,7 +277,7 @@
                 var selectOptPrices = document.querySelectorAll('[id="optProdPrice"]');
                 selectOptPrices.forEach(function (optPrice){
                    var priceText =  optPrice.textContent;
-                    var price = parseInt(priceText.replace('원', '').replace(',', ''));
+                    var price = parseInt(priceText.replace('원', '').replace(/,/g, ''));
                     totalCost += price;
                 });
                 var inputPrice = document.querySelector('[name="totalPrice"]');
@@ -401,27 +401,39 @@
                     console.log(userId);
                     console.log(prodNo);
                     // 카운터 문서객체 생성
-                    const prodCounts = document.querySelectorAll('input.numInput[name="num"]');
+                    const prodCounts = document.querySelectorAll('input[name="num"]');
                     // 옵션 문서객체 생성
                     const optDetailsNo = document.querySelectorAll('input[name="optDetailNo"]');
                     // 옵션과 갯수 리스트 저장할 배열 선언
                     const jsonDataArray = [];
 
                     // optDetailNo 갯수만큼 반복하며 jsonData 를 저장함
-                    optDetailsNo.forEach((optDetailsNo, index) => {
-                        const optNoValue = optDetailsNo.value;
-                        const prodCountValue = prodCounts[index].value;
+                    if (optDetailsNo.length!==0){
+                        optDetailsNo.forEach((optDetailsNo, index) => {
+                            const optNoValue = optDetailsNo.value;
+                            const prodCountValue = prodCounts[index].value;
 
+                            const jsonData = {
+                                "userId" : userId,
+                                "prodNo" : prodNo,
+                                "optDetailNo" : optNoValue,
+                                "count" : prodCountValue
+                            };
+                            jsonDataArray.push(jsonData);
+                            console.log(jsonDataArray);
+                        });
+                        console.log(jsonDataArray);
+                    }else {
+                        const prodCountValue = prodCounts[0].value;
                         const jsonData = {
                             "userId" : userId,
                             "prodNo" : prodNo,
-                            "optDetailNo" : optNoValue,
+                            "optDetailNo" : 0,
                             "count" : prodCountValue
-                        };
+                        }
                         jsonDataArray.push(jsonData);
-                        console.log(jsonDataArray);
-                    });
-                    console.log(jsonDataArray);
+                    }
+
 
                     const data = fetchPost(`/lotteon/product/orderView`, jsonDataArray)
                         .then(response => {
@@ -448,26 +460,38 @@
                     console.log(userId);
                     console.log(prodNo);
                     // 카운터 문서객체 생성
-                    const prodCounts = document.querySelectorAll('input.numInput[name="num"]');
+                    const prodCounts = document.querySelectorAll('input[name="num"]');
                     // 옵션 문서객체 생성
                     const optDetailsNo = document.querySelectorAll('input[name="optDetailNo"]');
                     // 옵션과 갯수 리스트 저장할 배열 선언
                     const jsonDataArray = [];
 
                     // optDetailNo 갯수만큼 반복하며 jsonData 를 저장함
-                    optDetailsNo.forEach((optDetailsNo, index) => {
-                        const optNoValue = optDetailsNo.value;
-                        const prodCountValue = prodCounts[index].value;
+                    if (optDetailsNo.length!==0){
+                        optDetailsNo.forEach((optDetailsNo, index) => {
+                            const optNoValue = optDetailsNo.value;
+                            const prodCountValue = prodCounts[index].value;
 
+                            const jsonData = {
+                                "userId" : userId,
+                                "prodNo" : prodNo,
+                                "optNo" : optNoValue,
+                                "count" : prodCountValue
+                            };
+                            jsonDataArray.push(jsonData);
+                        });
+                        console.log(jsonDataArray);
+                    }else {
+                        const prodCountValue = prodCounts[0].value;
                         const jsonData = {
                             "userId" : userId,
                             "prodNo" : prodNo,
-                            "optNo" : optNoValue,
+                            "optDetailNo" : 0,
                             "count" : prodCountValue
-                        };
+                        }
                         jsonDataArray.push(jsonData);
-                    });
-                    console.log(jsonDataArray);
+                    }
+
 
                     const data = fetchPost(`/lotteon/product/view/insertCart?userId=${userId}`, jsonDataArray)
                         .then(response => {
@@ -616,7 +640,7 @@
                 </div>
 
                 <div class="selectedOption">
-                    <div th:if="${OptionDTOs.optionMap.isEmpty()}">
+                    <div class="selectedValue" th:if="${OptionDTOs.optionMap.isEmpty()}">
                         <h4 th:text="${product.prodName}">상품 이름</h4>
                         <div class="count">
                             <button class="decrease" onclick="changeNumNoOpt(-1)">-</button>
