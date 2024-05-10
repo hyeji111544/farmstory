@@ -181,19 +181,25 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
 
         int total = results.size();
 
+        log.info("results : " + results);
+
         List<ProdQnaDTO> prodQnaDTOList = new ArrayList<>();
         for (ProdQna each : results) {
             List<ProdQnaNote> prodQnaNotes = jpaQueryFactory
                     .selectFrom(qProdQnaNote)
                     .where(qProdQnaNote.prodQnaNo.eq(each.getProdQnaNo()))
                     .fetch();
+            log.info("prodQnaNotes : " + prodQnaNotes);
             ProdQnaDTO prodQnaDTO = modelMapper.map(each, ProdQnaDTO.class);
             List<ProdQnaNoteDTO> prodQnaNoteDTOList = new ArrayList<>();
             for (ProdQnaNote eachNote : prodQnaNotes) {
                 prodQnaNoteDTOList.add(modelMapper.map(eachNote, ProdQnaNoteDTO.class));
+                log.info("prodQnaNoteDTOList : " + prodQnaNoteDTOList);
             }
             prodQnaDTO.setProdQnaNoteList(prodQnaNoteDTOList);
             prodQnaDTOList.add(prodQnaDTO);
+            log.info("prodQnaDTO : " + prodQnaDTO);
+            log.info("prodQnaDTOList : " + prodQnaDTOList);
         }
 
         return PageResponseDTO.builder()

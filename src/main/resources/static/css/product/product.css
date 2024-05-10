@@ -731,17 +731,6 @@
     width: 130px;
     height: 36px;
     border: 1px solid #111;
-    padding: 4px 10px!important;
-    text-align: center;
-    cursor: pointer;
-    margin-bottom: -1px;
-    margin-right: -5px;
-    line-height: 36px!important;
-}
-.btnProdQnaWrite {
-    width: 130px;
-    height: 36px;
-    border: 1px solid #111;
     border-top-right-radius: 10px;
     padding: 4px 10px!important;
     text-align: center;
@@ -844,7 +833,101 @@
     background-color: #f3f3f3;
 }
 
-
+.prodQnaWrite {
+    display: inline-block;
+    margin: 20px 2px 0 2px;
+    padding: 8px 9px;
+    border: 1px solid #c4c4c4;
+    color: #000;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+    place-self: end;
+    cursor: pointer;
+    float: right;
+}
+.prodQnaModalBack {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.5);
+    z-index: 10;
+}
+.prodQnaModal {
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    flex-wrap: wrap;
+    width: auto;
+    height: auto;
+    padding: 10px 20px 20px 20px;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+.prodQnaModal > div {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+.prodQnaModal > div:nth-child(1) {
+    flex-direction: row;
+    justify-content: space-between;
+}
+.prodQnaModal > div:nth-child(1) > span {
+    font-size: 16px;
+    font-weight: bold;
+}
+.prodQnaModal > div > span {
+    font-size: 14px;
+    font-weight: bold;
+}
+.prodQnaModal > div > input[type="text"] {
+    width: 400px;
+    height: 30px;
+    font-size: 14px;
+    padding: 0 10px;
+    margin: 10px 0;
+    outline: none;
+    border: 1px solid #909090;
+}
+.prodQnaModal > div > textarea {
+    width: 400px;
+    height: 200px;
+    font-size: 14px;
+    padding: 10px;
+    margin: 10px 0 0 0;
+    outline: none;
+    resize: none;
+    border: 1px solid #909090;
+}
+.prodQnaModal > div > p {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 0;
+}
+.prodQnaModal > div > label > span {
+    font-size: 14px;
+    padding: 5px 0;
+}
+.prodQnaModal > input[type="submit"] {
+    width: 150px;
+    height: 30px;
+    align-self: center;
+    font-size: 14px;
+    margin: 10px 0 0 0;
+    border: 1px solid #909090;
+    outline-style: none;
+    cursor: pointer;
+}
 
 #product > .view > .review > .paging {
     width: 100%;
