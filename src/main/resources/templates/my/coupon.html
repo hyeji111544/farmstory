@@ -23,7 +23,7 @@
                 <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
                 <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
-                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의하기</a></li>
+                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
                 <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
             </ul>
 
@@ -39,7 +39,7 @@
                         <dl>
                             <dt>· 나의 보유쿠폰</dt>
                             <dd>
-                                <strong th:text="${haveCoupons.size()}"></strong>
+                                <strong th:text="${haveCoupons.total}"></strong>
                                 <span>장</span>
                             </dd>
                         </dl>
@@ -53,20 +53,25 @@
                             <div>유효기간</div>
                             <div>상태</div>
                         </div>
-                        <div class="myTableBody myCouponRow" th:each="coupons : ${haveCoupons}">
-                            <div th:text="${coupons.cpName}"></div>
-                            <div th:text="${#numbers.formatInteger(coupons.cpDcPrice,3,'COMMA')}"></div>
-                            <div th:text="${#numbers.formatInteger(coupons.cpMinPrice,3,'COMMA')}"></div>
-                            <div th:text="${#temporals.format(coupons.cpEndDate, 'yy-MM-dd')}"></div>
-                            <div th:text="${coupons.cpStatus}"></div>
+                        <div class="myTableBody myCouponRow" th:each="coupons : ${haveCoupons.dtoList}">
+                            <div th:text="${coupons.couponsDTO.cpName}"></div>
+                            <div th:text="${#numbers.formatInteger(coupons.couponsDTO.cpDcPrice,3,'COMMA')}"></div>
+                            <div th:text="${#numbers.formatInteger(coupons.couponsDTO.cpMinPrice,3,'COMMA')}"></div>
+                            <div th:text="${#temporals.format(coupons.couponsDTO.cpEndDate, 'yy-MM-dd')}"></div>
+                            <div th:text="${coupons.couponsDTO.cpStatus}"></div>
                         </div>
 
                         <p class="page">
-                            <a href="#" class="prev">이전</a>
-                            <a href="#" class="num on">1</a>
-                            <a href="#" class="num">2</a>
-                            <a href="#" class="num">3</a>
-                            <a href="#" class="next">다음</a>
+                            <a th:if="${haveCoupons.prev && haveCoupons.cate == null}" th:href="@{/my/point(pg=${haveCoupons.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
+                            <a th:if="${haveCoupons.prev && haveCoupons.cate != null}" th:href="@{/my/point(pg=${haveCoupons.start -1}, userId=${#authentication.principal.user.userId}, cate=${haveCoupons.cate}, startDate=${haveCoupons.startDate}, finalDate=${haveCoupons.finalDate})}">이전</a>
+
+                            <th:block th:each="num:${#numbers.sequence(haveCoupons.start, haveCoupons.end)}">
+                                <a class="pageNum" th:if="${haveCoupons.cate == null}" th:href="@{/my/point(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == haveCoupons.pg} ? 'on' : ''">[[${num}]]</a>
+                                <a class="pageNum" th:if="${haveCoupons.cate != null}" th:href="@{/my/point(pg=${num}, cate=${haveCoupons.cate}, userId=${#authentication.principal.user.userId}, startDate=${haveCoupons.startDate}, finalDate=${haveCoupons.finalDate})}" th:class="${num == haveCoupons.pg} ? 'on' : ''">[[${num}]]</a>
+                            </th:block>
+
+                            <a th:if="${haveCoupons.next && haveCoupons.cate == null}" th:href="@{/my/point(pg=${haveCoupons.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>
+                            <a th:if="${haveCoupons.next && haveCoupons.cate != null}" th:href="@{/my/point(pg=${haveCoupons.end + 1}, userId=${#authentication.principal.user.userId}, cate=${haveCoupons.cate}, startDate=${haveCoupons.startDate}, finalDate=${haveCoupons.finalDate})}">다음</a>
                         </p>
                     </div>
 

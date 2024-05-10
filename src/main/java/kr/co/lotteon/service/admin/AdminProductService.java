@@ -17,6 +17,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -209,17 +210,29 @@ public class AdminProductService {
 
         // option2 List를 배열 반복으로 DB에 저장 후 반환 (optNo 필요함)
         List<ProdOption> SaveOptionList2 = new ArrayList<>();
-        for (ProdOptionDTO option2 : optionDTO2) {
-            ProdOption SaveOption2 = optionRepository.save(modelMapper.map(option2, ProdOption.class));
+        if (optionDTO2.get(0).getOptName().equals("0")) {
+            ProdOption SaveOption2 = new ProdOption();
+            SaveOption2.setOptNo(0);
             SaveOptionList2.add(SaveOption2);
+        }else {
+            for (ProdOptionDTO option2 : optionDTO2) {
+                ProdOption SaveOption2 = optionRepository.save(modelMapper.map(option2, ProdOption.class));
+                SaveOptionList2.add(SaveOption2);
+            }
         }
         log.info("SaveOptionList2 : " + SaveOptionList2);
 
         // option3 List를 배열 반복으로 DB에 저장 후 반환 (optNo 필요함)
         List<ProdOption> SaveOptionList3 = new ArrayList<>();
-        for (ProdOptionDTO option3 : optionDTO3) {
-            ProdOption SaveOption3 = optionRepository.save(modelMapper.map(option3, ProdOption.class));
+        if (optionDTO3.get(0).getOptName().equals("0")) {
+            ProdOption SaveOption3 = new ProdOption();
+            SaveOption3.setOptNo(0);
             SaveOptionList3.add(SaveOption3);
+        }else {
+            for (ProdOptionDTO option3 : optionDTO3) {
+                ProdOption SaveOption3 = optionRepository.save(modelMapper.map(option3, ProdOption.class));
+                SaveOptionList3.add(SaveOption3);
+            }
         }
         log.info("SaveOptionList3 : " + SaveOptionList3);
 
@@ -291,4 +304,33 @@ public class AdminProductService {
         resultMap.put("finalOptDetail", finalOptDetail);
         return ResponseEntity.ok().body(resultMap);
     }
+
+    // 상품 카테고리 수정
+    public ResponseEntity<?> modifyCate(Map<String, Object> requestData) {
+        int prodNo = Integer.parseInt((String)requestData.get("prodNo"));
+        String cate01No = requestData.get("cate01No").toString();
+        String cate02No = requestData.get("cate02No").toString();
+        String cate03No = requestData.get("cate03No").toString();
+
+        Optional<Product> optionalProduct = productRepository.findById(prodNo);
+
+        Map<String, Integer> resultMap = new HashMap<>();
+        if (optionalProduct.isPresent()) {
+            String saveCode = cate01No + cate02No + cate03No;
+            optionalProduct.get().setCateCode(saveCode);
+            Product saveCate = productRepository.save(optionalProduct.get());
+            if (saveCate.getCateCode().equals(saveCode)) {
+                resultMap.put("result", 1);
+                return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+            }else {
+                resultMap.put("result", 0);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+            }
+        }else {
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
+
+
 }

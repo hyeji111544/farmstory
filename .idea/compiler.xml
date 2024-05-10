@@ -28,8 +28,6 @@
         <module name="kr.co.lotteon.lotteon.test~3" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="17">
-      <module name="kr.co.lotteon.lotteon.test~2" target="17" />
-    </bytecodeTargetLevel>
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>

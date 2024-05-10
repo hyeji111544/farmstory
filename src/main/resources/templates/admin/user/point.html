@@ -124,7 +124,7 @@
                     <div th:text="${ResponseDTO.startNo - index.index}" style="width: 50px;"></div>
                     <div class="userId" th:text="${point.userId}" style="width: 220px;"></div>
                     <div th:text="${point.userName}" style="width: 200px;"></div>
-                    <div class="pointAfter" th:if="${point.pointBalance == 0}" style="width: 120px; text-align: right; padding-right: 30px"></div>
+                    <div class="pointAfter" th:if="${point.pointBalance == 0}" style="width: 120px; text-align: right; padding-right: 30px">0</div>
                     <div class="pointAfter" th:if="${point.pointBalance != 0}" th:text="${#numbers.formatInteger(point.pointBalance, 3, 'COMMA')}" style="width: 120px; text-align: right; padding-right: 30px"></div>
                     <div onclick="plusPointModal()" style="width: 150px; cursor: pointer;">지급하기</div>
                     <div onclick="minusPointModal()" style="width: 150px; cursor: pointer;">회수하기</div>

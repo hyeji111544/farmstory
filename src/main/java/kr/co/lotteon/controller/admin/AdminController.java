@@ -3,6 +3,7 @@ package kr.co.lotteon.controller.admin;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Banner;
 import kr.co.lotteon.entity.ProdOptDetail;
+import kr.co.lotteon.repository.ProductRepository;
 import kr.co.lotteon.service.MemberService;
 import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.admin.AdminService;
@@ -223,6 +224,12 @@ public class AdminController {
         log.info("optDetailDTOS : " + optDetailDTOS);
 
         return adminproductService.registerProdOption(optionDTO1, optionDTO2, optionDTO3, optDetailDTOS);
+    }
+
+    // 상품 카테고리 수정
+    @PostMapping("/admin/product/modifyCate")
+    public ResponseEntity<?> modifyCate(@RequestBody Map<String, Object> requestData) {
+        return adminproductService.modifyCate(requestData);
     }
 
     // 배너 등록

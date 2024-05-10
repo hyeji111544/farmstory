@@ -6,6 +6,32 @@
     <section id="admin-cs-list" layout:fragment="content">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script type="text/javascript">
+            window.onload = function() {
+                // 현재 URL 가져오기
+                let currentURL = window.location.href;
+
+                let splitValue = currentURL.split('?')[1];
+                let cateValue = splitValue.split('=')[1];
+
+                // noticeCate 파라미터 가져오기
+                let noticeCate = cateValue;
+                console.log("noticeCate: "+noticeCate);
+
+                // select 요소 가져오기
+                let selectElement = document.querySelector('select[name="search"]');
+                console.log("selectElement : {}",  selectElement);
+
+                // noticeCate 값에 해당하는 옵션 선택
+                if (noticeCate) {
+                    // noticeCate 값과 같은 value를 가진 옵션을 선택
+                    for (let option of selectElement.options) {
+                        if (option.value === noticeCate) {
+                            option.selected = true;
+                            break;
+                        }
+                    }
+                }
+            };
             $(function(){
                 // 삭제 체크박스
                 var chkObj = document.getElementsByName("RowCheck");
@@ -158,7 +184,7 @@
                     </th:block>
 
                     <a th:if="${pageResponseDTO.next && noticeCate == null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.end + 1})}">다음</a>
-                    <a th:if="${pageResponseDTO.next && noticeCate != null}" th:href="@{/admin/cs/notice/list(pg=${pageResponseDTO.end + 1}, noticeCate=${noticeCate})}">다음</a>
+                    <a th:if="${pageResponseDTO.next && noticeCate != null}" th:href="@{/admin/cs/notice/list(noticeCate=${noticeCate}pg=${pageResponseDTO.end + 1})}">다음</a>
                 </div>
             </div>
 

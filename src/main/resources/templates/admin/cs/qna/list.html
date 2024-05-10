@@ -32,7 +32,7 @@
                 // 삭제
                 let result = false;
                 if(qna_qnaNo.length != 0){
-                    result = confirm("선택하신 상품을 장바구니에서 삭제하시겠습니까?");
+                    result = confirm("정말 삭제하시겠습니까?");
                 }else{
                     return;
                 }
@@ -86,6 +86,17 @@
                     }
                 }
             }
+            // return한 타입값을 넣어줍니다.
+            let typeValue = onloadSelectCate();
+
+            // cate값을 바탕으로 type선택 옵션들을 보여줍니다.
+            const qnaCate = document.querySelector("select[name='qnaCate']");
+            typeList(qnaCate.value);
+
+            // type에 고른 type value를 넣어줍니다
+            if (typeValue !== "") {
+                onloadSelectType(typeValue);
+            }
             // // 카테고리별 조회
             function redirectToCateType() {
                 const qnaCate = document.querySelector("select[name='qnaCate']").value;
@@ -110,13 +121,23 @@
                 // 페이지 이동
                 location.href = url;
             }
-            // 타입별 카테조회
-            function firstOption() {
-                const CateOption = event.target;  // 내가 함수를 호출한 현재 태그
-                const CateValue = CateOption.value;  // select태그의 value값
-                const qnaType = document.getElementsByName('qnaType')[0];
+            //타입별 카테 조회
+            function firstOption(){
+                const qnaCate = document.querySelector("select[name='qnaCate']").value;
 
-                console.log(CateValue);
+                if(qnaCate !== "1차선택"){
+
+                    let url = "/lotteon/admin/cs/qna/list?";
+
+                    if(qnaCate){
+                        url += "qnaCate=" + qnaCate;
+                    }
+                    location.href = url;
+                }
+            }
+            // 타입별 카테조회
+            function typeList(CateValue) {
+                const qnaType = document.getElementsByName('qnaType')[0];
 
                 if (CateValue == 'coupon'){
                     // 원래 있던 option들 삭제
@@ -125,7 +146,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="cpregi">등록방법</option>
                                         <option value="cplimit">유효기간</option>
                                         <option value="event">이벤트기간</option>
@@ -138,7 +159,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="regi">가입</option>
                                         <option value="leave">탈퇴</option>
                                         <option value="info">회원정보</option>
@@ -150,7 +171,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="list">주문내역</option>
                                         <option value="way">결제방법</option>
                                         <option value="payment">결제수단</option>
@@ -162,7 +183,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="deldate">배송일</option>
                                         <option value="deldelay">배송지연</option>
                                         <option value="delchange">배송지변경</option>
@@ -174,7 +195,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="return">반품신청</option>
                                         <option value="ocancel">주문취소</option>
                                         <option value="refund">환불신청</option>
@@ -186,7 +207,7 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="tlist">숙박시설</option>
                                         <option value="treco">여행지추천</option>
                                         <option value="tway">결제방법</option>
@@ -198,12 +219,57 @@
                         child.remove();
                     })
                     // 새로운 옵션 삽입
-                    const TypeOption = `<option>1차선택</option>
+                    const TypeOption = `<option>2차선택</option>
                                         <option value="care">주의사항</option>
                                         <option value="sway">결제방법</option>
                                         <option value="sacc">입금계좌</option>
                                         <option value="sfee">수수료</option>`;
                     qnaType.insertAdjacentHTML('beforeend', TypeOption);
+                }
+            }
+            function onloadSelectCate(){
+                // 카테 가져온 현재 주소
+                let currentURL = window.location.href;
+                // ?qnaCate = '?'; ? 기준으로 자르고 [1]인 객체
+                let splitValue = currentURL.split('?')[1];
+                let cateValue = ""
+                let typeValue = ""
+                // 카테를 고른경우
+                if(splitValue != null){
+                    // qnaCate = '?' =기준으로 잘라줍니다. [qnaCate, '?'] 배열로 담깁니다
+                   let splitValue2 = splitValue.split('=');
+                   //[qnaCate, '', qnaType, ''] 타입선택을하면 이 값이 담깁니다
+                    // [qnaCate, delivery&qnaType, deldate]
+                   if(splitValue2.length > 2){
+                        // cateValue = ''값이 담깁니다 splitValue2[1]는 delivery&qnaType 이 객체만 빼옴
+                        cateValue = splitValue2[1].split('&')[0];
+                        // typeValue = '' 값이 담깁니다
+                        let value = splitValue2[2].split('&')[0];
+                        if(isNaN(value)){
+                            typeValue = value;
+                        }
+                   }else{
+                       // 1차선택일때 value(cate)엔 pg 넘버가 들어감
+                       let value = splitValue.split('=')[1];
+                       // isNan은 숫자,문자 검사하고 문자면 true, 숫자면 false(빈객체) 반환
+                       if(isNaN(value)){
+                           cateValue = value;
+                       }
+                   }
+                }
+                // 1차 카테고리 선택
+                const qnaCate = document.querySelector("select[name='qnaCate']");
+                if(cateValue !== ""){
+                    qnaCate.value = cateValue;
+                }
+                return typeValue;
+            }
+
+            function onloadSelectType(typeValue) {
+                // 타입 선택
+                const qnaType = document.querySelector("select[name='qnaType']");
+                if (typeValue !== "") {
+                    qnaType.value = typeValue;
                 }
             }
         </script>
