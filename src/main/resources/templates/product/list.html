@@ -131,7 +131,7 @@
                     <div class="score_review">
                         <b>★ <span>[[${product.tReviewScore}]]</span></b>
                         <b>리뷰 <span>[[${product.tReviewCount}]]</span></b>
-                        <span>고객만족우수</span>
+                        <span th:if="${product.TReviewScore>=4}">고객만족우수</span>
                     </div>
                 </a>
             </div>

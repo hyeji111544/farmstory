@@ -230,7 +230,7 @@ public class MyController {
 
         myService.writeReview(pdReviewDTO, revImage);
 
-        return "redirect:/my/review?userId=" +pdReviewDTO.getUserId();
+        return "redirect:/my/review?userId=" + pdReviewDTO.getUserId();
     }
 
     //마이페이지-리뷰 이동
