@@ -55,7 +55,7 @@
                 </th:block>
                 <!--로그인 했을때-->
                 <th:block th:if="${#authorization.expression('isAuthenticated()')}">
-                    <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+                    <a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">[[${#authentication.principal.user.userName}]]님</a>
                     <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
 
                     <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
@@ -78,7 +78,6 @@
                     <button><i class="fa fa-search"></i></button>
                 </form>
             </div>
-
         </div>
         <div class="menu">
             <div>
