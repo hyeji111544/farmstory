@@ -4,9 +4,35 @@
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
 
-        <script>
+        <script th:inline="javascript">
+            // 문의 유형 Map
+            const qnaCateType = {
+                "user" : "회원", "coupon" : "쿠폰/이벤트", "order" : "주문/결제", "delivery" : "배송", "cancel" : "취소/반품/환불", "travel" : "여행/숙박/항공", "safe" : "안전결제",
+                "regi" : "가입", "leave" : "탈퇴", "info" : "회원정보", "login" : "로그인",
+                "cpregi" : "등록방법", "cplimit" : "유효기간", "event" : "이벤트기간", "ejoin" : "이벤트참여",
+                "list" : "주문내역", "way" : "결제방법", "payment" : "결제수단", "oway" : "주문방법",
+                "deldate" : "배송일", "deldelay" : "배송지연", "delchange" : "배송지변경", "delcheck" : "배송현황",
+                "return" : "반품신청", "ocancel" : "주문취소", "refund" : "환불신청", "coption" : "환불조건",
+                "tlist" : "숙박시설", "treco" : "여행지추천", "tway" : "결제방법", "ttime" : "비행시간",
+                "care" : "주의사항", "sway" : "결제방법", "sacc" : "입금계좌", "sfee" : "수수료"
+            }
+            // 문의 유형 영어 -> 한글
+            function qnaCateTypeMatch() {
+                const myQnaRow = document.getElementsByClassName('myQnaRow');
+                Array.from(myQnaRow).forEach(function (eachRow) {
+                    let cateType = eachRow.querySelectorAll('div')[1];
+                    if(cateType.innerText !== "문의유형") {
+                        let type = cateType.className;
+                        let cate = cateType.innerText;
+                        let qnaCate = qnaCateType[type];
+                        let qnaType = qnaCateType[cate];
+                        cateType.innerText = qnaCate + " - " + qnaType;
+                    }
+                })
+            }
+
+            // 상품평 쓰기 박스로 이름과 번호 전달하기
             function moveProdData() {
-                // 상품평 쓰기 박스로 이름과 번호 전달하기
                 const button = event.target; // 클릭한 버튼
                 const confirm = button.parentNode; // 버튼의 부모
                 const myOrderRow = confirm.parentNode // 버튼의 부모의 부모
@@ -39,15 +65,14 @@
                 if (revScore != "" && revContent != "" && revThumb != "") {
                     reviewForm.submit();
                 }else{
-
                     alert("항목을 빠짐없이 입력해주세요.");
                 }
             }
 
            window.onload = function () {
-               /* 별 */
+               qnaCateTypeMatch();
+               /* 리뷰 작성 별 */
                const stars = document.querySelectorAll('.star');
-
                stars.forEach(star => {
                    star.addEventListener('mouseover', function() {
                        const value = this.getAttribute('data-value');
@@ -64,7 +89,6 @@
                        document.querySelector('.ratingValue').setAttribute('data-rated', value);
                        document.querySelector('.revScore').value = value;
                        highlightStars(value);
-                       // 여기에 값 설정을 위한 코드 추가
                    });
                });
 
@@ -108,25 +132,25 @@
 
 
         </script>
-        <!--여기까지-->
+        <!--마이페이지 상단 회원 정보-->
         <nav>
             <div>
                 <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
 
                 <div class="UserInfo">
-                    <p>홍길동</p>
-                    <p>롯데 ON ACE</p>
+                    <p th:text="${#authentication.principal.user.userName}"></p>
+                    <p th:text="${#authentication.principal.user.userGrade}"></p>
                 </div>
-
                 <ol>
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
                     <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna">1</span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
                 </ol>
             </div>
         </nav>
         <div class="home">
+            <!--마이페이지 사이드바-->
             <ul>
                 <span class="menu_else"></span>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
@@ -136,12 +160,12 @@
                 <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
                 <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
                 <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
-                <!--회원가입구현되면 위에 파라미터 바꾸기-->
             </ul>
 
             <section>
                 <a href="#"><img th:src="@{/images/my/my_banner1.jpg}" alt="패션, 타운 하나로 끝" class="banner"></a>
 
+                <!--최근주문내역-->
                 <article class="latest" >
                     <h3>최근주문내역</h3>
                     <a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
@@ -174,98 +198,86 @@
                     </div>
                 </article>
 
+                <!--포인트적립내역-->
                 <article class="point">
                     <h3>포인트적립내역</h3>
                     <a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
-                    <table border="0">
-                        <tr>
-                            <th>날짜</th>
-                            <th>구분</th>
-                            <th>적립금액</th>
-                            <th>비고</th>
-                        </tr>
-                        <tr th:each="point : ${myPoint}">
-                            <td th:text="${#strings.substring(point.changeDate, 0, 10)}"></td>
-                            <td id="changeType" th:text="${point.changeType}"></td>
-                            <td id="changePoint">
+                    <div class="PointList">
+                        <div>
+                            <div>날짜</div>
+                            <div>구분</div>
+                            <div>적립금액</div>
+                            <div>비고</div>
+                        </div>
+                        <div th:each="point : ${myPoint}">
+                            <div th:text="${#strings.substring(point.changeDate, 0, 10)}"></div>
+                            <div id="changeType" th:text="${point.changeType}"></div>
+                            <div id="changePoint" class="pointAfter">
                                 <span th:if="${point.changeType == '사용'}">-</span>
-                                <span th:text="${#numbers.formatInteger(point.changePoint,3,'COMMA')}"></span>
-                            </td>
-                            <td th:text="${point.changeCode}"></td>
-                        </tr>
-                    </table>
+                                <span th:text="${#numbers.formatInteger(point.changePoint, 3, 'COMMA')}" style="font-size: 16px"></span>
+                            </div>
+                            <div th:text="${point.changeCode}"></div>
+                        </div>
+                    </div>
                 </article>
+
+                <!--상품평-->
                 <article class="review">
                     <h3>상품평</h3>
                     <a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
-                    <table border="0">
-                        <tr >
-                            <th>번호</th>
-                            <th>이미지</th>
-                            <th>상품명</th>
-                            <th>내용</th>
-                            <th>평점</th>
-                            <th>작성일</th>
-                        </tr>
-                        <tr th:each="eachReviewPage : ${myReviewPage.dtoList} ">
-                            <td class="no" th:text="${eachReviewPage.revNo}"></td>
-                            <td>
+
+                    <div class="myTableStyle">
+                        <div class="myTableHead myReviewRow">
+                            <div>번호</div>
+                            <div>이미지</div>
+                            <div>상품명</div>
+                            <div>내용</div>
+                            <div>평점</div>
+                            <div>작성일</div>
+                        </div>
+                        <div class="myTableBody myReviewRow" th:each="eachReviewPage : ${myReviewPage.dtoList}">
+                            <div class="no" th:text="${eachReviewPage.revNo}"></div>
+                            <div>
                                 <img th:src="@{/uploads/__${eachReviewPage.revThumb}__}" style="width: 90px;">
-                            </td>
-                            <td class="prodName">
-                                <a href="#" th:text="${eachReviewPage.prodName}"></a>
-                            </td>
-                            <td class="content" th:text="${eachReviewPage.revContent}"></td>
-                            <td class="score">
+                            </div>
+                            <div class="prodName">
+                                <a th:href="@{/product/view(prodNo=${eachReviewPage.prodNo})}" th:text="${eachReviewPage.prodName}"></a>
+                            </div>
+                            <div class="content"  th:text="${eachReviewPage.revContent}"></div>
+                            <div class="score">
                                 <span class="rating" th:text="${eachReviewPage.revScore}"></span>
-                            </td>
-                            <td class="date" th:text="${#temporals.format(eachReviewPage.revAddDate, 'yyyy-MM-dd')}"></td>
-                        </tr>
-                    </table>
+                            </div>
+                            <div class="date" th:text="${#temporals.format(eachReviewPage.revAddDate, 'yyyy-MM-dd')}"></div>
+                        </div>
+                    </div>
                 </article>
 
+                <!--문의내역-->
                 <article class="qna">
                     <h3>문의내역</h3>
-                    <a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
-                    <table border="0">
-                        <tr>
-                            <th>번호</th>
-                            <th>문의채널</th>
-                            <th>문의유형</th>
-                            <th>제목</th>
-                            <th>작성일</th>
-                            <th>상태</th>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>고객센터</td>
-                            <td>주문/결제</td>
-                            <td>신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
-                            <td>2024-12-12</td>
-                            <td><span class="notAnswerYet">검토중</span></td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>고객센터</td>
-                            <td>주문/결제</td>
-                            <td>신용카드 결제 중 오류가 난 경우 어떻게 하나요?</td>
-                            <td>2024-12-12</td>
-                            <td><span class="answered">답변완료</span></td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>판매자게시판</td>
-                            <td>배송</td>
-                            <td>배송기간이 보통 얼마나 걸리나요?</td>
-                            <td>2024-12-12</td>
-                            <td><span class="answered">답변완료</span></td>
-                        </tr>
-                    </table>
+                    <a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}" class="more">더보기</a>
+                    <div class="myTableStyle" th:if="${selectMyQna != null}">
+                        <div class="myTableHead myQnaRow">
+                            <div>번호</div>
+                            <div>문의유형</div>
+                            <div>제목</div>
+                            <div>작성일</div>
+                            <div>상태</div>
+                        </div>
+                        <div class="myTableBody myQnaRow" th:each="qna, index : ${selectMyQna.dtoList}">
+                            <div th:text="${selectMyQna.startNo - index.index}"></div>
+                            <div th:class="${qna.qnaType}">[[${qna.qnaCate}]]</div>
+                            <div><a th:href="@{/cs/qna/view(qnaNo=${qna.qnaNo})}" th:text="${qna.qnaContent}"></a></div>
+
+                            <div th:text="${#temporals.format(qna.qnaDate, 'yyyy-MM-dd')}"></div>
+                            <div th:text="${qna.qnaStatus}"></div>
+                        </div>
+                    </div>
                 </article>
 
+                <!--확인해주세요-->
                 <article class="myinfo">
                     <h3>확인해주세요!</h3>
-
                     <div>
                         <div class="address">
                             <span>기본 배송지설정</span>

@@ -5,7 +5,7 @@
     <div id="my" layout:fragment="content">
         
         <script th:inline="javascript">
-
+            // 문의 유형 Map
             const qnaCateType = {
                 "user" : "회원", "coupon" : "쿠폰/이벤트", "order" : "주문/결제", "delivery" : "배송", "cancel" : "취소/반품/환불", "travel" : "여행/숙박/항공", "safe" : "안전결제",
                 "regi" : "가입", "leave" : "탈퇴", "info" : "회원정보", "login" : "로그인",
@@ -16,28 +16,19 @@
                 "tlist" : "숙박시설", "treco" : "여행지추천", "tway" : "결제방법", "ttime" : "비행시간",
                 "care" : "주의사항", "sway" : "결제방법", "sacc" : "입금계좌", "sfee" : "수수료"
             }
-
             window.onload = function () {
-                aa();
+                qnaCateTypeMatch();
             }
-
-
-            function qnaCateType() {
+            // 문의 유형 영어 -> 한글
+            function qnaCateTypeMatch() {
                 const myQnaRow = document.getElementsByClassName('myQnaRow');
-
                 Array.from(myQnaRow).forEach(function (eachRow) {
                     let cateType = eachRow.querySelectorAll('div')[1];
-
                     if(cateType.innerText !== "문의유형") {
                         let type = cateType.className;
                         let cate = cateType.innerText;
-
-                        console.log("type : " + type);
-                        console.log("cate : " + cate);
-
                         let qnaCate = qnaCateType[type];
                         let qnaType = qnaCateType[cate];
-
                         cateType.innerText = qnaCate + " - " + qnaType;
                     }
                 })
@@ -45,25 +36,26 @@
 
         </script>
 
+        <!--마이페이지 상단 회원 정보-->
         <nav>
             <div>
-                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img
-                        th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
+                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}"><img th:src="@{/images/my/my_logo.jpg}" alt="나의쇼핑정보"></a>
+
+                <div class="UserInfo">
+                    <p th:text="${#authentication.principal.user.userName}"></p>
+                    <p th:text="${#authentication.principal.user.userGrade}"></p>
+                </div>
                 <ol>
-                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span
-                            class="delivery" th:text="${session.countOrder}"></span></a></li>
-                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span
-                            class="coupon" th:text="${session.couponCount}"></span></a></li>
-                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span
-                            class="point"
-                            th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span
-                            class="qna">1</span></a></li>
+                    <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
+                    <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
+                    <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
                 </ol>
             </div>
         </nav>
 
         <div class="qna">
+            <!--마이페이지 사이드바-->
             <ul>
                 <span class="menu_else"></span>
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
@@ -81,7 +73,7 @@
                                                                       alt="패션, 타운 하나로 끝" class="banner"></a>
                 </th:block>
                 <article>
-
+                    <!--문의 카테고리바-->
                     <div class="myQnaNav">
                         <a class="navOn"
                            th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">고객문의</a>
@@ -101,8 +93,7 @@
                             <div th:text="${selectMyQna.startNo - index.index}"></div>
                             <div th:class="${qna.qnaType}">[[${qna.qnaCate}]]</div>
                             <div><a th:href="@{/cs/qna/view(qnaNo=${qna.qnaNo})}" th:text="${qna.qnaContent}"></a></div>
-
-                            <div th:text="${qna.qnaDate}"></div>
+                            <div th:text="${#temporals.format(qna.qnaDate, 'yyyy-MM-dd')}"></div>
                             <div th:text="${qna.qnaStatus}"></div>
                         </div>
 
@@ -135,7 +126,6 @@
                             <div th:text="${selectMyProdQna.startNo - index.index}"></div>
                             <div>제품문의</div>
                             <div><a href="#" th:text="${prodqna.prodQnaContent}"></a></div>
-
                             <div th:text="${prodqna.prodQnaDate}"></div>
                             <div th:text="${prodqna.prodQnaStatus}"></div>
                         </div>
