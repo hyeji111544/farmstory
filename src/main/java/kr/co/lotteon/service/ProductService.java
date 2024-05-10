@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -283,4 +284,14 @@ public class ProductService {
         return prodQnaRepository.selectProdQna(prodNo, pageable, pageRequestDTO);
     }
 
+    // 상품 문의 글 작성
+    public int writeProdQna(ProdQnaDTO prodQnaDTO) {
+        ProdQna prodQna = modelMapper.map(prodQnaDTO, ProdQna.class);
+        ProdQna saveProdQna = prodQnaRepository.save(prodQna);
+        if (saveProdQna.getProdQnaTitle().equals(prodQnaDTO.getProdQnaTitle())) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }

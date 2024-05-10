@@ -6,6 +6,7 @@ import kr.co.lotteon.entity.Cart;
 import kr.co.lotteon.entity.CartProduct;
 import kr.co.lotteon.entity.ProdOption;
 import kr.co.lotteon.entity.Wish;
+import kr.co.lotteon.repository.ProdQnaRepository;
 import kr.co.lotteon.service.CartService;
 import kr.co.lotteon.service.ProdCateService;
 import kr.co.lotteon.service.ProductService;
@@ -34,7 +35,6 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProdCateService prodCateService;
-    private final TestService testService;
     private final CartService cartService;
 
     // 상품 목록 이동
@@ -210,5 +210,17 @@ public class ProductController {
         return "/product/order";
     }
 
+    // 상품 문의 글 작성
+    @PostMapping("/product/writeProdQna")
+    public String writeProdQna(ProdQnaDTO prodQnaDTO) {
+        log.info("prodQnaDTO : " + prodQnaDTO);
+        prodQnaDTO.setProdQnaStatus("답변 대기중");
+        int result = productService.writeProdQna(prodQnaDTO);
+        if (result > 0) {
+            return "redirect:/product/view?prodNo=" + prodQnaDTO.getProdNo();
+        }else {
+            return "redirect:/product/view?prodNo=" + prodQnaDTO.getProdNo() + "&err=100";
+        }
+    }
 
 }
