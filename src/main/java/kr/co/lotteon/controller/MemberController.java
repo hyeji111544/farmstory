@@ -36,26 +36,21 @@ public class MemberController {
     @GetMapping("/member/login")
     public String login(Model model){
         String bannerMember = "member1";
-
         List<BannerDTO> bannerMember1 = adminService.selectBanners(bannerMember);
-
         model.addAttribute("bannerMember1", bannerMember1);
 
         return "/member/login";
     }
     
     // 회원가입 약관 동의 이동
-        @GetMapping("/member/signup")
+    @GetMapping("/member/signup")
     public String terms(Model model, String userRole){
-
-        log.info("terms..." +model);
+        log.info("userRole : " + userRole);
         UserDTO userDTO = new UserDTO();
         userDTO.setUserRole(userRole);
         TermsDTO termsDTO = termsService.selectTerms();
         model.addAttribute(termsDTO);
         model.addAttribute(userDTO);
-
-        log.info("userDTO" +userDTO);
 
         return "/member/signup";
     }
@@ -69,12 +64,8 @@ public class MemberController {
     // 회원가입 유저 정보 중복 체크 (아이디, 전화번호, 이메일)
     @GetMapping("/member/checkUser/{type}/{value}")
     public ResponseEntity<?> registerUserCheck(HttpSession session, @PathVariable("type") String type, @PathVariable("value") String value){
-        log.info("type : " + type);
-        log.info("value : " + value);
-
         // service에서 중복 체크
         int result = memberService.registerUserCheck(session, type, value);
-        
         // json 형식으로 변환
         Map<String, Integer> data = new HashMap<>();
         data.put("result", result);
@@ -89,8 +80,6 @@ public class MemberController {
         log.info("code:" + code);
         // 회원가입하는 사용자가 입력한 코드
         String checkCode = inputCode;
-
-        log.info("checkCode {}", checkCode);
         Map<String, Integer> data = new HashMap<>();
         if(code.equals(checkCode)){
             //json 형식으로 변환
@@ -110,13 +99,8 @@ public class MemberController {
         userDTO.setUserRole("USER");
         userDTO.setUserGrade("ACE");
         userDTO.setUserStatus("활동가능");
-
-
         LocalDateTime now = LocalDateTime.now();
         userDTO.setUserRegDate(now);
-
-        log.info("registerUser : " +userDTO);
-
         User user = memberService.registerUser(userDTO);
         return "redirect:/member/login";
     }
@@ -129,10 +113,8 @@ public class MemberController {
         userDTO.setUserGrade("Starter");
         userDTO.setSellerGrade("Starter");
         userDTO.setUserStatus("1");
-
         LocalDateTime now = LocalDateTime.now();
         userDTO.setUserRegDate(now);
-
         int result = memberService.registerSeller(userDTO);
 
         if (result > 0) {
@@ -142,7 +124,7 @@ public class MemberController {
         }
     }
 
-    //로그인 기능
+    //로그인 기능 //////////////////
     @GetMapping("/checkLogin")
     public String checkLogin() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -167,7 +149,6 @@ public class MemberController {
         return "/member/registerSeller";
     }
 
-
     // 아이디 찾기 이동
     @GetMapping("/member/findId")
     public String findId(){
@@ -178,11 +159,8 @@ public class MemberController {
     @GetMapping("/member/findIdEmailCheck/{value}")
     public ResponseEntity<?> findIdEmailCheck(HttpSession session, @PathVariable("value") String value){
 
-        log.info("value : " + value);
-
         // service에서 중복 체크
         int result = memberService.findIdCheckEmail(session, value);
-
         // json 형식으로 변환
         Map<String, Integer> data = new HashMap<>();
         data.put("result", result);
@@ -194,11 +172,8 @@ public class MemberController {
     public ResponseEntity<?> findUserId(@RequestBody Map<String, String> requestData, HttpSession session) {
         // 인증코드를 세션에서 가져오기
         String sessionCode = (String) session.getAttribute("code");
-        log.info("sessionCode :" + sessionCode);
         String userName = requestData.get("userName");
-        log.info("userName :" + userName);
         String userEmail = requestData.get("userEmail");
-        log.info("userEmail :" + userEmail);
         // 입력한 인증코드
         String code = requestData.get("code");
 
@@ -222,18 +197,15 @@ public class MemberController {
     // 비밀번호 찾기 이동
     @GetMapping("/member/findPw")
     public String findPw(){
-
         return "/member/findPw";
     }
-    // 비밀번호 재설정 email 중복체크/발송
-    @GetMapping("/member/updatePwEmailCheck/{value}")
-    public ResponseEntity<?> updatePwEmailCheck(HttpSession session, @PathVariable("value") String value){
 
-        log.info("value : " + value);
+    // 비밀번호 재설정 email 중복체크/발송
+    @GetMapping("/member/updatePwEmailCheck/{email}/{id}")
+    public ResponseEntity<?> updatePwEmailCheck(HttpSession session, @PathVariable("email") String email, @PathVariable("id") String userId){
 
         // service에서 중복 체크
-        int result = memberService.updatePwCheckEmail(session, value);
-
+        int result = memberService.updatePwCheckEmail(session, email, userId);
         // json 형식으로 변환
         Map<String, Integer> data = new HashMap<>();
         data.put("result", result);
@@ -244,11 +216,8 @@ public class MemberController {
     public ResponseEntity<?> updateUserPw(@RequestBody Map<String, String> requestData, HttpSession session) {
         // 인증코드를 세션에서 가져오기
         String sessionCode = (String) session.getAttribute("code");
-        log.info("sessionCode :" + sessionCode);
         String userId = requestData.get("userId");
-        log.info("userId :" + userId);
         String userEmail = requestData.get("userEmail");
-        log.info("userEmail :" + userEmail);
         String userPw = requestData.get("userPw");
         // 입력한 인증코드
         String code = requestData.get("code");
@@ -256,7 +225,6 @@ public class MemberController {
         if (sessionCode != null && sessionCode.equals(code)) {
             // 인증코드가 일치할 경우, 비밀번호 수정 로직 실행
             long result = memberService.updatePw(userId, userPw, userEmail, session);
-            log.info("contoller : " + result);
             if (result > 0) {
                 // 업데이트가 됐을경우
                 return ResponseEntity.status(HttpStatus.OK).body(result);

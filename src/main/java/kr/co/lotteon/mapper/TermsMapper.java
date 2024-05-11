@@ -7,9 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 public interface TermsMapper {
 
     //이용약관 동의 출력
-    public TermsDTO selectTerms();
+    public TermsDTO selectTerms(int termsNo);
 
     //이용약관 동의 출력
-    public String selectTermsForPolicy(String cate);
+    public String selectTermsForPolicy(String cate, int termsNo);
 
 }

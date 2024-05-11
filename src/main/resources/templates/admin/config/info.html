@@ -17,7 +17,7 @@
                 <section>
                     <h4>기본정보</h4>
                     <p>
-                        기본분류는 반드시 선택하셔야 합니다. 하나의 상품에 1개의 분류를 지정 합니다.
+                        쇼핑몰 기본정보입니다.
                     </p>
                     <table>
                         <tr>
@@ -35,7 +35,7 @@
                         <tr>
                             <td>버전</td>
                             <td>
-                                v1.0.1
+                                [[${appInfo.version}]]
                             </td>
                         </tr>
                     </table>
@@ -44,24 +44,28 @@
                 <section>
                     <h4>이용약관</h4>
                     <p>
-                        기본정보는 반드시 입력해야 합니다.
+                        쇼핑몰 이용약관입니다.
                     </p>
                     <table>
-                        <tr>
-                            <td>1조</td>
-                            <td><textarea name="art1"></textarea></td>
+                        <tr style="background-color: transparent">
+                            <td style="width: 200px;">구매 회원 이용약관</td>
+                            <td style="width: 600px;"><textarea name="art1" th:text="${termsDTO.buyer}" style="width: 100%; height: 150px;"></textarea></td>
                         </tr>
                         <tr>
-                            <td>1조</td>
-                            <td><textarea name="art1"></textarea></td>
+                            <td>판매 회원 이용약관</td>
+                            <td><textarea name="art1" th:text="${termsDTO.seller}" style="width: 100%; height: 150px;"></textarea></td>
                         </tr>
                         <tr>
-                            <td>1조</td>
-                            <td><textarea name="art1"></textarea></td>
+                            <td>전자금융거래 이용약관</td>
+                            <td><textarea name="art1" th:text="${termsDTO.finance}" style="width: 100%; height: 150px;"></textarea></td>
                         </tr>
                         <tr>
-                            <td>1조</td>
-                            <td><textarea name="art1"></textarea></td>
+                            <td>개인정보 수집동의</td>
+                            <td><textarea name="art1" th:text="${termsDTO.location}" style="width: 100%; height: 150px;"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>위치정보 이용약관</td>
+                            <td><textarea name="art1" th:text="${termsDTO.privacy}" style="width: 100%; height: 150px;"></textarea></td>
                         </tr>
                     </table>
                 </section>

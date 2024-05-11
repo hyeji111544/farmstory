@@ -7,12 +7,12 @@
 
     <!--이용약관 출력-->
     <select id="selectTerms" resultType="kr.co.lotteon.dto.TermsDTO">
-        select * from terms
+        select * from terms where termsNo = ${termsNo};
     </select>
 
     <!-- 카테고리별 이용약관 출력-->
     <select id="selectTermsForPolicy" resultType="String">
-        select ${cate} from terms
+        select ${cate} from terms where termsNo = ${termsNo};
     </select>
 
 </mapper>

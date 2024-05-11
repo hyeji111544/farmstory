@@ -22,7 +22,7 @@
                         // 일반 유저 vs 판매 유저
                         const userRole = document.getElementsByName('role')[0];
                         console.log(userRole.value);
-                        if (userRole.value === 'user') {
+                        if (userRole.value === 'USER') {
                             if (userPromo.checked) {
                                 let userPromovalue = "Y"
                                 window.location.href = "/lotteon/member/register?userPromo="+userPromovalue;
@@ -30,7 +30,7 @@
                                 let userPromovalue = "N"
                                 window.location.href = "/lotteon/member/register?userPromo=" + userPromovalue;
                             }
-                        } else if (userRole.value === 'seller') {
+                        } else if (userRole.value === 'SELLER') {
                             if (userPromo.checked) {
                                 let userPromovalue = "Y"
                                 window.location.href = "/lotteon/member/registerSeller?userPromo=" + userPromovalue;
@@ -54,9 +54,17 @@
                 <input type="hidden" name="role" th:value="${userDTO.userRole}">
             </nav>
             <section>
-                <h3><span class="essential">(필수)</span>케이마켓 이용약관</h3>
+                <th:block th:if="${userDTO.userRole} == 'USER'">
+                <h3><span class="essential">(필수)</span>케이마켓 일반 회원 이용약관</h3>
                 <textarea class="terms"  readonly>[[${termsDTO.buyer}]]</textarea>
                 <label><input type="checkbox" name="agree1" />동의합니다.</label>
+                </th:block>
+
+                <th:block th:if="${userDTO.userRole} == 'SELLER'">
+                    <h3><span class="essential">(필수)</span>케이마켓 판매 회원 이용약관</h3>
+                    <textarea class="terms"  readonly>[[${termsDTO.seller}]]</textarea>
+                    <label><input type="checkbox" name="agree1" />동의합니다.</label>
+                </th:block>
 
                 <h3><span class="essential">(필수)</span>전자금융거래 이용약관</h3>
                 <textarea class="financial" readonly>[[${termsDTO.finance}]]</textarea>

@@ -217,20 +217,22 @@ public class MemberService {
         return userRepository.updateUserPwByUserIdAndUserEmail(userId, encodedPassword, userEmail);
     }
     // 비밀번호재설정 이메일 확인/발송
-    public int updatePwCheckEmail(HttpSession session, String value) {
+    public int updatePwCheckEmail(HttpSession session, String email, String userId) {
         int result = 0;
-
+        log.info("email, userId" + email + userId);
         //이메일 중복검사
-        Optional<User> optUser = userRepository.findByUserEmail(value);
+        Optional<User> optUser = userRepository.findByUserEmailAndUserId(email, userId);
         //Optional이 비어있는지 체크
         if (optUser.isPresent()) {
             //사용 가능
             // 인증코드 발송
-            sendEmailConde(session, value);
+            sendEmailConde(session, email);
+            result = 1;
+            log.info("성공 : " + result);
             return result;
         } else {
             // 사용 불가능
-            result = 1;
+            log.info("실패 : " + result);
             return result;
         }
     }
