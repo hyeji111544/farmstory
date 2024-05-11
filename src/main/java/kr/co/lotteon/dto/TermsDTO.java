@@ -12,6 +12,7 @@ import lombok.*;
 public class TermsDTO {
 
     //terms
+    private int termsNo;
     private String buyer;
     private String finance;
     private String location;

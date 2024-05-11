@@ -5,6 +5,7 @@ import kr.co.lotteon.entity.Banner;
 import kr.co.lotteon.entity.ProdOptDetail;
 import kr.co.lotteon.repository.ProductRepository;
 import kr.co.lotteon.service.MemberService;
+import kr.co.lotteon.service.TermsService;
 import kr.co.lotteon.service.admin.AdminProductService;
 import kr.co.lotteon.service.admin.AdminService;
 import kr.co.lotteon.service.seller.SellerService;
@@ -31,6 +32,7 @@ public class AdminController {
     private final AdminService adminService;
     private final SellerService sellerService;
     private final MemberService memberService;
+    private final TermsService termsService;
     private final AdminProductService adminproductService;
 
     // 관리자 인덱스페이지 이동
@@ -81,8 +83,9 @@ public class AdminController {
 
     // 관리자 설정 정보 이동
     @GetMapping("/admin/config/info")
-    public String configInfo() {
-
+    public String configInfo(Model model) {
+        TermsDTO termsDTO = termsService.selectTerms();
+        model.addAttribute("termsDTO", termsDTO);
         return "/admin/config/info";
     }
 
