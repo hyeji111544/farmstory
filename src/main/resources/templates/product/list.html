@@ -22,7 +22,9 @@
                     sortCode = params.get('sort');
                 }
                 const sortNav = document.getElementsByClassName('sort')[0];
+                const mainSortNav = document.getElementsByClassName('mainSort')[0];
                 const aTag = sortNav.querySelectorAll('a');
+                const mTag = sortNav.querySelectorAll('a');
 
                 switch (sortCode) {
                     case 'prodSold':
@@ -50,23 +52,23 @@
                         sortText = ' > 최근등록순';
                         break;
                     case 'prodHit-main':
-                        aTag[0].classList.add('headerOn');
+                        mTag[0].classList.add('headerOn');
                         sortText = ' > 히트상품';
                         break;
                     case 'prodScore-main':
-                        aTag[1].classList.add('headerOn');
+                        mTag[1].classList.add('headerOn');
                         sortText = ' > 추천상품';
                         break;
                     case 'prodRdate-main':
-                        aTag[2].classList.add('headerOn');
+                        mTag[2].classList.add('headerOn');
                         sortText = ' > 최신상품';
                         break;
                     case 'prodSold-main':
-                        aTag[3].classList.add('headerOn');
+                        mTag[3].classList.add('headerOn');
                         sortText = ' > 인기상품';
                         break;
                     case 'prodDiscount-main':
-                        aTag[4].classList.add('headerOn');
+                        mTag[4].classList.add('headerOn');
                         sortText = ' > 할인상품';
                         break;
                     default:

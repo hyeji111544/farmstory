@@ -22,7 +22,6 @@
             }
 
         </script>
-
         <nav>
             <h3>상품목록</h3>
             <p>
@@ -59,25 +58,25 @@
                     <th>관리</th>
                 </tr>
 
-                <tr th:each="product, index:${pageResponseDTO.dtoList}" id="product">
-                    <td><input class="prodNo" type="checkbox" name="상품코드" th:value="${product.prodNo}"/></td>
+                <tr id="product" th:each="product : ${pageResponseDTO.dtoList}">
+                    <td><input type="checkbox" name="상품코드"/></td>
                     <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb" style="width: 70px; height: 70px"></td>
                     <td>[[${product.prodNo}]]</td>
                     <td style="width: 300px">[[${product.prodName}]]</td>
-                    <td class="listPriceAfter" style="width: 70px" th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}"></td>
-                    <td class="percentAfter" style="width: 50px">[[${product.prodDiscount}]]</td>
-                    <td class="afterPoint" style="width: 60px">[[${product.prodPoint}]]</td>
-                    <td class="stockAfter" style="width: 50px">[[${product.prodStock}]]</td>
-                    <td style="width: 80px">[[${product.prodSeller}]]</td>
+                    <td th:text="${#numbers.formatInteger(product.prodPrice,3,'COMMA')} + '원'" style="width: 70px"></td>
+                    <td th:text="${product.prodDiscount} + '%'" style="width: 50px">[[${product.prodDiscount}]]</td>
+                    <td th:if="${product.prodPoint} > 999" th:text="${#numbers.formatInteger(product.prodPoint,3,'COMMA')} + 'P'" style="width: 60px"></td>
+                    <td th:if="${product.prodPoint} < 999" th:text="${product.prodPoint} + 'P'" style="width: 60px"></td>
+
+                    <td th:if="${product.prodStock} > 999" th:text="${#numbers.formatInteger(product.prodStock,3,'COMMA')} + '개'" style="width: 50px"></td>
+                    <td th:if="${product.prodStock} < 999" th:text="${product.prodStock} + '개'" style="width: 50px"></td>
+                    <td style="width: 80px">[[${product.prodCompany}]]</td>
                     <td>[[${product.prodHit}]]</td>
                     <td>
-                        <a href="#" onclick="deleteProduct()">[삭제]</a>
-                        <a th:href="@{/admin/product/option(prodNo=${product.prodNo})}">[수정]</a>
+                        <a th:href="@{/seller/product/option(prodNo=${product.prodNo})}">[수정]</a>
                     </td>
                 </tr>
-
             </table>
-
 
             <a class="btn" style="margin-top: 10px">선택삭제</a>
 
@@ -92,17 +91,11 @@
                     <a th:if="${pageResponseDTO.next}" th:href="@{/admin/product/list(pg=${pageResponseDTO.end + 1})}">다음</a>
                 </div>
             </div>
-
         </section>
-
-
         <p class="ico info">
             <strong>Tip!</strong>
             전자상거래 등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성 등을 양식에 따라 입력할 수 있습니다.
         </p>
-
-
-
         <!-- 상품목록 컨텐츠 끝 -->
     </section>
 <!--내용 끝-->

@@ -112,6 +112,18 @@ public class SellerController {
 
         return "/seller/product/option";
     }
+    
+    // 판매자 상품 기본 정보 변경
+    @PostMapping("/seller/product/modifyProdInfo")
+    public String modifyProdInfo(ProductDTO productDTO, ProductimgDTO productimgDTO) {
+
+        log.info("productDTO : " + productDTO);
+        log.info("productimgDTO : " + productimgDTO);
+
+        int result = adminproductService.modifyProdInfo(productDTO, productimgDTO);
+
+        return "redirect:/seller/product/option?prodNo=" + productDTO.getProdNo();
+    }
 
 ////// 주문 관리 (seller/order) //////
     // 판매자 주문 관리 //
@@ -171,4 +183,5 @@ public class SellerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
     }
+    
 }
