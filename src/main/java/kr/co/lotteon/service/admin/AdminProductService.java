@@ -332,5 +332,70 @@ public class AdminProductService {
         }
     }
 
+    // 판매자 상품 기본 정보 변경
+    public int modifyProdInfo(ProductDTO productDTO, ProductimgDTO productimgDTO) {
+
+        Optional<Product> optProduct = productRepository.findById(productDTO.getProdNo());
+
+        if (optProduct.isPresent()) {
+            optProduct.get().setProdName(productDTO.getProdName());
+            optProduct.get().setProdInfo(productDTO.getProdInfo());
+            optProduct.get().setProdCompany(productDTO.getProdCompany());
+            optProduct.get().setProdPrice(productDTO.getProdPrice());
+            optProduct.get().setProdDiscount(productDTO.getProdDiscount());
+            optProduct.get().setProdPoint(productDTO.getProdPoint());
+            optProduct.get().setProdStock(productDTO.getProdStock());
+            optProduct.get().setProdDeliveryFee(productDTO.getProdDeliveryFee());
+
+            productRepository.save(optProduct.get());
+        }else {
+            return 0;
+        }
+
+        Productimg optProductImg = productimgRepository.findByProdNo(productDTO.getProdNo());
+
+        if (optProductImg != null) {
+            if (!productimgDTO.getMultThumb190().isEmpty()) {
+                int result = deleteFile(optProductImg.getThumb190());
+                if (result > 0) {
+                    optProductImg.setThumb190(fileUpload(productimgDTO.getMultThumb190(), "thumb190"));
+                }
+            }
+            if (!productimgDTO.getMultThumb230().isEmpty()) {
+                int result = deleteFile(optProductImg.getThumb230());
+                if (result > 0) {
+                    optProductImg.setThumb230(fileUpload(productimgDTO.getMultThumb230(), "thumb230"));
+                }
+            }
+            if (!productimgDTO.getMultThumb456().isEmpty()) {
+                int result = deleteFile(optProductImg.getThumb456());
+                if (result > 0) {
+                    optProductImg.setThumb456(fileUpload(productimgDTO.getMultThumb456(), "thumb456"));
+                }
+            }
+            if (!productimgDTO.getMultThumb940().isEmpty()) {
+                int result = deleteFile(optProductImg.getThumb940());
+                if (result > 0) {
+                    optProductImg.setThumb940(fileUpload(productimgDTO.getMultThumb940(), "thumb940"));
+                }
+            }
+            productimgRepository.save(optProductImg);
+            return 1;
+        }else {
+            return 0;
+        }
+    }
+
+    // 첨부 파일 삭제
+    public int deleteFile(String sName) {
+        File deleteFile = new File(fileUploadPath, sName);
+        if (deleteFile.delete()){
+            log.info("파일 삭제 service11 파일 삭제 성공");
+            return 1;
+        }else{
+            log.info("파일 삭제 service11 파일 삭제 실패");
+            return 0;
+        }
+    }
 
 }

@@ -698,8 +698,8 @@ header > div > .logo {
 }
 
 /* seller/product/option */
-.modifyBtn {
-    display: flex;
+.modifyBtn, .cancelBtn{
+    display: inline-block;
     width: 60px;
     height: 30px;
     border-radius: 4px;
@@ -711,9 +711,8 @@ header > div > .logo {
     line-height: 30px;
     margin-top: 10px;
     cursor: pointer;
-    align-self: end;
+    text-align: center;
 }
-
 
 
 /* seller/order/orderList */
@@ -1182,6 +1181,8 @@ header > div > .logo {
 }
 #btnNewOptAdd {
     display: inline-block;
+    width: 200px;
+    align-self: center;
     float: right;
     height: 30px;
     padding: 0 4px;
@@ -1196,6 +1197,8 @@ header > div > .logo {
 }
 #btnRegOpt {
     display: inline-block;
+    width: 200px;
+    align-self: center;
     float: right;
     height: 30px;
     padding: 0 4px;
@@ -1296,20 +1299,6 @@ header > div > .logo {
 .optionTable tr > td:nth-child(1), td:nth-child(3) {
     width: 200px;
     background: #f6f6f6;
-}
-.bigImageBox {
-    display: none;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
 }
 
 .modifyTable {
@@ -1529,4 +1518,41 @@ header > div > .logo {
 }
 .prodRegiRow > div {
     margin: 0 10px;
+}
+
+/* 모달 */
+.prodQnaModalBack {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.5);
+    z-index: 10;
+}
+.prodImgModal {
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    flex-wrap: wrap;
+    width: auto;
+    height: auto;
+    padding: 10px 20px 20px 20px;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+.prodImgModal > div > span {
+    font-size: 16px;
+    font-weight: bold;
+}
+.prodImg940Modal {
+    height: 600px;
+    overflow: scroll;
 }

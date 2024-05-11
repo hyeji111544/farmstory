@@ -496,6 +496,113 @@
                     .catch(err => console.log(err))
             }
 
+            // 940 이미지 크게 보기 모달창
+            function prodImgModalOpen() {
+                const QnaModalBack = document.getElementsByClassName('prodQnaModalBack')[0];
+                QnaModalBack.style.display = "block"
+            }
+
+            // 940 이미지 모달창 닫기
+            function closeQnaModal() {
+                const QnaModalBack = document.getElementsByClassName('prodQnaModalBack')[0];
+                const closeBtn = document.getElementsByClassName('closeBtn')[0];
+                if (event.target === QnaModalBack || event.target === closeBtn) {
+                    QnaModalBack.style.display = "none"
+                }
+            }
+
+            // 상품 기본 정보 수정 & 저장
+            function modifyProdInfo() {
+                const button = event.target;
+                if (button.innerText === "수정") {
+                    const modifyTable = document.getElementsByClassName('modifyTable')[0]; // 기본 정보 테이블
+                    const cancelBtn = document.getElementsByClassName('cancelBtn')[0]; // 취소버튼
+                    const prodName = modifyTable.querySelector('[name="prodName"]');
+                    const prodInfo = modifyTable.querySelector('[name="prodInfo"]');
+                    const prodCompany = modifyTable.querySelector('[name="prodCompany"]');
+                    const prodPrice = modifyTable.querySelector('[name="prodPrice"]');
+                    const prodDiscount = modifyTable.querySelector('[name="prodDiscount"]');
+                    const prodPoint = modifyTable.querySelector('[name="prodPoint"]');
+                    const prodStock = modifyTable.querySelector('[name="prodStock"]');
+                    const prodDeliveryFee = modifyTable.querySelector('[name="prodDeliveryFee"]');
+                    const modifyImage = document.getElementsByClassName('modifyImage')[0];
+                    const modifyImage940 = document.getElementsByClassName('modifyImage940')[0];
+
+                    button.innerText = "저장"
+                    cancelBtn.style.display = "inline-block";
+                    prodName.readOnly = false;
+                    prodName.style.border = "1px solid #909090";
+                    prodInfo.readOnly = false;
+                    prodInfo.style.border = "1px solid #909090";
+                    prodCompany.readOnly = false;
+                    prodCompany.style.border = "1px solid #909090";
+                    prodPrice.readOnly = false;
+                    prodPrice.style.border = "1px solid #909090";
+                    prodPrice.value = parseFloat((prodPrice.value).replace(/,/g, ''));
+                    prodDiscount.readOnly = false;
+                    prodDiscount.style.border = "1px solid #909090";
+                    prodPoint.readOnly = false;
+                    prodPoint.style.border = "1px solid #909090";
+                    prodPoint.value = parseFloat((prodPoint.value).replace(/,/g, ''));
+                    prodStock.readOnly = false;
+                    prodStock.style.border = "1px solid #909090";
+                    prodStock.value = parseFloat((prodStock.value).replace(/,/g, ''));
+                    prodDeliveryFee.readOnly = false;
+                    prodDeliveryFee.style.border = "1px solid #909090";
+                    prodDeliveryFee.value = parseFloat((prodDeliveryFee.value).replace(/,/g, ''));
+                    modifyImage.style.display = "flex";
+                    modifyImage940.style.display = "block";
+                }else if (button.innerText === "저장") {
+                    // 빈칸 체크 이후 form 전송
+                    console.log("G2")
+                    const prodInfoForm = document.getElementsByClassName('prodInfoForm')[0];
+                    prodInfoForm.submit();
+
+                }
+            }
+
+            // 상품 기본 정보 취소
+            function cancelProdInfo() {
+                const button = event.target;
+                const modifyTable = document.getElementsByClassName('modifyTable')[0]; // 기본 정보 테이블
+                const modifyBtn = button.previousElementSibling; // 수정 버튼
+                const prodName = modifyTable.querySelector('[name="prodName"]');
+                const prodInfo = modifyTable.querySelector('[name="prodInfo"]');
+                const prodCompany = modifyTable.querySelector('[name="prodCompany"]');
+                const prodPrice = modifyTable.querySelector('[name="prodPrice"]');
+                const prodDiscount = modifyTable.querySelector('[name="prodDiscount"]');
+                const prodPoint = modifyTable.querySelector('[name="prodPoint"]');
+                const prodStock = modifyTable.querySelector('[name="prodStock"]');
+                const prodDeliveryFee = modifyTable.querySelector('[name="prodDeliveryFee"]');
+                const modifyImage = document.getElementsByClassName('modifyImage')[0];
+                const modifyImage940 = document.getElementsByClassName('modifyImage940')[0];
+
+                button.style.display = "none";
+                modifyBtn.innerText = "수정"
+                prodName.readOnly = true;
+                prodName.style.border = "0";
+                prodInfo.readOnly = true;
+                prodInfo.style.border = "0";
+                prodCompany.readOnly = true;
+                prodCompany.style.border = "0";
+                prodPrice.readOnly = true;
+                prodPrice.style.border = "0";
+                prodPrice.value = parseInt(prodPrice.value).toLocaleString();
+                prodDiscount.readOnly = true;
+                prodDiscount.style.border = "0";
+                prodPoint.readOnly = true;
+                prodPoint.style.border = "0";
+                prodPoint.value = parseInt(prodPoint.value).toLocaleString();
+                prodStock.readOnly = true;
+                prodStock.style.border = "0";
+                prodStock.value = parseInt(prodStock.value).toLocaleString();
+                prodDeliveryFee.readOnly = true;
+                prodDeliveryFee.style.border = "0";
+                prodDeliveryFee.value = parseInt(prodDeliveryFee.value).toLocaleString();
+                modifyImage.style.display = "none";
+                modifyImage940.style.display = "none";
+            }
+
         </script>
         <nav>
             <script th:src="@{/js/util.js}"></script>
@@ -507,57 +614,55 @@
         </nav>
         <!-- 상품등록 컨텐츠 시작 -->
         <article>
-            <form th:action="@{/admin/product/register}" method="post" id="prodRegisterForm"
-                  enctype="multipart/form-data">
 
-                <!-- 상품분류 -->
-                <section style="margin-top: 10px">
-                    <h4>상품분류</h4>
-                    <p>
-                        기본분류는 반드시 선택하셔야 합니다. 하나의 상품에 1개의 분류를 지정 합니다.
-                    </p>
-                    <h4>상품분류</h4>
-                    <table>
-                        <tr>
-                            <td>상품 분류</td>
-                            <td class="cateCode" th:text="${productDTO.cateCode}"></td>
-                        </tr>
-                        <tr class="cateCodeTr" style="display: none">
-                            <td>1차 분류</td>
-                            <td>
-                                <select name="cate01No" onchange="changeCate02()" style="width: 200px;">
-                                    <option value="">1차 분류 선택</option>
-                                    <option class="changeOpt" th:each="cate01 : ${cate01DTOs}" th:value="${cate01.cate01No}" th:text="${cate01.cate01Name}">패션·의류·뷰티</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr class="cateCodeTr" style="display: none">
-                            <td>2차 분류</td>
-                            <td>
-                                <select name="cate02No" onchange="changeCate03()" style="width: 200px;">
-                                    <option value="">2차 분류 선택</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr class="cateCodeTr" style="display: none">
-                            <td>3차 분류</td>
-                            <td>
-                                <select name="cate03No" onchange="createCateCode()" style="width: 200px;">
-                                    <option value="">3차 분류 선택</option>
-                                </select>
-                            </td>
-                        </tr>
-                    </table>
-                    <div style="display: flex; align-self: end;">
-                        <span class="modifyBtn" onclick="modifyCateCode()">수정</span>
-                        <span class="modifyBtn" onclick="cancelCateCode()" style="display:none; margin-left: 20px">취소</span>
-                    </div>
-                </section>
-                <!-- 기본정보 -->
-                <section>
-                    <h4>기본정보</h4>
-                    <input type="hidden" name="prodNo" th:value="${productDTO.prodNo}">
-                    <table class="optionTable">
+            <!-- 상품분류 -->
+            <section style="margin-top: 10px">
+                <h4>상품분류</h4>
+                <p>
+                    기본분류는 반드시 선택하셔야 합니다. 하나의 상품에 1개의 분류를 지정 합니다.
+                </p>
+                <table>
+                    <tr>
+                        <td>상품 분류</td>
+                        <td class="cateCode" th:text="${productDTO.cateCode}"></td>
+                    </tr>
+                    <tr class="cateCodeTr" style="display: none">
+                        <td>1차 분류</td>
+                        <td>
+                            <select name="cate01No" onchange="changeCate02()" style="width: 200px;">
+                                <option value="">1차 분류 선택</option>
+                                <option class="changeOpt" th:each="cate01 : ${cate01DTOs}" th:value="${cate01.cate01No}" th:text="${cate01.cate01Name}">패션·의류·뷰티</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="cateCodeTr" style="display: none">
+                        <td>2차 분류</td>
+                        <td>
+                            <select name="cate02No" onchange="changeCate03()" style="width: 200px;">
+                                <option value="">2차 분류 선택</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr class="cateCodeTr" style="display: none">
+                        <td>3차 분류</td>
+                        <td>
+                            <select name="cate03No" onchange="createCateCode()" style="width: 200px;">
+                                <option value="">3차 분류 선택</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <div style="display: flex; align-self: end;">
+                    <span class="modifyBtn" onclick="modifyCateCode()">수정</span>
+                    <span class="modifyBtn" onclick="cancelCateCode()" style="display:none; margin-left: 20px">취소</span>
+                </div>
+            </section>
+            <!-- 기본정보 -->
+            <section>
+                <h4>기본정보</h4>
+                <form class="prodInfoForm" th:action="@{/seller/product/modifyProdInfo}" method="post" enctype="multipart/form-data">
+                    <table class="modifyTable">
+                        <input type="hidden" name="prodNo" th:value="${productDTO.prodNo}">
                         <tr>
                             <td>상품명</td>
                             <td>
@@ -575,7 +680,7 @@
                             </td>
                             <td>판매가격</td>
                             <td>
-                                <input type="text" name="prodPrice" th:value="${productDTO.prodPrice}" readonly>
+                                <input type="text" name="prodPrice" th:value="${#numbers.formatInteger(productDTO.prodPrice,3,'COMMA')}" readonly>
                             </td>
                         </tr>
                         <tr>
@@ -585,17 +690,20 @@
                             </td>
                             <td>포인트</td>
                             <td>
-                                <input type="text" name="prodPoint" th:value="${productDTO.prodPoint}" readonly>
+                                <input th:if="${productDTO.prodPoint} > 999" type="text" name="prodPoint" th:value="${#numbers.formatInteger(productDTO.prodPoint,3,'COMMA')}" readonly>
+                                <input th:if="${productDTO.prodPoint} < 999" type="text" name="prodPoint" th:value="${productDTO.prodPoint}" readonly>
                             </td>
                         </tr>
                         <tr>
                             <td>재고수량</td>
                             <td>
-                                <input type="text" name="prodStock" th:value="${productDTO.prodStock}" readonly>
+                                <input th:if="${productDTO.prodStock} > 999" type="text" name="prodStock" th:value="${#numbers.formatInteger(productDTO.prodStock,3,'COMMA')}" readonly>
+                                <input th:if="${productDTO.prodStock} < 999" type="text" name="prodStock" th:value="${productDTO.prodStock}" readonly>
                             </td>
                             <td>배송비</td>
                             <td>
-                                <input type="text" name="prodDeliveryFee" th:value="${productDTO.prodDeliveryFee}" readonly>
+                                <input th:if="${productDTO.prodDeliveryFee} > 999" type="text" name="prodDeliveryFee" th:value="${#numbers.formatInteger(productDTO.prodDeliveryFee,3,'COMMA')}" readonly>
+                                <input th:if="${productDTO.prodDeliveryFee} < 999" type="text" name="prodDeliveryFee" th:value="${productDTO.prodDeliveryFee}" readonly>
                             </td>
                         </tr>
                         <tr>
@@ -604,28 +712,28 @@
                                 <div style="display: flex; justify-content: space-between">
                                     <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb190}__}" class="thumb190" style="width: 250px;">
-                                        <span>크기 190 x 190</span>
+                                        <span style="height: 30px; line-height: 30px">크기 190 x 190</span>
                                     </label>
                                     <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb230}__}" class="thumb230" style="width: 250px;">
-                                        <span>크기 230 x 230</span>
+                                        <span style="height: 30px; line-height: 30px">크기 230 x 230</span>
                                     </label>
                                     <label style="width: 250px; border: 3px solid #e6e6e6">
                                         <img th:src="@{/uploads/__${productDTO.thumb456}__}" class="thumb456" style="width: 250px;">
-                                        <span>크기 456 x 456</span>
+                                        <span style="height: 30px; line-height: 30px">크기 456 x 456</span>
                                     </label>
                                 </div>
-                                <div style="display: none; justify-content: space-between; margin-top: 20px">
+                                <div class="modifyImage" style="display: none; justify-content: space-between; margin-top: 20px">
                                     <label style="width: 250px;">
-                                        <span style="font-size: 14px;">상품 이미지 변경</span>
+                                        <span style="font-size: 14px; margin-bottom: 10px">상품 이미지 변경</span>
                                         <input type="file" name="multThumb190"/>
                                     </label>
                                     <label style="width: 250px;">
-                                        <span style="font-size: 14px;">상품 이미지 변경</span>
+                                        <span style="font-size: 14px; margin-bottom: 10px">상품 이미지 변경</span>
                                         <input type="file" name="multThumb230"/>
                                     </label>
                                     <label style="width: 250px;">
-                                        <span style="font-size: 14px;">상품 이미지 변경</span>
+                                        <span style="font-size: 14px; margin-bottom: 10px">상품 이미지 변경</span>
                                         <input type="file" name="multThumb456"/>
                                     </label>
                                 </div>
@@ -634,177 +742,185 @@
                         <tr>
                             <td>상세 상품정보</td>
                             <td colspan="3">
-                                <label style="display: inline-block; width: 250px; height: 80px; border: 3px solid #e6e6e6; ">
+                                <label onclick="prodImgModalOpen()" style="display: inline-block; width: 250px; height: 80px; border: 3px solid #e6e6e6; align-content: center; cursor: pointer">
                                     <b>클릭해서 이미지 보기</b>
                                 </label>
-                                <div style="display: none; width:650px; height: 80px;">
-                                    <span>크기 가로 940px 높이 제약없음, 크기 최대 1MB, 상세페이지 상품정보에 출력될 이미지 입니다.</span>
+                                <div class="modifyImage940" style="display: none; width:100%; height: 70px;">
+                                    <span style=" margin: 10px 0">크기 가로 940px 높이 제약없음, 크기 최대 1MB, 상세페이지 상품정보에 출력될 이미지 입니다.</span>
                                     <input type="file" name="multThumb940"/>
                                 </div>
                             </td>
                         </tr>
                     </table>
-                    <span class="modifyBtn">수정</span>
-                </section>
+                </form>
+                <div style="align-self: end;">
+                    <span class="modifyBtn" onclick="modifyProdInfo()">수정</span>
+                    <span class="cancelBtn" onclick="cancelProdInfo()" style="display:none;">취소</span>
+                </div>
+            </section>
 
-                <!---->
-                <div class="bigImageBox">
+            <!--이미지 크게보기 모달창-->
+            <div class="prodQnaModalBack bigImageBox" onclick="closeQnaModal()">
+                <div class="prodImgModal">
+                    <div style="display:flex; justify-content: space-between; margin-bottom: 10px">
+                        <span>상세 상품정보 이미지</span>
+                        <span class="closeBtn" onclick="closeQnaModal()" style="cursor: pointer">X</span>
+                    </div>
+                    <div class="prodImg940Modal">
+                        <img th:src="@{/uploads/__${productDTO.thumb940}__}">
+                    </div>
+                </div>
+            </div>
 
+            <!-- 옵션 정보 -->
+            <section>
+                <h4 style="display: inline-block">등록된 상품 옵션</h4>
+                <p>
+                    하나의 상품에 최대 4개의 옵션을 설정할 수 있습니다.
+                </p>
+                <div class="existOptionTable">
+                    <div class="existOptionTitle">
+                        <div>구분</div>
+                        <div>옵션 이름</div>
+                        <div>옵션 값</div>
+                        <div>재고</div>
+                    </div>
+                    <div class="existOptionContent" th:each="optionDTO : ${optionDTOList}">
+                        <div>
+                            <input type="text" th:value="${optionDTO.optNo}" readonly style="width: 60px; border: 0"/>
+                            <input type="hidden" th:value="${optionDTO.prodNo}" readonly/>
+                        </div>
+                        <div>
+                            <input type="text" th:value="${optionDTO.optName}" readonly/>
+                        </div>
+                        <div>
+                            <input type="text" th:value="${optionDTO.optValue}" readonly/>
+                        </div>
+                        <div>옵션 관리</div>
+                    </div>
                 </div>
 
-
-                <!---->
-
-                <!-- 옵션 정보 -->
-                <section>
-                    <h4 style="display: inline-block">등록된 상품 옵션</h4>
-                    <p>
-                        하나의 상품에 최대 4개의 옵션을 설정할 수 있습니다.
-                    </p>
-                    <div class="existOptionTable">
-                        <div class="existOptionTitle">
-                            <div>구분</div>
-                            <div>옵션 이름</div>
-                            <div>옵션 값</div>
-                            <div>옵션 관리</div>
+                <div class="existOptDetailTable">
+                    <div class="existOptDetailTitle">
+                        <div>구분</div>
+                        <div>옵션1</div>
+                        <div>옵션2</div>
+                        <div>옵션3</div>
+                        <div>옵션 가격</div>
+                        <div>옵션 재고</div>
+                        <div>옵션 관리</div>
+                    </div>
+                    <div class="existOptDetailContent" th:each="detail : ${optionDetail}">
+                        <div>
+                            <input type="text" th:value="${detail.optDetailNo}" readonly/>
+                            <input type="hidden" th:value="${detail.prodNo}" readonly/>
                         </div>
-                        <div class="existOptionContent">
-                            <div>
-                                구분
-                                <input type="hidden" value="prodOtpNo" readonly/>
-                                <input type="hidden" value="prodNo" readonly/>
-                            </div>
-                            <div>
-                                <input type="text" value="prodOptName" readonly/>
-                            </div>
-                            <div>
-                                <input type="text" value="prodOptValue" readonly/>
-                            </div>
-                            <div>옵션 관리</div>
+                        <div>
+                            <input class="opt1No" type="text" th:value="${detail.optNo1}" readonly/>
+                        </div>
+                        <div>
+                            <input class="opt2No" type="text" th:value="${detail.optNo2}" readonly/>
+                        </div>
+                        <div>
+                            <input class="opt3No" type="text" th:value="${detail.optNo3}" readonly/>
+                        </div>
+                        <div>
+                            <input type="text" th:value="${detail.optPrice}" readonly/>
+                        </div>
+                        <div>
+                            <input type="text" th:value="${detail.optStock}" readonly/>
+                        </div>
+                        <div>
+                            <span>옵션 관리</span>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <div class="existOptDetailTable">
-                        <div class="existOptDetailTitle">
-                            <div>구분</div>
-                            <div>옵션1</div>
-                            <div>옵션2</div>
-                            <div>옵션3</div>
-                            <div>옵션 가격</div>
-                            <div>옵션 재고</div>
-                            <div>옵션 관리</div>
-                        </div>
-                        <div class="existOptDetailContent">
-                            <div>
-                                <input type="text" value="optDetailNo" readonly/>
-                                <input type="hidden" value="prodNo" readonly/>
-                            </div>
-                            <div>
-                                <input type="text" value="optNo1" readonly/>
-                            </div>
-                            <div>
-                                <input type="text" value="optNo2" readonly/>
-                            </div>
-                            <div>
-                                <input type="text" value="optNo3" readonly/>
-                            </div>
-                            <div>
-                                <input type="text" value="optPrice" readonly/>
-                            </div>
-                            <div>
-                                <input type="text" value="optStock" readonly/>
-                            </div>
-                            <div>옵션 관리</div>
-                        </div>
+            <!-- 옵션 정보 생성 -->
+            <section>
+                <h4 style="display: inline-block">상품 옵션 생성</h4>
+                <p>
+                    하나의 상품에 최대 3개의 옵션을 설정할 수 있습니다.<br>
+                    하나의 옵션에 최대 4개의 값을 설정할 수 있습니다.
+                </p>
+                <div class="makeOption">
+                    <div class="regOptTitle">
+                        <div>구분</div>
+                        <div>옵션 이름</div>
+                        <div>옵션 값</div>
                     </div>
-                </section>
-
-                <!-- 옵션 정보 생성 -->
-                <section>
-                    <h4 style="display: inline-block">상품 옵션 생성</h4>
-                    <p>
-                        하나의 상품에 최대 3개의 옵션을 설정할 수 있습니다.<br>
-                        하나의 옵션에 최대 4개의 값을 설정할 수 있습니다.
-                    </p>
-                    <div class="makeOption">
-                        <div class="regOptTitle">
-                            <div>구분</div>
-                            <div>옵션 이름</div>
-                            <div>옵션 값</div>
+                    <div class="regOptContent">
+                        <div class="optNumber">옵션 1</div>
+                        <div>
+                            <input type="text" class="optName" placeholder="옵션 이름 ex) size"/>
+                            <span onclick="addOptionName()">추가</span>
+                            <span onclick="deleteOptionName()">삭제</span>
                         </div>
-                        <div class="regOptContent">
-                            <div class="optNumber">옵션 1</div>
-                            <div>
-                                <input type="text" class="optName" placeholder="옵션 이름 ex) size"/>
-                                <span onclick="addOptionName()">추가</span>
-                                <span onclick="deleteOptionName()">삭제</span>
-                            </div>
-                            <div>
-                                <div class="optValueNumber">
-                                    <input type="text" class="optValue" placeholder="옵션 값 ex) small, large"/>
-                                    <span onclick="addOptionValue()">추가</span>
-                                    <span onclick="deleteOptionValue()">삭제</span>
-                                </div>
+                        <div>
+                            <div class="optValueNumber">
+                                <input type="text" class="optValue" placeholder="옵션 값 ex) small, large"/>
+                                <span onclick="addOptionValue()">추가</span>
+                                <span onclick="deleteOptionValue()">삭제</span>
                             </div>
                         </div>
                     </div>
-                    <span id="btnNewOptAdd" onclick="createOption()">신규 옵션 생성</span>
-                </section>
+                </div>
+                <span id="btnNewOptAdd" onclick="createOption()">신규 옵션 생성</span>
+            </section>
 
-                <!-- 옵션 정보 등록 -->
-                <section>
-                    <h4 style="display: inline-block">상품 옵션 만들기</h4>
-                    <p>
-                        하나의 상품에 최대 3개의 옵션을 설정할 수 있습니다.<br>
-                        하나의 옵션에 최대 4개의 값을 설정할 수 있습니다.
-                    </p>
-                    <div class="registerOption">
-                        <div class="regOptTitle">
-                            <div>구분</div>
-                            <div id="optTitle1">옵션 1</div>
-                            <div id="optTitle2">옵션 2</div>
-                            <div id="optTitle3">옵션 3</div>
-                            <div>옵션 가격</div>
-                            <div>옵션 재고</div>
-                            <div>옵션 관리</div>
-                        </div>
+            <!-- 옵션 정보 등록 -->
+            <section>
+                <h4 style="display: inline-block">상품 옵션 만들기</h4>
+                <p>
+                    하나의 상품에 최대 3개의 옵션을 설정할 수 있습니다.<br>
+                    하나의 옵션에 최대 4개의 값을 설정할 수 있습니다.
+                </p>
+                <div class="registerOption">
+                    <div class="regOptTitle">
+                        <div>구분</div>
+                        <div id="optTitle1">옵션 1</div>
+                        <div id="optTitle2">옵션 2</div>
+                        <div id="optTitle3">옵션 3</div>
+                        <div>옵션 가격</div>
+                        <div>옵션 재고</div>
+                        <div>옵션 관리</div>
                     </div>
-                    <span id="btnRegOpt" onclick="registerOption()">신규 옵션 등록</span>
-                </section>
+                </div>
+                <span id="btnRegOpt" onclick="registerOption()">신규 옵션 등록</span>
+            </section>
 
-                <!-- 상품정보 제공 고시 -->
-                <section style="margin-top: 40px">
-                    <h4>상품정보 제공고시</h4>
-                    <p>
-                        [전자상거래에 관한 상품정보 제공에 관한 고시] 항목에 의거 등록해야 되는 정보입니다.
-                    </p>
-                    <table>
-                        <tr>
-                            <td>상품상태</td>
-                            <td><input type="text" name="prodStatus" value="새상품"/></td>
-                        </tr>
-                        <tr>
-                            <td>부가세 면세여부</td>
-                            <td><input type="text" name="prodTax" value="과세상품"/></td>
-                        </tr>
-                        <tr>
-                            <td>영수증발행</td>
-                            <td><input type="text" name="prodReceipt" value="발행가능 - 신용카드 전표, 온라인 현금영수증"/></td>
-                        </tr>
-                        <tr>
-                            <td>사업자구분</td>
-                            <td><input type="text" name="prodBusinessType" value="사업자 판매자"/></td>
-                        </tr>
-                        <tr>
-                            <td>원산지</td>
-                            <td><input type="text" name="prodOrg" value="국내산"/></td>
-                        </tr>
-                    </table>
-                </section>
+            <!-- 상품정보 제공 고시 -->
+            <section style="margin-top: 40px">
+                <h4>상품정보 제공고시</h4>
+                <p>
+                    [전자상거래에 관한 상품정보 제공에 관한 고시] 항목에 의거 등록해야 되는 정보입니다.
+                </p>
+                <table>
+                    <tr>
+                        <td>상품상태</td>
+                        <td><input type="text" name="prodStatus" value="새상품"/></td>
+                    </tr>
+                    <tr>
+                        <td>부가세 면세여부</td>
+                        <td><input type="text" name="prodTax" value="과세상품"/></td>
+                    </tr>
+                    <tr>
+                        <td>영수증발행</td>
+                        <td><input type="text" name="prodReceipt" value="발행가능 - 신용카드 전표, 온라인 현금영수증"/></td>
+                    </tr>
+                    <tr>
+                        <td>사업자구분</td>
+                        <td><input type="text" name="prodBusinessType" value="사업자 판매자"/></td>
+                    </tr>
+                    <tr>
+                        <td>원산지</td>
+                        <td><input type="text" name="prodOrg" value="국내산"/></td>
+                    </tr>
+                </table>
+            </section>
 
-                <input type="submit" value="등록하기"/>
-                <a th:href="@{/seller/product/list(prodSeller=${session.prodSeller})}" style="display:inline-block; width: 90px; padding: 6px; border: 1px solid #959595; font-size: 13px; background-color: #fefefe; color: #333; text-align: center; box-sizing: border-box;">목록</a>
-            </form>
+            <a th:href="@{/seller/product/list(prodSeller='ADMIN')}" style="display:inline-block; width: 90px; padding: 6px; border: 1px solid #959595; font-size: 13px; background-color: #fefefe; color: #333; text-align: center; box-sizing: border-box;">목록</a>
         </article>
 
         <p class="ico alert">
