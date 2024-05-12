@@ -188,8 +188,8 @@
                         <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}">이전</a>
 
                         <th:block th:each="num:${#numbers.sequence(MyOrderDTOList.start, MyOrderDTOList.end)}">
-                            <a class="pageNum" th:if="${MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == MyOrderDTOList} ? 'on' : ''">[[${num}]]</a>
-                            <a class="pageNum" th:if="${MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${num}, type=${MyOrderDTOList.type}, cate=${MyOrderDTOList.cate}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                            <a class="pageNum" th:if="${MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == MyOrderDTOList.pg} ? 'on' : ''">[[${num}]]</a>
+                            <a class="pageNum" th:if="${MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${num}, type=${MyOrderDTOList.type}, cate=${MyOrderDTOList.cate}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}" th:class="${num == MyOrderDTOList.pg} ? 'on' : ''">[[${num}]]</a>
                         </th:block>
 
                         <a th:if="${MyOrderDTOList.next && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>
