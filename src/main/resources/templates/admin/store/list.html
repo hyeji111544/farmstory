@@ -88,7 +88,7 @@
 
                     <th:block th:each="num:${#numbers.sequence(sellerDTO.start, sellerDTO.end)}">
                         <a class="pageNum" th:if="${sellerDTO.keyword == null}" th:href="@{/admin/store/list(pg=${num})}" th:class="${num == sellerDTO.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${sellerDTO.keyword != null}" th:href="@{/admin/store/list(pg=${num}, keyword=${sellerDTO.keyword})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${sellerDTO.keyword != null}" th:href="@{/admin/store/list(pg=${num}, keyword=${sellerDTO.keyword})}" th:class="${num == sellerDTO.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
                     <a th:if="${sellerDTO.next && sellerDTO.keyword == null}" th:href="@{/admin/store/list(pg=${sellerDTO.start + 1})}">다음</a>

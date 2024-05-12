@@ -1556,3 +1556,24 @@ header > div > .logo {
     height: 600px;
     overflow: scroll;
 }
+
+.formBox {
+    display: flex;
+    width: 1070px;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: content-box;
+    border: 1px solid #c4c4c4;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #fafafa;
+}
+.formBox > table tr > td:nth-child(1) {
+    width: 150px;
+}
+.formBox > table tr > td:nth-child(2) {
+    text-align: left;
+}
+.formBox > table tr > td > textarea {
+    width: 870px;
+}

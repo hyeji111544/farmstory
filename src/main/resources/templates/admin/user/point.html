@@ -156,7 +156,7 @@
 
                     <th:block th:each="num:${#numbers.sequence(ResponseDTO.start, ResponseDTO.end)}">
                         <a class="pageNum" th:if="${ResponseDTO.keyword == null}" th:href="@{/admin/user/point(pg=${num})}" th:class="${num == ResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${ResponseDTO.keyword != null}" th:href="@{/admin/user/point(pg=${num}, keyword=${ResponseDTO.keyword})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${ResponseDTO.keyword != null}" th:href="@{/admin/user/point(pg=${num}, keyword=${ResponseDTO.keyword})}" th:class="${num == ResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
                     <a th:if="${ResponseDTO.next && ResponseDTO.keyword == null}" th:href="@{/admin/user/point(pg=${ResponseDTO.start + 1})}">다음</a>
