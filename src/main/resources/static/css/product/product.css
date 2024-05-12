@@ -31,6 +31,7 @@
     background-position: 36px 0px;
     background-size: auto 100%;
 }
+#product h6.rating.star0 {width: 15px;}
 #product h6.rating.star1 {width: 55px;}
 #product h6.rating.star2 {width: 70px;}
 #product h6.rating.star3 {width: 85px;}
@@ -46,6 +47,7 @@
     background-position: 36px 0px;
     text-indent: 86px;
 }
+#product h5.rating.star0 {background-position: 0 0px;}
 #product h5.rating.star1 {background-position: 0 -40px;}
 #product h5.rating.star2 {background-position: 0 -80px;}
 #product h5.rating.star3 {background-position: 0 -120px;}

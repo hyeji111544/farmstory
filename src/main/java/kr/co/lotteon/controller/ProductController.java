@@ -86,7 +86,8 @@ public class ProductController {
 
     // 상품 상세보기 이동
     @GetMapping("/product/view")
-    public String prodView(@RequestParam("prodNo") int prodNo, Model model, PageRequestDTO reviewPageRequestDTO, PageRequestDTO qnaPageRequestDTO){
+    public String prodView(@RequestParam("prodNo") int prodNo, @RequestParam("cateCode") String cateCode,
+                           Model model, PageRequestDTO reviewPageRequestDTO, PageRequestDTO qnaPageRequestDTO){
         log.info("prodView....!!!"+prodNo);
         ProductDTO productDTO = productService.selectProduct(prodNo);
         model.addAttribute("product", productDTO);
@@ -102,10 +103,31 @@ public class ProductController {
         // 상품 리뷰 조회
         PageResponseDTO prodReview = productService.selectProdReviewForView(prodNo, reviewPageRequestDTO);
         model.addAttribute("prodReview", prodReview);
+        log.info("prodReview {}", prodReview.toString());
 
         // 상품 문의 조회
         PageResponseDTO prodQna = productService.selectProdQna(prodNo, qnaPageRequestDTO);
         model.addAttribute("prodQna", prodQna);
+
+        String cate01 = "";
+        String cate02 = "";
+        String cate03 = "";
+        // cateCode AA / 101 / A101
+        if (cateCode.length() == 2){
+            cate01 = cateCode.substring(0,2);
+        }else if (cateCode.length() == 5) {
+            cate01 = cateCode.substring(0,2);
+            cate02 = cateCode.substring(2,5);
+        }else if (cateCode.length() > 5) {
+            cate01 = cateCode.substring(0,2);
+            cate02 = cateCode.substring(2,5);
+            cate03 = cateCode.substring(5,9);
+        }
+
+        Map<String, String> resultMap = prodCateService.findCateName(cate01, cate02, cate03);
+        log.info("resultMap : " + resultMap);
+        model.addAttribute("resultMap", resultMap);
+
 
         return "/product/view";
     }
