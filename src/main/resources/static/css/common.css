@@ -450,7 +450,9 @@ main > section > section {
   width: 100%;
   height: auto;
 }
-.product {
+
+
+.productBox > .product {
   display: flex;
   width: 230px;
   height: 330px;
