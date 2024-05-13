@@ -5,26 +5,92 @@
     <!-- 상품검색 화면 시작 -->
     <section class="search" layout:fragment="content">
 
+        <script>
+
+            window.onload = function () {
+                setCateCodeInputValue();
+                let currentURL = window.location.href;
+                let splitURL = currentURL.split('?')[1];
+                let sortCode = ""
+                let keywordText = "";
+                if (splitURL !== undefined){
+                    let params = new URLSearchParams(window.location.search);
+                    sortCode = params.get('sort');
+                    keywordText = params.get('keyword');
+                }
+                const sortNav = document.getElementsByClassName('sort')[0];
+                const aTag = sortNav.querySelectorAll('a');
+                console.log(keywordText);
+
+                switch (sortCode) {
+                    case 'prodSold':
+                        aTag[0].classList.add('navOn');
+                        break;
+                    case 'prodLowPrice':
+                        aTag[1].classList.add('navOn');
+                        break;
+                    case 'prodHighPrice':
+                        aTag[2].classList.add('navOn');
+                        break;
+                    case 'prodScore':
+                        aTag[3].classList.add('navOn');
+                        break;
+                    case 'prodReview':
+                        aTag[4].classList.add('navOn');
+                        break;
+                    case 'prodRdate':
+                        aTag[5].classList.add('navOn');
+                        break;
+                }
+
+                document.getElementById('keywordText').innerText = keywordText;
+                document.getElementById('searchKeyword').innerText = keywordText;
+
+            }
+
+            function sort(sortType){
+                const currentUrl = new URL(window.location.href);
+                currentUrl.searchParams.set('sort', sortType);
+                window.location.href = currentUrl.toString();
+            }
+
+            function getCateCodeFromUrl() {
+                const urlParams = new URLSearchParams(window.location.search);
+                console.log(urlParams);
+                return urlParams.get('cateCode');
+            }
+
+
+            // cateCode 값을 가져와서 input 필드에 할당하는 함수
+            function setCateCodeInputValue() {
+                const cateCode = getCateCodeFromUrl();
+                console.log("cateCode : "+cateCode);
+                document.getElementById('cateCode').value = cateCode || '';
+            }
+
+        </script>
+
       <!-- 제목, 페이지 네비게이션 -->
       <nav>
         <h1>상품 검색 결과</h1>
         <p>
-          HOME > <span>상품검색</span> > <strong>검색키워드</strong>
+          HOME > <span>상품검색</span> > <strong th:if="${param.keyword != null}" id="keywordText">검색키워드</strong>
         </p>
       </nav>
 
       <!-- 검색결과 그룹박스 -->
       <div class="group">
-        <h3><strong>셔츠</strong>검색결과 <em>(총&nbsp;:&nbsp;<span>20</span>&nbsp;건)</em></h3>
-        <form action="#">
-          <input type="text" name="search"/>
+        <h3><strong id="searchKeyword"></strong>검색결과 <em>(총&nbsp;:&nbsp;<span th:text="${productPageResponseDTO.total}"></span>&nbsp;건)</em></h3>
+        <form action="/lotteon/product/search" method="get">
+          <input type="text" name="keyword"/>
           <input type="submit" value="검색"/>
           <span>
-              <label><input type="checkbox" name="chk" value="상품명">상품명</label>
-              <label><input type="checkbox" name="chk" value="상품설명">상품설명</label>
-              <label><input type="checkbox" name="chk" value="상품가격">상품가격</label>
+              <label><input type="checkbox" name="type" value="prodName">상품명</label>
+              <label><input type="checkbox" name="type" value="prodInfo">상품설명</label>
+              <label><input type="checkbox" name="type" value="prodPrice">상품가격</label>
               <input type="text" name="min"/>원&nbsp;~&nbsp;<input type="text" name="max"/>원
           </span>
+            <input type="hidden" name="cateCode" id="cateCode" value="">
         </form>
         <p class="info">
           상세검색을 선택하지 않거나, 상품가격을 입력하지 않으면 현재 결과내에서 검색합니다.<br>
@@ -33,79 +99,59 @@
       </div>
 
       <!-- 정렬 메뉴 -->
-      <ul class="sort">
-          <li><a href="#">판매많은순</a></li>
-          <li><a href="#">낮은가격순</a></li>
-          <li><a href="#">높은가격순</a></li>
-          <li><a href="#">평점높은순</a></li>
-          <li><a href="#">후기많은순</a></li>
-          <li><a href="#">최근등록순</a></li>
-      </ul>
+        <ul class="sort">
+            <li><a href="#" onclick="sort('prodSold')" > 판매많은순</a></li>
+            <li><a href="#" onclick="sort('prodLowPrice')" > 낮은가격순</a></li>
+            <li><a href="#" onclick="sort('prodHighPrice')" > 높은가격순</a></li>
+            <li><a href="#" onclick="sort('prodScore')"> 평점높은순</a></li>
+            <li><a href="#" onclick="sort('prodReview')" > 후기많은순</a></li>
+            <li><a href="#" onclick="sort('prodRdate')" > 최근등록순</a></li>
+        </ul>
 
       <!-- 검색목록 -->
       <table border="0">
-        <tr>
-          <td><a href="#" class="thumb"><img src="https://via.placeholder.com/120x120" alt="상품이미지"/></a></td>
+        <tr th:each="product, index:${productPageResponseDTO.dtoList}">
+          <td><a href="#" class="thumb"><img th:src="@{/uploads/__${product.thumb190}__}" alt="상품이미지"/></a></td>
           <td>
-            <h3 class="name">상품명</h3>
-            <a href="#" class="desc">상품 설명</a>
+            <h3 class="name">[[${product.prodName}]]</h3>
+            <a th:href="@{'/product/view?cateCode=' + ${product.cateCode} + '&sort='+ ${setSortType} + '&prodNo=' +  ${product.prodNo}}" class="desc">[[${product.prodInfo}]]</a>
           </td>
           <td>
             <ul>
-              <li><ins class="dis-price">27,000</ins></li>
               <li>
-                <del class="org-price">30,000</del>
-                <span class="discount">10%</span>
+                <ins class="dis-price" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
               </li>
-              <li><span class="free-delivery">무료배송</span></li>
+              <li th:if="${product.prodDiscount != 0}">
+                <del class="org-price" th:text="${#numbers.formatInteger(product.prodPrice, 3, 'COMMA')}"></del>
+                <span class="discount" th:text="${product.prodDiscount} + '%'"></span>
+              </li>
+              <li><span class="free-delivery" th:if="${product.prodDeliveryFee}==0">무료배송</span></li>
             </ul>
           </td>
           <td>
-            <h4 class="seller"><i class="fas fa-home"></i>&nbsp;판매자</h4>
-            <h5 class="badge power great">판매자등급</h5>
-            <h6 class="rating star3">상품평</h6>
-          </td>
-        </tr>
-        <tr>
-          <td><a href="#" class="thumb"><img src="https://via.placeholder.com/120x120" alt="상품이미지"/></a></td>
-          <td>
-            <h3 class="name">상품명</h3>
-            <a href="#" class="desc">상품 설명</a>
-          </td>
-          <td>
-            <ul>
-              <li><ins class="dis-price">27,000</ins></li>
-              <li>
-                <del class="org-price">30,000</del>
-                <span class="discount">10%</span>
-              </li>
-              <li><span class="free-delivery">무료배송</span></li>
-            </ul>
-          </td>
-          <td>
-            <h4 class="seller"><i class="fas fa-home"></i>&nbsp;판매자</h4>
-            <h5 class="badge power great">판매자등급</h5>
-            <h6 class="rating star3">상품평</h6>
+            <h4 class="seller"><i class="fas fa-home"></i>&nbsp;[[${product.prodCompany}]]</h4>
+            <h5 th:if="${product.TReviewScore>=4}" class="badge great" style="display: inline-block">판매자등급</h5>
+            <h5 th:if="${product.sellerGrade=='Starter'}" class="badge power" style="display: inline-block">판매자등급</h5>
+            <h6 th:if="${product.TReviewScore==5}" class="rating star5">상품평</h6>
+            <h6 th:if="${product.TReviewScore>=4 and product.TReviewScore<5}" class="rating star4">상품평</h6>
+            <h6 th:if="${product.TReviewScore>=3 and product.TReviewScore<4}" class="rating star3">상품평</h6>
+            <h6 th:if="${product.TReviewScore>=2 and product.TReviewScore<3}" class="rating star2">상품평</h6>
+            <h6 th:if="${product.TReviewScore>=1 and product.TReviewScore<2}" class="rating star1">상품평</h6>
+            <h6 th:if="${product.TReviewScore>=0 and product.TReviewScore<1}" class="rating star0">상품평</h6>
           </td>
         </tr>
       </table>
 
       <!-- 상품목록 페이지번호 -->
       <div class="paging">
-        <span class="prev">
-          <a href="#"><&nbsp;이전</a>
+       <span class="prev" th:if="${productPageResponseDTO.prev}" >
+           <a th:href="@{'/product/list?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.start - 1}}"><&nbsp;이전</a>
+       </span>
+        <span class="num" th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
+            <a th:if="${num != 0}" th:href="@{/product/list(pg=${num}, cateCode=${productPageResponseDTO.cateCode}, sort=${setSortType})}" th:class="${num == productPageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
         </span>
-        <span class="num">
-          <a href="#" class="on">1</a>
-          <a href="#">2</a>
-          <a href="#">3</a>
-          <a href="#">4</a>
-          <a href="#">5</a>
-          <a href="#">6</a>
-          <a href="#">7</a>
-        </span>
-        <span class="next">
-          <a href="#">다음&nbsp;></a>
+        <span class="next" th:if="${productPageResponseDTO.next}">
+                     <a th:href="@{'/product/list?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.end + 1}}">다음&nbsp;></a>
         </span>
       </div>
 

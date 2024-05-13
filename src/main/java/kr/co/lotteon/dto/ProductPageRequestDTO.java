@@ -32,6 +32,8 @@ public class ProductPageRequestDTO {
     private String type;
     private String keyword;
     private String cateCode;
+    private String min = "0";
+    private String max = "10000000";
 
     public Pageable getPageable(String sort){
         return PageRequest.of(this.pg - 1, this.size, Sort.by(sort).descending());
