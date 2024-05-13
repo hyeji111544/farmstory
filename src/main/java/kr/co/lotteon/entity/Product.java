@@ -55,5 +55,7 @@ public class Product {
 
     @Transient
     private int revScore;
+    @Transient
+    private String sellerGrade ;
 
  }

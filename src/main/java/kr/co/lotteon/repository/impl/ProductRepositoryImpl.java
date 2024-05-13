@@ -3,6 +3,7 @@ package kr.co.lotteon.repository.impl;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.co.lotteon.dto.ProductPageRequestDTO;
 import kr.co.lotteon.entity.*;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -24,6 +26,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final QProduct qProduct = QProduct.product;
     private final QProductimg qProductimg = QProductimg.productimg;
     private final QProdOption qProdOption = QProdOption.prodOption;
+    private final QSeller qSeller = QSeller.seller;
 
 
     //ADMIN 페이지 프로덕트 조회
@@ -128,8 +131,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     public Page<Tuple> searchProductsByCateAndKeyWord(ProductPageRequestDTO pageRequestDTO, Pageable pageable){
-        String keyword = pageRequestDTO.getKeyword();
-        log.info("keyword : " + keyword);
 
         String sort = pageRequestDTO.getSort();
         String seletedCate = pageRequestDTO.getCateCode();
@@ -156,13 +157,63 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             orderSpecifier = qProduct.prodSold.desc();
         }
 
+        String keyword = pageRequestDTO.getKeyword();
+        String type = pageRequestDTO.getType();
+
+        log.info("keyword : " + keyword);
+        log.info("type : " + type);
+
+        BooleanExpression expression = null;
+        List<BooleanExpression> expressions = new ArrayList<>();
+
+        String[] types = null;
+        if (type!=null){
+            types = type.split(",");
+        }
+
+        if (types != null){
+            for (String t : types){
+                try {
+                    // type이 "prodName"인 경우 조건 추가
+                    if ("prodName".equals(t)) {
+                        expressions.add(qProduct.prodName.contains(keyword));
+                    }
+                    // type이 "prodInfo"인 경우 조건 추가
+                    if ("prodInfo".equals(t)) {
+                        expressions.add(qProduct.prodInfo.contains(keyword));
+                    }
+                    // type이 "prodPrice"인 경우 조건 추가
+                    if ("prodPrice".equals(t)) {
+                        int min = Integer.parseInt(pageRequestDTO.getMin());
+                        int max = Integer.parseInt(pageRequestDTO.getMax());
+                        expressions.add(qProduct.prodPrice.between(min, max));
+                    }
+                } catch (Exception e) {
+                    // 예외 발생 시에도 기본적으로 "prodName"에 대한 조건을 적용하도록 함
+                    expressions.add(qProduct.prodName.contains(keyword));
+                }
+            }
+            if (!expressions.isEmpty()) {
+                expression = expressions.stream().reduce(BooleanExpression::and).orElse(null);
+            }
+        }else {
+            expression = qProduct.prodName.contains(keyword);
+        }
+
+
+        log.info("expressions"+expressions.toString());
+
+
+        log.info("expression : " + expression);
+
         QueryResults<Tuple> results = jpaQueryFactory
-                .select(qProduct, qProductimg)
+                .select(qProduct, qProductimg, qSeller)
                 .from(qProduct)
                 .join(qProductimg)
                 .on(qProduct.prodNo.eq(qProductimg.prodNo))
-                .where(qProduct.prodName.contains(keyword)
-                        .and(qProduct.cateCode.like(seletedCate+"%")))
+                .join(qSeller)
+                .on(qProduct.prodSeller.eq(qSeller.sellerNo))
+                .where(expression.and(qProduct.cateCode.like(seletedCate+"%")))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(orderSpecifier)

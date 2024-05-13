@@ -42,5 +42,6 @@ public class ProductDTO {
     private String thumb940;
 
     private int revScore;
+    private String sellerGrade;
 
 }

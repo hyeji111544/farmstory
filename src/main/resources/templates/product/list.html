@@ -13,6 +13,7 @@
         <script>
 
             window.onload = function () {
+                setCateCodeInputValue();
                 let currentURL = window.location.href;
                 let splitURL = currentURL.split('?')[1];
                 let sortCode = ""
@@ -54,6 +55,7 @@
                     default:
                         sortText = '';
                 }
+
                 document.getElementById('sortText').innerText = sortText;
 
             }
@@ -64,16 +66,7 @@
                 window.location.href = currentUrl.toString();
             }
 
-            document.getElementById('cardViewButton').addEventListener('click', function() {
-                document.getElementById('cardView').style.display = 'block'; // 카드 형식 영역 표시
-                document.getElementById('listView').style.display = 'none'; // 리스트 형식 영역 숨김
-            });
 
-            // 리스트 형식 버튼 클릭 시
-            document.getElementById('listViewButton').addEventListener('click', function() {
-                document.getElementById('cardView').style.display = 'none'; // 카드 형식 영역 숨김
-                document.getElementById('listView').style.display = 'block'; // 리스트 형식 영역 표시
-            });
         </script>
       <!-- 제목, 페이지 네비게이션 -->
       <nav>
