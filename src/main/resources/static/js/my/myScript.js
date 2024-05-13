@@ -538,6 +538,7 @@ window.onload = function (){
         // input태그 활성화
         if (btnChangePass.className === 'change') {
             changePw.style.display = "inline-block";
+            changePw.style.border = "1px solid #999";
             btnChangePass.classList.remove('change');
             btnChangePass.classList.add('save');
 

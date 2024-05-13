@@ -15,9 +15,9 @@
 			let isHpOk    = false;
 
 			// 유효성 검사에 사용할 정규표현식
-			const reUid = /^[a-zA-Z0-9]{6,12}$/;
+			const reUid = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,12}$/;
 			const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,12}$/;
-			const reName  = /^[가-힣]{2,10}$/
+			const reName  = /^[가-힣]{2,10}$/;
 			const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 			const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
 
@@ -383,8 +383,8 @@
 						<tr>
 							<th><span class="essential">*</span>성별</th>
 							<td>
-								<label><input type="radio" name="man" value="1" checked>&nbsp;남</label>
-								<label><input type="radio" name="women" value="2">&nbsp;여</label>
+								<label><input type="radio" name="userGender" value="M">&nbsp;남</label>
+								<label><input type="radio" name="userGender" value="W">&nbsp;여</label>
 							</td>
 						</tr>
 						<tr>

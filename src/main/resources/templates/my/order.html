@@ -155,7 +155,17 @@
                     </div>
 
                     <!--주문내역 목록-->
-                    <div class="myOrderList">
+                    <!--내역이 없을떄-->
+                    <div th:if="${MyOrderDTOList.myOrderDTOList.size()} == 0" class="myOrderList">
+                        <div class="orderByCompany latest">
+                            <div class="myOrderRow" style="border: 1px solid #aaa">
+                                <p style="font-size: 18px">🎁 주문내역이 없습니다. 🎁</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--내역이 있을떄-->
+                    <div th:if="${MyOrderDTOList.myOrderDTOList.size()} > 0" class="myOrderList">
                         <div class="orderByCompany latest" th:each="linkedMap : ${MyOrderDTOList.myOrderDTOList}">
                             <div class="myOrderTitle">
                                 <p th:text="${linkedMap.value.get(0).detailDate}"></p>
@@ -183,7 +193,7 @@
                         </div>
                     </div>
 
-                    <p class="page">
+                    <p class="page" th:if="${MyOrderDTOList.myOrderDTOList.size()} > 0">
                         <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
                         <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}">이전</a>
 

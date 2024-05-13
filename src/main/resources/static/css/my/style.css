@@ -1865,6 +1865,7 @@ footer p > strong {
     justify-content: center;
     border-top: 1px solid #aaa;
 }
+
 .myQnaRow > div {padding: 10px; text-align: center}
 .myQnaRow > div:nth-child(1) {width: 50px;}
 .myQnaRow > div:nth-child(2) {width: 150px;}

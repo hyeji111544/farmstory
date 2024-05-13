@@ -573,12 +573,12 @@
                 }
             }
             function scrollToSection(sectionId) {
+                event.preventDefault();
                 const element = document.getElementById(sectionId);
                 if (element) {
                     element.scrollIntoView({ behavior: 'smooth' });
                 }
             }
-
 
         </script>
 
@@ -609,7 +609,7 @@
                 <nav>
                     <h3>[[${product.prodName}]]</h3>
                     <p>[[${product.prodInfo}]]</p>
-                    <h5 th:if="${product.TReviewScore==5}" class="rating star5"><a href="#">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore==5}" class="rating star5"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=4 and product.TReviewScore<5}" class="rating star4"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=3 and product.TReviewScore<4}" class="rating star3"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=2 and product.TReviewScore<3}" class="rating star2"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
