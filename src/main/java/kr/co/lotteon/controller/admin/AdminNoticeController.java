@@ -24,10 +24,12 @@ public class AdminNoticeController {
     // 관리자 고객센터 공지사항 리스트 출력
     @GetMapping("/admin/cs/notice/list")
     public String csNoticeList(Model model, PageRequestDTO pageRequestDTO,
-                               @RequestParam(value = "noticeCate", required = false) String noticeCate){
-        PageResponseDTO pageResponseDTO = adminNoticeService.NoticeAdminSelect(pageRequestDTO, noticeCate);
+                               @RequestParam(value = "noticeCate", required = false) String noticeCate,
+                               @RequestParam(value = "noticeType", required = false) String noticeType){
+        PageResponseDTO pageResponseDTO = adminNoticeService.NoticeAdminSelect(pageRequestDTO, noticeCate, noticeType);
         model.addAttribute("pageResponseDTO", pageResponseDTO);
         model.addAttribute("noticeCate",noticeCate);
+        model.addAttribute("noticeType",noticeType);
         log.info("pageResponseDTO {}", pageResponseDTO);
         return "/admin/cs/notice/list";
     }
