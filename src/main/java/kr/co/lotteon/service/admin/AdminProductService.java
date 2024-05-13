@@ -356,25 +356,29 @@ public class AdminProductService {
 
         if (optProductImg != null) {
             if (!productimgDTO.getMultThumb190().isEmpty()) {
-                int result = deleteFile(optProductImg.getThumb190());
+                //int result = deleteFile(optProductImg.getThumb190());
+                int result = 1;
                 if (result > 0) {
                     optProductImg.setThumb190(fileUpload(productimgDTO.getMultThumb190(), "thumb190"));
                 }
             }
             if (!productimgDTO.getMultThumb230().isEmpty()) {
-                int result = deleteFile(optProductImg.getThumb230());
+                //int result = deleteFile(optProductImg.getThumb230());
+                int result = 1;
                 if (result > 0) {
                     optProductImg.setThumb230(fileUpload(productimgDTO.getMultThumb230(), "thumb230"));
                 }
             }
             if (!productimgDTO.getMultThumb456().isEmpty()) {
-                int result = deleteFile(optProductImg.getThumb456());
+                //int result = deleteFile(optProductImg.getThumb456());
+                int result = 1;
                 if (result > 0) {
                     optProductImg.setThumb456(fileUpload(productimgDTO.getMultThumb456(), "thumb456"));
                 }
             }
             if (!productimgDTO.getMultThumb940().isEmpty()) {
-                int result = deleteFile(optProductImg.getThumb940());
+                //int result = deleteFile(optProductImg.getThumb940());
+                int result = 1;
                 if (result > 0) {
                     optProductImg.setThumb940(fileUpload(productimgDTO.getMultThumb940(), "thumb940"));
                 }

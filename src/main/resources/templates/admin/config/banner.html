@@ -47,27 +47,78 @@
                     console.log("trTags2 : " + trTags);
                 }
             }
-            let allBanNos = [];
-            let trTags2 = [];
-            function allCheckBox(){
-                const button = event.target;
-                const btnParent = button.parentNode.parentNode;
-                const trTag2 = btnParent.nextSibling;
-                const banNoTd = document.getElementById('banNoTd');
-                const banNo = banNoTd.innerText;
+            // let allBanNos = [];
+            // let trTags2 = [];
+            // let checkedTurn = 0;
+            // function allCheckBox(){
+            //     const button = event.target;
+            //     const btnParent = button.parentNode.parentNode;
+            //     const trTag2 = btnParent.nextSibling;
+            //     const banNoTd = document.getElementById('banNoTd');
+            //     const banNo = banNoTd.innerText;
+            //
+            //
+            //     if(button.checked){
+            //
+            //         const banCheckBoxValue = Array.from(document.getElementsByClassName('banCheckBox'));
+            //
+            //         if(checkedTurn === 0){
+            //             banCheckBoxValue.forEach(function(checkbox){
+            //                 checkbox.checked = true;
+            //             });
+            //             checkedTurn = 1;
+            //         }else{
+            //             banCheckBoxValue.forEach(function(checkbox){
+            //                 checkbox.checked = false;
+            //             });
+            //             checkedTurn = 0;
+            //         }
+            //         allBanNos.push(banNo);
+            //         trTags2.push(trTag2);
+            //         console.log("111: "+ allBanNos);
+            //         console.log("222: "+ trTags2);
+            //     }else{
+            //         let index = allBanNos.indexOf(banNo);
+            //         let index2 = trTags2.indexOf(trTag2);
+            //         allBanNos.splice(index, 1);
+            //         trTags2.splice(index2, 1);
+            //         console.log("333: "+ allBanNos);
+            //         console.log("444: "+ trTags2);
+            //     }
+            // }
 
-                if(button.checked){
-                    allBanNos.push(banNo);
-                    trTags2.push(trTag2);
-                    console.log("111: "+ allBanNos);
-                    console.log("222: "+ trTags2);
-                }else{
-                    let index = allBanNos.indexOf(banNo);
-                    let index2 = trTags2.indexOf(trTag2);
-                    allBanNos.splice(index, 1);
-                    trTags2.splice(index2, 1);
-                    console.log("333: "+ allBanNos);
-                    console.log("444: "+ trTags2);
+
+            function allCheckBox(tabId) {
+                const tab = document.getElementById(tabId);
+                const checkboxes = tab.getElementsByClassName('banCheckBox');
+                const button = tab.querySelector('input[type="checkbox"][name="all"]');
+                const isChecked = button.checked;
+
+                // 모든 체크박스 체크 또는 해제
+                for (let checkbox of checkboxes) {
+                    checkbox.checked = isChecked;
+                }
+
+                if (isChecked) {
+                    // 모두 체크 상태일 때
+                    banNos = []; // 배열 초기화
+                    trTags = []; // 배열 초기화
+
+                    const banNoTdAll = tab.getElementsByClassName('banNoTd');
+                    console.log(banNoTdAll);
+
+                    Array.from(banNoTdAll).forEach(function (each) {
+                        banNos.push(each.innerText);
+                    })
+
+                    console.log(banNos)
+                    for (let tr of tab.querySelectorAll('.bannerAll')) {
+                        trTags.push(tr);
+                    }
+                } else {
+                    // 모두 해제 상태일 때
+                    banNos = [];
+                    trTags = [];
                 }
             }
             function deleteBtn() {
@@ -284,7 +335,7 @@
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" id="bannerCheckBox" name="all" onclick="allCheckBox()"/></th>
+                        <th><input type="checkbox" id="bannerCheckBox" name="all" onclick="allCheckBox('tabs1')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -299,7 +350,7 @@
 
                     <tr class="bannerAll" th:each="banner : ${main1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td id="banNoTd" th:text="${banner.banNo}"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
                         <td onclick="bannerImgModalOpen()" style="cursor: pointer">
                             <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
                         </td>
@@ -333,7 +384,7 @@
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all" onclick="allCheckBox()"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox('tabs2')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -347,7 +398,7 @@
                     </tr>
                     <tr th:each="banner : ${main2}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td th:text="${banner.banNo}"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
                         <td onclick="bannerImgModalOpen()" style="cursor: pointer">
                             <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
                         </td>
@@ -382,7 +433,7 @@
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox('tabs3')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -396,7 +447,7 @@
                     </tr>
                     <tr th:each="banner : ${product1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td th:text="${banner.banNo}"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
                         <td onclick="bannerImgModalOpen()" style="cursor: pointer">
                             <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
                         </td>
@@ -430,7 +481,7 @@
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox('tabs4')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -444,7 +495,7 @@
                     </tr>
                     <tr th:each="banner : ${member1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td class="banNos" th:text="${banner.banNo}"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
                         <td onclick="bannerImgModalOpen()" style="cursor: pointer">
                             <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
                         </td>
@@ -478,7 +529,7 @@
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox('tabs5')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -492,7 +543,7 @@
                     </tr>
                     <tr th:each="banner : ${my1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td th:text="${banner.banNo}"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
                         <td onclick="bannerImgModalOpen()" style="cursor: pointer">
                             <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
                         </td>
