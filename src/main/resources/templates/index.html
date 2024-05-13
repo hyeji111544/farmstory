@@ -225,7 +225,7 @@
             <h1><i id="prodSold" class="fas fa-crown"></i>베스트상품</h1>
             <ol>
               <li th:each="soldItem, index:${sold}">
-                <a th:href="@{'/product/view?prodNo='+${soldItem.prodNo}}">
+                <a th:href="@{'/product/view?prodNo='+${soldItem.prodNo}+'&cateCode='+${soldItem.cateCode}}">
                   <div class="thumb">
                     <i th:text="${index.count}"></i>
                     <img  th:src="@{/uploads/__${soldItem.thumb230}__}"  alt="item1" />
@@ -261,7 +261,7 @@
 
           <section class="hit productBox">
             <div class="product" th:each="hitItem , index:${hit}">
-              <a th:href="@{'/product/view?prodNo='+${hitItem.prodNo}}">
+              <a th:href="@{'/product/view?prodNo='+${hitItem.prodNo}+'&cateCode='+${hitItem.cateCode}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${hitItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -285,7 +285,7 @@
 
           <section class="recommend productBox">
             <div class="product" th:each="scoreItem, index:${score}">
-              <a th:href="@{'/product/view?prodNo='+${scoreItem.prodNo}}">
+              <a th:href="@{'/product/view?prodNo='+${scoreItem.prodNo}+'&cateCode='+${scoreItem.cateCode}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${scoreItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -309,7 +309,7 @@
 
           <section class="new productBox">
             <div class="product" th:each="rDateItem, index:${rDate}">
-              <a th:href="@{'/product/view?prodNo='+${rDateItem.prodNo}}">
+              <a th:href="@{'/product/view?prodNo='+${rDateItem.prodNo}+'&cateCode='+${rDateItem.cateCode}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${rDateItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -333,7 +333,7 @@
 
           <section class="discount productBox">
             <div class="product" th:each="discountItem, index:${discount}">
-              <a th:href="@{'/product/view?prodNo='+${discountItem.prodNo}}">
+              <a th:href="@{'/product/view?prodNo='+${discountItem.prodNo}+'&cateCode='+${discountItem.cateCode}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${discountItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
