@@ -122,12 +122,16 @@
         }
       }
 
-
       function scrollToId(id) {
         const element = document.getElementById(id);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
+      }
+
+      // top 버튼
+      function movingTop() {
+        window.scrollTo(0, 0);
       }
     </script>
 
@@ -176,11 +180,11 @@
         <div class="menu">
           <div>
             <ul class="mainSort">
-              <li><a onclick="scrollToSection('prodHit')">히트상품</a></li>
-              <li><a onclick="scrollToSection('prodScore')">추천상품</a></li>
-              <li><a onclick="scrollToSection('prodRdate')">최신상품</a></li>
-              <li><a onclick="scrollToSection('prodSold')">인기상품</a></li>
-              <li><a onclick="scrollToSection('prodDiscount')">할인상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodHit')">히트상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodScore')">추천상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodRdate')">최신상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodSold')">인기상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodDiscount')">할인상품</a></li>
             </ul>
             <ul>
               <li><a th:href="@{/cs/notice/list}">공지사항</a></li>
@@ -255,8 +259,9 @@
             <span class="sliderNext" onclick="sliderNext()">&#10097;</span>
           </section>
           <!-- 히트상품 영역 -->
-          <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
+          <h3 style="padding: 10px 20px 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
             <span id="prodHit" style="font-size: 20px; font-weight: bold">히트상품</span>
+            <a th:href="@{/}" style="font-size: 16px; color: #909090; float: right">더보기 &#10095;</a>
           </h3>
 
           <section class="hit productBox">
@@ -377,7 +382,7 @@
           </p>
         </div>
       </footer>
-      <button type="button" id="top">상단이동</button>
+      <button type="button" id="top" onclick="movingTop()">상단이동</button>
     </div>
   </body>
 </html>

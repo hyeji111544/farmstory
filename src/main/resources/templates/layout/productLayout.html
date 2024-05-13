@@ -38,8 +38,11 @@
             document.getElementById('cateCodeInput').value = cateCode || '';
         }
 
-        // 페이지 로드 시 cateCode 값을 input 필드에 할당
 
+    // top 버튼
+    function movingTop() {
+        window.scrollTo(0, 0);
+    }
     </script>
 </head>
 <body>
@@ -154,7 +157,7 @@
             </p>
         </div>
     </footer>
-    <button type="button" id="top">상단이동</button>
+    <button type="button" id="top" onclick="movingTop()">상단이동</button>
 </div>
 </body>
 </html>

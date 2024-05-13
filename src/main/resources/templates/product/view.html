@@ -580,6 +580,7 @@
             }
             // 리뷰 & 문의하기 화면 이동
             function scrollToSection(sectionId) {
+                event.preventDefault();
                 const element = document.getElementById(sectionId);
                 if (element) {
                     element.scrollIntoView({ behavior: 'smooth' });
@@ -604,7 +605,6 @@
                     scrollToSection('changTabBox');
                 }
             }
-
         </script>
 
         <!-- 제목, 페이지 네비게이션 -->
@@ -634,12 +634,21 @@
                 <nav>
                     <h3>[[${product.prodName}]]</h3>
                     <p>[[${product.prodInfo}]]</p>
+<<<<<<< HEAD
                     <h5 th:if="${product.TReviewScore==5}" class="rating star5"><a href="#">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=4 and product.TReviewScore<5}" class="rating star4"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=3 and product.TReviewScore<4}" class="rating star3"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=2 and product.TReviewScore<3}" class="rating star2"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=1 and product.TReviewScore<2}" class="rating star1"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=0 and product.TReviewScore<1}" class="rating star0"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
+=======
+                    <h5 th:if="${product.TReviewScore==5}" class="rating star5"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=4 and product.TReviewScore<5}" class="rating star4"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=3 and product.TReviewScore<4}" class="rating star3"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=2 and product.TReviewScore<3}" class="rating star2"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=1 and product.TReviewScore<2}" class="rating star1"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=0 and product.TReviewScore<1}" class="rating star0"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+>>>>>>> 07b059b58be0269bfafeed3e2349481e6c7a4b39
                 </nav>
                 <nav>
                     <div th:if="${product.prodDiscount!=0}" class="org_price" >

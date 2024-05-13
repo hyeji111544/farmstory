@@ -7,6 +7,7 @@ import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.repository.UserPointRepository;
 import kr.co.lotteon.repository.PointHistoryRepository;
 import kr.co.lotteon.service.MyService;
+import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,7 @@ public class MyController {
 
     private final MyService myService;
     private final UserPointRepository userPointRepository;
+    private final AdminService adminService;
     private final PasswordEncoder passwordEncoder;
 
     //마이페이지-홈 이동
@@ -90,11 +92,12 @@ public class MyController {
         UserDTO userDTO = (UserDTO) result.get("user");
         SellerDTO sellerDTO = (SellerDTO) result.get("seller");
 
-        log.info("userDTO : " + userDTO);
-        log.info("sellerDTO : " + sellerDTO);
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
 
         model.addAttribute("userDTO", userDTO);
         model.addAttribute("sellerDTO", sellerDTO);
+        model.addAttribute("banMyOrderList", banMyOrderList);
         return "/my/info";
     }
 
