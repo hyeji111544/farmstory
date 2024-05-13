@@ -508,8 +508,10 @@
                 }
             }
 
-            // 별점 이미지 계산
             window.onload = function () {
+                // 화면이동
+                checkUrl();
+                // 별점 이미지 계산
                 let rating = document.getElementsByClassName("rating");
                 Array.from(rating).forEach(function (element) {
                     const revScore = parseInt(element.innerText);
@@ -542,6 +544,8 @@
                     if (prodReview.style.display === "none") {
                         prodReview.style.display = "block";
                         prodQna.style.display = "none";
+                        button.classList.add('reviewOn');
+                        button.nextElementSibling.classList.remove('reviewOn');
                     }
                 }else if (button.classList.value === "btnProdQna") {
                     const prodReview = document.getElementById('prodReview');
@@ -549,6 +553,8 @@
                     if (prodQna.style.display === "none") {
                         prodQna.style.display = "block";
                         prodReview.style.display = "none";
+                        button.classList.add('reviewOn');
+                        button.previousElementSibling.classList.remove('reviewOn');
                     }
                 }
             }
@@ -572,13 +578,32 @@
                     QnaModalBack.style.display = "none"
                 }
             }
+            // 리뷰 & 문의하기 화면 이동
             function scrollToSection(sectionId) {
                 const element = document.getElementById(sectionId);
                 if (element) {
                     element.scrollIntoView({ behavior: 'smooth' });
                 }
             }
-
+            // url에 pg 있을 경우 화면 이동
+            function checkUrl() {
+                let currentUrl = window.location.href;
+                let splitUrl = currentUrl.split('&pg=');
+                let checkUrl = currentUrl.split('&type=prod');
+                if (checkUrl.length > 1) {
+                    const prodReview = document.getElementById('prodReview');
+                    const prodQna = document.getElementById('prodQna');
+                    const btnProdReview = document.getElementsByClassName('btnProdReview')[0];
+                    const btnProdQna = document.getElementsByClassName('btnProdQna')[0];
+                    prodQna.style.display = "block";
+                    prodReview.style.display = "none";
+                    btnProdReview.classList.remove('reviewOn');
+                    btnProdQna.classList.add('reviewOn');
+                }
+                if (splitUrl.length > 1) {
+                    scrollToSection('changTabBox');
+                }
+            }
 
         </script>
 
@@ -610,11 +635,11 @@
                     <h3>[[${product.prodName}]]</h3>
                     <p>[[${product.prodInfo}]]</p>
                     <h5 th:if="${product.TReviewScore==5}" class="rating star5"><a href="#">상품평보기</a></h5>
-                    <h5 th:if="${product.TReviewScore>=4 and product.TReviewScore<5}" class="rating star4"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
-                    <h5 th:if="${product.TReviewScore>=3 and product.TReviewScore<4}" class="rating star3"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
-                    <h5 th:if="${product.TReviewScore>=2 and product.TReviewScore<3}" class="rating star2"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
-                    <h5 th:if="${product.TReviewScore>=1 and product.TReviewScore<2}" class="rating star1"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
-                    <h5 th:if="${product.TReviewScore>=0 and product.TReviewScore<1}" class="rating star0"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=4 and product.TReviewScore<5}" class="rating star4"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=3 and product.TReviewScore<4}" class="rating star3"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=2 and product.TReviewScore<3}" class="rating star2"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=1 and product.TReviewScore<2}" class="rating star1"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=0 and product.TReviewScore<1}" class="rating star0"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
                 </nav>
                 <nav>
                     <div th:if="${product.prodDiscount!=0}" class="org_price" >
@@ -792,8 +817,8 @@
         </article>
 
         <!-- 상품 리뷰 내용 -->
-        <nav class="changTabBox" style="padding-bottom: 0">
-            <h1 class="btnProdReview" onclick="changeTab()">상품 리뷰</h1>
+        <nav class="changTabBox" id="changTabBox" style="padding-bottom: 0">
+            <h1 class="btnProdReview reviewOn" onclick="changeTab()">상품 리뷰</h1>
             <h1 class="btnProdQna" onclick="changeTab()">상품 문의</h1>
         </nav>
 
@@ -814,18 +839,19 @@
             </ul>
             <div class="paging">
                 <span class="prev" th:if="${prodReview.prev}">
-                    <a href=""><&nbsp;이전</a>
+                    <a th:href="@{/product/view(prodNo=${product.prodNo}, cateCode=${product.cateCode}, pg=${prodReview.start - 1})}"><&nbsp;이전</a>
                 </span>
                 <span class="num" th:each="num:${#numbers.sequence(prodReview.start, prodReview.end)}">
-                    <a th:if="${num != 0}" href="#" th:class="${num == prodReview.pg} ? 'on':''">1</a>
+                    <a th:if="${num != 0}" th:href="@{/product/view(prodNo=${product.prodNo}, cateCode=${product.cateCode}, pg=${num}, type='review')}" th:class="${num == prodReview.pg} ? 'on':''">[[${num}]]</a>
                 </span>
                 <span class="next" th:if="${prodReview.next}">
-                    <a href="#">다음&nbsp;></a>
+                    <a th:href="@{/product/view(prodNo=${product.prodNo}, cateCode=${product.cateCode}, pg=${prodReview.start + 1})}">다음&nbsp;></a>
                 </span>
             </div>
-
         </article>
+        <!-- 상품 리뷰 내용 끝 -->
 
+        <!-- 상품 문의 내용 -->
         <article class="review" id="prodQna" style="display: none">
             <p class="prodQnaNotice">
                 구매한 상품의 취소/반품은 마이페이지 구매내역에서 신청 가능합니다.<br>
@@ -860,19 +886,18 @@
             <span class="prodQnaWrite" onclick="prodQnaWrite()">상품문의하기</span>
 
             <div class="paging">
-                <span class="prev">
-                    <a href="#"><&nbsp;이전</a>
+                <span class="prev" th:if="${prodQna.prev}">
+                    <a th:href="@{/product/view(prodNo=${product.prodNo}, cateCode=${product.cateCode}, pg=${prodQna.start - 1})}"><&nbsp;이전</a>
                 </span>
-                <span class="num">
-                    <a href="#" class="on">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
+                <span class="num" th:each="num:${#numbers.sequence(prodQna.start, prodQna.end)}">
+                    <a th:if="${num != 0}" th:href="@{/product/view(prodNo=${product.prodNo}, cateCode=${product.cateCode}, pg=${num}, type='prodQna')}" th:class="${num == prodQna.pg} ? 'on':''">[[${num}]]</a>
                 </span>
-                <span class="next">
-                    <a href="#">다음&nbsp;></a>
+                <span class="next" th:if="${prodQna.next}">
+                    <a th:href="@{/product/view(prodNo=${product.prodNo}, cateCode=${product.cateCode}, pg=${prodQna.start + 1})}">다음&nbsp;></a>
                 </span>
             </div>
         </article>
+        <!-- 상품 문의 내용 끝 -->
 
         <!--상품 문의 모달창-->
         <div class="prodQnaModalBack" onclick="closeQnaModal()">
