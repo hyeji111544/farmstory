@@ -145,7 +145,7 @@
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
                     <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의내역<span class="qna" th:text="${session.myQnaCount}"></span></a></li>
                 </ol>
             </div>
         </nav>
@@ -169,7 +169,16 @@
                 <article class="latest" >
                     <h3>최근주문내역</h3>
                     <a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
-                    <div class="myOrderList">
+                    <!--내역이 없을때-->
+                    <div th:if="${myOrder.size()} == 0" class="myOrderList">
+                        <div class="orderByCompany latest">
+                            <div class="myOrderRow" style="border: 1px solid #aaa">
+                                <p style="font-size : 18px">🛒주무내역이 없습니다.🛒</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!--내역이 있을때-->
+                    <div class="myOrderList" th:if="${myOrder.size()} > 0">
                         <div class="orderByCompany latest" th:each="linkedMap : ${myOrder}">
                             <div class="myOrderTitle">
                                 <p th:text="${linkedMap.value.get(0).detailDate}"></p>
@@ -202,7 +211,25 @@
                 <article class="point">
                     <h3>포인트적립내역</h3>
                     <a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
-                    <div class="PointList">
+
+                    <!--내역이 없을떄-->
+                    <div class="PointList" th:if="${myPoint.size()} == 0" >
+                        <div>
+                            <div>날짜</div>
+                            <div>구분</div>
+                            <div>적립금액</div>
+                            <div>비고</div>
+                        </div>
+                        <div style="justify-content: center;">
+                            <div style="border: 0;">
+                                <p style="font-size : 18px;" >포인트내역이 없습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--내역이 있을떄-->
+                    <div class="PointList" th:if="${myPoint.size()} > 0">
                         <div>
                             <div>날짜</div>
                             <div>구분</div>
@@ -225,9 +252,27 @@
                 <article class="review">
                     <h3>상품평</h3>
                     <a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
-
-                    <div class="myTableStyle">
+                    <!--상품평 없을때-->
+                    <div class="myTableStyle" th:if="${myReviewPage.dtoList.size()} == 0">
                         <div class="myTableHead myReviewRow">
+                            <div>번호</div>
+                            <div>이미지</div>
+                            <div>상품명</div>
+                            <div>내용</div>
+                            <div>평점</div>
+                            <div>작성일</div>
+                        </div>
+                        <div class="myTableBody myReviewRow">
+                                <div style="border: 0; width: 100%; text-align: -webkit-center;">
+                                    <p style="font-size : 18px;" >작성한 리뷰가 없습니다.</p>
+                                </div>
+                        </div>
+                    </div>
+
+
+                    <!--상품평 있을때-->
+                    <div class="myTableStyle">
+                        <div class="myTableHead myReviewRow" th:if="${myReviewPage.dtoList.size()} > 0">
                             <div>번호</div>
                             <div>이미지</div>
                             <div>상품명</div>
@@ -241,7 +286,7 @@
                                 <img th:src="@{/uploads/__${eachReviewPage.revThumb}__}" style="width: 90px;">
                             </div>
                             <div class="prodName">
-                                <a th:href="@{/product/view(prodNo=${eachReviewPage.prodNo})}" th:text="${eachReviewPage.prodName}"></a>
+                                <a th:href="@{'/product/view?prodNo='+${eachReviewPage.prodNo}+'&cateCode='+${eachReviewPage.cateCode}}" th:text="${eachReviewPage.prodName}"></a>
                             </div>
                             <div class="content"  th:text="${eachReviewPage.revContent}"></div>
                             <div class="score">
@@ -256,7 +301,28 @@
                 <article class="qna">
                     <h3>문의내역</h3>
                     <a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}" class="more">더보기</a>
-                    <div class="myTableStyle" th:if="${selectMyQna != null}">
+
+                    <!--문의내역 없을때-->
+                    <th:block th:if="${selectMyQna} != null">
+                        <div class="myTableStyle" th:if="${selectMyQna.dtoList.size() == 0}">
+                            <div class="myTableHead myQnaRow">
+                                <div>번호</div>
+                                <div>문의유형</div>
+                                <div>제목</div>
+                                <div>작성일</div>
+                                <div>상태</div>
+                            </div>
+                            <div class="myTableBody myQnaRow">
+                                <div style="border: 0; width: 100%; text-align: -webkit-center;">
+                                    <p style="font-size : 18px;" >문의내역이 없습니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <!--문의내역 있을때-->
+                    <th:block th:if="${selectMyQna} != null">
+                        <div class="myTableStyle" th:if="${selectMyQna.dtoList.size()} > 0">
                         <div class="myTableHead myQnaRow">
                             <div>번호</div>
                             <div>문의유형</div>
@@ -281,22 +347,27 @@
                     <div>
                         <div class="address">
                             <span>기본 배송지설정</span>
-                            <a href="#" class="setting">변경</a>
+                            <a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}" class="setting">변경</a>
+                            <p>
+                                <span th:text="${resultUserId.getUserAddr1()}"></span><br/>
+                                <span th:text="${resultUserId.getUserAddr2()}"></span><br/>
+                                (최종수정일 <span th:text="${#temporals.format(resultUserId.getUserUpdate(), 'yy-MM-dd')}"></span>)
+                            </p>
                         </div>
                         <div class="email">
                             <span>email 설정</span>
-                            <a href="#" class="setting">변경</a>
+                            <a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}" class="setting">변경</a>
                             <p>
-                                <span>abc123@gmail.com</span><br/>
-                                (최종수정일 <span>2021-12-10</span>)
+                                <span th:text="${resultUserId.getUserEmail()}"></span><br/>
+                                (최종수정일 <span th:text="${#temporals.format(resultUserId.getUserUpdate(), 'yy-MM-dd')}"></span>)
                             </p>
                         </div>
                         <div class="hp">
                             <span>휴대폰 설정</span>
-                            <a href="#" class="setting">변경</a>
+                            <a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}" class="setting">변경</a>
                             <p>
-                                <span>abc123@gmail.com</span><br/>
-                                (최종수정일 <span>2021-12-10</span>)
+                                <span th:text="${resultUserId.getUserHp()}"></span><br/>
+                                (최종수정일 <span th:text="${#temporals.format(resultUserId.getUserUpdate(), 'yy-MM-dd')}"></span>)
                             </p>
                         </div>
                     </div>

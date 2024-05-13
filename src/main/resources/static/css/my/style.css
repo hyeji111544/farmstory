@@ -1622,6 +1622,13 @@ footer p > strong {
     border: 1px solid #969696;
     color: white;
 }
+
+.searchOn {
+    background-color: #6cadff;;
+    border: 1px solid #969696;
+    color: white;
+}
+
 .myOrderSearch > form {
     display: inline-block;
     width: 250px;

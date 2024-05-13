@@ -110,7 +110,7 @@
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
                     <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의내역<span class="qna" th:text="${session.myQnaCount}"></span></a></li>
                 </ol>
             </div>
         </nav>
@@ -137,13 +137,13 @@
                     <!--주문내역 검색바-->
                     <div class="myOrderSearch">
                         <p>기간별 조회</p>
-                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체</a>
-                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='week')}">일주일</a>
-                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='halfmonth')}">15일</a>
-                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='month')}">1개월</a>
-                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='3month')}">3개월</a>
-                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='6month')}">6개월</a>
-                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='year')}">12개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}" th:class="${MyOrderDTOList.cate == null} ? 'searchOn' : ''">전체</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='week')}" th:class="${MyOrderDTOList.cate == 'week'} ? 'searchOn' : ''">일주일</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='halfmonth')}" th:class="${MyOrderDTOList.cate == 'halfmonth'} ? 'searchOn' : ''">15일</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='month')}" th:class="${MyOrderDTOList.cate == 'month'} ? 'searchOn' : ''">1개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='3month')}" th:class="${MyOrderDTOList.cate == '3month'} ? 'searchOn' : ''">3개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='6month')}" th:class="${MyOrderDTOList.cate == '6month'} ? 'searchOn' : ''">6개월</a>
+                        <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='year')}" th:class="${MyOrderDTOList.cate == 'year'} ? 'searchOn' : ''">12개월</a>
                         <form th:action="@{/my/order}" method="get" class="searchCustomDate">
                             <input type="date" name="startDate">
                             <p style="display: inline-block; width: 10px;">~</p>
@@ -155,7 +155,17 @@
                     </div>
 
                     <!--주문내역 목록-->
-                    <div class="myOrderList">
+                    <!--내역이 없을때-->
+                    <div th:if="${MyOrderDTOList.myOrderDTOList.size()} == 0" class="myOrderList">
+                        <div class="orderByCompany latest">
+                            <div class="myOrderRow" style="border: 1px solid #aaa">
+                                <p style="font-size : 18px">🛒주무내역이 없습니다.🛒</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--내역이 있을때-->
+                    <div th:if="${MyOrderDTOList.myOrderDTOList.size()} > 0" class="myOrderList">
                         <div class="orderByCompany latest" th:each="linkedMap : ${MyOrderDTOList.myOrderDTOList}">
                             <div class="myOrderTitle">
                                 <p th:text="${linkedMap.value.get(0).detailDate}"></p>
@@ -183,7 +193,7 @@
                         </div>
                     </div>
 
-                    <p class="page">
+                    <p class="page" th:if="${MyOrderDTOList.myOrderDTOList.size()} > 0">
                         <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate == null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, userId=${#authentication.principal.user.userId})}">이전</a>
                         <a th:if="${MyOrderDTOList.prev && MyOrderDTOList.cate != null}" th:href="@{/my/order(pg=${MyOrderDTOList.start -1}, type=${MyOrderDTOList.type}, keyword=${MyOrderDTOList.keyword}, userId=${#authentication.principal.user.userId})}">이전</a>
 

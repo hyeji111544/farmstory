@@ -244,7 +244,10 @@ public class MemberService {
         userDTO.setUserPw(encoded);
 
         User user = modelMapper.map(userDTO, User.class);
+        user.setUserVisitDate(user.getUserRegDate());
+        user.setUserUpdate(user.getUserRegDate());
         User savedUser = userRepository.save(user);
+
 
         UserPoint userPoint = new UserPoint();
         userPoint.setUserId(savedUser.getUserId());
