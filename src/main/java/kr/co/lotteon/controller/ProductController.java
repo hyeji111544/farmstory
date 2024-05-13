@@ -112,7 +112,11 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public String prodView(@RequestParam("prodNo") int prodNo, @RequestParam("cateCode") String cateCode,
                            Model model, PageRequestDTO reviewPageRequestDTO, PageRequestDTO qnaPageRequestDTO){
-        log.info("prodView....!!!"+prodNo);
+
+        log.info("reviewPageRequestDTO : " + reviewPageRequestDTO);
+        log.info("qnaPageRequestDTO : " + qnaPageRequestDTO);
+
+
         ProductDTO productDTO = productService.selectProduct(prodNo);
         model.addAttribute("product", productDTO);
 
@@ -125,11 +129,18 @@ public class ProductController {
         model.addAttribute("OptionDTOs", responseOptionDTO);
         
         // 상품 리뷰 조회
+        if (reviewPageRequestDTO.getType() != null && reviewPageRequestDTO.getType().equals("review")) {
+            reviewPageRequestDTO.setPg(reviewPageRequestDTO.getPg());
+            qnaPageRequestDTO.setPg(1);
+        }
         PageResponseDTO prodReview = productService.selectProdReviewForView(prodNo, reviewPageRequestDTO);
         model.addAttribute("prodReview", prodReview);
-        log.info("prodReview {}", prodReview.toString());
 
         // 상품 문의 조회
+        if (qnaPageRequestDTO.getType() != null && qnaPageRequestDTO.getType().equals("prodQna")) {
+            qnaPageRequestDTO.setPg(qnaPageRequestDTO.getPg());
+            reviewPageRequestDTO.setPg(1);
+        }
         PageResponseDTO prodQna = productService.selectProdQna(prodNo, qnaPageRequestDTO);
         model.addAttribute("prodQna", prodQna);
 

@@ -6,12 +6,12 @@
   <div class="qna">
     <nav>
       <div>
-        <p>홈<span>></span>공지사항</p>
+        <p>홈<span>></span>문의하기</p>
       </div>
     </nav>
     <section class="list">
       <aside>
-        <h2>공지사항</h2>
+        <h2>문의하기</h2>
         <ul>
           <li th:class="${qnaCate == 'user' ? 'on':''}"><a th:href="@{/cs/qna/list(qnaCate='user')}">회원</a></li>
           <li th:class="${qnaCate == 'coupon' ? 'on':''}"><a th:href="@{/cs/qna/list(qnaCate='coupon')}">쿠폰/이벤트</a></li>
