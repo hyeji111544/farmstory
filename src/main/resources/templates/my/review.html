@@ -43,7 +43,7 @@
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
                     <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의내역<span class="qna" th:text="${session.myQnaCount}"></span></a></li>
                 </ol>
             </div>
         </nav>
@@ -67,7 +67,28 @@
                 </th:block>
                 <article>
                     <h3>나의리뷰</h3>
-                    <div class="myTableStyle">
+
+                    <!--나의 리뷰 출력-->
+
+                    <!--나의 리뷰가 없을떄-->
+                    <div class="myTableStyle" th:if="${myReviewPage.dtoList.size()} == 0">
+                        <div class="myTableHead myReviewRow">
+                            <div>번호</div>
+                            <div>이미지</div>
+                            <div>상품명</div>
+                            <div>내용</div>
+                            <div>평점</div>
+                            <div>작성일</div>
+                        </div>
+                        <div class="myTableBody myReviewRow">
+                            <div style="border: 0; width: 100%; text-align: -webkit-center;">
+                                <p style="font-size : 18px;" >작성한 리뷰가 없습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--나의 리뷰가 있을떄-->
+                    <div class="myTableStyle" th:if="${myReviewPage.dtoList.size()} > 0">
                         <div class="myTableHead myReviewRow">
                             <div>번호</div>
                             <div>이미지</div>
@@ -82,7 +103,7 @@
                                 <img th:src="@{/uploads/__${eachReviewPage.revThumb}__}" style="width: 90px;">
                             </div>
                             <div>
-                                <a th:href="@{/product/view(prodNo=${eachReviewPage.prodNo})}" th:text="${eachReviewPage.prodName}"></a>
+                                <a th:href="@{'/product/view?prodNo='+${eachReviewPage.prodNo}+'&cateCode='+${eachReviewPage.cateCode}}" th:text="${eachReviewPage.prodName}"></a>
                             </div>
                             <div th:text="${eachReviewPage.revContent}"></div>
                             <div class="score">
@@ -96,8 +117,8 @@
                             <a th:if="${myReviewPage.prev && myReviewPage.cate != null}" th:href="@{/my/review(pg=${myReviewPage.start -1}, type=${myReviewPage.type}, keyword=${myReviewPage.keyword}, userId=${#authentication.principal.user.userId})}">이전</a>
 
                             <th:block th:each="num:${#numbers.sequence(myReviewPage.start, myReviewPage.end)}">
-                                <a class="pageNum" th:if="${myReviewPage.cate == null}" th:href="@{/my/review(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == myReviewPage} ? 'on' : ''">[[${num}]]</a>
-                                <a class="pageNum" th:if="${myReviewPage.cate != null}" th:href="@{/my/review(pg=${num}, type=${myReviewPage.type}, cate=${myReviewPage.cate}, keyword=${myReviewPage.keyword}, userId=${#authentication.principal.user.userId})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                                <a class="pageNum" th:if="${myReviewPage.cate == null}" th:href="@{/my/review(pg=${num}, userId=${#authentication.principal.user.userId})}" th:class="${num == myReviewPage.pg} ? 'on' : ''">[[${num}]]</a>
+                                <a class="pageNum" th:if="${myReviewPage.cate != null}" th:href="@{/my/review(pg=${num}, type=${myReviewPage.type}, cate=${myReviewPage.cate}, keyword=${myReviewPage.keyword}, userId=${#authentication.principal.user.userId})}" th:class="${num == myReviewPage.pg} ? 'on' : ''">[[${num}]]</a>
                             </th:block>
 
                             <a th:if="${myReviewPage.next && myReviewPage.cate == null}" th:href="@{/my/review(pg=${myReviewPage.end + 1}, userId=${#authentication.principal.user.userId})}">다음</a>

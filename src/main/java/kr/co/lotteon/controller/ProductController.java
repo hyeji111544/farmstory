@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,9 +85,33 @@ public class ProductController {
         return "/product/list";
     }
 
+    // 상품 검색 이동
+    @GetMapping("/product/search")
+    public String prodSearch(@RequestParam("cateCode") String cateCode,
+                             ProductPageRequestDTO productPageRequestDTO,
+                             Model model){
+
+        ProductPageResponseDTO pageResponseDTO;
+        productPageRequestDTO.setCateCode(cateCode);
+
+        pageResponseDTO = productService.searchProducts(productPageRequestDTO);
+
+        String setSortType = productPageRequestDTO.getSort();
+        String setCateCode = productPageRequestDTO.getCateCode();
+        pageResponseDTO.setCateCode(setCateCode);
+        model.addAttribute("setSortType", setSortType);
+        model.addAttribute(pageResponseDTO);
+
+
+        return "/product/search";
+    }
+
+
     // 상품 상세보기 이동
     @GetMapping("/product/view")
-    public String prodView(@RequestParam("prodNo") int prodNo, Model model, PageRequestDTO reviewPageRequestDTO, PageRequestDTO qnaPageRequestDTO){
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public String prodView(@RequestParam("prodNo") int prodNo, @RequestParam("cateCode") String cateCode,
+                           Model model, PageRequestDTO reviewPageRequestDTO, PageRequestDTO qnaPageRequestDTO){
         log.info("prodView....!!!"+prodNo);
         ProductDTO productDTO = productService.selectProduct(prodNo);
         model.addAttribute("product", productDTO);
@@ -102,10 +127,31 @@ public class ProductController {
         // 상품 리뷰 조회
         PageResponseDTO prodReview = productService.selectProdReviewForView(prodNo, reviewPageRequestDTO);
         model.addAttribute("prodReview", prodReview);
+        log.info("prodReview {}", prodReview.toString());
 
         // 상품 문의 조회
         PageResponseDTO prodQna = productService.selectProdQna(prodNo, qnaPageRequestDTO);
         model.addAttribute("prodQna", prodQna);
+
+        String cate01 = "";
+        String cate02 = "";
+        String cate03 = "";
+        // cateCode AA / 101 / A101
+        if (cateCode.length() == 2){
+            cate01 = cateCode.substring(0,2);
+        }else if (cateCode.length() == 5) {
+            cate01 = cateCode.substring(0,2);
+            cate02 = cateCode.substring(2,5);
+        }else if (cateCode.length() > 5) {
+            cate01 = cateCode.substring(0,2);
+            cate02 = cateCode.substring(2,5);
+            cate03 = cateCode.substring(5,9);
+        }
+
+        Map<String, String> resultMap = prodCateService.findCateName(cate01, cate02, cate03);
+        log.info("resultMap : " + resultMap);
+        model.addAttribute("resultMap", resultMap);
+
 
         return "/product/view";
     }
@@ -169,11 +215,7 @@ public class ProductController {
 
     }
 
-    // 상품 검색 이동
-    @GetMapping("/product/search")
-    public String prodSearch(){
-        return "/product/search";
-    }
+
 
     // 장바구니 이동
     @GetMapping("/product/cart")

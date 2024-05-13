@@ -15,9 +15,9 @@
 			let isHpOk    = false;
 
 			// 유효성 검사에 사용할 정규표현식
-			const reUid = /^[a-zA-Z0-9]{6,12}$/;
-			const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
-			const reName  = /^[가-힣]{2,10}$/
+			const reUid = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]{6,12}$/;
+			const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,12}$/;
+			const reName  = /^[가-힣]{2,10}$/;
 			const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 			const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
 
@@ -219,6 +219,10 @@
 						return; // 여기서 끝!
 					}
 
+					userEmail.readOnly = true;
+					resultEmail.innerText = "이메일 인증코드를 전송 중입니다.";
+					resultEmail.style.color = "blue";
+
 					// 2. 중복 체크 (DB)
 					fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
 							.then(response => response.json())
@@ -233,7 +237,7 @@
 									isEmailOk = false;
 								} else {
 									// 중복이 아닐경우
-									resultEmail.innerText = "사용가능한 이메일입니다.";
+									resultEmail.innerText = "이메일 인증코드가 전송되었습니다.";
 									resultEmail.style.color = "green";
 									userEmail.style.border = "1px solid green";
 									isEmailOk = false;
@@ -262,11 +266,11 @@
 									resultEmailCode.innerText = "인증번호가 인증되었습니다.";
 									resultEmailCode.style.color = "green";
 									inputEmailCode.style.border = "1px solid green";
+									inputEmailCode.readOnly = true;
 									isEmailOk = true;
 								}
 							})
 							.catch(err => console.log(err))
-
 				}
 
 
@@ -379,8 +383,8 @@
 						<tr>
 							<th><span class="essential">*</span>성별</th>
 							<td>
-								<label><input type="radio" name="man" value="1" checked>&nbsp;남</label>
-								<label><input type="radio" name="women" value="2">&nbsp;여</label>
+								<label><input type="radio" name="userGender" value="M">&nbsp;남</label>
+								<label><input type="radio" name="userGender" value="W">&nbsp;여</label>
 							</td>
 						</tr>
 						<tr>

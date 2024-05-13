@@ -572,6 +572,13 @@
                     QnaModalBack.style.display = "none"
                 }
             }
+            function scrollToSection(sectionId) {
+                event.preventDefault();
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
 
         </script>
 
@@ -580,7 +587,12 @@
             <script th:src="@{/js/util.js}"></script>
             <h1>상품보기</h1>
             <p>
-                HOME > <span>패션·의류·뷰티</span> > <strong>남성의류</strong>
+                HOME
+                <span th:if="${resultMap.cate01Name != null}" th:text="' > ' + ${resultMap.cate01Name}"></span>
+                <span th:if="${resultMap.cate01Name != null and resultMap.cate02Name != null}"> > </span>
+                <strong th:if="${resultMap.cate02Name != null}" th:text="${resultMap.cate02Name}"></strong>
+                <span th:if="${resultMap.cate02Name != null and resultMap.cate03Name != null}"> > </span>
+                <span th:if="${resultMap.cate03Name != null}" th:text="${resultMap.cate03Name}"></span>
             </p>
         </nav>
 
@@ -597,7 +609,12 @@
                 <nav>
                     <h3>[[${product.prodName}]]</h3>
                     <p>[[${product.prodInfo}]]</p>
-                    <h5 class="rating star4"><a href="#">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore==5}" class="rating star5"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=4 and product.TReviewScore<5}" class="rating star4"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=3 and product.TReviewScore<4}" class="rating star3"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=2 and product.TReviewScore<3}" class="rating star2"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=1 and product.TReviewScore<2}" class="rating star1"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore>=0 and product.TReviewScore<1}" class="rating star0"><a href="#" onclick="scrollToSection('prodReview')">상품평보기</a></h5>
                 </nav>
                 <nav>
                     <div th:if="${product.prodDiscount!=0}" class="org_price" >
@@ -796,15 +813,13 @@
                 </li>
             </ul>
             <div class="paging">
-                <span class="prev">
-                    <a href="#"><&nbsp;이전</a>
+                <span class="prev" th:if="${prodReview.prev}">
+                    <a href=""><&nbsp;이전</a>
                 </span>
-                <span class="num">
-                    <a href="#" class="on">1</a>
-                    <a href="#">2</a>
-                    <a href="#">3</a>
+                <span class="num" th:each="num:${#numbers.sequence(prodReview.start, prodReview.end)}">
+                    <a th:if="${num != 0}" href="#" th:class="${num == prodReview.pg} ? 'on':''">1</a>
                 </span>
-                <span class="next">
+                <span class="next" th:if="${prodReview.next}">
                     <a href="#">다음&nbsp;></a>
                 </span>
             </div>

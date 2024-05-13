@@ -73,7 +73,7 @@
 
                     <th:block th:each="num:${#numbers.sequence(noticeList.start, noticeList.end)}">
                         <a class="pageNum" th:if="${noticeCate == null}" th:href="@{/seller/cs/notice/list(pg=${num})}" th:class="${num == noticeList.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${noticeCate != null}" th:href="@{/seller/cs/notice/list(pg=${num}, noticeCate=${noticeCate})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${noticeCate != null}" th:href="@{/seller/cs/notice/list(pg=${num}, noticeCate=${noticeCate})}" th:class="${num == noticeList.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
                     <a th:if="${noticeList.next && noticeCate == null}" th:href="@{/seller/cs/notice/list(pg=${noticeList.end + 1})}">다음</a>

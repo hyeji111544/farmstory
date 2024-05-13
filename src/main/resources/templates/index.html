@@ -101,6 +101,38 @@
           globalBanner -= 1;
         }
       }
+
+      function scrollToSection(sectionId){
+        switch (sectionId){
+          case 'prodHit':
+            scrollToId('prodHit');
+            break;
+          case 'prodScore':
+            scrollToId('prodScore');
+            break;
+          case 'prodRdate':
+            scrollToId('prodRdate');
+            break;
+          case 'prodSold':
+            scrollToId('prodSold');
+            break;
+          case 'prodDiscount':
+            scrollToId('prodDiscount');
+            break;
+        }
+      }
+
+      function scrollToId(id) {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      // top 버튼
+      function movingTop() {
+        window.scrollTo(0, 0);
+      }
     </script>
 
   </head>
@@ -138,7 +170,7 @@
         <div class="logo">
           <div>
             <a th:href="@{/}"><img th:src="@{/images/header_logo.png}" alt="로고" /></a>
-            <form action="/lotteon/product/list" method="get">
+            <form action="/lotteon/product/search" method="get">
               <input type="hidden" name="cateCode" value="">
               <input type="text" name="keyword" />
               <button><i class="fa fa-search"></i></button>
@@ -148,11 +180,11 @@
         <div class="menu">
           <div>
             <ul class="mainSort">
-              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodHit-main'}">히트상품</a></li>
-              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodScore-main'}">추천상품</a></li>
-              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodRdate-main'}">최신상품</a></li>
-              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodSold-main'}">인기상품</a></li>
-              <li><a th:href="@{'/product/list?cateCode='+'&sort=prodDiscount-main'}">할인상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodHit')">히트상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodScore')">추천상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodRdate')">최신상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodSold')">인기상품</a></li>
+              <li style="cursor: pointer"><a onclick="scrollToSection('prodDiscount')">할인상품</a></li>
             </ul>
             <ul>
               <li><a th:href="@{/cs/notice/list}">공지사항</a></li>
@@ -194,10 +226,10 @@
 
           <!-- 베스트상품 배너 -->
           <article class="best">
-            <h1><i class="fas fa-crown"></i>베스트상품</h1>
+            <h1><i id="prodSold" class="fas fa-crown"></i>베스트상품</h1>
             <ol>
               <li th:each="soldItem, index:${sold}">
-                <a th:href="@{'/product/view?prodNo='+${soldItem.prodNo}}">
+                <a th:href="@{'/product/view?prodNo='+${soldItem.prodNo}+'&cateCode='+${soldItem.cateCode}}">
                   <div class="thumb">
                     <i th:text="${index.count}"></i>
                     <img  th:src="@{/uploads/__${soldItem.thumb230}__}"  alt="item1" />
@@ -227,13 +259,14 @@
             <span class="sliderNext" onclick="sliderNext()">&#10097;</span>
           </section>
           <!-- 히트상품 영역 -->
-          <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
-            <span style="font-size: 20px; font-weight: bold">히트상품</span>
+          <h3 style="padding: 10px 20px 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
+            <span id="prodHit" style="font-size: 20px; font-weight: bold">히트상품</span>
+            <a th:href="@{/}" style="font-size: 16px; color: #909090; float: right">더보기 &#10095;</a>
           </h3>
 
           <section class="hit productBox">
             <div class="product" th:each="hitItem , index:${hit}">
-              <a th:href="@{'/product/view?prodNo='+${hitItem.prodNo}}">
+              <a th:href="@{'/product/view?prodNo='+${hitItem.prodNo}+'&cateCode='+${hitItem.cateCode}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${hitItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -252,12 +285,12 @@
           </section>
           <!-- 추천상품 영역 -->
           <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
-            <span style="font-size: 20px; font-weight: bold">추천상품</span>
+            <span id="prodScore" style="font-size: 20px; font-weight: bold">추천상품</span>
           </h3>
 
           <section class="recommend productBox">
             <div class="product" th:each="scoreItem, index:${score}">
-              <a th:href="@{'/product/view?prodNo='+${scoreItem.prodNo}}">
+              <a th:href="@{'/product/view?prodNo='+${scoreItem.prodNo}+'&cateCode='+${scoreItem.cateCode}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${scoreItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -276,12 +309,12 @@
           </section>
           <!-- 최신상품 영역 -->
           <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
-            <span style="font-size: 20px; font-weight: bold">최신상품</span>
+            <span id="prodRdate" style="font-size: 20px; font-weight: bold">최신상품</span>
           </h3>
 
           <section class="new productBox">
             <div class="product" th:each="rDateItem, index:${rDate}">
-              <a th:href="@{'/product/view?prodNo='+${rDateItem.prodNo}}">
+              <a th:href="@{'/product/view?prodNo='+${rDateItem.prodNo}+'&cateCode='+${rDateItem.cateCode}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${rDateItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -300,12 +333,12 @@
           </section>
           <!-- 할인상품 영역 -->
           <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
-            <span style="font-size: 20px; font-weight: bold">할인상품</span>
+            <span id="prodDiscount" style="font-size: 20px; font-weight: bold">할인상품</span>
           </h3>
 
           <section class="discount productBox">
             <div class="product" th:each="discountItem, index:${discount}">
-              <a th:href="@{'/product/view?prodNo='+${discountItem.prodNo}}">
+              <a th:href="@{'/product/view?prodNo='+${discountItem.prodNo}+'&cateCode='+${discountItem.cateCode}}">
                 <div class="thumb">
                   <img th:src="@{/uploads/__${discountItem.thumb230}__}" alt="t1" style="width: 230px"/>
                 </div>
@@ -349,7 +382,7 @@
           </p>
         </div>
       </footer>
-      <button type="button" id="top">상단이동</button>
+      <button type="button" id="top" onclick="movingTop()">상단이동</button>
     </div>
   </body>
 </html>

@@ -25,6 +25,7 @@ public class User {
     private String userName;
     private LocalDate userBirth;
     private String userHp;
+    private String userGender;
     private String userEmail;
     private String userGrade;
     private String userRole;

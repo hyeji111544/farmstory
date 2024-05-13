@@ -92,15 +92,17 @@ public class ProductService {
     public ProductPageResponseDTO searchProducts(ProductPageRequestDTO pageRequestDTO){
         Pageable pageable = pageRequestDTO.getPageable("prodNo");
         Page<Tuple> pageProd = productRepository.searchProductsByCateAndKeyWord(pageRequestDTO, pageable);
-        log.info("searchProdsByCate...."+pageProd.toString());
         List<ProductDTO> products = pageProd.getContent().stream()
                 .map(tuple -> {
                     Product product = tuple.get(0, Product.class);
                     Productimg productImg = tuple.get(1, Productimg.class);
-
+                    Seller seller = tuple.get(2, Seller.class);
                     // Productimg에서 썸네일 정보를 가져와서 ProductDTO에 설정
                     if (productImg != null) {
                         product.setThumb190(productImg.getThumb190());
+                    }
+                    if (seller != null) {
+                        product.setSellerGrade(seller.getSellerGrade());
                     }
 
                     return modelMapper.map(product, ProductDTO.class);

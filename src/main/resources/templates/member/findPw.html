@@ -30,6 +30,7 @@
 				const resultPw = document.getElementById('resultPw'); // 1차비밀번호
 				const resultPwCheck = document.getElementById('resultPwCheck'); // 2차비밀번호
 
+				const userId = document.getElementById('userId');
 				const userPwCheck = document.getElementById('userPw');
 				const userPwCheck2 = document.getElementById('userPwCheck');
 
@@ -87,15 +88,17 @@
 				checkUserEmail.onclick = function (e) {
 					e.preventDefault();
 					resultEmail.innerText = "인증코드를 전송중입니다.";
-					resultEmail.style.color = "green";
+					resultEmail.style.color = "blue";
+					inputUserEmail.style.border = "1px solid #dfe5ed";
 
-					const value = inputUserEmail.value;
-					console.log(value);
+					const email = inputUserEmail.value;
+					const id = userId.value;
 					//이메일 중복체크 요청
-					fetch(`/lotteon/member/updatePwEmailCheck/${value}`)
+					fetch(`/lotteon/member/updatePwEmailCheck/${email}/${id}`)
 							.then(response => response.json())
 							.then(data => {
-								if (data.result === 0) {
+								console.log(data.result)
+								if (data.result > 0) {
 									// 이메일이 존재하는 경우
 									resultEmail.innerText = "인증코드가 전송되었습니다.";
 									resultEmail.style.color = "green";
@@ -104,7 +107,7 @@
 
 								} else {
 									// 이메일이 존재하지 않는 경우
-									resultEmail.innerText = "존재하지않는 이메일입니다.";
+									resultEmail.innerText = "사용자 정보를 확인해주세요.";
 									resultEmail.style.color = "red";
 									inputUserEmail.style.border = "1px solid red";
 								}
@@ -252,7 +255,7 @@
 				</section>
 
 				<div>
-					<input type="submit" class="join" ID="join" value="비밀번호 재설정" />
+					<input type="submit" class="join" id="join" value="비밀번호 재설정" />
 				</div>
 			</form>
 		</div>

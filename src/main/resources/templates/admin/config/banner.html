@@ -47,27 +47,78 @@
                     console.log("trTags2 : " + trTags);
                 }
             }
-            let allBanNos = [];
-            let trTags2 = [];
-            function allCheckBox(){
-                const button = event.target;
-                const btnParent = button.parentNode.parentNode;
-                const trTag2 = btnParent.nextSibling;
-                const banNoTd = document.getElementById('banNoTd');
-                const banNo = banNoTd.innerText;
+            // let allBanNos = [];
+            // let trTags2 = [];
+            // let checkedTurn = 0;
+            // function allCheckBox(){
+            //     const button = event.target;
+            //     const btnParent = button.parentNode.parentNode;
+            //     const trTag2 = btnParent.nextSibling;
+            //     const banNoTd = document.getElementById('banNoTd');
+            //     const banNo = banNoTd.innerText;
+            //
+            //
+            //     if(button.checked){
+            //
+            //         const banCheckBoxValue = Array.from(document.getElementsByClassName('banCheckBox'));
+            //
+            //         if(checkedTurn === 0){
+            //             banCheckBoxValue.forEach(function(checkbox){
+            //                 checkbox.checked = true;
+            //             });
+            //             checkedTurn = 1;
+            //         }else{
+            //             banCheckBoxValue.forEach(function(checkbox){
+            //                 checkbox.checked = false;
+            //             });
+            //             checkedTurn = 0;
+            //         }
+            //         allBanNos.push(banNo);
+            //         trTags2.push(trTag2);
+            //         console.log("111: "+ allBanNos);
+            //         console.log("222: "+ trTags2);
+            //     }else{
+            //         let index = allBanNos.indexOf(banNo);
+            //         let index2 = trTags2.indexOf(trTag2);
+            //         allBanNos.splice(index, 1);
+            //         trTags2.splice(index2, 1);
+            //         console.log("333: "+ allBanNos);
+            //         console.log("444: "+ trTags2);
+            //     }
+            // }
 
-                if(button.checked){
-                    allBanNos.push(banNo);
-                    trTags2.push(trTag2);
-                    console.log("111: "+ allBanNos);
-                    console.log("222: "+ trTags2);
-                }else{
-                    let index = allBanNos.indexOf(banNo);
-                    let index2 = trTags2.indexOf(trTag2);
-                    allBanNos.splice(index, 1);
-                    trTags2.splice(index2, 1);
-                    console.log("333: "+ allBanNos);
-                    console.log("444: "+ trTags2);
+
+            function allCheckBox(tabId) {
+                const tab = document.getElementById(tabId);
+                const checkboxes = tab.getElementsByClassName('banCheckBox');
+                const button = tab.querySelector('input[type="checkbox"][name="all"]');
+                const isChecked = button.checked;
+
+                // 모든 체크박스 체크 또는 해제
+                for (let checkbox of checkboxes) {
+                    checkbox.checked = isChecked;
+                }
+
+                if (isChecked) {
+                    // 모두 체크 상태일 때
+                    banNos = []; // 배열 초기화
+                    trTags = []; // 배열 초기화
+
+                    const banNoTdAll = tab.getElementsByClassName('banNoTd');
+                    console.log(banNoTdAll);
+
+                    Array.from(banNoTdAll).forEach(function (each) {
+                        banNos.push(each.innerText);
+                    })
+
+                    console.log(banNos)
+                    for (let tr of tab.querySelectorAll('.bannerAll')) {
+                        trTags.push(tr);
+                    }
+                } else {
+                    // 모두 해제 상태일 때
+                    banNos = [];
+                    trTags = [];
                 }
             }
             function deleteBtn() {
@@ -232,6 +283,32 @@
                         .catch(err => console.log(err))
                 }
             }
+
+            // 이미지 크게 보기 모달창
+            function bannerImgModalOpen() {
+                const button = event.target;
+                const imgTag = button.querySelector('.thumb');
+                let imageSrc = null;
+                if (imgTag !== null) {
+                    imageSrc = imgTag.src;
+                }else {
+                    imageSrc = button.src;
+                }
+                console.log(imageSrc);
+                const bannerModalBack = document.getElementsByClassName('bannerModalBack')[0];
+                const modalImgTag = document.getElementsByClassName('modalImgTag')[0];
+                modalImgTag.src = imageSrc;
+                bannerModalBack.style.display = "block"
+            }
+
+            // 이미지 모달창 닫기
+            function closeQnaModal() {
+                const bannerModalBack = document.getElementsByClassName('bannerModalBack')[0];
+                const closeBtn = document.getElementsByClassName('closeBtn')[0];
+                if (event.target === bannerModalBack || event.target === closeBtn) {
+                    bannerModalBack.style.display = "none"
+                }
+            }
         </script>
         <nav>
             <h3>배너관리</h3>
@@ -250,14 +327,15 @@
             </ul>
 
             <!-- 메인 상단 배너-->
-            <section id="tabs1">
+            <section id="tabs1" style="margin: 0 0 10px 0">
                 <h4>메인 상단배너</h4>
                 <p>
-                    쇼핑몰 메인 상단에 출력되는 배너입니다.
+                    쇼핑몰 메인 슬라이더 영역에 노출되는 배너입니다.<br>
+                    이미지를 클릭하면 큰 화면으로 볼 수 있습니다.
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" id="bannerCheckBox" name="all" onclick="allCheckBox()"/></th>
+                        <th><input type="checkbox" id="bannerCheckBox" name="all" onclick="allCheckBox('tabs1')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -272,12 +350,14 @@
 
                     <tr class="bannerAll" th:each="banner : ${main1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td id="banNoTd" th:text="${banner.banNo}"></td>
-                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
+                        <td onclick="bannerImgModalOpen()" style="cursor: pointer">
+                            <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
+                        </td>
                         <td>
                             <ul>
                                 <li th:text="${banner.banName}" class="name"></li>
-                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
+                                <li class="link"><a th:href="@{http://__${banner.banLink}__}">배너링크</a></li>
                             </ul>
                         </td>
                         <td th:text="${banner.banImgCate}"></td>
@@ -293,18 +373,18 @@
                 </table>
                 <input type="button" class="btnNegative" onclick="deleteBtn()" value="선택삭제"/>
                 <input type="button" class="btnPositive btnRegister" value="등록하기"/>
-
             </section>
 
             <!-- 메인 슬라이더 배너-->
-            <section id="tabs2">
+            <section id="tabs2" style="margin: 0 0 10px 0">
                 <h4>메인 슬라이더배너</h4>
                 <p>
-                    쇼핑몰 메인 슬라이더 영역에 노출되는 배너입니다.
+                    쇼핑몰 메인 슬라이더 영역에 노출되는 배너입니다.<br>
+                    이미지를 클릭하면 큰 화면으로 볼 수 있습니다.
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all" onclick="allCheckBox()"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox('tabs2')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -318,12 +398,14 @@
                     </tr>
                     <tr th:each="banner : ${main2}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td th:text="${banner.banNo}"></td>
-                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
+                        <td onclick="bannerImgModalOpen()" style="cursor: pointer">
+                            <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
+                        </td>
                         <td>
                             <ul>
                                 <li th:text="${banner.banName}" class="name"></li>
-                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
+                                <li class="link"><a th:href="@{http://__${banner.banLink}__}">배너링크</a></li>
                             </ul>
                         </td>
                         <td th:text="${banner.banImgCate}"></td>
@@ -343,14 +425,15 @@
             </section>
 
             <!-- 상품 상세보기 배너-->
-            <section id="tabs3">
+            <section id="tabs3" style="margin: 0 0 10px 0">
                 <h4>상품 상세보기 배너</h4>
                 <p>
-                    상품 상세보기 상품수량 입력 상단부에 노출되는 배너입니다.
+                    쇼핑몰 메인 슬라이더 영역에 노출되는 배너입니다.<br>
+                    이미지를 클릭하면 큰 화면으로 볼 수 있습니다.
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox('tabs3')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -364,12 +447,14 @@
                     </tr>
                     <tr th:each="banner : ${product1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td th:text="${banner.banNo}"></td>
-                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
+                        <td onclick="bannerImgModalOpen()" style="cursor: pointer">
+                            <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
+                        </td>
                         <td>
                             <ul>
                                 <li th:text="${banner.banName}" class="name"></li>
-                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
+                                <li class="link"><a th:href="@{http://__${banner.banLink}__}">배너링크</a></li>
                             </ul>
                         </td>
                         <td th:text="${banner.banImgCate}"></td>
@@ -388,14 +473,15 @@
             </section>
 
             <!-- 회원 로그인 배너-->
-            <section id="tabs4">
+            <section id="tabs4" style="margin: 0 0 10px 0">
                 <h4>회원 로그인 배너</h4>
                 <p>
-                    회원 로그인 폼 오른쪽에 노출되는 배너입니다.
+                    쇼핑몰 메인 슬라이더 영역에 노출되는 배너입니다.<br>
+                    이미지를 클릭하면 큰 화면으로 볼 수 있습니다.
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox('tabs4')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -409,12 +495,14 @@
                     </tr>
                     <tr th:each="banner : ${member1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td class="banNos" th:text="${banner.banNo}"></td>
-                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
+                        <td onclick="bannerImgModalOpen()" style="cursor: pointer">
+                            <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
+                        </td>
                         <td>
                             <ul>
                                 <li th:text="${banner.banName}" class="name"></li>
-                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
+                                <li class="link"><a th:href="@{http://__${banner.banLink}__}">배너링크</a></li>
                             </ul>
                         </td>
                         <td th:text="${banner.banImgCate}"></td>
@@ -433,14 +521,15 @@
             </section>
 
             <!-- 마이페이지 배너-->
-            <section id="tabs5">
+            <section id="tabs5" style="margin: 0 0 10px 0">
                 <h4>마이페이지 배너</h4>
                 <p>
-                    마이페이지 하위 모든 페이지에서 노출되는 배너입니다.
+                    쇼핑몰 메인 슬라이더 영역에 노출되는 배너입니다.<br>
+                    이미지를 클릭하면 큰 화면으로 볼 수 있습니다.
                 </p>
                 <table>
                     <tr>
-                        <th><input type="checkbox" name="all"/></th>
+                        <th><input type="checkbox" name="all" onclick="allCheckBox('tabs5')"/></th>
                         <th>배너번호</th>
                         <th>이미지</th>
                         <th>배너정보</th>
@@ -454,12 +543,14 @@
                     </tr>
                     <tr th:each="banner : ${my1}">
                         <td><input type="checkbox" class="banCheckBox" name="배너번호" onclick="checkBox()"/></td>
-                        <td th:text="${banner.banNo}"></td>
-                        <td><img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px"></td>
+                        <td class="banNoTd" th:text="${banner.banNo}"></td>
+                        <td onclick="bannerImgModalOpen()" style="cursor: pointer">
+                            <img th:src="@{/uploads/__${banner.banImgName}__}" class="thumb" width="30px">
+                        </td>
                         <td>
                             <ul>
                                 <li th:text="${banner.banName}" class="name"></li>
-                                <li class="link"><a th:href="@{/admin/config/banner(bannerLink=${banner.banLink})}">배너링크</a></li>
+                                <li class="link"><a th:href="@{http://__${banner.banLink}__}">배너링크</a></li>
                             </ul>
                         </td>
                         <td th:text="${banner.banImgCate}"></td>
@@ -481,6 +572,8 @@
             <strong>Tip!</strong>
             전자상거래 등에서의 상품 등의 정보제공에 관한 고시에 따라 총 35개 상품군에 대해 상품 특성 등을 양식에 따라 입력할 수 있습니다.
         </p>
+
+        <!--배너 등록 모달-->
         <div id="bannerRegister" class="popup">
             <div style="margin-top: 20px">
                 <nav>
@@ -556,6 +649,20 @@
                 </section>
             </div>
         </div>
+
+        <!--등록된 배너 크게 보기 배너-->
+        <div class="bannerModalBack" onclick="closeQnaModal()">
+            <div class="bannerImgModal">
+                <div style="display:flex; justify-content: space-between; margin-bottom: 10px">
+                    <span>배너 이미지 상세</span>
+                    <span class="closeBtn" onclick="closeQnaModal()" style="cursor: pointer">X</span>
+                </div>
+                <div class="bannerImg">
+                    <img class="modalImgTag" src="">
+                </div>
+            </div>
+        </div>
+
     </section>
 <!--내용 끝-->
 </html>

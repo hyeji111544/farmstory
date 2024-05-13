@@ -20,6 +20,9 @@ public interface AdminNoticeRepository extends JpaRepository<Notice, Integer> {
     // 공지사항 카테고리별 조회
     public Page<Notice> findByNoticeCateOrderByNoticeDateDesc(String cate, Pageable pageable);
 
+    // 공지사항 카테+타입 조회
+    public Page<Notice> findByNoticeCateAndNoticeTypeOrderByNoticeDateDesc(String cate,String type,Pageable pageable);
+
     // 글 조회수 업
     @Modifying
     @Query("UPDATE Notice n SET n.noticeHit = n.noticeHit + 1 WHERE n.noticeNo = :noticeNo")

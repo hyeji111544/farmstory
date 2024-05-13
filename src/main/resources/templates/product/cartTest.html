@@ -420,6 +420,10 @@
             })
         }
 
+        // top 버튼
+        function movingTop() {
+            window.scrollTo(0, 0);
+        }
     </script>
 
 </head>
@@ -427,11 +431,17 @@
 <div id="wrapper">
     <header>
         <div class="top">
-            <div>
-                <a href="#">로그인</a>
-                <a href="#">회원가입</a>
-                <a href="#">마이페이지</a>
-                <a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니</a>
+            <div th:if="${!#authorization.expression('isAuthenticated()')}">
+                <a th:href="@{/member/login}">로그인</a>
+                <a th:href="@{/member/join}">회원가입</a>
+            </div>
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
+                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}">마이페이지</a>
+                <a th:href="@{/product/cart(userId=${#authentication.principal.user.userId})}">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
+                </a>
+                <a th:href="@{/member/logout}">로그아웃</a>
             </div>
         </div>
         <div class="logo">
@@ -610,7 +620,7 @@
             </p>
         </div>
     </footer>
-    <button type="button" id="top">상단이동</button>
+    <button type="button" id="top" onclick="movingTop()">상단이동</button>
 </div>
 </body>
 </html>

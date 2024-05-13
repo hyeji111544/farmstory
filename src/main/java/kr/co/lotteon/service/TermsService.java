@@ -17,14 +17,15 @@ public class TermsService {
 
     //이용약관 동의 출력
     public TermsDTO selectTerms(){
-        return termsMapper.selectTerms();
+        int termsNo = 2;
+        return termsMapper.selectTerms(termsNo);
     }
 
     // 이용약관 페이지의 카테고리별 약관 조회
     public List<TermsDTO> selectTermsForPolicy(String cate) {
 
-        String termsText = termsMapper.selectTermsForPolicy(cate);
-
+        int termsNo = 1;
+        String termsText = termsMapper.selectTermsForPolicy(cate, termsNo);
         String[] termSplit = termsText.split("wkfmfrjdpdy");
 
         List<TermsDTO> termsDTOList = new ArrayList<>();

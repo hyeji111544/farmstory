@@ -12,6 +12,7 @@ import kr.co.lotteon.repository.Cate03Repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -31,6 +32,7 @@ public class ProdCateService {
     private final ModelMapper modelMapper;
 
     // sideBar 카테고리 정보 조회
+    @Cacheable("cateCache")
     public Map<String, List<?>> selectProdCate(){
         // cate01 DB에서 조회 후 List<cate01DTO>로 변환
         List<Cate01DTO> cate01DTOs = cate01Repository.findAll().stream()

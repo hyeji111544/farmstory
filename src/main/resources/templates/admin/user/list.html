@@ -247,7 +247,7 @@
 
                     <th:block th:each="num:${#numbers.sequence(userDTO.start, userDTO.end)}">
                         <a class="pageNum" th:if="${userDTO.keyword == null}" th:href="@{/admin/user/list(pg=${num})}" th:class="${num == userDTO.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${userDTO.keyword != null}" th:href="@{/admin/user/list(pg=${num}, keyword=${userDTO.keyword})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${userDTO.keyword != null}" th:href="@{/admin/user/list(pg=${num}, keyword=${userDTO.keyword})}" th:class="${num == userDTO.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
                     <a th:if="${userDTO.next && userDTO.keyword == null}" th:href="@{/admin/user/list(pg=${userDTO.start + 1})}">다음</a>

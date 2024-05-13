@@ -23,27 +23,29 @@
 
         gtag('config', 'G-4PQT8D58DQ');
     </script>
+    <script>
+        function getCateCodeFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            console.log(urlParams);
+            return urlParams.get('cateCode');
+        }
+
+
+        // cateCode 값을 가져와서 input 필드에 할당하는 함수
+        function setCateCodeInputValue() {
+            const cateCode = getCateCodeFromUrl();
+            console.log("cateCode : "+cateCode);
+            document.getElementById('cateCodeInput').value = cateCode || '';
+        }
+
+
+    // top 버튼
+    function movingTop() {
+        window.scrollTo(0, 0);
+    }
+    </script>
 </head>
 <body>
-<script>
-    function getCateCodeFromUrl() {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('cateCode');
-    }
-
-
-    // cateCode 값을 가져와서 input 필드에 할당하는 함수
-    function setCateCodeInputValue() {
-        const cateCode = getCateCodeFromUrl();
-        document.getElementById('cateCodeInput').value = cateCode || '';
-    }
-
-    // 페이지 로드 시 cateCode 값을 input 필드에 할당
-    window.onload = function() {
-
-        setCateCodeInputValue();
-    };
-</script>
 <div id="wrapper">
     <header>
         <div class="top">
@@ -72,7 +74,7 @@
         <div class="logo">
             <div>
                 <a th:href="@{/}"><img th:src="@{/images/header_logo.png}" alt="로고" /></a>
-                <form action="/lotteon/product/list" method="get">
+                <form action="/lotteon/product/search" method="get">
                     <input type="text" name="keyword"/>
                     <input type="hidden" name="cateCode" id="cateCodeInput" value="">
                     <button><i class="fa fa-search"></i></button>
@@ -155,7 +157,7 @@
             </p>
         </div>
     </footer>
-    <button type="button" id="top">상단이동</button>
+    <button type="button" id="top" onclick="movingTop()">상단이동</button>
 </div>
 </body>
 </html>

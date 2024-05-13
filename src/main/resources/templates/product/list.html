@@ -13,6 +13,7 @@
         <script>
 
             window.onload = function () {
+                setCateCodeInputValue();
                 let currentURL = window.location.href;
                 let splitURL = currentURL.split('?')[1];
                 let sortCode = ""
@@ -51,29 +52,10 @@
                         aTag[5].classList.add('navOn');
                         sortText = ' > 최근등록순';
                         break;
-                    case 'prodHit-main':
-                        mTag[0].classList.add('headerOn');
-                        sortText = ' > 히트상품';
-                        break;
-                    case 'prodScore-main':
-                        mTag[1].classList.add('headerOn');
-                        sortText = ' > 추천상품';
-                        break;
-                    case 'prodRdate-main':
-                        mTag[2].classList.add('headerOn');
-                        sortText = ' > 최신상품';
-                        break;
-                    case 'prodSold-main':
-                        mTag[3].classList.add('headerOn');
-                        sortText = ' > 인기상품';
-                        break;
-                    case 'prodDiscount-main':
-                        mTag[4].classList.add('headerOn');
-                        sortText = ' > 할인상품';
-                        break;
                     default:
                         sortText = '';
                 }
+
                 document.getElementById('sortText').innerText = sortText;
 
             }
@@ -83,6 +65,7 @@
                 currentUrl.searchParams.set('sort', sortType);
                 window.location.href = currentUrl.toString();
             }
+
 
         </script>
       <!-- 제목, 페이지 네비게이션 -->
@@ -109,6 +92,7 @@
             <li><a href="#" onclick="sort('prodReview')" > 후기많은순</a></li>
             <li><a href="#" onclick="sort('prodRdate')" > 최근등록순</a></li>
         </ul>
+
 
       <!-- 상품목록 -->
         <section class="productBox">
@@ -138,6 +122,7 @@
                 </a>
             </div>
         </section>
+
 
       <!-- 상품목록 페이지번호 -->
       <div class="paging">

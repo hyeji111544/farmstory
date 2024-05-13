@@ -36,10 +36,12 @@ public class PdReviewRepositoryImpl implements PdReviewRepositoryCustom {
 
         // SELECT * FROM `pdreview` AS a JOIN `pdreview` AS b ON a.revNo = b.revNo WHERE a.userid = '?';
         QueryResults<Tuple> selectPdReviews = jpaQueryFactory
-                .select(qPdReview, qPdReviewImg)
+                .select(qPdReview, qPdReviewImg, qProduct)
                 .from(qPdReview)
                 .join(qPdReviewImg)
                 .on(qPdReview.revNo.eq(qPdReviewImg.revNo))
+                .join(qProduct)
+                .on(qPdReview.prodNo.eq(qProduct.prodNo))
                 .where(qPdReview.userId.eq(userId))
                 .orderBy(qPdReview.revAddDate.desc())
                 .offset(pageable.getOffset())
@@ -58,8 +60,10 @@ public class PdReviewRepositoryImpl implements PdReviewRepositoryCustom {
                 .map(tuple -> {
                     PdReview pdReview = tuple.get(0, PdReview.class);
                     PdReviewImg pdReviewImg = tuple.get(1, PdReviewImg.class);
+                    Product product = tuple.get(2, Product.class);
                     PdReviewDTO pdReviewDTO = modelMapper.map(pdReview, PdReviewDTO.class);
                     pdReviewDTO.setRevThumb(pdReviewImg.getRevThumb());
+                    pdReviewDTO.setCateCode(product.getCateCode());
                     pdReviewDTO.setUserId(userId);
                     return pdReviewDTO;
                 }).toList();

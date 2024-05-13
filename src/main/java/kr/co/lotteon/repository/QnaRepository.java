@@ -1,7 +1,5 @@
 package kr.co.lotteon.repository;
 
-import kr.co.lotteon.entity.Faq;
-import kr.co.lotteon.entity.Notice;
 import kr.co.lotteon.entity.Qna;
 import kr.co.lotteon.repository.custom.QnaRepositoryCustom;
 import org.springframework.data.domain.Page;
@@ -13,6 +11,8 @@ import java.util.List;
 
 @Repository
 public interface QnaRepository extends JpaRepository<Qna, Integer>, QnaRepositoryCustom {
+
+    public int countByUserId(String userId);
 
     public Page<Qna> findByQnaCate(String cate, Pageable pageable);
 

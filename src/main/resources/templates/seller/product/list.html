@@ -33,23 +33,25 @@
                     <th>할인율</th>
                     <th>포인트</th>
                     <th>재고</th>
+                    <th>판매자</th>
                     <th>제조사</th>
                     <th>조회</th>
                     <th>관리</th>
                 </tr>
 
                 <tr id="product" th:each="product : ${pageResponseDTO.dtoList}">
-                    <td><input type="checkbox" name="상품코드"/></td>
+                    <td style="width: 20px;"><input type="checkbox" name="상품코드"/></td>
                     <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb" style="width: 70px; height: 70px"></td>
-                    <td>[[${product.prodNo}]]</td>
-                    <td style="width: 300px">[[${product.prodName}]]</td>
+                    <td style="width: 30px;">[[${product.prodNo}]]</td>
+                    <td style="width: 250px">[[${product.prodName}]]</td>
                     <td th:text="${#numbers.formatInteger(product.prodPrice,3,'COMMA')} + '원'" style="width: 70px"></td>
-                    <td th:text="${product.prodDiscount} + '%'" style="width: 50px">[[${product.prodDiscount}]]</td>
+                    <td th:text="${product.prodDiscount} + '%'" style="width: 40px">[[${product.prodDiscount}]]</td>
                     <td th:if="${product.prodPoint} > 999" th:text="${#numbers.formatInteger(product.prodPoint,3,'COMMA')} + 'P'" style="width: 60px"></td>
                     <td th:if="${product.prodPoint} < 999" th:text="${product.prodPoint} + 'P'" style="width: 60px"></td>
 
                     <td th:if="${product.prodStock} > 999" th:text="${#numbers.formatInteger(product.prodStock,3,'COMMA')} + '개'" style="width: 50px"></td>
                     <td th:if="${product.prodStock} < 999" th:text="${product.prodStock} + '개'" style="width: 50px"></td>
+                    <td style="width: 80px" th:text="${product.prodSeller}"></td>
                     <td style="width: 80px">[[${product.prodCompany}]]</td>
                     <td>[[${product.prodHit}]]</td>
                     <td>

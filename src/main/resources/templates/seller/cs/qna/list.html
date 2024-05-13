@@ -54,16 +54,16 @@
 
             <div class="pagingBox">
                 <div class="pagingList">
-                    <a th:if="${prodQnaList.prev && noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.start - 1})}">이전</a>
-                    <a th:if="${prodQnaList.prev && noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.start - 1}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}">이전</a>
+                    <a th:if="${prodQnaList.prev && noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.start - 1}, prodSeller=${session.prodSeller})}">이전</a>
+                    <a th:if="${prodQnaList.prev && noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.start - 1}, prodSeller=${session.prodSeller}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}">이전</a>
 
-                    <th:block th:each="num:${#numbers.sequence(prodQnaList.start, prodQnaList.end)}">
-                        <a class="pageNum" th:if="${noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${num})}" th:class="${num == prodQnaList.pg} ? 'on' : ''">[[${num}]]</a>
-                        <a class="pageNum" th:if="${noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${num}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}" th:class="${num == 1} ? 'on' : ''">[[${num}]]</a>
+                    <th:block th:if="${prodQnaList.startNo != 0}" th:each="num:${#numbers.sequence(prodQnaList.start, prodQnaList.end)}">
+                        <a class="pageNum" th:if="${noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${num}, prodSeller=${session.prodSeller})}" th:class="${num == prodQnaList.pg} ? 'on' : ''">[[${num}]]</a>
+                        <a class="pageNum" th:if="${noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${num}, prodSeller=${session.prodSeller}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}" th:class="${num == prodQnaList.pg} ? 'on' : ''">[[${num}]]</a>
                     </th:block>
 
-                    <a th:if="${prodQnaList.next && noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.end + 1})}">다음</a>
-                    <a th:if="${prodQnaList.next && noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.end + 1}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}">다음</a>
+                    <a th:if="${prodQnaList.next && noticeCate == null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.end + 1}, prodSeller=${session.prodSeller})}">다음</a>
+                    <a th:if="${prodQnaList.next && noticeCate != null}" th:href="@{/seller/cs/qna/list(pg=${prodQnaList.end + 1}, prodSeller=${session.prodSeller}, type=${prodQnaList.type}, keyword=${prodQnaList.keyword})}">다음</a>
                 </div>
             </div>
         </section>

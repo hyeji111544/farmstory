@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'kr.co.lotteon'
-version = '0.1.92-SNAPSHOT'
+version = '1.0.0-RC'
 
 java {
     sourceCompatibility = '17'

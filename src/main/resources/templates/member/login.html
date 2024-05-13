@@ -98,12 +98,13 @@
                     <span>자동 로그인</span>
                 </label>
 
+                <a th:href="@{/member/join}">회원가입 | </a>
                 <a th:href="@{/member/findId}">아이디 찾기 | </a>
                 <a th:href="@{/member/findPw}">비밀번호 찾기</a>
 
             </form>
             <div th:each="banner : ${bannerMember1}">
-                <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
+                <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner" style="width: 500px;"></a>
             </div>
         </div>
     </main>

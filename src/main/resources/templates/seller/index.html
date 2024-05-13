@@ -142,10 +142,17 @@
                         <div>주문 금액</div>
                         <div>
                             <div>
-                                <p>전체 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.allPrice,3,'COMMA')} + '원'"></span></p>
-                                <p>신규 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneDayPrice,3,'COMMA')} + '원'"></span></p>
-                                <p>주간 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneWeekPrice,3,'COMMA')} + '원'"></span></p>
-                                <p>월간 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneMonthsPrice,3,'COMMA')} + '원'"></span></p>
+                                <p th:if="${sellerInfoDTO.allPrice} > 999">전체 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.allPrice,3,'COMMA')} + '원'"></span></p>
+                                <p th:if="${sellerInfoDTO.allPrice} < 999">전체 주문<span th:text="${sellerInfoDTO.allPrice} + '원'"></span></p>
+
+                                <p th:if="${sellerInfoDTO.oneDayPrice} > 999">신규 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneDayPrice,3,'COMMA')} + '원'"></span></p>
+                                <p th:if="${sellerInfoDTO.oneDayPrice} < 999">신규 주문<span th:text="${sellerInfoDTO.oneDayPrice} + '원'"></span></p>
+
+                                <p th:if="${sellerInfoDTO.oneWeekPrice} > 999">주간 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneWeekPrice,3,'COMMA')} + '원'"></span></p>
+                                <p th:if="${sellerInfoDTO.oneWeekPrice} < 999">주간 주문<span th:text="${sellerInfoDTO.oneWeekPrice} + '원'"></span></p>
+
+                                <p th:if="${sellerInfoDTO.oneMonthsPrice} > 999">월간 주문<span th:text="${#numbers.formatInteger(sellerInfoDTO.oneMonthsPrice,3,'COMMA')} + '원'"></span></p>
+                                <p th:if="${sellerInfoDTO.oneMonthsPrice} < 999">월간 주문<span th:text="${sellerInfoDTO.oneMonthsPrice} + '원'"></span></p>
                             </div>
                         </div>
                     </div>
