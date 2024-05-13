@@ -16,7 +16,7 @@
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
                     <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의내역<span class="qna" th:text="${session.myQnaCount}"></span></a></li>
                 </ol>
             </div>
         </nav>
@@ -52,7 +52,26 @@
                         </dl>
                     </div>
 
-                    <div class="myTableStyle">
+                    <!--쿠폰내역-->
+
+                    <!--쿠폰없을때-->
+                    <div class="myTableStyle" th:if="${haveCoupons.dtoList.size()} == 0">
+                        <div class="myTableHead myCouponRow">
+                            <div>쿠폰명</div>
+                            <div>할인금액</div>
+                            <div>적용기준/제한조건</div>
+                            <div>유효기간</div>
+                            <div>상태</div>
+                        </div>
+                        <div class="myTableBody myCouponRow">
+                            <div style="border: 0;">
+                                <p style="font-size : 18px;" >쿠폰이 없습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--쿠폰 있을때-->
+                    <div class="myTableStyle" th:if="${haveCoupons.dtoList.size()} > 0">
                         <div class="myTableHead myCouponRow">
                             <div>쿠폰명</div>
                             <div>할인금액</div>

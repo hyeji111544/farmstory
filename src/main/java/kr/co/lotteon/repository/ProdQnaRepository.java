@@ -11,4 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProdQnaRepository extends JpaRepository<ProdQna, Integer>, ProdQnaRepositoryCustom {
+
+    public int countByUserId(String userId);
+
 }

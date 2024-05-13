@@ -32,4 +32,6 @@ public class PdReviewDTO {
     private int revImgNo;
     private String revThumb;
     private String prodName;
+
+    private String cateCode;
 }

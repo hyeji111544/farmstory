@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -62,11 +61,18 @@ public class MyService {
         log.info("pointBalance : " +pointBalance);
 
         //문의내역 (검토중)
+        int qnaCount = qnaRepository.countByUserId(userId);
+        int prodQndCount = prodQnaRepository.countByUserId(userId);
+        int myQnaCount = qnaCount + prodQndCount;
+
+        log.info("qnaCount : " +qnaCount);
+        log.info("prodQndCount : " +prodQndCount);
 
 
         session.setAttribute("countOrder", countOrder);
         session.setAttribute("couponCount", couponCount);
         session.setAttribute("pointBalance", pointBalance);
+        session.setAttribute("myQnaCount", myQnaCount);
 
     }
 
@@ -599,6 +605,18 @@ public class MyService {
                 .build();
 
 
+    }
+
+    //my정보 확인해주세요! 조회
+    public UserDTO selectMyAdder(String userId){
+
+        Optional<User> userList = userRepository.findById(userId);
+
+        if (userList.isPresent()) {
+            UserDTO userIdResult = modelMapper.map(userList.get(),UserDTO.class);
+            return  userIdResult;
+        }
+        return null;
     }
 
 }

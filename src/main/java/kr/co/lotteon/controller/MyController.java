@@ -65,6 +65,13 @@ public class MyController {
         PageResponseDTO selectMyQna = myService.selectMyQna(userId, pageRequestDTO);
         model.addAttribute("selectMyQna", selectMyQna);
 
+        //확인해주세요! 기능
+        UserDTO resultUserId = myService.selectMyAdder(userId);
+        log.info("resultUserId" +resultUserId);
+        model.addAttribute("resultUserId", resultUserId);
+
+
+
         return "/my/home";
 
     }
@@ -192,6 +199,8 @@ public class MyController {
         //userPointRepository.selectPoints(userId, pageRequestDTO);
 
         log.info("pageResponseDTO : " +pageResponseDTO);
+        log.info("Point - pageResponseDTO : " +pageResponseDTO);
+
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
         return "/my/point";

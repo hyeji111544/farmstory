@@ -85,6 +85,28 @@ public class ProductController {
         return "/product/list";
     }
 
+    // 상품 검색 이동
+    @GetMapping("/product/search")
+    public String prodSearch(@RequestParam("cateCode") String cateCode,
+                             ProductPageRequestDTO productPageRequestDTO,
+                             Model model){
+
+        ProductPageResponseDTO pageResponseDTO;
+        productPageRequestDTO.setCateCode(cateCode);
+
+        pageResponseDTO = productService.searchProducts(productPageRequestDTO);
+
+        String setSortType = productPageRequestDTO.getSort();
+        String setCateCode = productPageRequestDTO.getCateCode();
+        pageResponseDTO.setCateCode(setCateCode);
+        model.addAttribute("setSortType", setSortType);
+        model.addAttribute(pageResponseDTO);
+
+
+        return "/product/search";
+    }
+
+
     // 상품 상세보기 이동
     @GetMapping("/product/view")
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -193,11 +215,7 @@ public class ProductController {
 
     }
 
-    // 상품 검색 이동
-    @GetMapping("/product/search")
-    public String prodSearch(){
-        return "/product/search";
-    }
+
 
     // 장바구니 이동
     @GetMapping("/product/cart")

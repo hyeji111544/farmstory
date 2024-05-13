@@ -50,14 +50,19 @@ public class AdminNoticeService {
     }
 
     // 관리자페이지 고객센터 메뉴 공지사항 리스트 출력
-    public PageResponseDTO NoticeAdminSelect(PageRequestDTO pageRequestDTO, String noticeCate){
+    public PageResponseDTO NoticeAdminSelect(PageRequestDTO pageRequestDTO, String noticeCate, String noticeType){
         Pageable pageable = pageRequestDTO.getPageable("noticeNo");
 
-        Page<Notice> pageNotice;
+        log.info("noticeCate : " + noticeCate);
+        log.info("noticeType : " + noticeType);
+
+        Page<Notice> pageNotice = null;
         if(noticeCate == null){
             pageNotice = adminNoticeRepository.findAllByOrderByNoticeDateDesc(pageable);
-        }else{
+        }else if (noticeCate != null && noticeType == null){
             pageNotice = adminNoticeRepository.findByNoticeCateOrderByNoticeDateDesc(noticeCate, pageable);
+        }else if (noticeCate != null && noticeType != null){
+            pageNotice = adminNoticeRepository.findByNoticeCateAndNoticeTypeOrderByNoticeDateDesc(noticeCate,noticeType,pageable);
         }
         // Entity -> DTO
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()
