@@ -182,7 +182,7 @@
                         <div class="orderByCompany latest" th:each="linkedMap : ${myOrder}">
                             <div class="myOrderTitle">
                                 <p th:text="${linkedMap.value.get(0).detailDate}"></p>
-                                <p>주문번호<span th:text="${linkedMap.key}"></span></p>
+                                <p class="orderNo">주문번호<span th:text="${linkedMap.key}" style="cursor: pointer"></span></p>
                                 <p>
                                     <img th:src="@{/images/icon-arrow-top.png}" onclick="accordionBtn()"/>
                                 </p>
@@ -190,17 +190,17 @@
                             <div class="myOrderRow" th:each="orderList : ${linkedMap.value}">
                                 <div><img th:src="@{/uploads/__${orderList.thumb190}__}"></div>
                                 <div class="myOrderInfo">
-                                    <p th:text="${orderList.prodCompany}"></p>
+                                    <p class="company" th:text="${orderList.prodCompany}" style="cursor: pointer"></p>
                                     <p class="InfoProdName" th:text="${orderList.prodName}"></p>
                                     <p th:text="${orderList.count}"></p>
                                     <p th:text="${#numbers.formatInteger(orderList.detailPrice,3,'COMMA')}"></p>
                                 </div>
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
-                                    <span>수취확인</span>
+                                    <span class="receive">수취확인</span>
                                     <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}">상품평쓰기</span>
                                     <span>반품신청</span>
-                                    <span>교환신청</span>
+                                    <span class="btnQuestion">문의하기</span>
                                 </div>
                             </div>
                         </div>
