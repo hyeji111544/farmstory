@@ -19,7 +19,7 @@
                 <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
                 <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
                 <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
+                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의내역<span class="qna" th:text="${session.myQnaCount}"></span></a></li>
             </ol>
         </div>
     </nav>

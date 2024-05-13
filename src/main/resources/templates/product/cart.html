@@ -467,7 +467,7 @@
             </div>
             <div th:if="${#authorization.expression('isAuthenticated()')}">
                 <a th:href="@{/member/join}">[[${#authentication.principal.user.userName}]]님</a>
-                <a th:href="@{/my/home(UserId=${#authentication.principal.user.userId})}">마이페이지</a>
+                <a th:href="@{/my/home(userId=${#authentication.principal.user.userId})}">마이페이지</a>
                 <a th:href="@{/product/cart(userId=${#authentication.principal.user.userId})}">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
                 </a>

@@ -27,5 +27,7 @@ public class PdReview {
 
     @CreationTimestamp
     private LocalDateTime revAddDate;
+    @Transient
+    private String cateCode;
 
 }

@@ -21,8 +21,8 @@
             }
             // 문의 유형 영어 -> 한글
             function qnaCateTypeMatch() {
-                const myQnaRow = document.getElementsByClassName('myQnaRow');
-                Array.from(myQnaRow).forEach(function (eachRow) {
+                const cateQnaRow = document.getElementsByClassName('cateQnaRow');
+                Array.from(cateQnaRow).forEach(function (eachRow) {
                     let cateType = eachRow.querySelectorAll('div')[1];
                     if(cateType.innerText !== "문의유형") {
                         let type = cateType.className;
@@ -49,7 +49,7 @@
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
                     <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">할인쿠폰<span class="coupon" th:text="${session.couponCount}"></span></a></li>
                     <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트<span class="point" th:text="${#numbers.formatInteger(session.pointBalance,3,'COMMA')}"></span></a></li>
-                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId})}">문의내역<span class="qna"></span></a></li>
+                    <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의내역<span class="qna" th:text="${session.myQnaCount}"></span></a></li>
                 </ol>
             </div>
         </nav>
@@ -75,13 +75,14 @@
                 <article>
                     <!--문의 카테고리바-->
                     <div class="myQnaNav">
-                        <a class="navOn"
-                           th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">고객문의</a>
-                        <a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='prodqna')}">상품문의</a>
+                        <a th:class="${selectMyQna} ? 'navOn' : ''" th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">고객문의</a>
+                        <a th:class="${selectMyProdQna} ? 'navOn' : ''" th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='prodqna')}">상품문의</a>
                     </div>
 
                     <!--고객문의 테이블-->
-                    <div class="myTableStyle" th:if="${selectMyQna != null}">
+                    <!--고객문의 없을때-->
+                    <th:block th:if="${selectMyQna} != null">
+                    <div class="myTableStyle" th:if="${selectMyQna.dtoList.size() == 0}">
                         <div class="myTableHead myQnaRow">
                             <div>번호</div>
                             <div>문의유형</div>
@@ -89,7 +90,25 @@
                             <div>작성일</div>
                             <div>상태</div>
                         </div>
-                        <div class="myTableBody myQnaRow" th:each="qna, index : ${selectMyQna.dtoList}">
+                        <div class="myTableBody myQnaRow">
+                            <div style="border: 0; width: 100%; text-align: -webkit-center;">
+                                <p style="font-size : 18px;" >문의내역이 없습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    </th:block>
+
+                    <!--고객문의 있을때-->
+                    <th:block th:if="${selectMyQna} != null">
+                    <div class="myTableStyle" th:if="${selectMyQna.dtoList.size()} > 0">
+                        <div class="myTableHead myQnaRow">
+                            <div>번호</div>
+                            <div>문의유형</div>
+                            <div>제목</div>
+                            <div>작성일</div>
+                            <div>상태</div>
+                        </div>
+                        <div class="myTableBody myQnaRow cateQnaRow" th:each="qna, index : ${selectMyQna.dtoList}">
                             <div th:text="${selectMyQna.startNo - index.index}"></div>
                             <div th:class="${qna.qnaType}">[[${qna.qnaCate}]]</div>
                             <div><a th:href="@{/cs/qna/view(qnaNo=${qna.qnaNo})}" th:text="${qna.qnaContent}"></a></div>
@@ -112,9 +131,30 @@
                             <a th:if="${selectMyQna.next && selectMyQna.cate != null}" th:href="@{/my/qna(pg=${selectMyQna.end + 1}, type=${selectMyQna.type}, keyword=${selectMyQna.keyword}, userId=${#authentication.principal.user.userId})}">다음</a>
                         </p>
                     </div>
+                    </th:block>
 
                     <!--상품문의 테이블-->
-                    <div class="myTableStyle" th:if="${selectMyProdQna != null}">
+                    <!--상품문의 없을때-->
+                    <th:block th:if="${selectMyProdQna} != null">
+                        <div class="myTableStyle" th:if="${selectMyProdQna.dtoList.size()} == 0">
+                            <div class="myTableHead myQnaRow">
+                                <div>번호</div>
+                                <div>문의유형</div>
+                                <div>제목</div>
+                                <div>작성일</div>
+                                <div>상태</div>
+                            </div>
+                            <div class="myTableBody myQnaRow">
+                                <div style="border: 0; width: 100%; text-align: -webkit-center;">
+                                    <p style="font-size : 18px;" >상품문의내역이 없습니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+
+                    <!--상품문의 있을때-->
+                    <th:block th:if="${selectMyProdQna} != null">
+                    <div class="myTableStyle" th:if="${selectMyProdQna.dtoList.size()} > 0">
                         <div class="myTableHead myQnaRow">
                             <div>번호</div>
                             <div>문의유형</div>
@@ -126,7 +166,7 @@
                             <div th:text="${selectMyProdQna.startNo - index.index}"></div>
                             <div>제품문의</div>
                             <div><a href="#" th:text="${prodqna.prodQnaContent}"></a></div>
-                            <div th:text="${prodqna.prodQnaDate}"></div>
+                            <div th:text="${#temporals.format(prodqna.prodQnaDate, 'yyyy-MM-dd')}"></div>
                             <div th:text="${prodqna.prodQnaStatus}"></div>
                         </div>
 
@@ -143,6 +183,7 @@
                             <a th:if="${selectMyProdQna.next && selectMyProdQna.cate != null}" th:href="@{/my/qna(pg=${selectMyProdQna.end + 1}, type=${selectMyProdQna.type}, keyword=${selectMyProdQna.keyword}, userId=${#authentication.principal.user.userId})}">다음</a>
                         </p>
                     </div>
+                    </th:block>
                 </article>
             </section>
 
