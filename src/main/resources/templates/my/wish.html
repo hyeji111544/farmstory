@@ -3,6 +3,120 @@
     layout:decorate="~{/layout/myLayout.html}">
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
+        <script>
+            // 체크박스 전체선택
+            function checkBoxTotal() {
+                const totalCheckBox = document.getElementById('totalCheckBox');
+                const eachCheckBox = document.getElementsByClassName('eachCheckBox');
+                if (totalCheckBox.checked) {
+                    Array.from(eachCheckBox).forEach(function (checkBox) {
+                        checkBox.checked = true;
+                    })
+                }else {
+                    Array.from(eachCheckBox).forEach(function (checkBox) {
+                        checkBox.checked = false;
+                    })
+                }
+            }
+
+            let wishNoArr = [];
+            let wishContentArr = [];
+            // 전체 삭제 버튼 클릭시
+            function deleteWishAll() {
+                const eachCheckBox = document.getElementsByClassName('eachCheckBox');
+                Array.from(eachCheckBox).forEach(function (checkBox) {
+                    if (checkBox.checked) {
+                        wishNoArr.push(checkBox.value);
+                        wishContentArr.push(checkBox.parentNode);
+                    }
+                })
+                deleteWishList();
+            }
+
+            // 개별 삭제 버튼 클릭시
+            function deleteWishEach() {
+                const button = event.target;
+                const checkBox = button.parentNode.parentNode.querySelector('.eachCheckBox');
+                wishNoArr.push(checkBox.value);
+                wishContentArr.push(checkBox.parentNode);
+                deleteWishList();
+            }
+
+            // 위시리스트 삭제
+            function deleteWishList() {
+                const totalCheckBox = document.getElementById('totalCheckBox');
+                const eachCheckBox = document.getElementsByClassName('eachCheckBox');
+                const jsonData = {
+                    "wishNoArr" : wishNoArr
+                }
+
+                fetch("/lotteon/my/wish/deleteWish", {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(jsonData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.result > 0) {
+                            // 성공
+                            Array.from(wishContentArr).forEach(function (wishContent) {
+                                wishContent.remove();
+                            })
+                        } else {
+                            // 실패
+                            alert("삭제에 실패했습니다.");
+                        }
+                    })
+                    .catch(err => console.log(err))
+                    .finally(() => {
+                        wishNoArr = [];
+                        wishContentArr = [];
+                        Array.from(eachCheckBox).forEach(function (checkBox) {
+                            checkBox.checked = false;
+                        })
+                        totalCheckBox.checked = false;
+                    });
+            }
+
+            // 장바구니 담기 버튼
+            function wishProdToCart() {
+                const button = event.target;
+                const checkBox = button.parentNode.parentNode.querySelector('.eachCheckBox');
+                const prodName = button.parentNode.parentNode.querySelector('a').innerText;
+                let result = confirm(prodName + "을(를) 장바구니에 추가하시겠습니까?");
+                if (result) {
+                    const userId = document.getElementById('userId').value;
+                    const jsonData = {
+                        "userId" : userId,
+                        "prodNo" : button.className
+                    }
+
+                    fetch("/lotteon/my/wish/wishProdToCart", {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if (data.result > 0) {
+                                // 성공
+                                wishNoArr.push(checkBox.value);
+                                wishContentArr.push(checkBox.parentNode);
+                                deleteWishList();
+                                alert("해당 상품이 장바구니에 담겼습니다.");
+                            } else {
+                                // 실패
+                                alert("실패했습니다.");
+                            }
+                        })
+                        .catch(err => console.log(err))
+                }else {
+                    alert("취소되었습니다.");
+                }
+            }
+        </script>
         <!--마이페이지 상단 회원 정보-->
         <nav>
             <div>
@@ -35,6 +149,7 @@
             </ul>
 
             <section>
+                <input type="hidden" id="userId" th:value="${#authentication.principal.user.userId}">
                 <th:block th:each="banner : ${banMyOrderList}" >
                     <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
                 </th:block>
@@ -55,12 +170,12 @@
                     <!--관심상품 있을때-->
                     <div class="wishTable" th:if="${wishList.dtoList.size()} > 0">
                         <div>
-                            <input type="checkbox">
+                            <input type="checkbox" id="totalCheckBox" onclick="checkBoxTotal()">
                             <div>전체선택</div>
-                            <div>선택삭제</div>
+                            <div onclick="deleteWishAll()" style="cursor: pointer">선택삭제</div>
                         </div>
                         <div class="wishContent" th:each="wish : ${wishList.dtoList}">
-                            <input type="checkbox" th:value="${wish.wishNo}">
+                            <input type="checkbox" th:value="${wish.wishNo}" class="eachCheckBox">
                             <img th:src="@{/uploads/__${wish.thumb190}__}">
                             <div>
                                 <a th:href="@{/product/view(prodNo=${wish.prodNo})}" th:text="${wish.prodName}"></a>
@@ -69,8 +184,8 @@
                                 <p th:text="${#numbers.formatInteger(wish.prodPrice, 3, 'COMMA')}">가격</p>
                             </div>
                             <div>
-                                <span>장바구니 담기</span>
-                                <span>관심상품 삭제</span>
+                                <span th:class="${wish.prodNo}" onclick="wishProdToCart()">장바구니 담기</span>
+                                <span onclick="deleteWishEach()">관심상품 삭제</span>
                             </div>
                         </div>
 
