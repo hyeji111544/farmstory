@@ -237,7 +237,7 @@
                     <td style="text-align: left">
                         <span>
                             <a th:href="@{/admin/cs/notice/view(noticeNo=${notice.noticeNo})}">
-                                <span th:if="${notice.noticeType == 'guide'}" style="white-space: nowrap;"><span th:text="'[안내] ' + ${notice.noticeTitle}"></span></span>
+                               <span th:if="${notice.noticeType == 'guide'}" style="white-space: nowrap;"><span th:text="'[안내]' + ${notice.noticeTitle}"></span></span>
                                 <span th:if="${notice.noticeType == 'announce'}" style="white-space: nowrap;"><span th:text="'[발표] ' + ${notice.noticeTitle}"></span></span>
                                 <span th:if="${notice.noticeType == 'prodinfo'}" style="white-space: nowrap;"><span th:text="'[위해상품정보] ' + ${notice.noticeTitle}"></span></span>
                                 <span th:if="${notice.noticeType == 'uservice'}" style="white-space: nowrap;"><span th:text="'[고객서비스] ' + ${notice.noticeTitle}"></span></span>

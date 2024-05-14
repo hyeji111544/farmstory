@@ -98,9 +98,12 @@ public class ProductController {
 
         String setSortType = productPageRequestDTO.getSort();
         String setCateCode = productPageRequestDTO.getCateCode();
+        pageResponseDTO.setMin(productPageRequestDTO.getMin());
+        pageResponseDTO.setMax(productPageRequestDTO.getMax());
         pageResponseDTO.setCateCode(setCateCode);
         model.addAttribute("setSortType", setSortType);
         model.addAttribute(pageResponseDTO);
+        log.info("pageResponseDTO : " + pageResponseDTO);
 
 
         return "/product/search";
@@ -112,7 +115,31 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public String prodView(@RequestParam("prodNo") int prodNo, @RequestParam("cateCode") String cateCode,
                            Model model, PageRequestDTO reviewPageRequestDTO, PageRequestDTO qnaPageRequestDTO){
-        log.info("prodView....!!!"+prodNo);
+
+        PageRequestDTO reviewDTO = new PageRequestDTO();
+        PageRequestDTO prodQnaDTO = new PageRequestDTO();
+        if (reviewPageRequestDTO.getType() != null && reviewPageRequestDTO.getType().equals("review")) {
+            reviewDTO.setNo(reviewPageRequestDTO.getNo());
+            reviewDTO.setPg(reviewPageRequestDTO.getPg());
+            reviewDTO.setSize(reviewPageRequestDTO.getSize());
+            reviewDTO.setType(reviewPageRequestDTO.getType());
+            prodQnaDTO.setNo(reviewPageRequestDTO.getNo());
+            prodQnaDTO.setPg(1);
+            prodQnaDTO.setSize(reviewPageRequestDTO.getSize());
+            prodQnaDTO.setType(reviewPageRequestDTO.getType());
+        }
+        if (qnaPageRequestDTO.getType() != null && qnaPageRequestDTO.getType().equals("prodQna")) {
+            prodQnaDTO.setNo(reviewPageRequestDTO.getNo());
+            prodQnaDTO.setPg(reviewPageRequestDTO.getPg());
+            prodQnaDTO.setSize(reviewPageRequestDTO.getSize());
+            prodQnaDTO.setType(reviewPageRequestDTO.getType());
+            reviewDTO.setNo(reviewPageRequestDTO.getNo());
+            reviewDTO.setPg(1);
+            reviewDTO.setSize(reviewPageRequestDTO.getSize());
+            reviewDTO.setType(reviewPageRequestDTO.getType());
+        }
+
+        // 상품 정보 조회
         ProductDTO productDTO = productService.selectProduct(prodNo);
         model.addAttribute("product", productDTO);
 
@@ -125,13 +152,13 @@ public class ProductController {
         model.addAttribute("OptionDTOs", responseOptionDTO);
         
         // 상품 리뷰 조회
-        PageResponseDTO prodReview = productService.selectProdReviewForView(prodNo, reviewPageRequestDTO);
+        PageResponseDTO prodReview = productService.selectProdReviewForView(prodNo, reviewDTO);
         model.addAttribute("prodReview", prodReview);
-        log.info("prodReview {}", prodReview.toString());
-
         // 상품 문의 조회
-        PageResponseDTO prodQna = productService.selectProdQna(prodNo, qnaPageRequestDTO);
+        PageResponseDTO prodQna = productService.selectProdQna(prodNo, prodQnaDTO);
         model.addAttribute("prodQna", prodQna);
+
+
 
         String cate01 = "";
         String cate02 = "";
@@ -231,20 +258,14 @@ public class ProductController {
         return "/product/cart";
     }
 
-    // 장바구니 이동
-    /*
-    @GetMapping("/product/cartTest")
-    public String prodCartTest(@RequestParam("userId") String userId, Model model){
-        int cartNo = productService.findCartNoByUserId(userId);
-        if (cartNo != 0){
-            Map<String, List<CartInfoDTO>> cartProducts = testService.findCartProdNoTest(cartNo);
-            model.addAttribute("cartProducts", cartProducts);
-        }
+    // 쿠폰존 이동
+    @GetMapping("/product/couponZone")
+    public String couponZone(){
 
-        return "/product/cartTest";
+        return "/product/couponZone";
     }
 
-     */
+
 
     // 상품 주문 이동
     @GetMapping("/product/order")

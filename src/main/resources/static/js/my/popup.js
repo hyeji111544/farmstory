@@ -1,7 +1,7 @@
 $(function(){
 
     // 판매자 정보 팝업 띄우기
-    $('.latest .info .company > a').click(function(e){
+    $('.latest .myOrderRow .company').click(function(e){
         e.preventDefault();
         $('#popSeller').addClass('on');
     });
@@ -14,14 +14,13 @@ $(function(){
     });
 
     // 주문상세 팝업 띄우기
-    $('.latest .info .orderNo > a').click(function(e){
+    $('.latest .myOrderTitle .orderNo > span').click(function(e){
         e.preventDefault();
         $('#popOrder').addClass('on');
     });
 
     // 수취확인 팝업 띄우기
     $('.latest  .confirm > .receive').click(function(e){
-        alert("!!");
         e.preventDefault();
         $('#popReceive').addClass('on');
     });

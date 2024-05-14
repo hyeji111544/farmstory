@@ -19,7 +19,7 @@
             const userId = checkUSerId.value;
             const userRole = checkUSerRole.value;
 
-            fetch(`/lotteon/my/info/checkUserPw/{userPw}/{userId}`)
+            fetch(`/lotteon/my/info/checkUserPw/${userPw}/${userId}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
@@ -72,6 +72,7 @@
                 <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
             </th:block>
 
+            <!--인증-->
             <div class="myTableStyle" id="checkUserPwBox">
                 <p class="myTableHead" style="padding: 10px 0; font-size: 16px;">비밀번호를 입력해주세요.</p>
                 <div style="display: flex; margin: 10px 0; height: 30px; justify-content: center;">
@@ -82,19 +83,19 @@
                 </div>
             </div>
 
-            <article class="myTableStyle" id="userInfoBox" style="display: none">
+            <article class="myTableStyle" id="userInfoBox" >
                 <h3 class="myTableHead" style="padding: 10px 0">회원정보 설정</h3>
                 <table border="0" style="margin: 0; border-top: 1px solid #aaa">
                     <tr>
                         <td>사용자 ID</td>
-                        <td id="userId" th:text="${#strings.substring(userDTO.userId, 0, 5)} + '****'"></td>
+                        <td id="userId" th:text="${userDTO.userId}"></td>
                         <td id="userRole" hidden th:text="${userDTO.userRole}"></td>
                     </tr>
                     <tr>
                         <td>비밀번호</td>
                         <td>
                             <input type="text" name="userPw" id="changePw" style="display: none">
-                            <button class="change" id="btnChangePass">비밀번호 수정</button>
+                            <button class="change" id="btnChangePass" onclick="changeUserPw()">비밀번호 수정</button>
                             <span id="resultPw" class="resultText"></span>
                             <p class="resultPw"></p>
                         </td>
@@ -130,7 +131,7 @@
                                 <input type="text" name="hp1" th:value="${#strings.substring(userDTO.userHp,0,3)}" style="text-align: center" readonly maxlength="3"/>-
                                 <input type="text" name="hp2" th:value="${#strings.substring(userDTO.userHp,4,8)}" style="text-align: center" readonly maxlength="4"/>-
                                 <input type="text" name="hp3" th:value="${#strings.substring(userDTO.userHp,9,13)}" style="text-align: center" readonly maxlength="4"/>
-                                <button class="change" id="btnChangeHp">수정하기</button>
+                                <button class="change" id="btnChangeHp" onclick="changeUserHp()">수정하기</button>
                                 <span id="hpError" class="resultText"></span>
                             </p>
                         </td>
@@ -171,7 +172,7 @@
                     <tr>
                         <td>담당자 이름</td>
                         <td>
-                            <input type="text" name="sellerName" id="sellerName" th:value="${seller.sellerName}" readonly>
+                            <input type="text" name="sellerName" id="sellerName" th:value="${seller.sellerName}" readonly required>
                             <span id="resultSellerName" class="resultText"></span>
                             <button class="change" id="btnChangeSellerName">수정하기</button>
                         </td>
@@ -196,7 +197,7 @@
                                 <input type="text" name="sellerFax1" th:value="${#strings.substring(seller.fax,0,3)}" style="text-align: center" readonly maxlength="3"/>-
                                 <input type="text" name="sellerFax2" th:value="${#strings.substring(seller.fax,4,8)}" style="text-align: center" readonly maxlength="4"/>-
                                 <input type="text" name="sellerFax3" th:value="${#strings.substring(seller.fax,9,13)}" style="text-align: center" readonly maxlength="4"/>
-                                <button class="change" id="btnChangeSellerFax">수정하기</button>
+                                <button class="change" id="btnChangeSellerFax" onclick="changeSellerFax()">수정하기</button>
                                 <span id="sellerFaxError" class="resultText"></span>
                             </p>
                         </td>

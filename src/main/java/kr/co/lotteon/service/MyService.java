@@ -29,7 +29,7 @@ public class MyService {
     private final UserRepository userRepository;
     private final UserCouponRepository userCouponRepository;
     private final OrdersRepository ordersRepository;
-    private final OrderdetailRepository orderdetailRepository;
+    private final OrderDetailRepository orderdetailRepository;
     private final WishRepository wishRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
@@ -43,6 +43,7 @@ public class MyService {
     private final ProductRepository productRepository;
     private final QnaRepository qnaRepository;
     private final ProdQnaRepository prodQnaRepository;
+    private final CompanyService companyService;
 
     public void selectMyInfo(HttpSession session, String userId){
         log.info("countOrder : " +userId);
@@ -133,7 +134,7 @@ public class MyService {
     public ResponseEntity<?> myInfoUpdateSellerHp(String userId, String sellerHp){
         long result = sellerRepository.updateSellerHpByUserId(userId,sellerHp);
         log.info("userId :" + userId);
-        log.info("sellerName :" + sellerHp);
+        log.info("sellerHp :" + sellerHp);
 
         if(result > 0){
             //업데이트가 됐을경우
@@ -619,4 +620,13 @@ public class MyService {
         return null;
     }
 
-}
+    // 마이페이지 - 주문상세 모달 정보 조회
+    public Map<String, List<?>> orderDetailCheck(int orderNo, OrderDetailDTO orderDetailDTO){
+
+        log.info("orderDetailCheck service");
+
+        return orderdetailRepository.selectDetailCheck(orderNo, orderDetailDTO);
+
+    }
+
+ }

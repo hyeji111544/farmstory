@@ -6,21 +6,27 @@
     <section class="search" layout:fragment="content">
 
         <script>
-
             window.onload = function () {
                 setCateCodeInputValue();
                 let currentURL = window.location.href;
                 let splitURL = currentURL.split('?')[1];
                 let sortCode = ""
                 let keywordText = "";
+                let typeText = [];
+                let minText = "";
+                let maxText = "";
                 if (splitURL !== undefined){
                     let params = new URLSearchParams(window.location.search);
                     sortCode = params.get('sort');
                     keywordText = params.get('keyword');
+                    typeText = params.getAll('type');
+                    minText = params.get('min');
+                    maxText = params.get('max');
                 }
                 const sortNav = document.getElementsByClassName('sort')[0];
                 const aTag = sortNav.querySelectorAll('a');
                 console.log(keywordText);
+                console.log(typeText);
 
                 switch (sortCode) {
                     case 'prodSold':
@@ -45,8 +51,25 @@
 
                 document.getElementById('keywordText').innerText = keywordText;
                 document.getElementById('searchKeyword').innerText = keywordText;
+                document.getElementById('minPrice').value = minText || '';
+                document.getElementById('maxPrice').value = maxText || '';
+                document.getElementById('inputKeyword').value = keywordText || '';
 
+                const typeCheckboxes = document.querySelectorAll('.typeCheckbox');
+                typeCheckboxes.forEach(checkbox => {
+                    if (typeText.includes(checkbox.value)) {
+                        checkbox.checked = true;
+                    }
+                });
             }
+            function removeValue(event){
+                var clickedElement = event.target;
+                if (clickedElement.classList.contains('searchInfo')) {
+                    clickedElement.value = '';
+                }
+            }
+
+
 
             function sort(sortType){
                 const currentUrl = new URL(window.location.href);
@@ -54,19 +77,6 @@
                 window.location.href = currentUrl.toString();
             }
 
-            function getCateCodeFromUrl() {
-                const urlParams = new URLSearchParams(window.location.search);
-                console.log(urlParams);
-                return urlParams.get('cateCode');
-            }
-
-
-            // cateCode 값을 가져와서 input 필드에 할당하는 함수
-            function setCateCodeInputValue() {
-                const cateCode = getCateCodeFromUrl();
-                console.log("cateCode : "+cateCode);
-                document.getElementById('cateCode').value = cateCode || '';
-            }
 
         </script>
 
@@ -82,13 +92,14 @@
       <div class="group">
         <h3><strong id="searchKeyword"></strong>검색결과 <em>(총&nbsp;:&nbsp;<span th:text="${productPageResponseDTO.total}"></span>&nbsp;건)</em></h3>
         <form action="/lotteon/product/search" method="get">
-          <input type="text" name="keyword"/>
+          <input type="text" id="inputKeyword" class="searchInfo" onfocus="removeValue(event)" name="keyword"/>
           <input type="submit" value="검색"/>
           <span>
-              <label><input type="checkbox" name="type" value="prodName">상품명</label>
-              <label><input type="checkbox" name="type" value="prodInfo">상품설명</label>
-              <label><input type="checkbox" name="type" value="prodPrice">상품가격</label>
-              <input type="text" name="min"/>원&nbsp;~&nbsp;<input type="text" name="max"/>원
+              <label><input type="checkbox" name="type" value="prodName" class="typeCheckbox">상품명</label>
+              <label><input type="checkbox" name="type" value="prodInfo" class="typeCheckbox">상품설명</label>
+              <label><input type="checkbox" name="type" value="prodPrice" class="typeCheckbox">상품가격</label>
+              <input type="text" id="minPrice" class="searchInfo"  onfocus="removeValue(event)" name="min"/>원&nbsp;~&nbsp;
+              <input type="text" class="searchInfo"  onfocus="removeValue(event)" id="maxPrice" name="max"/>원
           </span>
             <input type="hidden" name="cateCode" id="cateCode" value="">
         </form>
@@ -142,18 +153,20 @@
         </tr>
       </table>
 
-      <!-- 상품목록 페이지번호 -->
-      <div class="paging">
-       <span class="prev" th:if="${productPageResponseDTO.prev}" >
-           <a th:href="@{'/product/list?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.start - 1}}"><&nbsp;이전</a>
-       </span>
-        <span class="num" th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
-            <a th:if="${num != 0}" th:href="@{/product/list(pg=${num}, cateCode=${productPageResponseDTO.cateCode}, sort=${setSortType})}" th:class="${num == productPageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
+
+        <!-- 상품목록 페이지번호 -->
+        <div class="paging">
+        <span class="prev" th:if="${productPageResponseDTO.prev}">
+            <a th:href="@{'/product/search?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.start - 1} + '&keyword=' + ${productPageResponseDTO.keyword} + '&type=' + ${productPageResponseDTO.type} + '&min=' + ${productPageResponseDTO.min} + '&max=' + ${productPageResponseDTO.max}}"><&nbsp;이전</a>
         </span>
-        <span class="next" th:if="${productPageResponseDTO.next}">
-                     <a th:href="@{'/product/list?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.end + 1}}">다음&nbsp;></a>
+            <span class="num" th:each="num : ${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
+            <a th:if="${num != 0}" th:href="@{'/product/search?pg=' + ${num} + '&cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&keyword=' + ${productPageResponseDTO.keyword} + '&type=' + ${productPageResponseDTO.type} + '&min=' + ${productPageResponseDTO.min} + '&max=' + ${productPageResponseDTO.max}}" th:class="${num == productPageResponseDTO.pg} ? 'on' : ''">[[${num}]]</a>
         </span>
-      </div>
+            <span class="next" th:if="${productPageResponseDTO.next}">
+            <a th:href="@{'/product/search?cateCode=' + ${productPageResponseDTO.cateCode} + '&sort=' + ${setSortType} + '&pg=' + ${productPageResponseDTO.end + 1} + '&keyword=' + ${productPageResponseDTO.keyword} + '&type=' + ${productPageResponseDTO.type} + '&min=' + ${productPageResponseDTO.min} + '&max=' + ${productPageResponseDTO.max}}">다음&nbsp;></a>
+        </span>
+        </div>
+
 
     </section>
     <!-- 상품검색 화면 끝 -->

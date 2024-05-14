@@ -282,7 +282,7 @@ public class ProductService {
 
     // 상품 문의 조회
     public PageResponseDTO selectProdQna(int prodNo, PageRequestDTO pageRequestDTO) {
-        Pageable pageable = pageRequestDTO.getPageable("No");
+        Pageable pageable = pageRequestDTO.getPageable("prodQnaNo");
         return prodQnaRepository.selectProdQna(prodNo, pageable, pageRequestDTO);
     }
 

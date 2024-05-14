@@ -23,7 +23,7 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
     private final OrdersRepository ordersRepository;
-    private final OrderdetailRepository orderdetailRepository;
+    private final OrderDetailRepository orderdetailRepository;
     private final UserPointRepository userPointRepository;
     private final PointHistoryRepository pointHistoryRepository;
 

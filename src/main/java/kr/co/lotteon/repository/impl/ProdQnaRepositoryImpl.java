@@ -171,7 +171,7 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
 
     // 상품 문의 조회
     public PageResponseDTO selectProdQna(int prodNo, Pageable pageable, PageRequestDTO pageRequestDTO) {
-
+        log.info("pageable : " + pageable);
         List<ProdQna> results = jpaQueryFactory
                 .selectFrom(qprodQna)
                 .where(qprodQna.prodNo.eq(prodNo))
@@ -179,7 +179,9 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        int total = results.size();
+        long total = jpaQueryFactory
+                .selectFrom(qprodQna)
+                .where(qprodQna.prodNo.eq(prodNo)).fetchCount();
 
         log.info("results : " + results);
 
@@ -205,7 +207,7 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
         return PageResponseDTO.builder()
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(prodQnaDTOList)
-                .total(total)
+                .total((int)total)
                 .build();
 
 
