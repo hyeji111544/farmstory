@@ -118,48 +118,47 @@
                 if (document.getElementById('prodCount').innerText === "0"){
                     alert('주문상품을 선택해주세요.');
                 }else {
+                    if (confirm('상품을 결제 하시겠습니까?')){
+                        var selectedCart = document.getElementsByName('selectedCart');
+                        const userId = document.getElementById('userForDirect').value;
+                        var selectedCartList = [];
+                        var selectedCountList = [];
 
-                    var selectedCart = document.getElementsByName('selectedCart');
-                    const userId = document.getElementById('userForDirect').value;
-                    var selectedCartList = [];
-                    var selectedCountList = [];
-
-                    selectedCart.forEach(function (checkbox) {
-                        if (checkbox.checked){
-                            var inputField = checkbox.parentNode.querySelector('input[type="hidden"]');
-                            var cartProdNo = inputField.value;
-                            selectedCartList.push(cartProdNo);
-                            var inputCount = checkbox.parentNode.querySelector('.prodCount');
-                            var countValue = inputCount.value;
-                            selectedCountList.push(countValue);
-                        }
-                    });
-
-                    console.log(selectedCartList);
-                    console.log(selectedCountList);
-
-                    const jsonDate = {
-                        cartProdNo : selectedCartList,
-                        count : selectedCountList
-                    };
-
-                    fetchPut(`/lotteon/cart/update`, jsonDate)
-                        .then(data => {
-                            console.log(data); // 서버로부터 받은 데이터 출력 또는 처리
-
-                            var selectedProdInput = document.getElementById('selectedProd');
-                            selectedProdInput.value = selectedCartList.join(',');
-                            const form = document.getElementById('buyForm');
-                            form.submit();
-
-                        })
-                        .catch(error => {
-                            console.error(error); // 오류 처리
+                        selectedCart.forEach(function (checkbox) {
+                            if (checkbox.checked){
+                                var inputField = checkbox.parentNode.querySelector('input[type="hidden"]');
+                                var cartProdNo = inputField.value;
+                                selectedCartList.push(cartProdNo);
+                                var inputCount = checkbox.parentNode.querySelector('.prodCount');
+                                var countValue = inputCount.value;
+                                selectedCountList.push(countValue);
+                            }
                         });
+
+                        console.log(selectedCartList);
+                        console.log(selectedCountList);
+
+                        const jsonDate = {
+                            cartProdNo : selectedCartList,
+                            count : selectedCountList
+                        };
+
+                        fetchPut(`/lotteon/cart/update`, jsonDate)
+                            .then(data => {
+                                console.log(data); // 서버로부터 받은 데이터 출력 또는 처리
+
+                                var selectedProdInput = document.getElementById('selectedProd');
+                                selectedProdInput.value = selectedCartList.join(',');
+                                const form = document.getElementById('buyForm');
+                                form.submit();
+
+                            })
+                            .catch(error => {
+                                console.error(error); // 오류 처리
+                            });
+                    }
                 }
-
             }
-
         }
 
         /* 3일후 계산하여 배송예정일에 출력 */
@@ -521,8 +520,10 @@
                     HOME > <span>패션·의류·뷰티</span> > <strong>장바구니</strong>
                 </p>
             </nav>
-            <div th:if="${cartProducts.size()==0}" id="emptyList">
-                <p> 장바구니가 비어있습니다. </p>
+            <div th:if="${cartProducts.size()==0}" id="cartList" >
+                <div style="justify-content: center; align-items: center;  padding: 20px 0">
+                    <p style="font-size: 16px; font-weight: bold;">🛒 장바구니가 비어있습니다. 🛒</p>
+                </div>
             </div>
             <div th:if="${cartProducts.size()!=0}" id="cartList">
                 <!-- 장바구니 목록 -->

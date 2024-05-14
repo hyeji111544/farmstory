@@ -53,8 +53,9 @@
             <div class="logo">
                 <div>
                     <a th:href="@{/}"><img th:src="@{/images/header_logo.png}" alt="로고"/></a>
-                    <form action="#">
-                        <input type="text" name="search"/>
+                    <form action="/lotteon/product/search" method="get">
+                        <input type="text" name="keyword"/>
+                        <input type="hidden" name="cateCode" id="cateCodeInput" value="">
                         <button><i class="fa fa-search"></i></button>
                     </form>
                 </div>

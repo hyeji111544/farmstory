@@ -47,6 +47,7 @@ public class SecurityConfig {
         // 인가 설정
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                                     .requestMatchers("/").permitAll()
+                                    .requestMatchers("/product/cart").authenticated()
                                     //.requestMatchers("/article/**").permitAll()
                                     //.requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
                                     //.requestMatchers("/manager/**").hasAnyAuthority("ADMIN", "MANAGER")

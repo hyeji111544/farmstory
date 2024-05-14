@@ -261,7 +261,7 @@
           <!-- 히트상품 영역 -->
           <h3 style="padding: 10px 20px 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
             <span id="prodHit" style="font-size: 20px; font-weight: bold">히트상품</span>
-            <a th:href="@{/}" style="font-size: 16px; color: #909090; float: right">더보기 &#10095;</a>
+            <a th:href="@{/product/list(cateCode='', sort='prodHit')}" style="font-size: 16px; color: #909090; float: right">더보기 &#10095;</a>
           </h3>
 
           <section class="hit productBox">
@@ -286,6 +286,7 @@
           <!-- 추천상품 영역 -->
           <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
             <span id="prodScore" style="font-size: 20px; font-weight: bold">추천상품</span>
+            <a th:href="@{/product/list(cateCode='', sort='prodScore')}" style="font-size: 16px; color: #909090; float: right">더보기 &#10095;</a>
           </h3>
 
           <section class="recommend productBox">
@@ -310,6 +311,7 @@
           <!-- 최신상품 영역 -->
           <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
             <span id="prodRdate" style="font-size: 20px; font-weight: bold">최신상품</span>
+            <a th:href="@{/product/list(cateCode='', sort='prodRdate')}" style="font-size: 16px; color: #909090; float: right">더보기 &#10095;</a>
           </h3>
 
           <section class="new productBox">
@@ -334,6 +336,7 @@
           <!-- 할인상품 영역 -->
           <h3 style="padding: 10px 0 10px 20px; margin-bottom: 10px; border-bottom: 1px solid #909090;">
             <span id="prodDiscount" style="font-size: 20px; font-weight: bold">할인상품</span>
+            <a th:href="@{/product/list(cateCode='', sort='prodDiscount')}" style="font-size: 16px; color: #909090; float: right">더보기 &#10095;</a>
           </h3>
 
           <section class="discount productBox">
