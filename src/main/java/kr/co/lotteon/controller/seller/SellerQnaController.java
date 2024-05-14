@@ -91,11 +91,13 @@ public class SellerQnaController {
     // 판매자 관리페이지 - NOTICE List
     @GetMapping("/seller/cs/notice/list")
     public String sellerNoticeList(Model model, PageRequestDTO pageRequestDTO,
-                                   @RequestParam(value = "noticeCate", required = false) String noticeCate){
-        PageResponseDTO noticeList = sellerQnaService.selectSellerNoticeList(pageRequestDTO, noticeCate);
+                                   @RequestParam(value = "noticeCate", required = false) String noticeCate,
+                                   @RequestParam(value = "noticeType", required = false) String noticeType){
+        PageResponseDTO noticeList = sellerQnaService.selectSellerNoticeList(pageRequestDTO, noticeCate,noticeType);
 
         model.addAttribute("noticeCate",noticeCate);
         model.addAttribute("noticeList", noticeList);
+        model.addAttribute("noticeType", noticeType);
         return "/seller/cs/notice/list";
     }
 
