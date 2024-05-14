@@ -14,6 +14,8 @@ public class ProductPageResponseDTO {
     private String type;
     private String keyword;
     private String cateCode;
+    private String min;
+    private String max;
 
     private List<ProductDTO> dtoList;
     private int pg;

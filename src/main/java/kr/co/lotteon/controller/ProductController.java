@@ -98,9 +98,12 @@ public class ProductController {
 
         String setSortType = productPageRequestDTO.getSort();
         String setCateCode = productPageRequestDTO.getCateCode();
+        pageResponseDTO.setMin(productPageRequestDTO.getMin());
+        pageResponseDTO.setMax(productPageRequestDTO.getMax());
         pageResponseDTO.setCateCode(setCateCode);
         model.addAttribute("setSortType", setSortType);
         model.addAttribute(pageResponseDTO);
+        log.info("pageResponseDTO : " + pageResponseDTO);
 
 
         return "/product/search";
@@ -255,20 +258,14 @@ public class ProductController {
         return "/product/cart";
     }
 
-    // 장바구니 이동
-    /*
-    @GetMapping("/product/cartTest")
-    public String prodCartTest(@RequestParam("userId") String userId, Model model){
-        int cartNo = productService.findCartNoByUserId(userId);
-        if (cartNo != 0){
-            Map<String, List<CartInfoDTO>> cartProducts = testService.findCartProdNoTest(cartNo);
-            model.addAttribute("cartProducts", cartProducts);
-        }
+    // 쿠폰존 이동
+    @GetMapping("/product/couponZone")
+    public String couponZone(){
 
-        return "/product/cartTest";
+        return "/product/couponZone";
     }
 
-     */
+
 
     // 상품 주문 이동
     @GetMapping("/product/order")

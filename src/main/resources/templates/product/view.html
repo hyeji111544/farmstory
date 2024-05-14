@@ -348,29 +348,42 @@
                     console.log(userId);
                     console.log(prodNo);
                     // 카운터 문서객체 생성
-                    const prodCounts = document.querySelectorAll('input.numInput[name="num"]');
+                    const prodCounts = document.querySelectorAll('input[name="num"]');
+                    console.log("prodCounts"+prodCounts);
                     // 옵션 문서객체 생성
                     const optDetailsNo = document.querySelectorAll('input[name="optDetailNo"]');
                     // 옵션과 갯수 리스트 저장할 배열 선언
                     const jsonDataArray = [];
 
-                    // optDetailNo 갯수만큼 반복하며 jsonData 를 저장함
-                    optDetailsNo.forEach((optDetailsNo, index) => {
-                        const optNoValue = optDetailsNo.value;
-                        const prodCountValue = prodCounts[index].value;
+                    if (optDetailsNo.length!==0){
+                        optDetailsNo.forEach((optDetailsNo, index) => {
+                            const optNoValue = optDetailsNo.value;
+                            const prodCountValue = prodCounts[index].value;
 
-                        console.log("prodOpt : " + optNoValue);
+                            console.log("prodOpt : " + optNoValue);
+                            console.log("count : " + prodCountValue);
+
+                            const jsonData = {
+                                "userId" : userId,
+                                "prodNo" : prodNo,
+                                "optNo" : optNoValue,
+                                "wishCount" : prodCountValue
+                            };
+                            jsonDataArray.push(jsonData);
+                        });
+                        console.log(jsonDataArray);
+                    }else {
+                        const prodCountValue = prodCounts[0].value;
                         console.log("count : " + prodCountValue);
-
                         const jsonData = {
                             "userId" : userId,
                             "prodNo" : prodNo,
-                            "optNo" : optNoValue,
+                            "optDetailNo" : 0,
                             "wishCount" : prodCountValue
-                        };
+                        }
                         jsonDataArray.push(jsonData);
-                    });
-                    console.log(jsonDataArray);
+                    }
+
 
                     const data = fetchPost(`/lotteon/product/view/insertWish`, jsonDataArray)
                         .then(response => {
@@ -441,7 +454,7 @@
                             window.location.href = "/lotteon/product/orderDirect";
                         })
                         .catch(error => {
-                            console.error("장바구니 추가에 실패했습니다.",error);
+                            console.error("주문창 이동에 실패했습니다.",error);
                             alert("잠시후에 다시 시도해 주세요.");
                         });
                 }
@@ -694,7 +707,6 @@
                                 <span class="eachCost" id="selectProdPrice" th:text="${#numbers.formatInteger((product.prodPrice * (100 - product.prodDiscount) * 0.01), 3, 'COMMA')}" style="font-size: 20px"></span>원
                                 <input type="hidden" id="saveProdPrice" th:value="${(product.prodPrice * (100 - product.prodDiscount)*0.01)}"/>
                             </span>
-                            <input type="hidden" name="optDetailNo" value=""/>
                         </div>
                     </div>
                 </div>
@@ -764,43 +776,43 @@
             <table border="0">
                 <tr>
                     <td>제품소재</td>
-                    <td>상세정보 직접입력</td>
+                    <td>컨텐츠 참조</td>
                 </tr>
                 <tr>
                     <td>색상</td>
-                    <td>상세정보 직접입력</td>
+                    <td>컨텐츠 참조</td>
                 </tr>
                 <tr>
                     <td>치수</td>
-                    <td>상세정보 직접입력</td>
+                    <td>컨텐츠 참조</td>
                 </tr>
                 <tr>
                     <td>제조자/수입국</td>
-                    <td>상세정보 직접입력</td>
+                    <td>컨텐츠 참조 / 대한민국</td>
                 </tr>
                 <tr>
                     <td>제조국</td>
-                    <td>상세정보 직접입력</td>
+                    <td>컨텐츠 참조</td>
                 </tr>
                 <tr>
                     <td>취급시 주의사항</td>
-                    <td>상세정보 직접입력</td>
+                    <td>제품 사용 설명서 참조</td>
                 </tr>
                 <tr>
                     <td>제조연월</td>
-                    <td>상세정보 직접입력</td>
+                    <td>컨텐츠 참조</td>
                 </tr>
                 <tr>
                     <td>품질보증기준</td>
-                    <td>상세정보 직접입력</td>
+                    <td>제품 이상 시 공정거래위원회 고시 소비자분쟁해결기준에 의거 보상합니다.</td>
                 </tr>
                 <tr>
                     <td>A/S 책임자와 전화번호</td>
-                    <td>상세정보 직접입력</td>
+                    <td> 롯데ON 고객센터(1899-7000) </td>
                 </tr>
                 <tr>
                     <td>주문후 예상 배송기간</td>
-                    <td>상세정보 직접입력</td>
+                    <td>전국 평균 기준 배송 후 3일 이내 도착</td>
                 </tr>
                 <tr>
                 <td colspan="2">구매, 교환, 반품, 배송, 설치 등과 관련하여 추가비용, 제한조건 등의 특이사항이 있는 경우</td>
@@ -822,7 +834,7 @@
             <h1 class="btnProdQna" onclick="changeTab()">상품 문의</h1>
         </nav>
 
-        <article class="review" id="prodReview">
+        <article class="review" id="prodReview" th:if="${prodReview.dtoList.size()!=0}">
             <ul>
                 <li th:each="review : ${prodReview.dtoList}">
                     <img th:src="@{/uploads/__${review.revThumb}__}">
@@ -848,6 +860,12 @@
                     <a th:href="@{/product/view(prodNo=${product.prodNo}, cateCode=${product.cateCode}, pg=${prodReview.start + 1})}">다음&nbsp;></a>
                 </span>
             </div>
+        </article>
+        <article class="review" id="prodReview" th:if="${prodReview.dtoList.size()==0}">
+            <ul>
+                <li style="padding: 20px 0; margin-left: 350px; border: 0; font-size: 18px"> 작성된 리뷰가 없습니다. </li>
+
+            </ul>
         </article>
         <!-- 상품 리뷰 내용 끝 -->
 

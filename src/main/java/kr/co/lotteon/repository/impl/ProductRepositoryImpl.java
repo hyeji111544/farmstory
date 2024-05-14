@@ -201,11 +201,6 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
 
 
-        log.info("expressions"+expressions.toString());
-
-
-        log.info("expression : " + expression);
-
         QueryResults<Tuple> results = jpaQueryFactory
                 .select(qProduct, qProductimg, qSeller)
                 .from(qProduct)
