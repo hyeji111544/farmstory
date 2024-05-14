@@ -567,6 +567,28 @@ footer p > strong {
   border-radius: 17px;
   color: #fff;
 }
+.pagingBox {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+}
+.pagingList > a {
+  display: inline-block;
+  min-width: 20px;
+  height: 20px;
+  padding: 4px;
+  text-align: center;
+  line-height: 20px;
+  background-color: #fafafa;
+  border: 1px solid #c4c4c4;
+  border-radius: 4px;
+}
+.pagingList > a:hover {
+  background-color: #dadada;
+}
+.on {
+  background-color: #dadada!important;
+}
 
 /* notice - 글보기 */
 #cs > .notice > .view {}
