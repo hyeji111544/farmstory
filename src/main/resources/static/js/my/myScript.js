@@ -1,35 +1,39 @@
+// 연락처 수정 //
+const btnChangeHp = document.getElementById('btnChangeHp');
+const hp1 = document.getElementsByName('hp1')[0];
+const hp2 = document.getElementsByName('hp2')[0];
+const hp3 = document.getElementsByName('hp3')[0];
+const sellerHp1 = document.getElementsByName('sellerHp1')[0];
+const sellerHp2 = document.getElementsByName('sellerHp2')[0];
+const sellerHp3 = document.getElementsByName('sellerHp3')[0];
+const sellerFax1 = document.getElementsByName('sellerFax1')[0];
+const sellerFax2 = document.getElementsByName('sellerFax2')[0];
+const sellerFax3 = document.getElementsByName('sellerFax3')[0];
+const hpError = document.getElementById('hpError');
+const FaxError = document.getElementById('sellerFaxError');
+const resultSellerName = document.getElementById('resultSellerName');
+const btnChangeSellerName = document.getElementById('btnChangeSellerName');
+const sellerNameCheck= document.getElementById('sellerName');
+const resultSellerHp= document.getElementById('resultSellerHp');
+const btnChangeSellerHp= document.getElementById('btnChangeSellerHp');
+const sellerHpError= document.getElementById('sellerHpError');
+const btnChangeSellerFax = document.getElementById('btnChangeSellerFax');
+
+
+
+
+let isHpOk    = false;
+let isNameOk  = false;
+let isFaxOk = false;
+const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
+const reName  = /^[가-힣]{2,10}$/
+let reFax = /^\d{3}-\d{3,4}-\d{4}$/;
+let isPassOk  = false;
+const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
+
 window.onload = function (){
 //// my/info ////
-
-    // 연락처 수정 //
-    const btnChangeHp = document.getElementById('btnChangeHp');
-    const hp1 = document.getElementsByName('hp1')[0];
-    const hp2 = document.getElementsByName('hp2')[0];
-    const hp3 = document.getElementsByName('hp3')[0];
-    const sellerHp1 = document.getElementsByName('sellerHp1')[0];
-    const sellerHp2 = document.getElementsByName('sellerHp2')[0];
-    const sellerHp3 = document.getElementsByName('sellerHp3')[0];
-    const sellerFax1 = document.getElementsByName('sellerFax1')[0];
-    const sellerFax2 = document.getElementsByName('sellerFax2')[0];
-    const sellerFax3 = document.getElementsByName('sellerFax3')[0];
-    const hpError = document.getElementById('hpError');
-    const FaxError = document.getElementById('sellerFaxError');
-    const resultSellerName = document.getElementById('resultSellerName');
-    const btnChangeSellerName = document.getElementById('btnChangeSellerName');
-    const sellerNameCheck= document.getElementById('sellerName');
-    const resultSellerHp= document.getElementById('resultSellerHp');
-    const btnChangeSellerHp= document.getElementById('btnChangeSellerHp');
-    const sellerHpError= document.getElementById('sellerHpError');
     const userId = document.getElementById('userId').innerText;
-    const btnChangeSellerFax = document.getElementById('btnChangeSellerFax');
-
-    let isHpOk    = false;
-    let isNameOk  = false;
-    let isFaxOk = false;
-    const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
-    const reName  = /^[가-힣]{2,10}$/
-    let reFax = /^\d{2,3}-\d{3,4}-\d{4}$/;
-
     // 판매자 이름 유효성 검사
     if(sellerNameCheck){
     sellerNameCheck.addEventListener('blur', function (){
@@ -62,8 +66,12 @@ window.onload = function (){
                 sellerNameCheck.readOnly = false;
                 btnChangeSellerName.classList.remove('change');
                 btnChangeSellerName.classList.add('save');
-            } else if (btnChangeSellerName.className === 'save') {
-
+            } else if (btnChangeSellerName.className === 'save'){
+                if (sellerNameCheck.value.trim() === "") {
+                    // 수정 칸이 비어 있으면 수정하지 않음
+                    alert("수정할 이름을 입력하세요.");
+                    return;
+                }
                 const userIdValue = document.getElementById('userId').innerText;
                 const sellerNameValue = document.getElementById('sellerName').value;
                 e.preventDefault();
@@ -83,7 +91,7 @@ window.onload = function (){
                     .then(data => {
                         console.log(data);
                         if (data === 1) {
-                            alert(`판매자 이름이 수정되었습니다.`);
+                            alert(`수정 완료!`);
                             sellerNameCheck.readOnly = true;
                             sellerNameCheck.style.border = "0";
                             sellerNameCheck.classList.add('change');
@@ -128,7 +136,8 @@ window.onload = function (){
                 let savedSellerHp2 = sellerHp2.value;
                 let savedSellerHp3 = sellerHp3.value;
                 let sellerHp = savedSellerHp1 + "-" + savedSellerHp2 + "-" + savedSellerHp3;
-
+                console.log(sellerHp)
+                console.log(userId)
                 const jsonData = {
                     "userId": userId,
                     "sellerHp": sellerHp
@@ -165,7 +174,7 @@ window.onload = function (){
                                         sellerHp3.style.border = "0";
                                         btnChangeSellerHp.classList.add('change');
                                         btnChangeSellerHp.classList.remove('save');
-                                        alert("수정완료");
+                                        alert("수정 완료!");
                                     } else {
                                         alert("수정실패");
                                     }
@@ -178,174 +187,6 @@ window.onload = function (){
                     })
                     .catch(err => console.log(err));
             }
-        }
-    }
-    // 회원 연락처 수정
-    btnChangeHp.onclick = function (event) {
-
-        const totalHp = hp1.value + "-" + hp2.value + "-" + hp3.value;
-        const value = totalHp;
-        const type = "userHp";
-
-        if (!value.match(reHp)) {
-            hpError.innerText = "유효하지 않은 전화번호입니다.";
-            hpError.style.color = "red";
-            isHpOk = false;
-            return; // 여기서 끝!
-        }
-        // input태그 활성화
-        if (btnChangeHp.className === 'change') {
-            hp1.value = "";
-            hp2.value = "";
-            hp3.value = "";
-            hp1.style.border = "1px solid #999";
-            hp2.style.border = "1px solid #999";
-            hp3.style.border = "1px solid #999";
-            hp1.readOnly = false;
-            hp2.readOnly = false;
-            hp3.readOnly = false;
-            btnChangeHp.classList.remove('change');
-            btnChangeHp.classList.add('save');
-
-        } else if (btnChangeHp.className === 'save') {
-            // 수정 연락처 저장
-            let saveHp1 = hp1.value;
-            let saveHp2 = hp2.value;
-            let saveHp3 = hp3.value;
-            let userHp = saveHp1 + "-" + saveHp2 + "-" + saveHp3;
-
-            const jsonData = {
-                "userId" : userId,
-                "userHp" : userHp
-            };
-
-            // 2. 중복 체크 (DB)
-            fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-
-                    if (data.result > 0) {
-                        // 중복일 경우
-                        hpError.innerText = "중복된 전화번호입니다.";
-                        hpError.style.color = "red";
-                        isHpOk = false;
-                    } else {
-                        // 중복이 아닐경우
-                        hpError.innerText = "사용가능한 전화입니다.";
-                        hpError.style.color = "green";
-                        isHpOk = true;
-
-                        // 중복이 아닐 때 수정 연락처 저장 요청
-                        fetch("/lotteon/my/updateHp", {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(jsonData)
-                        })
-                            .then(response => {
-                                if (response.ok) {
-                                    hp1.readOnly = true;
-                                    hp2.readOnly = true;
-                                    hp3.readOnly = true;
-                                    hp1.style.border = "0";
-                                    hp2.style.border = "0";
-                                    hp3.style.border = "0";
-                                    btnChangeHp.classList.add('change');
-                                    btnChangeHp.classList.remove('save');
-                                    hpError.innerText = "";
-                                    alert("수정 완료")
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                // 저장 완료 후 처리할 내용
-                            })
-                            .catch(err => console.log(err));
-                    }
-                })
-                .catch(err => console.log(err));
-        }
-    }
-    // 회원 팩스번호 수정
-    btnChangeSellerFax.onclick = function (event) {
-
-        const totalFax = sellerFax1.value + "-" + sellerFax2.value + "-" + sellerFax3.value;
-        const value = totalFax;
-        const type = "fax";
-
-        if (!value.match(reFax)) {
-            FaxError.innerText = "유효하지 않은 팩스번호입니다.";
-            FaxError.style.color = "red";
-            isFaxOk = false;
-            return; // 여기서 끝!
-        }
-        // input태그 활성화
-        if (btnChangeSellerFax.className === 'change') {
-            sellerFax1.value = "";
-            sellerFax2.value = "";
-            sellerFax3.value = "";
-            sellerFax1.style.border = "1px solid #999";
-            sellerFax2.style.border = "1px solid #999";
-            sellerFax3.style.border = "1px solid #999";
-            sellerFax1.readOnly = false;
-            sellerFax2.readOnly = false;
-            sellerFax3.readOnly = false;
-            btnChangeSellerFax.classList.remove('change');
-            btnChangeSellerFax.classList.add('save');
-        } else if (btnChangeSellerFax.className === 'save') {
-            // 수정 연락처 저장
-            let saveFax1 = sellerFax1.value;
-            let saveFax2 = sellerFax2.value;
-            let saveFax3 = sellerFax3.value;
-            let fax = saveFax1 + "-" + saveFax2 + "-" + saveFax3;
-
-            const jsonData = {
-                "userId": userId,
-                "fax": fax
-            };
-            // 2. 중복 체크 (DB)
-            fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-
-                    if (data.result > 0) {
-                        // 중복일 경우
-                        FaxError.innerText = "중복된 전화번호입니다.";
-                        FaxError.style.color = "red";
-                        isHpOk = false;
-                    } else {
-                        // 중복이 아닐경우
-                        FaxError.innerText = "사용가능한 전화입니다.";
-                        FaxError.style.color = "green";
-                        isHpOk = true;
-
-                        fetch("/lotteon/my/updateFax", {
-                            method: 'POST',
-                            headers: {'Content-Type': 'application/json'},
-                            body: JSON.stringify(jsonData)
-                        })
-                            .then(response => {
-                                if (response.ok) {
-                                    sellerFax1.readOnly = true;
-                                    sellerFax2.readOnly = true;
-                                    sellerFax3.readOnly = true;
-                                    sellerFax1.style.border = "0";
-                                    sellerFax2.style.border = "0";
-                                    sellerFax3.style.border = "0";
-                                    btnChangeSellerFax.classList.add('change');
-                                    btnChangeSellerFax.classList.remove('save');
-                                } else {
-                                    alert("실패했습니다.")
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                            })
-                            .catch(err => console.log(err));
-                    }
-                })
-                .catch(err => console.log(err));
         }
     }
 
@@ -504,72 +345,6 @@ window.onload = function (){
             }
         }
     }
-    // 유효성 검사
-    let isPassOk  = false;
-    const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
-
-    // 비밀번호 수정 //
-    const btnChangePass = document.getElementById('btnChangePass');
-    const changePw = document.getElementById('changePw');
-    const resultPw = document.getElementById('resultPw');
-
-    // 비밀번호 유효성 체크
-    if(changePw){
-    changePw.addEventListener('blur', function (){
-        const value = changePw.value;
-        const type = "userPw";
-        //1. 정규 표현식 통과
-        if (!value.match(rePass)) {
-            resultPw.innerText = "유효하지 않은 패스워드입니다.";
-            resultPw.style.color = "red";
-            changePw.style.border = "1px solid red";
-            isPassOk = false;
-            return; // 여기서 끝!
-        } else {
-            resultPw.innerText = "사용가능한 비밀번호입니다.";
-            resultPw.style.color = "green";
-            changePw.style.border = "1px solid green";
-            isPassOk = true;
-            return; // 여기서 끝!
-        }
-    });
-    }
-    btnChangePass.onclick = function (){
-        // input태그 활성화
-        if (btnChangePass.className === 'change') {
-            changePw.style.display = "inline-block";
-            changePw.style.border = "1px solid #999";
-            btnChangePass.classList.remove('change');
-            btnChangePass.classList.add('save');
-
-        } else if (btnChangePass.className === 'save') {
-            // 수정 비밀번호 저장
-            let savePw = changePw.value;
-            console.log(savePw);
-            const userId = document.getElementById('userId').innerText;
-            const jsonData = {
-                "userId" : userId,
-                "userPw" : savePw
-            }
-            fetch("/lotteon/my/updatePw", {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(jsonData)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        changePw.style.display = "none";
-                        btnChangePass.classList.add('change');
-                        btnChangePass.classList.remove('save');
-                        alert("비밀번호 수정이 완료되었습니다.");
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                })
-                .catch(err => console.log(err))
-        }
-    }
 
     const changeAddr= document.getElementById('changeAddr');
     const doneChangeAddr= document.getElementById('doneChangeAddr');
@@ -606,6 +381,11 @@ window.onload = function (){
         const addr2 = userAddr2.value;
         const userId = userIdValue.innerText;
 
+        if (doneChangeAddr.value.trim() === "") {
+            // 수정 칸이 비어 있으면 수정하지 않음
+            alert("수정할 이름을 입력하세요.");
+            return;
+        }
         const jsonData = {
             "userZip" : zip,
             "userId" : userId,
@@ -631,6 +411,7 @@ window.onload = function (){
                     userZip.readOnly = true;
                     userAddr1.readOnly = true;
                     userAddr2.readOnly = true;
+                    alert("수정 완료!")
                 }else {
                     alert("수정에 실패했습니다.")
                 }
@@ -666,3 +447,233 @@ window.onload = function (){
         }
     }
 }
+
+// 회원 팩스번호 수정
+function changeSellerFax() {
+
+    const totalFax = sellerFax1.value + "-" + sellerFax2.value + "-" + sellerFax3.value;
+    const value = totalFax;
+    const type = "fax";
+
+
+    if (!value.match(reFax)) {
+        FaxError.innerText = "유효하지 않은 팩스번호입니다.";
+        FaxError.style.color = "red";
+        isFaxOk = false;
+        return; // 여기서 끝!
+    }
+    // input태그 활성화
+    if (btnChangeSellerFax.className === 'change') {
+        sellerFax1.value = "";
+        sellerFax2.value = "";
+        sellerFax3.value = "";
+        sellerFax1.style.border = "1px solid #999";
+        sellerFax2.style.border = "1px solid #999";
+        sellerFax3.style.border = "1px solid #999";
+        sellerFax1.readOnly = false;
+        sellerFax2.readOnly = false;
+        sellerFax3.readOnly = false;
+        btnChangeSellerFax.classList.remove('change');
+        btnChangeSellerFax.classList.add('save');
+    } else if (btnChangeSellerFax.className === 'save') {
+        // 수정 연락처 저장
+        let saveFax1 = sellerFax1.value;
+        let saveFax2 = sellerFax2.value;
+        let saveFax3 = sellerFax3.value;
+        let fax = saveFax1 + "-" + saveFax2 + "-" + saveFax3;
+
+        const jsonData = {
+            "userId": userId,
+            "fax": fax
+        };
+        // 2. 중복 체크 (DB)
+        fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                if (data.result > 0) {
+                    // 중복일 경우
+                    FaxError.innerText = "중복된 팩스 번호입니다.";
+                    FaxError.style.color = "red";
+                    isHpOk = false;
+                } else {
+                    // 중복이 아닐경우
+                    FaxError.innerText = "사용가능한 팩스 번호입니다.";
+                    FaxError.style.color = "green";
+                    isHpOk = true;
+
+                    fetch("/lotteon/my/updateFax", {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                sellerFax1.readOnly = true;
+                                sellerFax2.readOnly = true;
+                                sellerFax3.readOnly = true;
+                                sellerFax1.style.border = "0";
+                                sellerFax2.style.border = "0";
+                                sellerFax3.style.border = "0";
+                                btnChangeSellerFax.classList.add('change');
+                                btnChangeSellerFax.classList.remove('save');
+                                alert('수정 완료!');
+                            } else {
+                                alert("실패했습니다.")
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                        })
+                        .catch(err => console.log(err));
+                }
+            })
+            .catch(err => console.log(err));
+    }
+}
+// 회원 연락처 수정
+function changeUserHp() {
+
+    const totalHp = hp1.value + "-" + hp2.value + "-" + hp3.value;
+    const value = totalHp;
+    const type = "userHp";
+
+    if (!value.match(reHp)) {
+        hpError.innerText = "유효하지 않은 전화번호입니다.";
+        hpError.style.color = "red";
+        isHpOk = false;
+        return; // 여기서 끝!
+    }
+    // input태그 활성화
+    if (btnChangeHp.className === 'change') {
+        hp1.value = "";
+        hp2.value = "";
+        hp3.value = "";
+        hp1.style.border = "1px solid #999";
+        hp2.style.border = "1px solid #999";
+        hp3.style.border = "1px solid #999";
+        hp1.readOnly = false;
+        hp2.readOnly = false;
+        hp3.readOnly = false;
+        btnChangeHp.classList.remove('change');
+        btnChangeHp.classList.add('save');
+
+    } else if (btnChangeHp.className === 'save') {
+        // 수정 연락처 저장
+        let saveHp1 = hp1.value;
+        let saveHp2 = hp2.value;
+        let saveHp3 = hp3.value;
+        let userHp = saveHp1 + "-" + saveHp2 + "-" + saveHp3;
+
+        const jsonData = {
+            "userId" : userId,
+            "userHp" : userHp
+        };
+
+        // 2. 중복 체크 (DB)
+        fetch(`/lotteon/member/checkUser/${type}/${value}`) // DB에서 중복체크하고 올 controller
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+
+                if (data.result > 0) {
+                    // 중복일 경우
+                    hpError.innerText = "중복된 전화번호입니다.";
+                    hpError.style.color = "red";
+                    isHpOk = false;
+                } else {
+                    // 중복이 아닐경우
+                    hpError.innerText = "사용가능한 전화입니다.";
+                    hpError.style.color = "green";
+                    isHpOk = true;
+
+                    // 중복이 아닐 때 수정 연락처 저장 요청
+                    fetch("/lotteon/my/updateHp", {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(jsonData)
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                hp1.readOnly = true;
+                                hp2.readOnly = true;
+                                hp3.readOnly = true;
+                                hp1.style.border = "0";
+                                hp2.style.border = "0";
+                                hp3.style.border = "0";
+                                btnChangeHp.classList.add('change');
+                                btnChangeHp.classList.remove('save');
+                                hpError.innerText = "";
+                                alert("수정 완료!")
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // 저장 완료 후 처리할 내용
+                        })
+                        .catch(err => console.log(err));
+                }
+            })
+            .catch(err => console.log(err));
+    }
+}
+function changeUserPw(){
+// 비밀번호 수정 //
+    const btnChangePass = document.getElementById('btnChangePass');
+    const changePw = document.getElementById('changePw');
+    const resultPw = document.getElementById('resultPw');
+
+    const value = changePw.value;
+    const type = "userPw";
+    // input태그 활성화
+    if (btnChangePass.className === 'change') {
+        changePw.style.display = "inline-block";
+        changePw.style.border = "1px solid #999";
+        btnChangePass.classList.remove('change');
+        btnChangePass.classList.add('save');
+
+    } else if (btnChangePass.className === 'save') {
+        //1. 정규 표현식 통과
+        if (!value.match(rePass)) {
+            resultPw.innerText = "유효하지 않은 패스워드입니다.";
+            resultPw.style.color = "red";
+            changePw.style.border = "1px solid red";
+            isPassOk = false;
+            return; // 여기서 끝!
+        } else {
+            resultPw.innerText = "사용가능한 비밀번호입니다.";
+            resultPw.style.color = "green";
+            changePw.style.border = "1px solid green";
+            isPassOk = true;
+            // 수정 비밀번호 저장
+            let savePw = changePw.value;
+            console.log(savePw);
+            const userId = document.getElementById('userId').innerText;
+            const jsonData = {
+                "userId" : userId,
+                "userPw" : savePw
+            }
+            fetch("/lotteon/my/updatePw", {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(jsonData)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        changePw.style.display = "none";
+                        btnChangePass.classList.add('change');
+                        btnChangePass.classList.remove('save');
+                        alert("수정 완료!");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                })
+                .catch(err => console.log(err))
+            return; // 여기서 끝!
+        }
+
+    }
+}
+

@@ -70,28 +70,21 @@
           </tr>
         </table>
 
-        <div class="page">
-                <span class="prev" >
+        <div class="pagingBox">
+                <div class="pagingList" >
                     <!-- 이전 버튼 -->
-                     <a th:if="${pageResponseDTO.prev && qnaCate == null}" th:href="@{/cs/qna/list(pg=${pageResponseDTO.start - 1})}"> 이전</a>
+                    <a th:if="${pageResponseDTO.prev && qnaCate == null}" th:href="@{/cs/qna/list(pg=${pageResponseDTO.start - 1})}"> 이전</a>
                     <a th:if="${pageResponseDTO.prev && qnaCate != null}" th:href="@{/cs/qna/list(pg=${pageResponseDTO.start - 1}, qnaCate=${qnaCate})}"> 이전</a>
-                </span>
-          <!-- 페이지 링크 -->
-          <span class="num">
-                  <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
-                 <a th:if="${qnaCate == null}" th:href="@{/cs/qna/list(pg=${num})}"
-                    th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
-                    th:text="${num}"></a>
-                <a th:if="${qnaCate != null}" th:href="@{/cs/qna/list(pg=${num}, qnaCate=${qnaCate})}"
-                   th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'"
-                   th:text="${num}"></a>
+                    <!-- 페이지 링크 -->
+                    <th:block th:each="num:${#numbers.sequence(pageResponseDTO.start, pageResponseDTO.end)}">
+                      <a th:if="${qnaCate == null}" th:href="@{/cs/qna/list(pg=${num})}" th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'" th:text="${num}"></a>
+                      <a th:if="${qnaCate != null}" th:href="@{/cs/qna/list(pg=${num}, qnaCate=${qnaCate})}" th:class="${pageResponseDTO.pg == num} ? 'current' : 'off'" th:text="${num}"></a>
                     </th:block>
-                </span>
-          <!-- 다음 버튼 -->
-          <span class="next">
+
+                    <!-- 다음 버튼 -->
                     <a th:if="${pageResponseDTO.next && qnaCate == null}" th:href="@{/cs/qna/list(pg=${pageResponseDTO.end + 1})}"> 다음</a>
                     <a th:if="${pageResponseDTO.next && qnaCate != null}" th:href="@{/cs/qna/list(pg=${pageResponseDTO.end + 1}, qnaCate=${qnaCate})}"> 다음</a>
-                </span>
+                </div>
         </div>
         <a th:href="@{/cs/qna/write(qnaCate=${qnaCate})}"><input type="button" value="문의하기" style=" float: right; background-color: #4291e9; color: white; border: none; padding: 10px 20px; cursor: pointer;" /></a>
       </article>

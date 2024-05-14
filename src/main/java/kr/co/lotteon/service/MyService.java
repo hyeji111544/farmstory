@@ -133,7 +133,7 @@ public class MyService {
     public ResponseEntity<?> myInfoUpdateSellerHp(String userId, String sellerHp){
         long result = sellerRepository.updateSellerHpByUserId(userId,sellerHp);
         log.info("userId :" + userId);
-        log.info("sellerName :" + sellerHp);
+        log.info("sellerHp :" + sellerHp);
 
         if(result > 0){
             //업데이트가 됐을경우
