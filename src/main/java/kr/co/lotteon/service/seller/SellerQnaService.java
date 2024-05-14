@@ -112,14 +112,16 @@ public class SellerQnaService {
     }
 
     // 판매자 관리페이지 - NOTICE List - 목록조회
-    public PageResponseDTO selectSellerNoticeList(PageRequestDTO pageRequestDTO, String noticeCate) {
+    public PageResponseDTO selectSellerNoticeList(PageRequestDTO pageRequestDTO, String noticeCate,String noticeType) {
         Pageable pageable = pageRequestDTO.getPageable("noticeNo");
 
         Page<Notice> pageNotice = null;
         if (noticeCate == null){
             pageNotice = noticeRepository.findAllByOrderByNoticeDateDesc(pageable);
-        }else {
+        }else if(noticeCate != null && noticeType == null) {
             pageNotice = adminNoticeRepository.findByNoticeCateOrderByNoticeDateDesc(noticeCate, pageable);
+        }else if(noticeCate != null && noticeType != null){
+            pageNotice = adminNoticeRepository.findByNoticeCateAndNoticeTypeOrderByNoticeDateDesc(noticeCate,noticeType,pageable);
         }
 
         List<NoticeDTO> dtoList = pageNotice.getContent().stream()
