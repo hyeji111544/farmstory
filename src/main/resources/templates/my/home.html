@@ -124,11 +124,51 @@
                            break;
                    }
                });
-
            }
 
            //changePoint 사용일때 - 출력
             const changePoint = document.getElementById("changePoint");
+
+            // 제품 상세 모달 정보 조회
+            function orderDetailModal() {
+                const button = event.target;
+                const orderNo = button.innerText;
+
+                fetch(`/lotteon/my/home/orderDetailCheck/${orderNo}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        console.log(data.orderDetailDTOList);
+                        console.log(data.orderNoInfo);
+                        const orderDTOs = data.orderDetailDTOList;
+                        const orderInfo = data.orderNoInfo[0];
+                        console.log("orderDTOs: " + JSON.stringify(orderDTOs));
+                        console.log("orderInfo: " + JSON.stringify(orderInfo));
+
+                        const popOrder = document.getElementById('popOrder');
+                        const orderUserName = document.getElementById('orderUserName')
+                        const orderUserHp = document.getElementById('orderUserHp')
+                        const orderUserDel = document.getElementById('orderUserDel')
+                        const orderUserMemo = document.getElementById('orderUserMemo')
+
+                        orderUserName.innerText = orderInfo.orderReceiver;
+                        orderUserHp.innerText = orderInfo.orderHp;
+                        orderUserDel.innerText = orderInfo.orderAddr;
+                        orderUserMemo.innerText = orderInfo.orderMemo;
+
+                    })
+                    .catch(err => console.log(err))
+            }
+
+            function orderStatusUpdate(){
+                const button = event.target;
+
+                fetch(`/lotteon/my/home/orderStatusUpdate/`)
+                    .then()
+                    .then()
+                    .catch()
+
+            }
 
 
         </script>
@@ -182,7 +222,7 @@
                         <div class="orderByCompany latest" th:each="linkedMap : ${myOrder}">
                             <div class="myOrderTitle">
                                 <p th:text="${linkedMap.value.get(0).detailDate}"></p>
-                                <p class="orderNo">주문번호<span th:text="${linkedMap.key}" style="cursor: pointer"></span></p>
+                                <p class="orderNo">주문번호<span th:text="${linkedMap.key}" onclick="orderDetailModal()" style="cursor: pointer"></span></p>
                                 <p>
                                     <img th:src="@{/images/icon-arrow-top.png}" onclick="accordionBtn()"/>
                                 </p>
@@ -197,7 +237,7 @@
                                 </div>
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
-                                    <span class="receive">수취확인</span>
+                                    <span class="receive" onclick="checkComplete">수취확인</span>
                                     <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}">상품평쓰기</span>
                                     <span>반품신청</span>
                                     <span class="btnQuestion">문의하기</span>
@@ -240,7 +280,7 @@
                             <div th:text="${#strings.substring(point.changeDate, 0, 10)}"></div>
                             <div id="changeType" th:text="${point.changeType}"></div>
                             <div id="changePoint" class="pointAfter">
-                                <span th:if="${point.changeType == '사용'}">-</span>
+                                <span th:if="${point.changeType == '사용'}"></span>
                                 <span th:text="${#numbers.formatInteger(point.changePoint, 3, 'COMMA')}" style="font-size: 16px"></span>
                             </div>
                             <div th:text="${point.changeCode}"></div>

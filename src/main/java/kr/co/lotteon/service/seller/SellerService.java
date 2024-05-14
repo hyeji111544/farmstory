@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.NoticeRepository;
-import kr.co.lotteon.repository.OrderdetailRepository;
+import kr.co.lotteon.repository.OrderDetailRepository;
 import kr.co.lotteon.repository.ProdQnaRepository;
 import kr.co.lotteon.repository.SellerRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 public class SellerService {
 
     private final SellerRepository sellerRepository;
-    private final OrderdetailRepository orderdetailRepository;
+    private final OrderDetailRepository orderdetailRepository;
     private final ProdQnaRepository prodQnaRepository;
     private final NoticeRepository noticeRepository;
     private final ModelMapper modelMapper;
