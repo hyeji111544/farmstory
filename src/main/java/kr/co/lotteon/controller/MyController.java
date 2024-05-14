@@ -3,13 +3,16 @@ package kr.co.lotteon.controller;
 import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.Coupons;
+import kr.co.lotteon.entity.Orders;
 import kr.co.lotteon.entity.PointHistory;
+import kr.co.lotteon.entity.QOrderDetail;
 import kr.co.lotteon.repository.UserPointRepository;
 import kr.co.lotteon.repository.PointHistoryRepository;
 import kr.co.lotteon.service.MyService;
 import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,6 +49,7 @@ public class MyController {
         // 최근주문내역
         LinkedHashMap<Integer, List<OrderDetailDTO>> myOrder = myService.myHomeSelectOrder(userId);
         model.addAttribute("myOrder", myOrder);
+        log.info("myOrder" +myOrder);
 
 
         // 포인트적립내역
@@ -264,6 +268,25 @@ public class MyController {
         PageResponseDTO wishList = myService.selectUserWish(userId, pageRequestDTO);
         model.addAttribute("wishList", wishList);
         return "/my/wish";
+    }
+
+    // 마이페이지 - 주문상세 모달 정보 조회
+    @GetMapping("/my/home/orderDetailCheck/{orderNo}")
+    public ResponseEntity<?> orderDetailCheck(@PathVariable int orderNo, OrderDetailDTO orderDetailDTO) {
+
+        log.info("orderNo : " + orderNo);
+        Map<String, List<?>> resultMap = myService.orderDetailCheck(orderNo, orderDetailDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+        //List<Orders> orderNoInfo = (List<Orders>) resultMap.get("orderNoInfo");
+        //List<OrderDetailDTO> orderDetailDTOList = (List<OrderDetailDTO>) resultMap.get("orderDetailDTOList");
+    }
+    
+    //마이페이지 - 주문상태 업데이트
+    @GetMapping("/lotteon/my/home/orderStatusUpdate/")
+    public void orderStatusUpdate(@RequestBody String detailStatus){
+
+
     }
 
 }
