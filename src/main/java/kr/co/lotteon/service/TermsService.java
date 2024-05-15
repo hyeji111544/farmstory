@@ -37,7 +37,6 @@ public class TermsService {
             termsDTO.setTermContent(eachTerm[1]);
             termsDTOList.add(termsDTO);
         }
-
         return termsDTOList;
     }
 
