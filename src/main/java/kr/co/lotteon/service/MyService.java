@@ -14,7 +14,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,9 +38,12 @@ public class MyService {
     private final OrderDetailRepository orderdetailRepository;
     private final WishRepository wishRepository;
     private final PointHistoryRepository pointHistoryRepository;
+    private final CartRepository cartRepository;
+    private final CartProductRepository cartProductRepository;
 
     private final PdReviewRepository pdReviewRepository;
     private final PdReviewImgRepository pdReviewImgRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final CouponsRepository couponsRepository;
     private final ModelMapper modelMapper;
@@ -633,9 +642,94 @@ public class MyService {
     }
 
     //마이페이지 - 주문상태 업데이트
-    public void updateOrderState(String prodNo){
+    public int updateOrderState(String prodNo, String detailNo){
         log.info("updateOrderState service");
         log.info("prodNo : "+prodNo);
+        int orderDetailNo = Integer.parseInt(detailNo);
+
+        Optional<OrderDetail> optOrderStatus = orderdetailRepository.findById(orderDetailNo);
+        if(optOrderStatus.isPresent()){
+            optOrderStatus.get().setDetailStatus("구매확정");
+            OrderDetail result = orderdetailRepository.save(optOrderStatus.get());
+            if(result.getDetailStatus().equals("구매확정")){
+                return 1;
+            }else {
+                return 0;
+            }
+        }else {
+            return 0;
+        }
     }
 
+    // 마이페이지 수취 확인
+    public ResponseEntity<?> orderReceive(@PathVariable int detailNo) {
+        Optional<OrderDetail> optOrderDetail = orderdetailRepository.findById(detailNo);
+        Map<String, Integer> resultMap = new HashMap<>();
+        if (optOrderDetail.isPresent()) {
+            optOrderDetail.get().setDetailStatus("구매확정");
+            OrderDetail saveOrderDetail = orderdetailRepository.save(optOrderDetail.get());
+            if (saveOrderDetail.getDetailStatus().equals("구매확정")) {
+                resultMap.put("result", 1);
+                return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+            }else {
+                resultMap.put("result", 0);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+            }
+        }else {
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
+
+    // 관심상품 삭제
+    public void deleteWish(int[] wishNoArr) {
+        for (int wishNo : wishNoArr) {
+            wishRepository.deleteById(wishNo);
+        }
+    }
+
+    // 관심상품 장바구니에 담기
+    public ResponseEntity<?> wishProdToCart(Map<String, String> requestData) {
+        String userId = requestData.get("userId");
+        int prodNo = Integer.parseInt(requestData.get("prodNo"));
+        int optNo = Integer.parseInt(requestData.get("optNo"));
+        int count = Integer.parseInt(requestData.get("count"));
+        Cart cart = cartRepository.findByUserId(userId);
+
+        CartProduct cartProduct = new CartProduct();
+        cartProduct.setCartNo(cart.getCartNo());
+        cartProduct.setProdNo(prodNo);
+        cartProduct.setCount(count);
+        cartProduct.setOptNo(optNo);
+
+        CartProduct saveCart = cartProductRepository.save(cartProduct);
+        Map<String, Integer> resultMap = new HashMap<>();
+        if (saveCart.getProdNo() == prodNo) {
+            resultMap.put("result", 1);
+            return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+        }else {
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
+
+    // 나의 설정 비밀번호 확인
+    public ResponseEntity<?> checkUserPw(String userPw, String userId) {
+        Optional<User> optUser = userRepository.findById(userId);
+        Map<String, Integer> resultMap = new HashMap<>();
+        if (optUser.isPresent()) {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            boolean result = encoder.matches(userPw, optUser.get().getUserPw());
+            if (result) {
+                resultMap.put("result", 1);
+                return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+            }else {
+                resultMap.put("result", 0);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+            }
+        }else {
+            resultMap.put("result", 0);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
  }

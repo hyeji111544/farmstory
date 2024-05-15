@@ -136,14 +136,8 @@
                 fetch(`/lotteon/my/home/orderDetailCheck/${orderNo}`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
-                        console.log(data.orderDetailDTOList);
-                        console.log(data.orderNoInfo);
                         const orderDTOs = data.orderDetailDTOList;
                         const orderInfo = data.orderNoInfo[0];
-                        console.log("orderDTOs: " + JSON.stringify(orderDTOs));
-                        console.log("orderInfo: " + JSON.stringify(orderInfo));
-
                         const popOrder = document.getElementById('popOrder');
                         const orderUserName = document.getElementById('orderUserName')
                         const orderUserHp = document.getElementById('orderUserHp')
@@ -153,8 +147,11 @@
                         orderUserName.innerText = orderInfo.orderReceiver;
                         orderUserHp.innerText = orderInfo.orderHp;
                         orderUserDel.innerText = orderInfo.orderAddr;
-                        orderUserMemo.innerText = orderInfo.orderMemo;
-
+                        if (orderInfo.orderMemo === "") {
+                            orderUserMemo.innerText = "배송 메모가 없습니다."
+                        }else {
+                            orderUserMemo.innerText = orderInfo.orderMemo;
+                        }
                     })
                     .catch(err => console.log(err))
             }
@@ -164,42 +161,40 @@
             //수취인확인 버튼 클릭
             function checkComplete(){
                 const button = event.target; // 클릭한 버튼
-                const confirm = button.parentNode; // 버튼의 부모
-                const myOrderRow = confirm.parentNode // 버튼의 부모의 부모
-                const myOrderInfo = myOrderRow.querySelector('.myOrderInfo') // 할아버지의 둘째
-                const detailNo = button.getAttribute('data-detailNo'); // 상품 번호
-                const prodNo = button.id; // 상품 번호
-
-                console.log(prodNo);
-
                 const popReceive = document.getElementById('popReceive'); // 상품평쓰기 창
-
-                const productNo = popReceive.querySelector('.productNo');
                 const prodDetailNo = popReceive.querySelector('.detailNo');
-
-                productNo.value = prodNo;
-                prodDetailNo.value = detailNo;
-
+                prodDetailNo.value = button.id;
             }
 
-            //수취인확인 버튼
-            function orderStatusUpdate() {
-                const prodNo = document.querySelector('.productNo').value;
-                const detailNo = document.querySelector('.detailNo').value;
+            // 수취확인
+            function orderReceiveUpdate() {
+                const popReceive = document.getElementById('popReceive');
+                const detailNo = popReceive.querySelector('.detailNo').value;
+                const userId = document.getElementsByClassName('userId')[0].value;
 
-                fetch(`/lotteon/my/home/orderStatusUpdate/{detailNo}`)
-                    .then(response => {
-                        // 처리할 내용
-                    })
+                fetch(`/lotteon/my/orderReceive/${detailNo}`)
+                    .then(response => response.json())
                     .then(data => {
-                        // 처리할 내용
+                        console.log(data);
+                        if (data.result > 0) {
+                            window.location.href = "/lotteon/my/home?userId="+userId;
+                        }else {
+                            alert("실패했습니다.");
+                        }
                     })
-                    .catch(error => {
-                        // 에러 처리
-                    });
+                    .catch(err => console.log(err))
             }
 
-
+            // 상품 문의 작성 버튼
+            function writeProdQna() {
+                const button = event.target; // 클릭한 버튼
+                const popQuestion = document.getElementById('popQuestion'); // 상품평쓰기 창
+                const userId = document.getElementsByClassName('userId')[0].value;
+                const prodNoTag = popQuestion.querySelector('.prodNo');
+                const userIdTag = popQuestion.querySelector('.userId');
+                prodNoTag.value = button.id;
+                userIdTag.value = userId;
+            }
         </script>
         <!--마이페이지 상단 회원 정보-->
         <nav>
@@ -209,6 +204,7 @@
                 <div class="UserInfo">
                     <p th:text="${#authentication.principal.user.userName}"></p>
                     <p th:text="${#authentication.principal.user.userGrade}"></p>
+                    <input type="hidden" class="userId" th:value="${#authentication.principal.user.userId}">
                 </div>
                 <ol>
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
@@ -266,10 +262,10 @@
                                 </div>
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
-                                    <span class="receive" onclick="checkComplete()" th:id="${orderList.prodNo}">수취확인</span>
+                                    <span class="receive" onclick="checkComplete()" th:id="${orderList.detailNo}">수취확인</span>
                                     <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}" th:data-detailNo="${orderList.detailNo}">상품평쓰기</span>
                                     <span>반품신청</span>
-                                    <span class="btnQuestion">문의하기</span>
+                                    <span class="btnQuestion" onclick="writeProdQna()" th:id="${orderList.prodNo}">문의하기</span>
                                 </div>
                             </div>
                         </div>
@@ -278,7 +274,7 @@
 
                 <!--포인트적립내역-->
                 <article class="point">
-                    <h3>포인트적립내역</h3>1
+                    <h3>포인트적립내역</h3>
                     <a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
 
                     <!--내역이 없을떄-->
@@ -408,6 +404,7 @@
                             <div th:text="${qna.qnaStatus}"></div>
                         </div>
                     </div>
+                    </th:block>
                 </article>
 
                 <!--확인해주세요-->

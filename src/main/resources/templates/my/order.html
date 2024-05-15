@@ -94,6 +94,99 @@
                         }
                     });
                 }
+                // Review - 별점
+                let rating = document.getElementsByClassName("rating");
+                Array.from(rating).forEach(function (element) {
+                    const revScore = parseInt(element.innerText);
+                    switch (revScore){
+                        case 1:
+                            element.classList.add('star1');
+                            break;
+                        case 2:
+                            element.classList.add('star2');
+                            break;
+                        case 3:
+                            element.classList.add('star3');
+                            break;
+                        case 4:
+                            element.classList.add('star4');
+                            break;
+                        case 5:
+                            element.classList.add('star5');
+                            break;
+                    }
+                });
+            }
+
+            //changePoint 사용일때 - 출력
+            const changePoint = document.getElementById("changePoint");
+
+            // 제품 상세 모달 정보 조회
+            function orderDetailModal() {
+                const button = event.target;
+                const orderNo = button.innerText;
+
+                fetch(`/lotteon/my/home/orderDetailCheck/${orderNo}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const orderDTOs = data.orderDetailDTOList;
+                        const orderInfo = data.orderNoInfo[0];
+                        const popOrder = document.getElementById('popOrder');
+                        const orderUserName = document.getElementById('orderUserName')
+                        const orderUserHp = document.getElementById('orderUserHp')
+                        const orderUserDel = document.getElementById('orderUserDel')
+                        const orderUserMemo = document.getElementById('orderUserMemo')
+
+                        orderUserName.innerText = orderInfo.orderReceiver;
+                        orderUserHp.innerText = orderInfo.orderHp;
+                        orderUserDel.innerText = orderInfo.orderAddr;
+                        if (orderInfo.orderMemo === "") {
+                            orderUserMemo.innerText = "배송 메모가 없습니다."
+                        }else {
+                            orderUserMemo.innerText = orderInfo.orderMemo;
+                        }
+                    })
+                    .catch(err => console.log(err))
+            }
+
+
+
+            //수취인확인 버튼 클릭
+            function checkComplete(){
+                const button = event.target; // 클릭한 버튼
+                const popReceive = document.getElementById('popReceive'); // 상품평쓰기 창
+                const prodDetailNo = popReceive.querySelector('.detailNo');
+                prodDetailNo.value = button.id;
+            }
+
+            // 수취확인
+            function orderReceiveUpdate() {
+                const popReceive = document.getElementById('popReceive');
+                const detailNo = popReceive.querySelector('.detailNo').value;
+                const userId = document.getElementsByClassName('userId')[0].value;
+
+                fetch(`/lotteon/my/orderReceive/${detailNo}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.result > 0) {
+                            window.location.href = "/lotteon/my/home?userId="+userId;
+                        }else {
+                            alert("실패했습니다.");
+                        }
+                    })
+                    .catch(err => console.log(err))
+            }
+
+            // 상품 문의 작성 버튼
+            function writeProdQna() {
+                const button = event.target; // 클릭한 버튼
+                const popQuestion = document.getElementById('popQuestion'); // 상품평쓰기 창
+                const userId = document.getElementsByClassName('userId')[0].value;
+                const prodNoTag = popQuestion.querySelector('.prodNo');
+                const userIdTag = popQuestion.querySelector('.userId');
+                prodNoTag.value = button.id;
+                userIdTag.value = userId;
             }
 
         </script>
@@ -105,6 +198,7 @@
                 <div class="UserInfo">
                     <p th:text="${#authentication.principal.user.userName}"></p>
                     <p th:text="${#authentication.principal.user.userGrade}"></p>
+                    <input type="hidden" class="userId" th:value="${#authentication.principal.user.userId}">
                 </div>
                 <ol>
                     <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">주문·배송<span class="delivery" th:text="${session.countOrder}"></span></a></li>
@@ -169,7 +263,7 @@
                         <div class="orderByCompany latest" th:each="linkedMap : ${MyOrderDTOList.myOrderDTOList}">
                             <div class="myOrderTitle">
                                 <p th:text="${linkedMap.value.get(0).detailDate}"></p>
-                                <p>주문번호<span th:text="${linkedMap.key}"></span></p>
+                                <p class="orderNo">주문번호<span th:text="${linkedMap.key}" onclick="orderDetailModal()" style="cursor: pointer"></span></p>
                                 <p>
                                     <img th:src="@{/images/icon-arrow-top.png}" onclick="accordionBtn()"/>
                                 </p>
@@ -177,17 +271,17 @@
                             <div class="myOrderRow" th:each="orderList : ${linkedMap.value}">
                                 <div><img th:src="@{/uploads/__${orderList.thumb190}__}"></div>
                                 <div class="myOrderInfo">
-                                    <p th:text="${orderList.prodCompany}"></p>
+                                    <p class="company" th:text="${orderList.prodCompany}" style="cursor: pointer"></p>
                                     <p class="InfoProdName" th:text="${orderList.prodName}"></p>
                                     <p th:text="${orderList.count}"></p>
                                     <p th:text="${#numbers.formatInteger(orderList.detailPrice,3,'COMMA')}"></p>
                                 </div>
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
-                                    <span>수취확인</span>
+                                    <span class="receive" onclick="checkComplete()" th:id="${orderList.detailNo}">수취확인</span>
                                     <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}" th:data-detailNo="${orderList.detailNo}">상품평쓰기</span>
                                     <span>반품신청</span>
-                                    <span>교환신청</span>
+                                    <span class="btnQuestion" onclick="writeProdQna()" th:id="${orderList.prodNo}">문의하기</span>
                                 </div>
                             </div>
                         </div>
