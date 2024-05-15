@@ -80,7 +80,7 @@ public class ProductController {
         Map<String, String> resultMap = prodCateService.findCateName(cate01, cate02, cate03);
         log.info("resultMap : " + resultMap);
         model.addAttribute("resultMap", resultMap);
-
+        log.info("pageResponseDTO : "  + pageResponseDTO);
 
         return "/product/list";
     }

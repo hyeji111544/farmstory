@@ -81,6 +81,15 @@
                 window.location.href = currentUrl.toString();
             }
 
+            // 상품 상태 확인
+            function checkProdStatus(event) {
+                const button = event.target;
+                const prod = button.closest('a');
+                if (prod.className === "판매중단") {
+                    event.preventDefault();
+                    alert("판매 중단된 상품입니다.");
+                }
+            }
 
         </script>
       <!-- 제목, 페이지 네비게이션 -->
@@ -112,7 +121,8 @@
       <!-- 상품목록 -->
         <section class="productBox">
             <div th:each="product, index:${productPageResponseDTO.dtoList}" class="product">
-                <a th:href="@{'/product/view?cateCode=' + ${product.cateCode} + '&sort='+ ${setSortType} + '&prodNo=' +  ${product.prodNo}}">
+                <a th:href="@{'/product/view?cateCode=' + ${product.cateCode} + '&sort='+ ${setSortType} + '&prodNo=' +  ${product.prodNo}}"
+                   th:class="${product.prodStatus}" onclick="checkProdStatus(event)">
                     <div class="thumb">
                         <img th:src="@{/uploads/__${product.thumb190}__}" alt="t1" />
                     </div>
