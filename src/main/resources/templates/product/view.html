@@ -647,7 +647,7 @@
                 <nav>
                     <h3>[[${product.prodName}]]</h3>
                     <p>[[${product.prodInfo}]]</p>
-                    <h5 th:if="${product.TReviewScore==5}" class="rating star5"><a href="#">상품평보기</a></h5>
+                    <h5 th:if="${product.TReviewScore==5}" class="rating star5"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=4 and product.TReviewScore<5}" class="rating star4"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=3 and product.TReviewScore<4}" class="rating star3"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
                     <h5 th:if="${product.TReviewScore>=2 and product.TReviewScore<3}" class="rating star2"><a href="#" onclick="scrollToSection('changTabBox')">상품평보기</a></h5>
@@ -930,6 +930,7 @@
                         <input type="hidden"  name="userId" th:value="${#authentication.principal.user.userId}">
                     </th:block>
                     <input type="hidden" name="prodNo" th:value="${product.prodNo}"/>
+                    <input type="hidden" name="cateCode" th:value="${product.cateCode}"/>
                     <input type="text" name="prodQnaTitle" placeholder="문의 제목"/>
                 </div>
                 <div>

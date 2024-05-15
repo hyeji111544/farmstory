@@ -275,14 +275,14 @@ public class ProductController {
 
     // 상품 문의 글 작성
     @PostMapping("/product/writeProdQna")
-    public String writeProdQna(ProdQnaDTO prodQnaDTO) {
+    public String writeProdQna(ProdQnaDTO prodQnaDTO, String cateCode) {
         log.info("prodQnaDTO : " + prodQnaDTO);
         prodQnaDTO.setProdQnaStatus("답변 대기중");
         int result = productService.writeProdQna(prodQnaDTO);
         if (result > 0) {
-            return "redirect:/product/view?prodNo=" + prodQnaDTO.getProdNo();
+            return "redirect:/product/view?prodNo=" + prodQnaDTO.getProdNo() + "&cateCode=" + cateCode;
         }else {
-            return "redirect:/product/view?prodNo=" + prodQnaDTO.getProdNo() + "&err=100";
+            return "redirect:/product/view?prodNo=" + prodQnaDTO.getProdNo() + "&cateCode=" + cateCode + "&err=100";
         }
     }
 

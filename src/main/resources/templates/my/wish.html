@@ -178,7 +178,7 @@
                             <input type="checkbox" th:value="${wish.wishNo}" class="eachCheckBox">
                             <img th:src="@{/uploads/__${wish.thumb190}__}">
                             <div>
-                                <a th:href="@{/product/view(prodNo=${wish.prodNo})}" th:text="${wish.prodName}"></a>
+                                <a th:href="@{/product/view(prodNo=${wish.prodNo}, cateCode=${wish.cateCode})}" th:text="${wish.prodName}"></a>
                                 <p th:if="${wish.optName != null}" th:text="${wish.optName}">옵션</p>
                                 <p th:text="${wish.wishCount}">수량</p>
                                 <p th:text="${#numbers.formatInteger(wish.prodPrice, 3, 'COMMA')}">가격</p>
