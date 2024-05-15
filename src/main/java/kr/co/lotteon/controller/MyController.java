@@ -284,8 +284,9 @@ public class MyController {
     
     //마이페이지 - 주문상태 업데이트
     @GetMapping("/lotteon/my/home/orderStatusUpdate/")
-    public void orderStatusUpdate(@RequestBody String detailStatus){
-
+    public void orderStatusUpdate(@RequestBody String prodNo){
+        log.info("prodNo : " + prodNo);
+        myService.updateOrderState(prodNo);
 
     }
 
