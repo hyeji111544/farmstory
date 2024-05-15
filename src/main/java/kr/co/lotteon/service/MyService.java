@@ -522,10 +522,12 @@ public class MyService {
                     String prodName = tuple.get(1, String.class);
                     Integer prodPrice = tuple.get(2, Integer.class);
                     String thumb190 = tuple.get(3, String.class);
+                    String cateCode = tuple.get(4, String.class);
                     WishDTO wishDTO = modelMapper.map(wish, WishDTO.class);
                     wishDTO.setProdName(prodName);
                     wishDTO.setProdPrice(prodPrice);
                     wishDTO.setThumb190(thumb190);
+                    wishDTO.setCateCode(cateCode);
                     return wishDTO;
                         }
                     ).toList();

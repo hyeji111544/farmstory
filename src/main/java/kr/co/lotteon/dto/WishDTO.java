@@ -22,4 +22,5 @@ public class WishDTO {
     private int prodPrice;
     private String thumb190;
     private String optName;
+    private String cateCode;
 }

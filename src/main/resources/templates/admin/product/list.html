@@ -93,7 +93,6 @@
                     <td style="width: 20px;"><input type="checkbox" name="상품코드"/></td>
                     <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb" style="width: 70px; height: 70px"></td>
                     <td style="width: 30px;">[[${product.prodNo}]]</td>
-                    <td style="width: 250px">[[${product.prodName}]]</td>
 
                     <td th:if="${product.prodStatus} != '판매중단'" style="width: 250px;">[[${product.prodName}]]</td>
                     <td th:if="${product.prodStatus} == '판매중단'" style="width: 250px; color: red">[[${product.prodName}]]</td>
