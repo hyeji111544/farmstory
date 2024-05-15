@@ -3,6 +3,54 @@
     layout:decorate="~{/layout/sellerLayout.html}">
 <!--내용 시작-->
     <section id="admin-product-list" layout:fragment="content">
+        <script>
+            function modifyProdStatus() {
+                const button = event.target;
+                const prodNameTd = button.parentNode.parentNode.querySelectorAll('td')[3];
+                const prodName = prodNameTd.innerText;
+                let result = false;
+                if (button.innerText === "[삭제]") {
+                    result = confirm("[" + prodName + "]" + "을(를) 삭제 하시겠습니까?");
+
+                    if (result) {
+                        const prodNo = button.className;
+                        const status = 1;
+                        fetch(`/lotteon/seller/product/modifyProdStatus/${prodNo}/${status}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                if (data.result > 0) {
+                                    alert("[" + prodName + "]" + " 상품의 상태가 [판매중단]으로 변경되었습니다.");
+                                    button.innerText = "[재판매]";
+                                    prodNameTd.style.color = "red";
+                                }else {
+                                    alert("실패했습니다.");
+                                }
+                            })
+                            .catch(err => console.log(err))
+                    }
+                }else {
+                    result = confirm("[" + prodName + "]" + "을(를) 재판매 하시겠습니까?");
+                    if (result) {
+                        const prodNo = button.className;
+                        const status = 2;
+                        fetch(`/lotteon/seller/product/modifyProdStatus/${prodNo}/${status}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                if (data.result > 0) {
+                                    alert("[" + prodName + "]" + " 상품의 상태가 [판매중]으로 변경되었습니다.");
+                                    button.innerText = "[삭제]";
+                                    prodNameTd.style.color = "#111";
+                                }else {
+                                    alert("실패했습니다.");
+                                }
+                            })
+                            .catch(err => console.log(err))
+                    }
+                }
+            }
+        </script>
         <nav>
             <h3>상품목록</h3>
             <p>
@@ -43,7 +91,10 @@
                     <td style="width: 20px;"><input type="checkbox" name="상품코드"/></td>
                     <td><img th:src="@{/uploads/__${product.thumb190}__}" class="thumb" style="width: 70px; height: 70px"></td>
                     <td style="width: 30px;">[[${product.prodNo}]]</td>
-                    <td style="width: 250px">[[${product.prodName}]]</td>
+
+                    <td th:if="${product.prodStatus} != '판매중단'" style="width: 250px;">[[${product.prodName}]]</td>
+                    <td th:if="${product.prodStatus} == '판매중단'" style="width: 250px; color: red">[[${product.prodName}]]</td>
+
                     <td th:text="${#numbers.formatInteger(product.prodPrice,3,'COMMA')} + '원'" style="width: 70px"></td>
                     <td th:text="${product.prodDiscount} + '%'" style="width: 40px">[[${product.prodDiscount}]]</td>
                     <td th:if="${product.prodPoint} > 999" th:text="${#numbers.formatInteger(product.prodPoint,3,'COMMA')} + 'P'" style="width: 60px"></td>
@@ -55,6 +106,9 @@
                     <td style="width: 80px">[[${product.prodCompany}]]</td>
                     <td>[[${product.prodHit}]]</td>
                     <td>
+                        <a th:if="${product.prodStatus} != '판매중단'" th:class="${product.prodNo}" onclick="modifyProdStatus()" style="cursor: pointer">[삭제]</a>
+                        <a th:if="${product.prodStatus} == '판매중단'" th:class="${product.prodNo}" onclick="modifyProdStatus()" style="cursor: pointer">[재판매]</a>
+                        <br><br>
                         <a th:href="@{/seller/product/option(prodNo=${product.prodNo})}">[수정]</a>
                     </td>
                 </tr>
