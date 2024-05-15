@@ -14,6 +14,7 @@
             const checkUSerPw = document.getElementById('checkUSerPw');
             const checkUSerId = document.getElementById('checkUSerId');
             const checkUSerRole = document.getElementById('checkUSerRole');
+            const btnWithdraw = document.getElementById('btnWithdraw');
 
             const userPw = checkUSerPw.value;
             const userId = checkUSerId.value;
@@ -25,11 +26,13 @@
                     console.log(data)
                     if (data.result > 0) {
                         userInfoBox.style.display = "flex";
+                        btnWithdraw.style.display = "flex";
+                        checkUserPwBox.style.display = "none";
                         if (userRole === "SELLER") {
                             sellerInfoBox.style.display = "flex";
                         }
                     }else {
-                        alert("실패")
+                        alert("비밀번호가 일치하지 않습니다.")
                     }
                 })
                 .catch(err => console.log(err))
@@ -76,14 +79,14 @@
             <div class="myTableStyle" id="checkUserPwBox">
                 <p class="myTableHead" style="padding: 10px 0; font-size: 16px;">비밀번호를 입력해주세요.</p>
                 <div style="display: flex; margin: 10px 0; height: 30px; justify-content: center;">
-                    <input type="text" id="checkUSerPw" style="height: 30px; margin-right: 10px;"/>
+                    <input type="password" id="checkUSerPw" style="height: 30px; margin-right: 10px;"/>
                     <input type="hidden" id="checkUSerId" th:value="${#authentication.principal.user.userId}"/>
                     <input type="hidden" id="checkUSerRole" th:value="${userDTO.userRole}"/>
                     <span onclick="checkUserPw()" style="display: inline-block; width: 60px; height: 28px; border: 1px solid #aaa; text-align: center; line-height: 28px; cursor: pointer">확인</span>
                 </div>
             </div>
 
-            <article class="myTableStyle" id="userInfoBox" >
+            <article class="myTableStyle" id="userInfoBox" style="display:none;">
                 <h3 class="myTableHead" style="padding: 10px 0">회원정보 설정</h3>
                 <table border="0" style="margin: 0; border-top: 1px solid #aaa">
                     <tr>
@@ -154,7 +157,7 @@
             </article>
 
             <!-- 판매자 회원이 로그인한 경우에만 출력 -->
-            <article th:if="${userDTO.getUserRole() == 'SELLER'}" class="myTableStyle" id="sellerInfoBox">
+            <article th:if="${userDTO.getUserRole() == 'SELLER'}" class="myTableStyle" id="sellerInfoBox" style="display:none;">
                 <h3 class="myTableHead" style="padding: 10px 0">판매자 정보 설정</h3>
 
                 <table border="0" th:each="seller : ${sellerDTO}" style="margin: 0; border-top: 1px solid #aaa">
@@ -223,7 +226,7 @@
                     </tbody>
                 </table>
             </article>
-            <button id="btnWithdraw">탈퇴하기</button>
+            <button id="btnWithdraw" style="display:none;">탈퇴하기</button>
         </section>
     </div>
 </div>

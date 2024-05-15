@@ -9,6 +9,7 @@ import kr.co.lotteon.entity.QOrderDetail;
 import kr.co.lotteon.repository.UserPointRepository;
 import kr.co.lotteon.repository.PointHistoryRepository;
 import kr.co.lotteon.service.MyService;
+import kr.co.lotteon.service.ProductService;
 import kr.co.lotteon.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.print.Pageable;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -35,6 +33,7 @@ public class MyController {
 
     private final MyService myService;
     private final UserPointRepository userPointRepository;
+    private final ProductService productService;
     private final AdminService adminService;
     private final PasswordEncoder passwordEncoder;
 
@@ -299,7 +298,48 @@ public class MyController {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
-
     }
 
+    // 마이페이지 수취 확인
+    @GetMapping("/my/orderReceive/{detailNo}")
+    public ResponseEntity<?> orderReceive(@PathVariable int detailNo) {
+        return myService.orderReceive(detailNo);
+    }
+
+    // 마이페이지 수취 확인
+    @PostMapping("/my/writeProdQna")
+    public String writeProdQna(ProdQnaDTO prodQnaDTO) {
+        log.info("prodQnaDTO : " + prodQnaDTO);
+        prodQnaDTO.setProdQnaStatus("답변 대기중");
+        prodQnaDTO.setProdQnaSecret("N");
+        int result = productService.writeProdQna(prodQnaDTO);
+        if (result > 0) {
+            return "redirect:/my/home?userId=" + prodQnaDTO.getUserId();
+        }else {
+            return "redirect:/my/home?userId=" + prodQnaDTO.getUserId() + "&err=100";
+        }
+    }
+
+    // 관심상품 삭제
+    @PostMapping("/my/wish/deleteWish")
+    public ResponseEntity<?> deleteWish(@RequestBody Map<String, int[]> requestData) {
+        int[] wishNoArr = requestData.get("wishNoArr");
+        myService.deleteWish(wishNoArr);
+        Map<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("result", 1);
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    // 관심상품 장바구니에 담기
+    @PostMapping("/my/wish/wishProdToCart")
+    public ResponseEntity<?> wishProdToCart(@RequestBody Map<String, String> requestData) {
+        log.info("requestData : " + requestData);
+        return myService.wishProdToCart(requestData);
+    }
+
+    // 나의 설정 비밀번호 확인
+    @GetMapping("/my/info/checkUserPw/{userPw}/{userId}")
+    public ResponseEntity<?> checkUserPw(@PathVariable String userPw, @PathVariable String userId) {
+        return myService.checkUserPw(userPw, userId);
+    }
 }

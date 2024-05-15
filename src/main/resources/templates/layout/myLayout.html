@@ -23,6 +23,7 @@
         gtag('js', new Date());
 
         gtag('config', 'G-4PQT8D58DQ');
+
     </script>
 </head>
 <body>
@@ -43,7 +44,7 @@
                         <a th:href="@{/seller/index}" sec:authorize="hasAnyAuthority('SELLER')">상점관리</a>
                         <a th:href="@{/admin/index(UserId=${#authentication.principal.user.userId})}" sec:authorize="hasAnyAuthority('ADMIN')">관리자</a>
 
-                        <a th:href="@{product/cart(userId=${#authentication.principal.user.userId})}">
+                        <a th:href="@{/product/cart(userId=${#authentication.principal.user.userId})}">
                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>&nbsp;장바구니
                         </a>
                         <a th:href="@{/member/logout}">로그아웃</a>
@@ -204,7 +205,7 @@
                     <button class="btnClose">X</button>
                 </nav>
                 <section>
-                    <form action="#" >
+                    <form th:action="@{/my/writeProdQna}" method="post">
                         <table border="0">
                             <tr>
                                 <th>문의종류</th>
@@ -220,18 +221,20 @@
                                 <th>Email</th>
                                 <td class="email">
                                     <input type="text" name="email" value="chh**@gmail.com"/>
+                                    <input type="hidden" name="prodNo" class="prodNo">
+                                    <input type="hidden" name="userId" class="userId">
                                 </td>
                             </tr>
                             <tr>
                                 <th>제목</th>
                                 <td class="title">
-                                    <input type="text" name="title" placeholder="제목입력"/>
+                                    <input type="text" name="prodQnaTitle" placeholder="제목입력"/>
                                 </td>
                             </tr>
                             <tr>
                                 <th>내용</th>
                                 <td class="content">
-                                    <textarea name="content" placeholder="내용입력"></textarea>
+                                    <textarea name="prodQnaContent" placeholder="내용입력"></textarea>
                                 </td>
                             </tr>
                         </table>
@@ -250,31 +253,29 @@
         <!-- 문의하기 팝업 끝 -->
 
         <!-- 수취확인 팝업 -->
-        <form th:action="@{/my/updateOrder}" method="post" enctype="multipart/form-data" class="updateOrderForm">
-            <div id="popReceive" class="popup">
-                <div>
-                    <nav>
-                        <h1>수취확인</h1>
-                        <button class="btnClose">X</button>
-                    </nav>
-                    <section>
-                        <p>
-                            상품을 잘 받으셨나요?<br>
-                            상품을 받으셨으면 수취확인을 눌러 구매확정을 진행하세요.<br>
-                            구매확정 후 포인트를 지급해 드립니다.
-                        </p>
+        <div id="popReceive" class="popup">
+            <div>
+                <nav>
+                    <h1>수취확인</h1>
+                    <button class="btnClose">X</button>
+                </nav>
+                <section>
+                    <p>
+                        상품을 잘 받으셨나요?<br>
+                        상품을 받으셨으면 수취확인을 눌러 구매확정을 진행하세요.<br>
+                        구매확정 후 포인트를 지급해 드립니다.
+                    </p>
 
 
-                        <div>
-                            <input class="productNo" name="prodNo">
-                            <input class="detailNo" name="detailNo">
-                            <button class="btnPositive btnConfirm" onclick="orderStatusUpdate()">확인</button>
-                            <button class="btnNegative btnCancel">취소</button>
-                        </div>
-                    </section>
-                </div>
+                    <div>
+                        <input type="hidden" class="header" name="prodNo">
+                        <input type="hidden" class="detailNo" name="detailNo">
+                        <button class="btnPositive btnConfirm" onclick="orderReceiveUpdate()">확인</button>
+                        <button class="btnNegative btnCancel">취소</button>
+                    </div>
+                </section>
             </div>
-        </form>
+        </div>
         <!-- 수취확인 팝업 끝 -->
 
         <!-- 상품평쓰기 팝업 -->
@@ -291,14 +292,14 @@
                                 <th>상품명</th>
                                 <td id="productName" class="productName"></td>
                                 <td id="productNo">
-                                    <input class="productNo" name="prodNo">
-                                    <input class="detailNo" name="detailNo">
+                                    <input type="hidden" class="productNo" name="prodNo">
+                                    <input type="hidden" class="detailNo" name="detailNo">
                                 </td>
                             </tr>
                             <tr>
                                 <th>만족도</th>
                                 <td class="ratingTd">
-                                    <input class="revScore" name="revScore">
+                                    <input type="hidden" class="revScore" name="revScore">
                                     <div class="ratingValue">
                                         <span class="star" data-value="1">&#9733;</span>
                                         <span class="star" data-value="2">&#9733;</span>
