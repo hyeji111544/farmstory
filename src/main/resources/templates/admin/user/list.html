@@ -122,7 +122,7 @@
 
                 if (result) {
                     const jsonData = {
-                        "userId" : globalUserId.innerText,
+                        "userId" : globalUserId.id,
                         "changeType" : changeType,
                         "changeValue" : changeValue,
                     }
@@ -206,7 +206,7 @@
             <div class="userListTableContent" th:each="user, index : ${userDTO.dtoList}" style="text-align: center">
                 <div class="userListTableRow">
                     <div th:text="${userDTO.startNo - index.index}" style="width: 50px;"></div>
-                    <div th:text="${#strings.substring(user.userId, 0, 6)} + '****'" style="width: 200px;"></div>
+                    <div th:text="${#strings.substring(user.userId, 0, 6)} + '****'" style="width: 200px;" th:id="${user.userId}"></div>
                     <div th:text="${user.userName}" style="width: 150px;"></div>
                     <div th:text="${user.userRole}" style="width: 150px;"></div>
                     <div th:text="${user.userGrade}" style="width: 150px;"></div>

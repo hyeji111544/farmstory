@@ -34,7 +34,7 @@ public class WishRepositoryImpl implements WishRepositoryCustom {
 
 
         QueryResults<Tuple> resultWish = jpaQueryFactory
-                .select(qWish, qProduct.prodName, qProduct.prodPrice, qProductimg.thumb190)
+                .select(qWish, qProduct.prodName, qProduct.prodPrice, qProductimg.thumb190, qProduct.cateCode)
                 .from(qWish)
                 .join(qProduct)
                 .on(qWish.prodNo.eq(qProduct.prodNo))
