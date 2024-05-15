@@ -630,4 +630,10 @@ public class MyService {
 
     }
 
+    //마이페이지 - 주문상태 업데이트
+    public void updateOrderState(String prodNo){
+        log.info("updateOrderState service");
+        log.info("prodNo : "+prodNo);
+    }
+
  }

@@ -36,13 +36,11 @@
                 const button = event.target; // 클릭한 버튼
                 const confirm = button.parentNode; // 버튼의 부모
                 const myOrderRow = confirm.parentNode // 버튼의 부모의 부모
-                const myOrderInfo = myOrderRow.querySelector('.myOrderInfo') // 할아버지의 둘째
-                const prodName = myOrderInfo.querySelector('.InfoProdName') // 상품 이름
+                const myOrderInfo = myOrderRow.querySelector('.myOrderInfo'); // 할아버지의 둘째
+                const prodName = myOrderInfo.querySelector('.InfoProdName'); // 상품 이름
                 const detailNo = button.getAttribute('data-detailNo'); // 상품 번호
                 const prodNo = button.id; // 상품 번호
-
                 const popReview = document.getElementById('popReview'); // 상품평쓰기 창
-
                 const productName = popReview.querySelector('.productName');
                 const productNo = popReview.querySelector('.productNo');
                 const prodDetailNo = popReview.querySelector('.detailNo');
@@ -51,6 +49,7 @@
                 productNo.value = prodNo;
                 prodDetailNo.value = detailNo;
             }
+
 
             // 리뷰 제출 버튼
             function btnReviewSubmit() {
@@ -160,14 +159,44 @@
                     .catch(err => console.log(err))
             }
 
-            function orderStatusUpdate(){
-                const button = event.target;
 
-                fetch(`/lotteon/my/home/orderStatusUpdate/`)
-                    .then()
-                    .then()
-                    .catch()
 
+            //수취인확인 버튼 클릭
+            function checkComplete(){
+                const button = event.target; // 클릭한 버튼
+                const confirm = button.parentNode; // 버튼의 부모
+                const myOrderRow = confirm.parentNode // 버튼의 부모의 부모
+                const myOrderInfo = myOrderRow.querySelector('.myOrderInfo') // 할아버지의 둘째
+                const detailNo = button.getAttribute('data-detailNo'); // 상품 번호
+                const prodNo = button.id; // 상품 번호
+
+                console.log(prodNo);
+
+                const popReceive = document.getElementById('popReceive'); // 상품평쓰기 창
+
+                const productNo = popReceive.querySelector('.productNo');
+                const prodDetailNo = popReceive.querySelector('.detailNo');
+
+                productNo.value = prodNo;
+                prodDetailNo.value = detailNo;
+
+            }
+
+            //수취인확인 버튼
+            function orderStatusUpdate() {
+                const prodNo = document.querySelector('.productNo').value;
+                const detailNo = document.querySelector('.detailNo').value;
+
+                fetch(`/lotteon/my/home/orderStatusUpdate/{detailNo}`)
+                    .then(response => {
+                        // 처리할 내용
+                    })
+                    .then(data => {
+                        // 처리할 내용
+                    })
+                    .catch(error => {
+                        // 에러 처리
+                    });
             }
 
 
@@ -237,7 +266,7 @@
                                 </div>
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
-                                    <span class="receive" onclick="checkComplete()">수취확인</span>
+                                    <span class="receive" onclick="checkComplete()" th:id="${orderList.prodNo}">수취확인</span>
                                     <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}" th:data-detailNo="${orderList.detailNo}">상품평쓰기</span>
                                     <span>반품신청</span>
                                     <span class="btnQuestion">문의하기</span>
@@ -249,7 +278,7 @@
 
                 <!--포인트적립내역-->
                 <article class="point">
-                    <h3>포인트적립내역</h3>
+                    <h3>포인트적립내역</h3>1
                     <a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}" class="more">더보기</a>
 
                     <!--내역이 없을떄-->
