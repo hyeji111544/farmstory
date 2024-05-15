@@ -399,6 +399,7 @@ public class MyService {
     @Value("${file.upload.path}")
     private String fileUploadPath;
     public String writeReview(PdReviewDTO pdReviewDTO, MultipartFile revImage){
+        log.info("pdReviewDTO : " + pdReviewDTO);
         // 1. 이미지 저장
         String path = new File(fileUploadPath).getAbsolutePath();
 

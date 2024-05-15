@@ -237,8 +237,8 @@
                                 </div>
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
-                                    <span class="receive" onclick="checkComplete">수취확인</span>
-                                    <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}">상품평쓰기</span>
+                                    <span class="receive" onclick="checkComplete()">수취확인</span>
+                                    <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}" th:data-detailNo="${orderList.detailNo}">상품평쓰기</span>
                                     <span>반품신청</span>
                                     <span class="btnQuestion">문의하기</span>
                                 </div>
