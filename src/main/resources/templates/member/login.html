@@ -66,6 +66,16 @@
                 // 추출된 쿠키 값을 디코딩해서
                 // 반환. 디코딩은 URL 인코딩된 문자열을 해독하여 원래의 문자열로 되돌리는 작업
             }
+
+            window.onload = function () {
+                let currentURL = window.location.href;
+                const success = currentURL.split('?');
+                if (success.length > 1) {
+                    if (success[1] === "success=100") {
+                        alert("아이디와 비밀번호를 확인해주세요.");
+                    }
+                }
+            }
         </script>
         <div class="login">
             <nav>
