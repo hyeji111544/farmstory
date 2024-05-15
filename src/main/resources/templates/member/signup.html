@@ -23,6 +23,9 @@
                         const userRole = document.getElementsByName('role')[0];
                         console.log(userRole.value);
                         if (userRole.value === 'USER') {
+                            // 회원가입 페이지 접근을 막기 위한 쿠키 생성
+                            makeCookie('USER', 'true', 1);
+
                             if (userPromo.checked) {
                                 let userPromovalue = "Y"
                                 window.location.href = "/lotteon/member/register?userPromo="+userPromovalue;
@@ -31,6 +34,9 @@
                                 window.location.href = "/lotteon/member/register?userPromo=" + userPromovalue;
                             }
                         } else if (userRole.value === 'SELLER') {
+                            // 회원가입 페이지 접근을 막기 위한 쿠키 생성
+                            makeCookie('SELLER', 'true', 1);
+
                             if (userPromo.checked) {
                                 let userPromovalue = "Y"
                                 window.location.href = "/lotteon/member/registerSeller?userPromo=" + userPromovalue;
@@ -44,6 +50,11 @@
                         alert("🚨체크항목 1, 2, 3번은 필수항목입니다");
                     }
                 }
+            }
+
+            // 쿠키 생성
+            function makeCookie(name, value, days) {
+                document.cookie = `register=${name}`;
             }
         </script>
 

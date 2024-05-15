@@ -11,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.AuthProvider;
 import java.util.LinkedHashMap;
@@ -183,5 +180,11 @@ public class SellerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
     }
-    
+
+    // 판매 상품 판매 상태 변경 //
+    @GetMapping("/seller/product/modifyProdStatus/{prodNo}/{status}")
+    public ResponseEntity<?> modifyProdStatus(@PathVariable int prodNo, @PathVariable int status) {
+        return sellerService.modifyProdStatus(prodNo, status);
+    }
+
 }

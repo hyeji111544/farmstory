@@ -4,16 +4,17 @@ import com.querydsl.core.Tuple;
 import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
-import kr.co.lotteon.repository.NoticeRepository;
-import kr.co.lotteon.repository.OrderDetailRepository;
-import kr.co.lotteon.repository.ProdQnaRepository;
-import kr.co.lotteon.repository.SellerRepository;
+import kr.co.lotteon.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
 public class SellerService {
 
     private final SellerRepository sellerRepository;
+    private final ProductRepository productRepository;
     private final OrderDetailRepository orderdetailRepository;
     private final ProdQnaRepository prodQnaRepository;
     private final NoticeRepository noticeRepository;
@@ -327,6 +329,44 @@ public class SellerService {
         Pageable pageable = pageRequestDTO.getPageable("No");
 
         return sellerRepository.selectSellerList(pageable, pageRequestDTO);
+    }
+
+    // 판매 상품 판매 상태 변경 //
+    public ResponseEntity<?> modifyProdStatus(int prodNo, int status) {
+        Optional<Product> optProduct = productRepository.findById(prodNo);
+        Map<String, Integer> resultMap = new HashMap<>();
+
+        if (status == 1) {
+            if (optProduct.isPresent()) {
+                optProduct.get().setProdStatus("판매중단");
+                Product saveProduct = productRepository.save(optProduct.get());
+                if (saveProduct.getProdStatus().equals("판매중단")) {
+                    resultMap.put("result", 1);
+                    return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+                }else {
+                    resultMap.put("result", 0);
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+                }
+            }else {
+                resultMap.put("result", 0);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+            }
+        }else {
+            if (optProduct.isPresent()) {
+                optProduct.get().setProdStatus("새상품");
+                Product saveProduct = productRepository.save(optProduct.get());
+                if (saveProduct.getProdStatus().equals("새상품")) {
+                    resultMap.put("result", 1);
+                    return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+                }else {
+                    resultMap.put("result", 0);
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+                }
+            }else {
+                resultMap.put("result", 0);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+            }
+        }
     }
 
 }

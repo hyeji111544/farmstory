@@ -21,9 +21,31 @@
 			const reEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 			const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
 
+			//쿠키 삭제
+			function deleteCookie(cookieName){
+				const expireDate = new Date();
+				expireDate.setDate(expireDate.getDate() - 1);
+				document.cookie = cookieName + "= " + "; expires=" + expireDate.toUTCString();
+			}
+
 			window.onload = function () {
 
+				const cookies = document.cookie.split(';');
+				// 모든 쿠키를 반복
+				let cookieName = []
+				for (let cookie of cookies) {
+					cookieName.push(cookie.trim().split('=')[0]);
+				}
+				// 쿠키 확인
+				if (!cookieName.includes('register')) {
+					alert("잘못된 접근입니다.");
+					window.location.href = "/lotteon/member/login"
+				}
 
+				// 페이지를 벗어날 때 쿠키 삭제
+				window.addEventListener('beforeunload', function() {
+					deleteCookie('register');
+				});
 
 				//아이디 태그
 				const userId = document.getElementById('userId');
@@ -234,6 +256,7 @@
 									resultEmail.innerText = "중복된 이메일입니다.";
 									resultEmail.style.color = "red";
 									userEmail.style.border = "1px solid red";
+									userEmail.readOnly = false;
 									isEmailOk = false;
 								} else {
 									// 중복이 아닐경우
