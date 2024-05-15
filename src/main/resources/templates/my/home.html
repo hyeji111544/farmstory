@@ -182,23 +182,13 @@
 
             }
 
-            //수취인확인 버튼
-            function orderStatusUpdate() {
-                const prodNo = document.querySelector('.productNo').value;
-                const detailNo = document.querySelector('.detailNo').value;
+            //수취확인 제출 폼
+            function orderStatusUpdate(){
+                const reviewForm = document.getElementsByClassName('updateOrderForm')[0]; // 상품평쓰기 창
+                const popReview = document.getElementById('popReceive'); // 상품평쓰기 창
 
-                fetch(`/lotteon/my/home/orderStatusUpdate/{detailNo}`)
-                    .then(response => {
-                        // 처리할 내용
-                    })
-                    .then(data => {
-                        // 처리할 내용
-                    })
-                    .catch(error => {
-                        // 에러 처리
-                    });
+                reviewForm.submit();
             }
-
 
         </script>
         <!--마이페이지 상단 회원 정보-->
@@ -266,7 +256,7 @@
                                 </div>
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">
-                                    <span class="receive" onclick="checkComplete()" th:id="${orderList.prodNo}">수취확인</span>
+                                    <span class="receive" onclick="checkComplete()" th:id="${orderList.prodNo}" th:data-detailNo="${orderList.detailNo}">수취확인</span>
                                     <span class="review" onclick="moveProdData()" th:id="${orderList.prodNo}" th:data-detailNo="${orderList.detailNo}">상품평쓰기</span>
                                     <span>반품신청</span>
                                     <span class="btnQuestion">문의하기</span>

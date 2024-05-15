@@ -631,9 +631,23 @@ public class MyService {
     }
 
     //마이페이지 - 주문상태 업데이트
-    public void updateOrderState(String prodNo){
+    public int updateOrderState(String prodNo, String detailNo){
         log.info("updateOrderState service");
         log.info("prodNo : "+prodNo);
+        int orderDetailNo = Integer.parseInt(detailNo);
+
+        Optional<OrderDetail> optOrderStatus = orderdetailRepository.findById(orderDetailNo);
+        if(optOrderStatus.isPresent()){
+            optOrderStatus.get().setDetailStatus("구매확정");
+            OrderDetail result = orderdetailRepository.save(optOrderStatus.get());
+            if(result.getDetailStatus().equals("구매확정")){
+                return 1;
+            }else {
+                return 0;
+            }
+        }else {
+            return 0;
+        }
     }
 
  }

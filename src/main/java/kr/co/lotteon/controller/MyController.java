@@ -283,10 +283,22 @@ public class MyController {
     }
     
     //마이페이지 - 주문상태 업데이트
-    @GetMapping("/lotteon/my/home/orderStatusUpdate/")
-    public void orderStatusUpdate(@RequestBody String prodNo){
-        log.info("prodNo : " + prodNo);
-        myService.updateOrderState(prodNo);
+    @PostMapping("/my/updateOrder/")
+    public ResponseEntity<?> orderStatusUpdate(@RequestBody Map<String, String> requestData){
+
+        String prodNo = requestData.get("prodNo");
+        String detailNo = requestData.get("detailNo");
+
+        log.info("4894prodNo : " + prodNo);
+        log.info("prodNo" +prodNo);
+        int result = myService.updateOrderState(prodNo, detailNo);
+
+
+        if(result > 0){
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+        }
 
     }
 
