@@ -278,7 +278,9 @@
             </ul>
 
             <section>
-                <a href="#"><img th:src="@{/images/my/my_banner1.jpg}" alt="패션, 타운 하나로 끝" class="banner"></a>
+                <th:block th:each="banner : ${banMyOrderList}" >
+                    <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
+                </th:block>
 
                 <!--최근주문내역-->
                 <article class="latest" >
