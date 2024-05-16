@@ -732,4 +732,21 @@ public class MyService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
         }
     }
+
+    // prodSeller 출력
+    public ResponseEntity<?> selectProdSeller(String prodSeller){
+        Optional<Seller> optSeller = sellerRepository.findById(prodSeller);
+        Map<String, SellerDTO> resultMap = new HashMap<>();
+
+        if(optSeller.isPresent()){
+            SellerDTO sellerDTO = modelMapper.map(optSeller.get(), SellerDTO.class);
+            log.info("sellerDTO : " + sellerDTO.toString());
+            resultMap.put("result", sellerDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(resultMap);
+        }else {
+            resultMap.put("result", null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
+
  }
