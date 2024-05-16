@@ -186,6 +186,7 @@
                         <div th:if="${orders.detailStatus == '취소완료'}" th:text="${orders.detailStatus}" style="color: #FFA900"></div>
                         <div th:if="${orders.detailStatus == '교환완료'}" th:text="${orders.detailStatus}" style="color: #F94A29"></div>
                         <div th:if="${orders.detailStatus == '환불완료'}" th:text="${orders.detailStatus}" style="color: #D61355"></div>
+                        <div th:if="${orders.detailStatus == '구매확정'}" th:text="${orders.detailStatus}" style="color: #36AE7C"></div>
 
                         <div th:text="${orders.detailDate}"></div>
                         <div onclick="createDetailInfo()" th:class="${index.index}">자세히</div>
