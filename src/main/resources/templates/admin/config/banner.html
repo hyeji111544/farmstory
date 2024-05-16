@@ -19,11 +19,10 @@
                     $('#bannerRegister').addClass('on');
                 });
             });
-
+            // 게시글 선택하기
             let banNos = []; // 전역변수 어디서든 접근, 참조 가능한 변수
             let trTags = [];
             function checkBox() {
-                console.log("banNos1 : " + banNos);
                 // 체크를 하면 saveBannerNo에 번호를 저장
                 const button = event.target; // 버튼 본인
                 const btnParent = button.parentNode; // 버튼의 부모태그 (td)
@@ -34,60 +33,15 @@
                 if (button.checked) {
                     banNos.push(bannerNo);
                     trTags.push(trTag);
-                    console.log("banNos : " + banNos);
-                    console.log("trTags : " + trTags);
                 }else {
                     // 체크를 풀면 saveBannerNo 번호를 삭제
                     let index = banNos.indexOf(bannerNo);
                     let index2 = trTags.indexOf(trTag);
                     banNos.splice(index, 1);
                     trTags.splice(index2, 1);
-
-                    console.log("banNos2 : " + banNos);
-                    console.log("trTags2 : " + trTags);
                 }
             }
-            // let allBanNos = [];
-            // let trTags2 = [];
-            // let checkedTurn = 0;
-            // function allCheckBox(){
-            //     const button = event.target;
-            //     const btnParent = button.parentNode.parentNode;
-            //     const trTag2 = btnParent.nextSibling;
-            //     const banNoTd = document.getElementById('banNoTd');
-            //     const banNo = banNoTd.innerText;
-            //
-            //
-            //     if(button.checked){
-            //
-            //         const banCheckBoxValue = Array.from(document.getElementsByClassName('banCheckBox'));
-            //
-            //         if(checkedTurn === 0){
-            //             banCheckBoxValue.forEach(function(checkbox){
-            //                 checkbox.checked = true;
-            //             });
-            //             checkedTurn = 1;
-            //         }else{
-            //             banCheckBoxValue.forEach(function(checkbox){
-            //                 checkbox.checked = false;
-            //             });
-            //             checkedTurn = 0;
-            //         }
-            //         allBanNos.push(banNo);
-            //         trTags2.push(trTag2);
-            //         console.log("111: "+ allBanNos);
-            //         console.log("222: "+ trTags2);
-            //     }else{
-            //         let index = allBanNos.indexOf(banNo);
-            //         let index2 = trTags2.indexOf(trTag2);
-            //         allBanNos.splice(index, 1);
-            //         trTags2.splice(index2, 1);
-            //         console.log("333: "+ allBanNos);
-            //         console.log("444: "+ trTags2);
-            //     }
-            // }
-
-
+            // 게시글 전체선택
             function allCheckBox(tabId) {
                 const tab = document.getElementById(tabId);
                 const checkboxes = tab.getElementsByClassName('banCheckBox');
@@ -98,7 +52,6 @@
                 for (let checkbox of checkboxes) {
                     checkbox.checked = isChecked;
                 }
-
                 if (isChecked) {
                     // 모두 체크 상태일 때
                     banNos = []; // 배열 초기화
@@ -110,8 +63,6 @@
                     Array.from(banNoTdAll).forEach(function (each) {
                         banNos.push(each.innerText);
                     })
-
-                    console.log(banNos)
                     for (let tr of tab.querySelectorAll('.bannerAll')) {
                         trTags.push(tr);
                     }
@@ -121,9 +72,8 @@
                     trTags = [];
                 }
             }
+            // 삭제기능
             function deleteBtn() {
-
-                console.log("banNos : " + banNos);
                 // 삭제 버튼을 클릭하면 saveBannerNo를 가져와서 삭제 진행
                 if (banNos.length != 0) {
                     confirm("선택하신 글을 삭제하시겠습니까?");
@@ -159,7 +109,6 @@
                     alert("취소되었습니다.");
                 }
             }
-
             // 활성화 버튼을 누르면 나머지 배너들은 비활성화 되고 누른것만 활성화로 변함
             function banUsable(sectionId) {
                 const button = event.target;
@@ -167,18 +116,10 @@
                 const banNo = button.parentNode.parentNode.querySelectorAll('td')[1].innerText;
                 const banStatus = button.parentNode.previousElementSibling;
 
-                console.log(banImgCate);
-                console.log(banNo);
-                console.log(banStatus);
-
-                // 활성화시킬 배너 No값
-                // 비활성화시킬 배너 cate값
-
                 const jsonData = {
                     "banImgCate" : banImgCate,
                     "banNo" : banNo
                 }
-
                 const confirmResult = confirm("배너를 활성화 하시겠습니까?");
                 if (confirmResult) {
                 fetch("/lotteon/admin/banner/banUsable", {
@@ -188,7 +129,6 @@
                 })
                     .then(response => response.json())
                     .then(data =>{
-                        console.log(data);
                         if(data.result > 0){
                             const allBanStatuses = document.querySelectorAll(`#${sectionId} table tr td:nth-child(10)`);
                             allBanStatuses.forEach(td => {
@@ -203,8 +143,6 @@
                     .catch(err => console.log(err))
             }
             }
-
-
             // 활성화 버튼을 누르면 yes
             function yesUsable() {
                 const button = event.target;
@@ -212,18 +150,10 @@
                 const banNo = button.parentNode.parentNode.querySelectorAll('td')[1].innerText;
                 const banUsable = button.parentNode.previousElementSibling.innerText;
 
-                console.log(banImgCate);
-                console.log(banNo);
-                console.log(banUsable);
-
-                // 활성화시킬 배너 No값
-                // 비활성화시킬 배너 cate값
-
                 const jsonData = {
                     "banUsable" : "YES",
                     "banNo" : banNo
                 }
-
                 const confirmResult = confirm("배너를 활성화 하시겠습니까?");
                 if (confirmResult) {
                     fetch("/lotteon/admin/banner/updateBanUsable", {
@@ -251,18 +181,10 @@
                 const banNo = button.parentNode.parentNode.querySelectorAll('td')[1].innerText;
                 const banUsable = button.parentNode.previousElementSibling.innerText;
 
-                console.log(banImgCate);
-                console.log(banNo);
-                console.log(banUsable);
-
-                // 활성화시킬 배너 No값
-                // 비활성화시킬 배너 cate값
-
                 const jsonData = {
                     "banUsable" : "NO",
                     "banNo" : banNo
                 }
-
                 const confirmResult = confirm("배너를 비활성화 하시겠습니까?");
                 if (confirmResult) {
                     fetch("/lotteon/admin/banner/updateBanUsable", {
@@ -283,7 +205,6 @@
                         .catch(err => console.log(err))
                 }
             }
-
             // 이미지 크게 보기 모달창
             function bannerImgModalOpen() {
                 const button = event.target;
@@ -300,7 +221,6 @@
                 modalImgTag.src = imageSrc;
                 bannerModalBack.style.display = "block"
             }
-
             // 이미지 모달창 닫기
             function closeQnaModal() {
                 const bannerModalBack = document.getElementsByClassName('bannerModalBack')[0];

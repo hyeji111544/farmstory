@@ -60,27 +60,6 @@ public class AdminController {
         return "/admin/index";
     }
 
-    // admin - config //
-    // 관리자 설정 배너 이동
-    @GetMapping("/admin/config/banner")
-    public String configBanner(Model model) {
-
-        // 카테고리별로 model참조 5번
-        List<BannerDTO> main1 = adminService.bannerList("main1");
-        List<BannerDTO> main2 = adminService.bannerList("main2");
-        List<BannerDTO> product1 = adminService.bannerList("product1");
-        List<BannerDTO> member1 = adminService.bannerList("member1");
-        List<BannerDTO> my1 = adminService.bannerList("my1");
-
-        model.addAttribute("main1", main1);
-        model.addAttribute("main2", main2);
-        model.addAttribute("product1", product1);
-        model.addAttribute("member1", member1);
-        model.addAttribute("my1", my1);
-
-        return "/admin/config/banner";
-    }
-
     // 관리자 설정 정보 이동
     @GetMapping("/admin/config/info")
     public String configInfo(Model model) {
@@ -233,6 +212,27 @@ public class AdminController {
     @PostMapping("/admin/product/modifyCate")
     public ResponseEntity<?> modifyCate(@RequestBody Map<String, Object> requestData) {
         return adminproductService.modifyCate(requestData);
+    }
+
+    // admin - config //
+    // 관리자 설정 배너 이동
+    @GetMapping("/admin/config/banner")
+    public String configBanner(Model model) {
+
+        // 카테고리별로 model참조 5번
+        List<BannerDTO> main1 = adminService.bannerList("main1");
+        List<BannerDTO> main2 = adminService.bannerList("main2");
+        List<BannerDTO> product1 = adminService.bannerList("product1");
+        List<BannerDTO> member1 = adminService.bannerList("member1");
+        List<BannerDTO> my1 = adminService.bannerList("my1");
+
+        model.addAttribute("main1", main1);
+        model.addAttribute("main2", main2);
+        model.addAttribute("product1", product1);
+        model.addAttribute("member1", member1);
+        model.addAttribute("my1", my1);
+
+        return "/admin/config/banner";
     }
 
     // 배너 등록
