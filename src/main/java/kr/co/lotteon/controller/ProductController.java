@@ -112,7 +112,6 @@ public class ProductController {
 
     // 상품 상세보기 이동
     @GetMapping("/product/view")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public String prodView(@RequestParam("prodNo") int prodNo, @RequestParam("cateCode") String cateCode,
                            Model model, PageRequestDTO reviewPageRequestDTO, PageRequestDTO qnaPageRequestDTO){
 
