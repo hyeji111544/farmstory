@@ -104,6 +104,7 @@ public class PdReviewRepositoryImpl implements PdReviewRepositoryCustom {
                 .join(qPdReviewImg)
                 .on(qPdReview.revNo.eq(qPdReviewImg.revNo))
                 .where(qPdReview.prodNo.eq(prodNo))
+                .orderBy(qPdReview.revAddDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
