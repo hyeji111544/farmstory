@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
@@ -47,9 +48,15 @@ public class SecurityConfig {
         // 인가 설정
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                                     .requestMatchers("/").permitAll()
+                                    .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                                    .requestMatchers("/seller/**").hasAnyAuthority("SELLER")
+                                    .requestMatchers(HttpMethod.POST,"/product/**").authenticated()
+                                    .requestMatchers("/product/order").authenticated()
                                     .requestMatchers("/product/cart").authenticated()
-                                    //.requestMatchers("/article/**").permitAll()
-                                    //.requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+                                    .requestMatchers("/product/complete").authenticated()
+                                    .requestMatchers("/product/orderDirect").authenticated()
+                                    .requestMatchers("/cs/qna/write").authenticated()
+                                    .requestMatchers("/my/**").authenticated()
                                     //.requestMatchers("/manager/**").hasAnyAuthority("ADMIN", "MANAGER")
                                     .anyRequest().permitAll()
         );
