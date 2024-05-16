@@ -1,15 +1,12 @@
 // 연락처 수정 //
-const btnChangeHp = document.getElementById('btnChangeHp');
-const hp1 = document.getElementsByName('hp1')[0];
-const hp2 = document.getElementsByName('hp2')[0];
-const hp3 = document.getElementsByName('hp3')[0];
+
 const sellerHp1 = document.getElementsByName('sellerHp1')[0];
 const sellerHp2 = document.getElementsByName('sellerHp2')[0];
 const sellerHp3 = document.getElementsByName('sellerHp3')[0];
 const sellerFax1 = document.getElementsByName('sellerFax1')[0];
 const sellerFax2 = document.getElementsByName('sellerFax2')[0];
 const sellerFax3 = document.getElementsByName('sellerFax3')[0];
-const hpError = document.getElementById('hpError');
+
 const FaxError = document.getElementById('sellerFaxError');
 const resultSellerName = document.getElementById('resultSellerName');
 const btnChangeSellerName = document.getElementById('btnChangeSellerName');
@@ -19,10 +16,6 @@ const btnChangeSellerHp= document.getElementById('btnChangeSellerHp');
 const sellerHpError= document.getElementById('sellerHpError');
 const btnChangeSellerFax = document.getElementById('btnChangeSellerFax');
 
-
-
-
-let isHpOk    = false;
 let isNameOk  = false;
 let isFaxOk = false;
 const reHp    = /^01(?:0|1|[6-9])-(?:\d{4})-\d{4}$/;
@@ -275,6 +268,8 @@ window.onload = function (){
                             resultEmailCode.innerText = "인증번호가 인증되었습니다.";
                             resultEmailCode.style.color = "green";
                             inputEmailCode.style.border = "1px solid green";
+                            resultEmail.style.display = "none";
+                            checkEmailCode.style.display = "none";
 
                             btnChangeEmail.classList.remove('checkCode');
                             btnChangeEmail.classList.add('save');
@@ -335,7 +330,7 @@ window.onload = function (){
                             btnChangeEmail.innerText = "수정하기";
                             inputEmailCode.value = "";
                             emailCodeSection.style.display = "none";
-
+                            alert("수정 완료!")
                         }
                         return response.json();
                     })
@@ -381,7 +376,7 @@ window.onload = function (){
         const addr2 = userAddr2.value;
         const userId = userIdValue.className;
 
-        if (doneChangeAddr.value.trim() === "") {
+        if (doneChangeAddr.innerText.trim() === "") {
             // 수정 칸이 비어 있으면 수정하지 않음
             alert("수정할 이름을 입력하세요.");
             return;
@@ -534,6 +529,13 @@ function changeSellerFax() {
 }
 // 회원 연락처 수정
 function changeUserHp() {
+    const hp1 = document.getElementsByName('hp1')[0];
+    const hp2 = document.getElementsByName('hp2')[0];
+    const hp3 = document.getElementsByName('hp3')[0];
+    const btnChangeHp = document.getElementById('btnChangeHp');
+    const hpError = document.getElementById('hpError');
+    const userId = document.getElementById('userId').className;
+    let isHpOk    = false;
 
     const totalHp = hp1.value + "-" + hp2.value + "-" + hp3.value;
     const value = totalHp;
@@ -665,6 +667,7 @@ function changeUserPw(){
                         btnChangePass.classList.add('change');
                         btnChangePass.classList.remove('save');
                         alert("수정 완료!");
+                        resultPw.style.display = "none";
                     }
                     return response.json();
                 })

@@ -44,7 +44,7 @@
                 <h2 class="title2" th:text="${'☞[답변]' + ' '+ view.qnaTitle}"></h2>
                 <p class="reply"></p>
               </nav>
-              <div style="text-align: center; font-size: 15px; padding-top: 60px;">
+              <div style="text-align: left; font-size: 15px; margin-left: 30px">
               <td th:if="${view.qnaReply == '' || view.qnaReply == null}">답변 대기중입니다.</td>
               <td th:if="${view.qnaReply != '' || view.qnaReply != null}">[[${view.qnaReply}]]</td>
               </div>

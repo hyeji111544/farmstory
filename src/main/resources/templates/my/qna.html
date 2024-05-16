@@ -3,7 +3,7 @@
     layout:decorate="~{/layout/myLayout.html}">
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
-        
+
         <script th:inline="javascript">
             // 문의 유형 Map
             const qnaCateType = {
@@ -18,6 +18,7 @@
             }
             window.onload = function () {
                 qnaCateTypeMatch();
+                highlight();
             }
             // 문의 유형 영어 -> 한글
             function qnaCateTypeMatch() {
@@ -33,6 +34,7 @@
                     }
                 })
             }
+
 
         </script>
 
@@ -56,15 +58,15 @@
 
         <div class="qna">
             <!--마이페이지 사이드바-->
-            <ul>
+            <ul class="myCate">
                 <span class="menu_else"></span>
-                <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
-                <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
-                <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
-                <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
-                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
-                <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
+                <li class=""><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
+                <li class=""><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
+                <li class=""><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
+                <li class=""><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
+                <li class=""><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
+                <li class=""><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
+                <li class=""><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
             </ul>
 
             <section>
@@ -165,9 +167,11 @@
                         <div class="myTableBody myQnaRow" th:each="prodqna, index : ${selectMyProdQna.dtoList}">
                             <div th:text="${selectMyProdQna.startNo - index.index}"></div>
                             <div>제품문의</div>
-                            <div><a href="#" th:text="${prodqna.prodQnaContent}"></a></div>
+                            <div><a href="#"  class="qna-link" th:text="${prodqna.prodQnaContent}"></a>
+                                <input id="qnaNo" type="text" th:value="${prodqna.prodQnaNo}"></div>
                             <div th:text="${#temporals.format(prodqna.prodQnaDate, 'yyyy-MM-dd')}"></div>
                             <div th:text="${prodqna.prodQnaStatus}"></div>
+
                         </div>
 
                         <p class="page">

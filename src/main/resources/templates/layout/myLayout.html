@@ -24,6 +24,42 @@
 
         gtag('config', 'G-4PQT8D58DQ');
 
+        function highlight (){
+            let currentURL = window.location.href;
+            let splitURL = currentURL.split('?')[0];
+            let storyCate = ""
+            console.log("splitURL"+splitURL);
+            if (splitURL != null){
+                storyCate = splitURL.split('my/')[1];
+            }
+            console.log("storyCate: "+ storyCate);
+            const mySelect = document.getElementsByClassName('myCate')[0];
+            const liTag = mySelect.querySelectorAll('li');
+            switch (storyCate){
+                case "order":
+                    liTag[0].classList.add('on');
+                    break;
+                case 'wish':
+                    liTag[1].classList.add('on');
+                    break;
+                case 'point':
+                    liTag[2].classList.add('on');
+                    break;
+                case 'coupon':
+                    liTag[3].classList.add('on');
+                    break;
+                case 'review':
+                    liTag[4].classList.add('on');
+                    break;
+                case 'qna':
+                    liTag[5].classList.add('on');
+                    break;
+                case 'info':
+                    liTag[6].classList.add('on');
+                    break;
+            }
+        }
+
     </script>
 </head>
 <body>
