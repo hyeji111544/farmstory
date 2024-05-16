@@ -229,6 +229,7 @@ public class MyController {
 
             PageResponseDTO selectMyProdQna = myService.selectMyProdQna(userId, pageRequestDTO);
             model.addAttribute("selectMyProdQna", selectMyProdQna);
+            log.info("selectMyProdQna : " +selectMyProdQna);
 
             return "/my/qna";
         }
