@@ -163,6 +163,9 @@ public class SellerController {
         PageResponseDTO selectOrder = sellerService.selectProdSalesInfo(prodSeller, pageRequestDTO);
         log.info("selectOrder : " + selectOrder);
 
+        SellerInfoDTO sellerInfoDTO = sellerService.selectAdminInfo();
+
+        model.addAttribute("sellerInfoDTO", sellerInfoDTO);
         model.addAttribute("selectOrder", selectOrder);
         return "/seller/order/delivery";
     }
