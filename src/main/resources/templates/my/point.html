@@ -7,6 +7,26 @@
             window.onload = function (){
                 highlight();
             }
+
+            // 날짜계산
+            function checkDate() {
+                const startDate = document.getElementsByName('startDate')[0].value;
+                const finalDate = document.getElementsByName('finalDate')[0].value;
+                if (startDate && finalDate) {
+                    const start = new Date(startDate);
+                    const end = new Date(finalDate);
+
+                    const diffInMs = end - start;
+
+                    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+                    if (diffInDays >= 365) {
+                        alert('검색기간은 1년을 넘을 수 없습니다.');
+                        document.getElementsByName('startDate')[0].value = '';
+                        document.getElementsByName('finalDate')[0].value = '';
+                    }
+                }
+            }
         </script>
         <!--마이페이지 상단 회원 정보-->
         <nav>
@@ -56,9 +76,9 @@
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='6month')}" th:class="${pageResponseDTO.cate == '6month'} ? 'searchOn' : ''">6개월</a>
                         <a th:href="@{/my/point(userId=${#authentication.principal.user.userId}, cate='year')}" th:class="${pageResponseDTO.cate == 'year'} ? 'searchOn' : ''">12개월</a>
                         <form th:action="@{/my/point}" method="get" class="searchCustomDate">
-                            <input type="date" name="startDate">
+                            <input type="date" name="startDate" onchange="checkDate()">
                             <p style="display: inline-block; width: 10px;">~</p>
-                            <input type="date" name="finalDate">
+                            <input type="date" name="finalDate" onchange="checkDate()">
                             <input type="hidden" name="cate" value="custom">
                             <input type="hidden" name="userId" th:value="${#authentication.principal.user.userId}">
                             <input type="submit" value="검색">

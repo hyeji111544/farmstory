@@ -75,7 +75,9 @@ public class MyController {
         log.info("resultUserId" +resultUserId);
         model.addAttribute("resultUserId", resultUserId);
 
-
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         return "/my/home";
 
@@ -87,6 +89,10 @@ public class MyController {
 
         PageResponseDTO haveCoupons = myService.selectCoupons(pageRequestDTO, userId);
         model.addAttribute("haveCoupons", haveCoupons); // Map<String ,List<Coupons>>  / Map<String, int>
+
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
         return "/my/coupon";
     }
 
@@ -99,10 +105,10 @@ public class MyController {
 
         String banImgCate = "my1";
         List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         model.addAttribute("userDTO", userDTO);
         model.addAttribute("sellerDTO", sellerDTO);
-        model.addAttribute("banMyOrderList", banMyOrderList);
         return "/my/info";
     }
 
@@ -191,6 +197,10 @@ public class MyController {
         MyOrderPageResponseDTO MyOrderDTOList = myService.selectOrders(userId, myOrderPageRequestDTO);
         model.addAttribute("MyOrderDTOList", MyOrderDTOList);
 
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
+
         return "/my/order";
     }
 
@@ -203,8 +213,9 @@ public class MyController {
         PageResponseDTO pageResponseDTO = myService.selectPoints(userId, pageRequestDTO);
         //userPointRepository.selectPoints(userId, pageRequestDTO);
 
-        log.info("pageResponseDTO : " +pageResponseDTO);
-        log.info("Point - pageResponseDTO : " +pageResponseDTO);
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
@@ -215,8 +226,9 @@ public class MyController {
     @GetMapping("/my/qna")
     public String myQna(String userId, PageRequestDTO pageRequestDTO, Model model){
 
-        log.info("pageRequestDTO : " + pageRequestDTO);
-        log.info("userId : " + userId);
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         if (pageRequestDTO.getCate().equals("qna")) {
 
@@ -256,10 +268,11 @@ public class MyController {
     public String myReview(String userId, Model model, PageRequestDTO pageRequestDTO){
         PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
 
-        log.info("myReviewPage" +myReviewPage);
-
         model.addAttribute("myReviewPage", myReviewPage);
 
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         return "/my/review";
     }
@@ -269,6 +282,11 @@ public class MyController {
     public String myWish(String userId, Model model, PageRequestDTO pageRequestDTO){
         PageResponseDTO wishList = myService.selectUserWish(userId, pageRequestDTO);
         model.addAttribute("wishList", wishList);
+
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
+
         return "/my/wish";
     }
 
@@ -353,7 +371,7 @@ public class MyController {
         return myService.selectMyProdQnaDetail(requestBody);
     }
 
-  //Seller 정보 확인
+    //Seller 정보 확인
     @GetMapping("/my/sellerCheck/{prodSeller}")
     public ResponseEntity<?> selectMyHomeSeller(@PathVariable String prodSeller){
         return myService.selectProdSeller(prodSeller);
