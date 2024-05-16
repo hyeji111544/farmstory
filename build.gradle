@@ -9,6 +9,7 @@ version = '1.0.2-RC'
 
 java {
     sourceCompatibility = '17'
+    
 }
 
 configurations {
