@@ -85,8 +85,8 @@ public class AdminService {
                 .total(total)
                 .build();
     }
-    // 배너 DB 저장 메서드
-    public BannerDTO  bannerInsert(BannerDTO bannerDTO) {
+    // 배너 등록
+    public BannerDTO bannerInsert(BannerDTO bannerDTO) {
         Banner banner = modelMapper.map(bannerDTO, Banner.class);
         Banner saveBanner = new Banner();
         if (banner.getBanImgCate().equals("main2")) {
@@ -186,7 +186,6 @@ public class AdminService {
                 return null;
         }
     }
-
     //배너 불러오기
     public List<BannerDTO> selectBanners(String banImgCate) {
 
@@ -197,7 +196,6 @@ public class AdminService {
         }
         return bannerDTOS;
     }
-
     //배너 활성화 업데이트
     public ResponseEntity<?> updateBanners(String banImgCate, int banNo){
         
@@ -207,7 +205,6 @@ public class AdminService {
             eachBanner.setBanUsable("NO");
             bannerRepository.save(eachBanner);
         }
-
         // 선택한 배너의 활성화를 YES로 변경
         Optional<Banner> optBanner = bannerRepository.findById(banNo);
         Banner resultBanner = new Banner();
@@ -215,7 +212,6 @@ public class AdminService {
             optBanner.get().setBanUsable("YES");
             resultBanner = bannerRepository.save(optBanner.get());
         }
-
         // 결과 반환
         Map<String, Integer> resultMap = new HashMap<>();
         if (resultBanner.getBanUsable() == "YES") {
@@ -226,6 +222,7 @@ public class AdminService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
         }
     }
+    // 메인배너 슬라이더
     public ResponseEntity<?> updateMainBanners(int banNo, String banUsable){
         long result = bannerRepository.updateBannerUsable(banNo, banUsable);
         Map<String, Integer> resultMap = new HashMap<>();
