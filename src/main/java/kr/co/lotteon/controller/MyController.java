@@ -6,6 +6,7 @@ import kr.co.lotteon.entity.Coupons;
 import kr.co.lotteon.entity.Orders;
 import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.entity.QOrderDetail;
+import kr.co.lotteon.repository.SellerRepository;
 import kr.co.lotteon.repository.UserPointRepository;
 import kr.co.lotteon.repository.PointHistoryRepository;
 import kr.co.lotteon.service.MyService;
@@ -36,6 +37,7 @@ public class MyController {
     private final ProductService productService;
     private final AdminService adminService;
     private final PasswordEncoder passwordEncoder;
+    private final SellerRepository sellerRepository;
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
@@ -73,7 +75,9 @@ public class MyController {
         log.info("resultUserId" +resultUserId);
         model.addAttribute("resultUserId", resultUserId);
 
-
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         return "/my/home";
 
@@ -85,6 +89,10 @@ public class MyController {
 
         PageResponseDTO haveCoupons = myService.selectCoupons(pageRequestDTO, userId);
         model.addAttribute("haveCoupons", haveCoupons); // Map<String ,List<Coupons>>  / Map<String, int>
+
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
         return "/my/coupon";
     }
 
@@ -97,10 +105,10 @@ public class MyController {
 
         String banImgCate = "my1";
         List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         model.addAttribute("userDTO", userDTO);
         model.addAttribute("sellerDTO", sellerDTO);
-        model.addAttribute("banMyOrderList", banMyOrderList);
         return "/my/info";
     }
 
@@ -189,6 +197,10 @@ public class MyController {
         MyOrderPageResponseDTO MyOrderDTOList = myService.selectOrders(userId, myOrderPageRequestDTO);
         model.addAttribute("MyOrderDTOList", MyOrderDTOList);
 
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
+
         return "/my/order";
     }
 
@@ -201,8 +213,9 @@ public class MyController {
         PageResponseDTO pageResponseDTO = myService.selectPoints(userId, pageRequestDTO);
         //userPointRepository.selectPoints(userId, pageRequestDTO);
 
-        log.info("pageResponseDTO : " +pageResponseDTO);
-        log.info("Point - pageResponseDTO : " +pageResponseDTO);
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         model.addAttribute("pageResponseDTO", pageResponseDTO);
 
@@ -213,8 +226,9 @@ public class MyController {
     @GetMapping("/my/qna")
     public String myQna(String userId, PageRequestDTO pageRequestDTO, Model model){
 
-        log.info("pageRequestDTO : " + pageRequestDTO);
-        log.info("userId : " + userId);
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         if (pageRequestDTO.getCate().equals("qna")) {
 
@@ -229,6 +243,7 @@ public class MyController {
 
             PageResponseDTO selectMyProdQna = myService.selectMyProdQna(userId, pageRequestDTO);
             model.addAttribute("selectMyProdQna", selectMyProdQna);
+            log.info("selectMyProdQna : " +selectMyProdQna);
 
             return "/my/qna";
         }
@@ -253,10 +268,11 @@ public class MyController {
     public String myReview(String userId, Model model, PageRequestDTO pageRequestDTO){
         PageResponseDTO myReviewPage = myService.selectReivews(userId, pageRequestDTO);
 
-        log.info("myReviewPage" +myReviewPage);
-
         model.addAttribute("myReviewPage", myReviewPage);
 
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
 
         return "/my/review";
     }
@@ -266,6 +282,11 @@ public class MyController {
     public String myWish(String userId, Model model, PageRequestDTO pageRequestDTO){
         PageResponseDTO wishList = myService.selectUserWish(userId, pageRequestDTO);
         model.addAttribute("wishList", wishList);
+
+        String banImgCate = "my1";
+        List<BannerDTO> banMyOrderList = adminService.selectBanners(banImgCate);
+        model.addAttribute("banMyOrderList", banMyOrderList);
+
         return "/my/wish";
     }
 
@@ -342,4 +363,18 @@ public class MyController {
     public ResponseEntity<?> checkUserPw(@PathVariable String userPw, @PathVariable String userId) {
         return myService.checkUserPw(userPw, userId);
     }
+
+    // 마이 페이지 제품문의 보기
+    @PostMapping("/my/selectProdQna")
+    public ResponseEntity<?> selectProdQna(@RequestBody Map<String, Integer> requestBody) {
+
+        return myService.selectMyProdQnaDetail(requestBody);
+    }
+
+    //Seller 정보 확인
+    @GetMapping("/my/sellerCheck/{prodSeller}")
+    public ResponseEntity<?> selectMyHomeSeller(@PathVariable String prodSeller){
+        return myService.selectProdSeller(prodSeller);
+    }
+
 }

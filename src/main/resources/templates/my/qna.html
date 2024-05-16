@@ -3,7 +3,7 @@
     layout:decorate="~{/layout/myLayout.html}">
 <!--내용 시작-->
     <div id="my" layout:fragment="content">
-        
+
         <script th:inline="javascript">
             // 문의 유형 Map
             const qnaCateType = {
@@ -18,6 +18,7 @@
             }
             window.onload = function () {
                 qnaCateTypeMatch();
+                highlight();
             }
             // 문의 유형 영어 -> 한글
             function qnaCateTypeMatch() {
@@ -33,6 +34,68 @@
                     }
                 })
             }
+
+            function selectProdQna(event){
+                const content = event.target;
+                const contentBox = content.parentNode;
+                const qnAHtml = contentBox.querySelector(".qnaNo");
+                const prodHtml = contentBox.querySelector(".prodNo");
+                const qnAValue = qnAHtml.value;
+                const prodValue = prodHtml.value;
+                console.log("qnAValue"+qnAValue);
+
+                if (qnAValue!=null){
+                    const jsonData = {
+                        prodQnaNo : qnAValue,
+                        prodNo : prodValue
+                    };
+                    fetchPost(`/lotteon/my/selectProdQna`, jsonData)
+                        .then(data=>{
+                            if (data!=null){
+                                console.log(data);
+
+                                const prodName = document.getElementById('prodName');
+                                const prodImg = document.getElementById('prodImg');
+                                const prodQnaNote = document.getElementById('prodQnaNote');
+
+                                prodName.innerText = data.prodName;
+                                prodImg.src = "/lotteon/uploads/"+data.thumb190;
+                                prodQnaNote.innerText = data.content;
+
+                                prodQnaModalControl();
+                            }else {
+                                alert("답변 대기중 입니다.");
+                            }
+
+
+                        })
+                        .catch();
+                }
+
+            }
+
+            function prodQnaModalControl() {
+                const deliveryPopup = document.getElementsByClassName('deliveryPopup')[0];
+                const prodQnaModalPopup = document.getElementsByClassName('prodQnaModal')[0];
+                if (prodQnaModalPopup.style.display === "flex"){
+                    prodQnaModalPopup.style.display = "none";
+                }else {
+                    prodQnaModalPopup.style.display = "flex";
+                }
+                deliveryPopup.style.display = "none";
+            }
+
+            function closeControlModal() {
+                const prodQnaModalPopup = document.getElementsByClassName('prodQnaModal')[0];
+                prodQnaModalPopup.style.display = "none";
+                let prodName = document.getElementById('prodName');
+                let prodImg = document.getElementById('prodImg');
+                let prodQnaNote = document.getElementById('prodQnaNote');
+                prodName = "";
+                prodImg = "";
+                prodQnaNote = "";
+            }
+
 
         </script>
 
@@ -56,15 +119,15 @@
 
         <div class="qna">
             <!--마이페이지 사이드바-->
-            <ul>
+            <ul class="myCate">
                 <span class="menu_else"></span>
-                <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
-                <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
-                <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
-                <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
-                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
-                <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
+                <li class=""><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
+                <li class=""><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
+                <li class=""><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
+                <li class=""><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
+                <li class=""><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
+                <li class=""><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
+                <li class=""><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
             </ul>
 
             <section>
@@ -165,9 +228,13 @@
                         <div class="myTableBody myQnaRow" th:each="prodqna, index : ${selectMyProdQna.dtoList}">
                             <div th:text="${selectMyProdQna.startNo - index.index}"></div>
                             <div>제품문의</div>
-                            <div><a href="#" th:text="${prodqna.prodQnaContent}"></a></div>
+                            <div><a href="#" onclick="selectProdQna(event)" class="qna-link" th:text="${prodqna.prodQnaContent}"></a>
+                                <input class="qnaNo" type="hidden" th:value="${prodqna.prodQnaNo}">
+                                <input class="prodNo" type="hidden" th:value="${prodqna.prodNo}">
+                            </div>
                             <div th:text="${#temporals.format(prodqna.prodQnaDate, 'yyyy-MM-dd')}"></div>
                             <div th:text="${prodqna.prodQnaStatus}"></div>
+
                         </div>
 
                         <p class="page">
@@ -185,6 +252,23 @@
                     </div>
                     </th:block>
                 </article>
+
+                <div class="popupStyle prodQnaModal" id="userGrade" style="flex-direction: column">
+                    <div style="display:flex; justify-content: space-between">
+                        <p class="qnaTitle">상품 문의</p>
+                        <p style="width: 40px; cursor: pointer" onclick="closeControlModal()">닫기</p>
+                    </div>
+                    <div style="display:flex;">
+                        <p style="padding-right: 10px; border-right: solid 1px #c4c4c4" class="qnaTitle">상품</p><br>
+                        <img style="padding-left: 10px" id="prodImg" src="">
+                        <div id="prodName">이름</div>
+                    </div>
+                    <div style="display:flex;">
+                        <p style="padding-right: 10px; border-right: solid 1px #c4c4c4" class="qnaTitle">문의 <br> 답변</p>
+                        <p style="padding-left: 10px" id="prodQnaNote">내용입니다.</p>
+                    </div>
+                </div>
+
             </section>
 
         </div>

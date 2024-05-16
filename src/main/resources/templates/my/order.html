@@ -63,6 +63,7 @@
             }
 
             window.onload = function () {
+                highlight();
                 /* 별 */
                 const stars = document.querySelectorAll('.star');
 
@@ -189,6 +190,26 @@
                 userIdTag.value = userId;
             }
 
+            // 날짜계산
+            function checkDate() {
+                const startDate = document.getElementsByName('startDate')[0].value;
+                const finalDate = document.getElementsByName('finalDate')[0].value;
+                if (startDate && finalDate) {
+                    const start = new Date(startDate);
+                    const end = new Date(finalDate);
+
+                    const diffInMs = end - start;
+
+                    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+                    if (diffInDays >= 365) {
+                        alert('검색기간은 1년을 넘을 수 없습니다.');
+                        document.getElementsByName('startDate')[0].value = '';
+                        document.getElementsByName('finalDate')[0].value = '';
+                    }
+                }
+            }
+
         </script>
         <!--마이페이지 상단 회원 정보-->
         <nav>
@@ -211,15 +232,15 @@
 
         <div class="ordered">
             <!--마이페이지 사이드바-->
-            <ul>
+            <ul class="myCate">
                 <span class="menu_else"></span>
-                <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
-                <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
-                <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
-                <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
-                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
-                <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
+                <li class=""><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
+                <li class=""><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
+                <li class=""><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
+                <li class=""><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
+                <li class=""><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
+                <li class=""><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
+                <li class=""><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
             </ul>
 
             <section>
@@ -239,9 +260,9 @@
                         <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='6month')}" th:class="${MyOrderDTOList.cate == '6month'} ? 'searchOn' : ''">6개월</a>
                         <a th:href="@{/my/order(userId=${#authentication.principal.user.userId}, cate='year')}" th:class="${MyOrderDTOList.cate == 'year'} ? 'searchOn' : ''">12개월</a>
                         <form th:action="@{/my/order}" method="get" class="searchCustomDate">
-                            <input type="date" name="startDate">
+                            <input type="date" name="startDate" onchange="checkDate()">
                             <p style="display: inline-block; width: 10px;">~</p>
-                            <input type="date" name="finalDate">
+                            <input type="date" name="finalDate" onchange="checkDate()">
                             <input type="hidden" name="cate" value="custom">
                             <input type="hidden" name="userId" th:value="${#authentication.principal.user.userId}">
                             <input type="submit" value="검색">

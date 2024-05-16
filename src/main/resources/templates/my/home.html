@@ -69,6 +69,7 @@
             }
 
            window.onload = function () {
+               highlight();
                qnaCateTypeMatch();
                /* 리뷰 작성 별 */
                const stars = document.querySelectorAll('.star');
@@ -195,6 +196,55 @@
                 prodNoTag.value = button.id;
                 userIdTag.value = userId;
             }
+
+            //seller 정보 보내기
+            function myHomeSellerSelect(){
+                const prodSeller = document.getElementById('prodSeller').value;
+
+                fetch(`/lotteon/my/sellerCheck/${prodSeller}`)
+                    .then(response => {
+                        console.log(response);
+
+                        if (response.ok) {
+                            // 성공
+                        } else {
+                            // 실패
+                        }
+
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+
+                        if (data.result != null) {
+                            // 성공
+                            const sellerGrade = document.getElementById('sellerGrade');
+                            sellerGrade.innerText = data.result.sellerGrade;
+
+                            const sellerCompany = document.getElementById('sellerCompany');
+                            sellerCompany.innerText = data.result.company;
+
+                            const sellerName = document.getElementById('sellerName');
+                            sellerName.innerText = data.result.sellerName;
+
+                            const sellerHp = document.getElementById('sellerHp');
+                            sellerHp.innerText = data.result.sellerHp;
+
+                            const sellerFax = document.getElementById('sellerFax');
+                            sellerFax.innerText = data.result.fax;
+
+                            const sellerBusiness = document.getElementById('sellerBusiness')
+                            sellerBusiness.innerText = data.result.businessNum;
+
+
+                        }else {
+                            // 실패
+                        }
+
+                    })
+                    .catch(err => console.log(err));
+            }
+
         </script>
         <!--마이페이지 상단 회원 정보-->
         <nav>
@@ -216,19 +266,21 @@
         </nav>
         <div class="home">
             <!--마이페이지 사이드바-->
-            <ul>
+            <ul class="myCate">
                 <span class="menu_else"></span>
-                <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-                <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
-                <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
-                <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
-                <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
-                <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
-                <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
+                <li class=""><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
+                <li class=""><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
+                <li class=""><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
+                <li class=""><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
+                <li class=""><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
+                <li class=""><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
+                <li class=""><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
             </ul>
 
             <section>
-                <a href="#"><img th:src="@{/images/my/my_banner1.jpg}" alt="패션, 타운 하나로 끝" class="banner"></a>
+                <th:block th:each="banner : ${banMyOrderList}" >
+                    <a th:href="@{http://__${banner.banLink}__}"><img th:src="@{/uploads/__${banner.banImgName}__}" alt="패션, 타운 하나로 끝" class="banner"></a>
+                </th:block>
 
                 <!--최근주문내역-->
                 <article class="latest" >
@@ -255,10 +307,11 @@
                             <div class="myOrderRow" th:each="orderList : ${linkedMap.value}">
                                 <div><img th:src="@{/uploads/__${orderList.thumb190}__}"></div>
                                 <div class="myOrderInfo">
-                                    <p class="company" th:text="${orderList.prodCompany}" style="cursor: pointer"></p>
+                                    <p class="company" th:text="${orderList.prodCompany}" onclick="myHomeSellerSelect()" style="cursor: pointer"></p>
                                     <p class="InfoProdName" th:text="${orderList.prodName}"></p>
                                     <p th:text="${orderList.count}"></p>
                                     <p th:text="${#numbers.formatInteger(orderList.detailPrice,3,'COMMA')}"></p>
+                                    <input id="prodSeller" type="hidden" th:value="${orderList.prodSeller}"/>
                                 </div>
                                 <div th:text="${orderList.detailStatus}"></div>
                                 <div class="confirm">

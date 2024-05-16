@@ -7,6 +7,9 @@
     <script th:src="@{/js/my/myScript.js}"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
+        window.onload = function (){
+            highlight();
+        }
         function checkUserPw() {
             const checkUserPwBox = document.getElementById('checkUserPwBox');
             const userInfoBox = document.getElementById('userInfoBox');
@@ -59,15 +62,15 @@
 
     <div class="info">
         <!--마이페이지 사이드바-->
-        <ul>
+        <ul class="myCate">
             <span class="menu_else"></span>
-            <li><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
-            <li><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
-            <li><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
-            <li><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
-            <li><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
-            <li><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
-            <li><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
+            <li class=""><a th:href="@{/my/order(userId=${#authentication.principal.user.userId})}">전체주문내역</a></li>
+            <li class=""><a th:href="@{/my/wish(userId=${#authentication.principal.user.userId})}">관심상품</a></li>
+            <li class=""><a th:href="@{/my/point(userId=${#authentication.principal.user.userId})}">포인트내역</a></li>
+            <li class=""><a th:href="@{/my/coupon(userId=${#authentication.principal.user.userId})}">쿠폰</a></li>
+            <li class=""><a th:href="@{/my/review(userId=${#authentication.principal.user.userId})}">나의리뷰</a></li>
+            <li class=""><a th:href="@{/my/qna(userId=${#authentication.principal.user.userId}, cate='qna')}">문의하기</a></li>
+            <li class=""><a th:href="@{/my/info(userId=${#authentication.principal.user.userId})}">나의설정</a></li>
         </ul>
 
         <section>
@@ -91,13 +94,13 @@
                 <table border="0" style="margin: 0; border-top: 1px solid #aaa">
                     <tr>
                         <td>사용자 ID</td>
-                        <td id="userId" th:text="${userDTO.userId}"></td>
+                        <td id="userId" th:text="${#strings.substring(userDTO.userId, 0, 6)} + '****'" th:class="${userDTO.userId}"></td>
                         <td id="userRole" hidden th:text="${userDTO.userRole}"></td>
                     </tr>
                     <tr>
                         <td>비밀번호</td>
                         <td>
-                            <input type="text" name="userPw" id="changePw" style="display: none">
+                            <input type="password" name="userPw" id="changePw" style="display: none">
                             <button class="change" id="btnChangePass" onclick="changeUserPw()">비밀번호 수정</button>
                             <span id="resultPw" class="resultText"></span>
                             <p class="resultPw"></p>
@@ -116,7 +119,7 @@
                         <td>
                             <input type="text" name="email1" th:value="${#strings.setSplit(userDTO.userEmail,'@')[0]}" style="text-align: center" readonly>@
                             <input type="text" name="email2" th:value="${#strings.setSplit(userDTO.userEmail,'@')[1]}" style="text-align: center" readonly>
-                            <button class="change" id="btnChangeEmail">수정하기</button>
+                            <button class="change" id="btnChangeEmail" onclick="changeEmailBtn()">수정하기</button>
                             <span id="emailError" class="resultText"></span>
 
                             <div id="emailCodeSection" style="display: none;">
@@ -148,9 +151,9 @@
                                 <input type="text" name="userAddr1" id="userAddr1" th:value="${userDTO.userAddr1}" style="border: 0" readonly/>
                                 <input type="text" name="userAddr2" id="userAddr2" th:value="${userDTO.userAddr2}" style="border: 0" readonly/>
                             </p>
-                            <button id="changeAddr" style="margin-top: 5px">수정하기</button>
-                            <button id="doneChangeAddr" style="margin-top: 5px; display: none;">수정완료</button>
-                            <button id="btnZip" style="display: none; margin-top: 5px">주소검색</button>
+                            <button id="changeAddr" onclick="changeAddrBtn()" style="margin-top: 5px">수정하기</button>
+                            <button id="doneChangeAddr" onclick="doneChangeAddrBtn()" style="margin-top: 5px; display: none;">수정완료</button>
+                            <button id="btnZip" onclick="findZip()" style="display: none; margin-top: 5px">주소검색</button>
                         </td>
                     </tr>
                 </table>

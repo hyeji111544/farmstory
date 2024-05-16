@@ -257,7 +257,7 @@ public class MemberService {
         UserCoupon userCoupon = new UserCoupon();
         userCoupon.setUserId(savedUser.getUserId());
         userCoupon.setCpNo(1);
-        userCoupon.setUcpStatus("사용가능");
+        userCoupon.setUcpStatus("사용 가능");
         userCouponRepository.save(userCoupon);
 
         Cart cart = new Cart();

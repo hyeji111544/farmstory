@@ -23,4 +23,11 @@ public class ProdQnaNote {
     private String content;
     @CreationTimestamp
     private LocalDateTime cQnaDate;
+
+    @Transient
+    private int prodNo;
+    @Transient
+    private String prodName;
+    @Transient
+    private String thumb190;
 }
