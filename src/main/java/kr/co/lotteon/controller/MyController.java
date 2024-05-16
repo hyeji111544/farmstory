@@ -346,7 +346,14 @@ public class MyController {
         return myService.checkUserPw(userPw, userId);
     }
 
-    //Seller 정보 확인
+    // 마이 페이지 제품문의 보기
+    @PostMapping("/my/selectProdQna")
+    public ResponseEntity<?> selectProdQna(@RequestBody Map<String, Integer> requestBody) {
+
+        return myService.selectMyProdQnaDetail(requestBody);
+    }
+
+  //Seller 정보 확인
     @GetMapping("/my/sellerCheck/{prodSeller}")
     public ResponseEntity<?> selectMyHomeSeller(@PathVariable String prodSeller){
         return myService.selectProdSeller(prodSeller);

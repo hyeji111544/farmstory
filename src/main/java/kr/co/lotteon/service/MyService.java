@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.lotteon.dto.*;
 import kr.co.lotteon.entity.*;
 import kr.co.lotteon.repository.*;
+import kr.co.lotteon.repository.impl.ProductRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -53,6 +54,7 @@ public class MyService {
     private final QnaRepository qnaRepository;
     private final ProdQnaRepository prodQnaRepository;
     private final CompanyService companyService;
+    private final ProdQnaNoteRepository prodQnaNoteRepository;
 
     public void selectMyInfo(HttpSession session, String userId){
         log.info("countOrder : " +userId);
@@ -730,6 +732,29 @@ public class MyService {
         }else {
             resultMap.put("result", 0);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+    }
+
+    public ResponseEntity<?> selectMyProdQnaDetail(Map<String, Integer> requestBody){
+        Integer prodQnaNo = requestBody.get("prodQnaNo");
+        Integer prodNo = requestBody.get("prodNo");
+        ProdQnaNote prodQnaNote = prodQnaNoteRepository.findByProdQnaNo(prodQnaNo);
+        Tuple tuple = productRepository.selectProduct(prodNo);
+        log.info(tuple.toString());
+        Product product = tuple.get(0, Product.class);
+        Productimg productimg = tuple.get(1, Productimg.class);
+        if (product!=null){
+            prodQnaNote.setProdNo(product.getProdNo());
+            prodQnaNote.setProdName(product.getProdName());
+            prodQnaNote.setThumb190(productimg.getThumb190());
+        }
+
+        if (prodQnaNote != null) {
+            log.info("selectMyProdQnaDetail service:"+prodQnaNote);
+            return ResponseEntity.status(HttpStatus.OK).body(prodQnaNote);
+        }else {
+            log.info("selectMyProdQnaDetail service :::: fail");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
