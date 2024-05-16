@@ -33,7 +33,7 @@ const rePass  = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,1
 
 window.onload = function (){
 //// my/info ////
-    const userId = document.getElementById('userId').innerText;
+    const userId = document.getElementById('userId').className;
     // 판매자 이름 유효성 검사
     if(sellerNameCheck){
     sellerNameCheck.addEventListener('blur', function (){
@@ -72,7 +72,7 @@ window.onload = function (){
                     alert("수정할 이름을 입력하세요.");
                     return;
                 }
-                const userIdValue = document.getElementById('userId').innerText;
+                const userIdValue = document.getElementById('userId').className;
                 const sellerNameValue = document.getElementById('sellerName').value;
                 e.preventDefault();
                 console.log(userIdValue);
@@ -313,7 +313,7 @@ window.onload = function (){
                 let saveEmail2 = email2.value;
                 let userEmail = saveEmail1 + "@" + saveEmail2;
                 console.log(userEmail);
-                const userId = document.getElementById('userId').innerText;
+                const userId = document.getElementById('userId').className;
 
                 const jsonData = {
                     "userId" : userId,
@@ -379,7 +379,7 @@ window.onload = function (){
         const zip = userZip.value;
         const addr1 = userAddr1.value;
         const addr2 = userAddr2.value;
-        const userId = userIdValue.innerText;
+        const userId = userIdValue.className;
 
         if (doneChangeAddr.value.trim() === "") {
             // 수정 칸이 비어 있으면 수정하지 않음
@@ -422,7 +422,7 @@ window.onload = function (){
     const leave = document.getElementById('btnWithdraw');
     const userRole = document.getElementById('userRole');
     leave.onclick = function () {
-        const userId = userIdValue.innerText;
+        const userId = userIdValue.className;
 
         let result = confirm("정말 탈퇴하시겠습니까?");
 
@@ -649,7 +649,7 @@ function changeUserPw(){
             // 수정 비밀번호 저장
             let savePw = changePw.value;
             console.log(savePw);
-            const userId = document.getElementById('userId').innerText;
+            const userId = document.getElementById('userId').className;
             const jsonData = {
                 "userId" : userId,
                 "userPw" : savePw
