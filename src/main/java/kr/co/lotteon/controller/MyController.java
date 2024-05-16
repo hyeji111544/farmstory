@@ -343,4 +343,11 @@ public class MyController {
     public ResponseEntity<?> checkUserPw(@PathVariable String userPw, @PathVariable String userId) {
         return myService.checkUserPw(userPw, userId);
     }
+
+    // 마이 페이지 제품문의 보기
+    @PostMapping("/my/selectProdQna")
+    public ResponseEntity<?> selectProdQna(@RequestBody Map<String, Integer> requestBody) {
+
+        return myService.selectMyProdQnaDetail(requestBody);
+    }
 }

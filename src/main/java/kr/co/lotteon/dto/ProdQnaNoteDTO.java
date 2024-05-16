@@ -17,4 +17,8 @@ public class ProdQnaNoteDTO {
     private String sellerNo;
     private String content;
     private LocalDateTime cQnaDate;
+
+    private int prodNo;
+    private String prodName;
+    private String thumb190;
 }

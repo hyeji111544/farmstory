@@ -35,6 +35,67 @@
                 })
             }
 
+            function selectProdQna(event){
+                const content = event.target;
+                const contentBox = content.parentNode;
+                const qnAHtml = contentBox.querySelector(".qnaNo");
+                const prodHtml = contentBox.querySelector(".prodNo");
+                const qnAValue = qnAHtml.value;
+                const prodValue = prodHtml.value;
+                console.log("qnAValue"+qnAValue);
+
+                if (qnAValue!=null){
+                    const jsonData = {
+                        prodQnaNo : qnAValue,
+                        prodNo : prodValue
+                    };
+                    fetchPost(`/lotteon/my/selectProdQna`, jsonData)
+                        .then(data=>{
+                            if (data!=null){
+                                console.log(data);
+
+                                const prodName = document.getElementById('prodName');
+                                const prodImg = document.getElementById('prodImg');
+                                const prodQnaNote = document.getElementById('prodQnaNote');
+
+                                prodName.innerText = data.prodName;
+                                prodImg.src = "/lotteon/uploads/"+data.thumb190;
+                                prodQnaNote.innerText = data.content;
+
+                                prodQnaModalControl();
+                            }else {
+                                alert("답변 대기중 입니다.");
+                            }
+
+
+                        })
+                        .catch();
+                }
+
+            }
+
+            function prodQnaModalControl() {
+                const deliveryPopup = document.getElementsByClassName('deliveryPopup')[0];
+                const prodQnaModalPopup = document.getElementsByClassName('prodQnaModal')[0];
+                if (prodQnaModalPopup.style.display === "flex"){
+                    prodQnaModalPopup.style.display = "none";
+                }else {
+                    prodQnaModalPopup.style.display = "flex";
+                }
+                deliveryPopup.style.display = "none";
+            }
+
+            function closeControlModal() {
+                const prodQnaModalPopup = document.getElementsByClassName('prodQnaModal')[0];
+                prodQnaModalPopup.style.display = "none";
+                let prodName = document.getElementById('prodName');
+                let prodImg = document.getElementById('prodImg');
+                let prodQnaNote = document.getElementById('prodQnaNote');
+                prodName = "";
+                prodImg = "";
+                prodQnaNote = "";
+            }
+
 
         </script>
 
@@ -167,8 +228,10 @@
                         <div class="myTableBody myQnaRow" th:each="prodqna, index : ${selectMyProdQna.dtoList}">
                             <div th:text="${selectMyProdQna.startNo - index.index}"></div>
                             <div>제품문의</div>
-                            <div><a href="#"  class="qna-link" th:text="${prodqna.prodQnaContent}"></a>
-                                <input id="qnaNo" type="text" th:value="${prodqna.prodQnaNo}"></div>
+                            <div><a href="#" onclick="selectProdQna(event)" class="qna-link" th:text="${prodqna.prodQnaContent}"></a>
+                                <input class="qnaNo" type="hidden" th:value="${prodqna.prodQnaNo}">
+                                <input class="prodNo" type="hidden" th:value="${prodqna.prodNo}">
+                            </div>
                             <div th:text="${#temporals.format(prodqna.prodQnaDate, 'yyyy-MM-dd')}"></div>
                             <div th:text="${prodqna.prodQnaStatus}"></div>
 
@@ -189,6 +252,23 @@
                     </div>
                     </th:block>
                 </article>
+
+                <div class="popupStyle prodQnaModal" id="userGrade" style="flex-direction: column">
+                    <div style="display:flex; justify-content: space-between">
+                        <p class="qnaTitle">상품 문의</p>
+                        <p style="width: 40px; cursor: pointer" onclick="closeControlModal()">닫기</p>
+                    </div>
+                    <div style="display:flex;">
+                        <p style="padding-right: 10px; border-right: solid 1px #c4c4c4" class="qnaTitle">상품</p><br>
+                        <img style="padding-left: 10px" id="prodImg" src="">
+                        <div id="prodName">이름</div>
+                    </div>
+                    <div style="display:flex;">
+                        <p style="padding-right: 10px; border-right: solid 1px #c4c4c4" class="qnaTitle">문의 <br> 답변</p>
+                        <p style="padding-left: 10px" id="prodQnaNote">내용입니다.</p>
+                    </div>
+                </div>
+
             </section>
 
         </div>
