@@ -91,13 +91,13 @@
                 <table border="0" style="margin: 0; border-top: 1px solid #aaa">
                     <tr>
                         <td>사용자 ID</td>
-                        <td id="userId" th:text="${userDTO.userId}"></td>
+                        <td id="userId" th:text="${#strings.substring(userDTO.userId, 0, 6)} + '****'" th:class="${userDTO.userId}"></td>
                         <td id="userRole" hidden th:text="${userDTO.userRole}"></td>
                     </tr>
                     <tr>
                         <td>비밀번호</td>
                         <td>
-                            <input type="text" name="userPw" id="changePw" style="display: none">
+                            <input type="password" name="userPw" id="changePw" style="display: none">
                             <button class="change" id="btnChangePass" onclick="changeUserPw()">비밀번호 수정</button>
                             <span id="resultPw" class="resultText"></span>
                             <p class="resultPw"></p>
