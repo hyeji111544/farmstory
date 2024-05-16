@@ -119,7 +119,7 @@
                         <td>
                             <input type="text" name="email1" th:value="${#strings.setSplit(userDTO.userEmail,'@')[0]}" style="text-align: center" readonly>@
                             <input type="text" name="email2" th:value="${#strings.setSplit(userDTO.userEmail,'@')[1]}" style="text-align: center" readonly>
-                            <button class="change" id="btnChangeEmail">수정하기</button>
+                            <button class="change" id="btnChangeEmail" onclick="changeEmailBtn()">수정하기</button>
                             <span id="emailError" class="resultText"></span>
 
                             <div id="emailCodeSection" style="display: none;">
@@ -151,9 +151,9 @@
                                 <input type="text" name="userAddr1" id="userAddr1" th:value="${userDTO.userAddr1}" style="border: 0" readonly/>
                                 <input type="text" name="userAddr2" id="userAddr2" th:value="${userDTO.userAddr2}" style="border: 0" readonly/>
                             </p>
-                            <button id="changeAddr" style="margin-top: 5px">수정하기</button>
-                            <button id="doneChangeAddr" style="margin-top: 5px; display: none;">수정완료</button>
-                            <button id="btnZip" style="display: none; margin-top: 5px">주소검색</button>
+                            <button id="changeAddr" onclick="changeAddrBtn()" style="margin-top: 5px">수정하기</button>
+                            <button id="doneChangeAddr" onclick="doneChangeAddrBtn()" style="margin-top: 5px; display: none;">수정완료</button>
+                            <button id="btnZip" onclick="findZip()" style="display: none; margin-top: 5px">주소검색</button>
                         </td>
                     </tr>
                 </table>

@@ -6,6 +6,7 @@ import kr.co.lotteon.entity.Coupons;
 import kr.co.lotteon.entity.Orders;
 import kr.co.lotteon.entity.PointHistory;
 import kr.co.lotteon.entity.QOrderDetail;
+import kr.co.lotteon.repository.SellerRepository;
 import kr.co.lotteon.repository.UserPointRepository;
 import kr.co.lotteon.repository.PointHistoryRepository;
 import kr.co.lotteon.service.MyService;
@@ -36,6 +37,7 @@ public class MyController {
     private final ProductService productService;
     private final AdminService adminService;
     private final PasswordEncoder passwordEncoder;
+    private final SellerRepository sellerRepository;
 
     //마이페이지-홈 이동
     @GetMapping("/my/home")
@@ -350,4 +352,11 @@ public class MyController {
 
         return myService.selectMyProdQnaDetail(requestBody);
     }
+
+  //Seller 정보 확인
+    @GetMapping("/my/sellerCheck/{prodSeller}")
+    public ResponseEntity<?> selectMyHomeSeller(@PathVariable String prodSeller){
+        return myService.selectProdSeller(prodSeller);
+    }
+
 }
