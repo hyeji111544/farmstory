@@ -42,6 +42,7 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
                                             .join(qProduct)
                                             .on(qprodQna.prodNo.eq(qProduct.prodNo))
                                             .where(qProduct.prodSeller.eq(prodSeller))
+                                            .orderBy(qprodQna.prodQnaDate.desc())
                                             .offset(pageable.getOffset())
                                             .limit(pageable.getPageSize())
                                             .fetchResults();
@@ -76,6 +77,7 @@ public class ProdQnaRepositoryImpl implements ProdQnaRepositoryCustom {
                     .on(qprodQna.prodNo.eq(qProduct.prodNo))
                     .where(qProduct.prodSeller.eq(prodSeller))
                     .where(expression)
+                    .orderBy(qprodQna.prodQnaDate.desc())
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
                     .fetchResults();
