@@ -289,6 +289,8 @@
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((hitItem.prodPrice * (100 - hitItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                   <span th:if="${hitItem.prodDeliveryFee}==0" class="free">무료배송</span>
+                  <span th:if="${hitItem.prodDeliveryFee}!=0" class="free" style="background-color: transparent; color: #111">배송비 : <span th:text="${#numbers.formatInteger(hitItem.prodDeliveryFee, 3, 'COMMA') + '원'}"></span></span>
+
                 </div>
               </a>
             </div>
@@ -314,6 +316,8 @@
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((scoreItem.prodPrice * (100 - scoreItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                   <span th:if="${scoreItem.prodDeliveryFee}==0" class="free">무료배송</span>
+                  <span th:if="${scoreItem.prodDeliveryFee}!=0" class="free" style="background-color: transparent; color: #111">배송비 : <span th:text="${#numbers.formatInteger(scoreItem.prodDeliveryFee, 3, 'COMMA') + '원'}"></span></span>
+
                 </div>
               </a>
             </div>
@@ -339,6 +343,8 @@
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((rDateItem.prodPrice * (100 - rDateItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                   <span th:if="${rDateItem.prodDeliveryFee}==0" class="free">무료배송</span>
+                  <span th:if="${rDateItem.prodDeliveryFee}!=0" class="free" style="background-color: transparent; color: #111">배송비 : <span th:text="${#numbers.formatInteger(rDateItem.prodDeliveryFee, 3, 'COMMA') + '원'}"></span></span>
+
                 </div>
               </a>
             </div>
@@ -364,6 +370,8 @@
                 <div class="dis_price">
                   <ins th:text="${#numbers.formatInteger((discountItem.prodPrice * (100 - discountItem.prodDiscount) * 0.01), 3, 'COMMA')}"></ins>
                   <span th:if="${discountItem.prodDeliveryFee}==0" class="free">무료배송</span>
+                  <span th:if="${discountItem.prodDeliveryFee}!=0" class="free" style="background-color: transparent; color: #111">배송비 : <span th:text="${#numbers.formatInteger(discountItem.prodDeliveryFee, 3, 'COMMA') + '원'}"></span></span>
+
                 </div>
               </a>
             </div>
